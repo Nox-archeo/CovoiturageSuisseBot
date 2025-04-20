@@ -1,0 +1,3709 @@
+{
+  "cities": [
+    {
+      "name": "Aclens",
+      "canton": "VD",
+      "npa": "1123"
+    },
+    {
+      "name": "Adligenswil",
+      "canton": "LU",
+      "npa": "6043"
+    },
+    {
+      "name": "Aesch (LU)",
+      "canton": "LU",
+      "npa": "6287"
+    },
+    {
+      "name": "Agarn",
+      "canton": "VS",
+      "npa": "3951"
+    },
+    {
+      "name": "Agiez",
+      "canton": "VD",
+      "npa": "1352"
+    },
+    {
+      "name": "Aigle",
+      "canton": "VD",
+      "npa": "1860"
+    },
+    {
+      "name": "Aire-la-Ville",
+      "canton": "GE",
+      "npa": "1288"
+    },
+    {
+      "name": "Alberswil",
+      "canton": "LU",
+      "npa": "6248"
+    },
+    {
+      "name": "Albinen",
+      "canton": "VS",
+      "npa": "3955"
+    },
+    {
+      "name": "Allaman",
+      "canton": "VD",
+      "npa": "1165"
+    },
+    {
+      "name": "Alle",
+      "canton": "JU",
+      "npa": "2942"
+    },
+    {
+      "name": "Altbüron",
+      "canton": "LU",
+      "npa": "6147"
+    },
+    {
+      "name": "Altishofen",
+      "canton": "LU",
+      "npa": "6246"
+    },
+    {
+      "name": "Anières",
+      "canton": "GE",
+      "npa": "1247"
+    },
+    {
+      "name": "Anniviers",
+      "canton": "VS",
+      "npa": "3961"
+    },
+    {
+      "name": "Arbaz",
+      "canton": "VS",
+      "npa": "1974"
+    },
+    {
+      "name": "Ardon",
+      "canton": "VS",
+      "npa": "1957"
+    },
+    {
+      "name": "Arnex-sur-Nyon",
+      "canton": "VD",
+      "npa": "1277"
+    },
+    {
+      "name": "Arnex-sur-Orbe",
+      "canton": "VD",
+      "npa": "1321"
+    },
+    {
+      "name": "Arzier-Le Muids",
+      "canton": "VD",
+      "npa": "1273"
+    },
+    {
+      "name": "Assens",
+      "canton": "VD",
+      "npa": "1042"
+    },
+    {
+      "name": "Attalens",
+      "canton": "FR",
+      "npa": "1616"
+    },
+    {
+      "name": "Aubonne",
+      "canton": "VD",
+      "npa": "1170"
+    },
+    {
+      "name": "Ausserberg",
+      "canton": "VS",
+      "npa": "3938"
+    },
+    {
+      "name": "Autigny",
+      "canton": "FR",
+      "npa": "1742"
+    },
+    {
+      "name": "Avenches",
+      "canton": "VD",
+      "npa": "1580"
+    },
+    {
+      "name": "Avry",
+      "canton": "FR",
+      "npa": "1754"
+    },
+    {
+      "name": "Avully",
+      "canton": "GE",
+      "npa": "1237"
+    },
+    {
+      "name": "Avusy",
+      "canton": "GE",
+      "npa": "1285"
+    },
+    {
+      "name": "Ayent",
+      "canton": "VS",
+      "npa": "1966"
+    },
+    {
+      "name": "Ballaigues",
+      "canton": "VD",
+      "npa": "1338"
+    },
+    {
+      "name": "Ballens",
+      "canton": "VD",
+      "npa": "1144"
+    },
+    {
+      "name": "Ballwil",
+      "canton": "LU",
+      "npa": "6275"
+    },
+    {
+      "name": "Baltschieder",
+      "canton": "VS",
+      "npa": "3937"
+    },
+    {
+      "name": "Bardonnex",
+      "canton": "GE",
+      "npa": "1257"
+    },
+    {
+      "name": "Bas-Intyamon",
+      "canton": "FR",
+      "npa": "1669"
+    },
+    {
+      "name": "Basse-Allaine",
+      "canton": "JU",
+      "npa": "2904"
+    },
+    {
+      "name": "Basse-Vendline",
+      "canton": "JU",
+      "npa": "2926"
+    },
+    {
+      "name": "Bassins",
+      "canton": "VD",
+      "npa": "1269"
+    },
+    {
+      "name": "Baulmes",
+      "canton": "VD",
+      "npa": "1446"
+    },
+    {
+      "name": "Bavois",
+      "canton": "VD",
+      "npa": "1372"
+    },
+    {
+      "name": "Begnins",
+      "canton": "VD",
+      "npa": "1268"
+    },
+    {
+      "name": "Belfaux",
+      "canton": "FR",
+      "npa": "1782"
+    },
+    {
+      "name": "Bellevue",
+      "canton": "GE",
+      "npa": "1293"
+    },
+    {
+      "name": "Bellwald",
+      "canton": "VS",
+      "npa": "3997"
+    },
+    {
+      "name": "Belmont-Broye",
+      "canton": "FR",
+      "npa": "1773"
+    },
+    {
+      "name": "Belmont-sur-Lausanne",
+      "canton": "VD",
+      "npa": "1092"
+    },
+    {
+      "name": "Belmont-sur-Yverdon",
+      "canton": "VD",
+      "npa": "1432"
+    },
+    {
+      "name": "Bercher",
+      "canton": "VD",
+      "npa": "1038"
+    },
+    {
+      "name": "Bernex",
+      "canton": "GE",
+      "npa": "1233"
+    },
+    {
+      "name": "Berolle",
+      "canton": "VD",
+      "npa": "1149"
+    },
+    {
+      "name": "Beromünster",
+      "canton": "LU",
+      "npa": "6215"
+    },
+    {
+      "name": "Bettens",
+      "canton": "VD",
+      "npa": "1042"
+    },
+    {
+      "name": "Bettmeralp",
+      "canton": "VS",
+      "npa": "3992"
+    },
+    {
+      "name": "Bex",
+      "canton": "VD",
+      "npa": "1880"
+    },
+    {
+      "name": "Billens-Hennens",
+      "canton": "FR",
+      "npa": "1681"
+    },
+    {
+      "name": "Binn",
+      "canton": "VS",
+      "npa": "3996"
+    },
+    {
+      "name": "Bioley-Magnoux",
+      "canton": "VD",
+      "npa": "1407"
+    },
+    {
+      "name": "Bister",
+      "canton": "VS",
+      "npa": "3983"
+    },
+    {
+      "name": "Bitsch",
+      "canton": "VS",
+      "npa": "3982"
+    },
+    {
+      "name": "Bière",
+      "canton": "VD",
+      "npa": "1145"
+    },
+    {
+      "name": "Blatten",
+      "canton": "VS",
+      "npa": "3919"
+    },
+    {
+      "name": "Blonay - Saint-Légier",
+      "canton": "VD",
+      "npa": "1807"
+    },
+    {
+      "name": "Bofflens",
+      "canton": "VD",
+      "npa": "1353"
+    },
+    {
+      "name": "Bogis-Bossey",
+      "canton": "VD",
+      "npa": "1279"
+    },
+    {
+      "name": "Bois-d'Amont",
+      "canton": "FR",
+      "npa": "1610"
+    },
+    {
+      "name": "Boncourt",
+      "canton": "JU",
+      "npa": "2926"
+    },
+    {
+      "name": "Bonvillars",
+      "canton": "VD",
+      "npa": "1427"
+    },
+    {
+      "name": "Borex",
+      "canton": "VD",
+      "npa": "1277"
+    },
+    {
+      "name": "Bossonnens",
+      "canton": "FR",
+      "npa": "1615"
+    },
+    {
+      "name": "Bottens",
+      "canton": "VD",
+      "npa": "1041"
+    },
+    {
+      "name": "Botterens",
+      "canton": "FR",
+      "npa": "1652"
+    },
+    {
+      "name": "Boudry",
+      "canton": "NE",
+      "npa": "2017"
+    },
+    {
+      "name": "Bougy-Villars",
+      "canton": "VD",
+      "npa": "1172"
+    },
+    {
+      "name": "Boulens",
+      "canton": "VD",
+      "npa": "1063"
+    },
+    {
+      "name": "Bourg-Saint-Pierre",
+      "canton": "VS",
+      "npa": "1946"
+    },
+    {
+      "name": "Bourg-en-Lavaux",
+      "canton": "VD",
+      "npa": "1091"
+    },
+    {
+      "name": "Bournens",
+      "canton": "VD",
+      "npa": "1035"
+    },
+    {
+      "name": "Bourrignon",
+      "canton": "JU",
+      "npa": "2803"
+    },
+    {
+      "name": "Boussens",
+      "canton": "VD",
+      "npa": "1034"
+    },
+    {
+      "name": "Bovernier",
+      "canton": "VS",
+      "npa": "1932"
+    },
+    {
+      "name": "Boécourt",
+      "canton": "JU",
+      "npa": "2856"
+    },
+    {
+      "name": "Bremblens",
+      "canton": "VD",
+      "npa": "1121"
+    },
+    {
+      "name": "Bretigny-sur-Morrens",
+      "canton": "VD",
+      "npa": "1053"
+    },
+    {
+      "name": "Bretonnières",
+      "canton": "VD",
+      "npa": "1329"
+    },
+    {
+      "name": "Brig-Glis",
+      "canton": "VS",
+      "npa": "3900"
+    },
+    {
+      "name": "Broc",
+      "canton": "FR",
+      "npa": "1636"
+    },
+    {
+      "name": "Brot-Plamboz",
+      "canton": "NE",
+      "npa": "2318"
+    },
+    {
+      "name": "Brünisried",
+      "canton": "FR",
+      "npa": "1719"
+    },
+    {
+      "name": "Buchillon",
+      "canton": "VD",
+      "npa": "1164"
+    },
+    {
+      "name": "Buchrain",
+      "canton": "LU",
+      "npa": "6033"
+    },
+    {
+      "name": "Bulle",
+      "canton": "FR",
+      "npa": "1630"
+    },
+    {
+      "name": "Bullet",
+      "canton": "VD",
+      "npa": "1453"
+    },
+    {
+      "name": "Bure",
+      "canton": "JU",
+      "npa": "2915"
+    },
+    {
+      "name": "Bursinel",
+      "canton": "VD",
+      "npa": "1195"
+    },
+    {
+      "name": "Bursins",
+      "canton": "VD",
+      "npa": "1183"
+    },
+    {
+      "name": "Burtigny",
+      "canton": "VD",
+      "npa": "1268"
+    },
+    {
+      "name": "Bussigny",
+      "canton": "VD",
+      "npa": "1030"
+    },
+    {
+      "name": "Bussy-sur-Moudon",
+      "canton": "VD",
+      "npa": "1514"
+    },
+    {
+      "name": "Buttisholz",
+      "canton": "LU",
+      "npa": "6018"
+    },
+    {
+      "name": "Bösingen",
+      "canton": "FR",
+      "npa": "3178"
+    },
+    {
+      "name": "Bürchen",
+      "canton": "VS",
+      "npa": "3935"
+    },
+    {
+      "name": "Büron",
+      "canton": "LU",
+      "npa": "6233"
+    },
+    {
+      "name": "Carouge (GE)",
+      "canton": "GE",
+      "npa": "1227"
+    },
+    {
+      "name": "Cartigny",
+      "canton": "GE",
+      "npa": "1236"
+    },
+    {
+      "name": "Chalais",
+      "canton": "VS",
+      "npa": "3966"
+    },
+    {
+      "name": "Chamblon",
+      "canton": "VD",
+      "npa": "1436"
+    },
+    {
+      "name": "Chamoson",
+      "canton": "VS",
+      "npa": "1955"
+    },
+    {
+      "name": "Champagne",
+      "canton": "VD",
+      "npa": "1424"
+    },
+    {
+      "name": "Champtauroz",
+      "canton": "VD",
+      "npa": "1537"
+    },
+    {
+      "name": "Champvent",
+      "canton": "VD",
+      "npa": "1443"
+    },
+    {
+      "name": "Champéry",
+      "canton": "VS",
+      "npa": "1874"
+    },
+    {
+      "name": "Chancy",
+      "canton": "GE",
+      "npa": "1284"
+    },
+    {
+      "name": "Chardonne",
+      "canton": "VD",
+      "npa": "1803"
+    },
+    {
+      "name": "Chavannes-de-Bogis",
+      "canton": "VD",
+      "npa": "1279"
+    },
+    {
+      "name": "Chavannes-des-Bois",
+      "canton": "VD",
+      "npa": "1290"
+    },
+    {
+      "name": "Chavannes-le-Chêne",
+      "canton": "VD",
+      "npa": "1464"
+    },
+    {
+      "name": "Chavannes-le-Veyron",
+      "canton": "VD",
+      "npa": "1148"
+    },
+    {
+      "name": "Chavannes-près-Renens",
+      "canton": "VD",
+      "npa": "1022"
+    },
+    {
+      "name": "Chavannes-sur-Moudon",
+      "canton": "VD",
+      "npa": "1512"
+    },
+    {
+      "name": "Chavornay",
+      "canton": "VD",
+      "npa": "1373"
+    },
+    {
+      "name": "Cheseaux-Noréaz",
+      "canton": "VD",
+      "npa": "1400"
+    },
+    {
+      "name": "Cheseaux-sur-Lausanne",
+      "canton": "VD",
+      "npa": "1033"
+    },
+    {
+      "name": "Chessel",
+      "canton": "VD",
+      "npa": "1846"
+    },
+    {
+      "name": "Chevilly",
+      "canton": "VD",
+      "npa": "1316"
+    },
+    {
+      "name": "Chevroux",
+      "canton": "VD",
+      "npa": "1545"
+    },
+    {
+      "name": "Chexbres",
+      "canton": "VD",
+      "npa": "1071"
+    },
+    {
+      "name": "Cheyres-Châbles",
+      "canton": "FR",
+      "npa": "1468"
+    },
+    {
+      "name": "Chigny",
+      "canton": "VD",
+      "npa": "1134"
+    },
+    {
+      "name": "Chippis",
+      "canton": "VS",
+      "npa": "3965"
+    },
+    {
+      "name": "Choulex",
+      "canton": "GE",
+      "npa": "1244"
+    },
+    {
+      "name": "Château-d'Oex",
+      "canton": "VD",
+      "npa": "1660"
+    },
+    {
+      "name": "Châtel-Saint-Denis",
+      "canton": "FR",
+      "npa": "1618"
+    },
+    {
+      "name": "Châtel-sur-Montsalvens",
+      "canton": "FR",
+      "npa": "1653"
+    },
+    {
+      "name": "Châtillon (FR)",
+      "canton": "FR",
+      "npa": "1473"
+    },
+    {
+      "name": "Châtillon (JU)",
+      "canton": "JU",
+      "npa": "2843"
+    },
+    {
+      "name": "Châtonnaye",
+      "canton": "FR",
+      "npa": "1553"
+    },
+    {
+      "name": "Chénens",
+      "canton": "FR",
+      "npa": "1744"
+    },
+    {
+      "name": "Chéserex",
+      "canton": "VD",
+      "npa": "1275"
+    },
+    {
+      "name": "Chêne-Bougeries",
+      "canton": "GE",
+      "npa": "1224"
+    },
+    {
+      "name": "Chêne-Bourg",
+      "canton": "GE",
+      "npa": "1225"
+    },
+    {
+      "name": "Chêne-Pâquier",
+      "canton": "VD",
+      "npa": "1464"
+    },
+    {
+      "name": "Clarmont",
+      "canton": "VD",
+      "npa": "1127"
+    },
+    {
+      "name": "Clos du Doubs",
+      "canton": "JU",
+      "npa": "2883"
+    },
+    {
+      "name": "Coeuve",
+      "canton": "JU",
+      "npa": "2932"
+    },
+    {
+      "name": "Coinsins",
+      "canton": "VD",
+      "npa": "1267"
+    },
+    {
+      "name": "Collex-Bossy",
+      "canton": "GE",
+      "npa": "1239"
+    },
+    {
+      "name": "Collombey-Muraz",
+      "canton": "VS",
+      "npa": "1893"
+    },
+    {
+      "name": "Collonge-Bellerive",
+      "canton": "GE",
+      "npa": "1245"
+    },
+    {
+      "name": "Collonges",
+      "canton": "VS",
+      "npa": "1903"
+    },
+    {
+      "name": "Cologny",
+      "canton": "GE",
+      "npa": "1223"
+    },
+    {
+      "name": "Commugny",
+      "canton": "VD",
+      "npa": "1291"
+    },
+    {
+      "name": "Concise",
+      "canton": "VD",
+      "npa": "1426"
+    },
+    {
+      "name": "Confignon",
+      "canton": "GE",
+      "npa": "1232"
+    },
+    {
+      "name": "Conthey",
+      "canton": "VS",
+      "npa": "1964"
+    },
+    {
+      "name": "Coppet",
+      "canton": "VD",
+      "npa": "1296"
+    },
+    {
+      "name": "Corbeyrier",
+      "canton": "VD",
+      "npa": "1856"
+    },
+    {
+      "name": "Corbières",
+      "canton": "FR",
+      "npa": "1647"
+    },
+    {
+      "name": "Corcelles-le-Jorat",
+      "canton": "VD",
+      "npa": "1082"
+    },
+    {
+      "name": "Corcelles-près-Concise",
+      "canton": "VD",
+      "npa": "1426"
+    },
+    {
+      "name": "Corcelles-près-Payerne",
+      "canton": "VD",
+      "npa": "1562"
+    },
+    {
+      "name": "Corminboeuf",
+      "canton": "FR",
+      "npa": "1720"
+    },
+    {
+      "name": "Cornaux",
+      "canton": "NE",
+      "npa": "2087"
+    },
+    {
+      "name": "Cornol",
+      "canton": "JU",
+      "npa": "2952"
+    },
+    {
+      "name": "Corseaux",
+      "canton": "VD",
+      "npa": "1802"
+    },
+    {
+      "name": "Corsier (GE)",
+      "canton": "GE",
+      "npa": "1246"
+    },
+    {
+      "name": "Corsier-sur-Vevey",
+      "canton": "VD",
+      "npa": "1804"
+    },
+    {
+      "name": "Cortaillod",
+      "canton": "NE",
+      "npa": "2016"
+    },
+    {
+      "name": "Cossonay",
+      "canton": "VD",
+      "npa": "1304"
+    },
+    {
+      "name": "Cottens (FR)",
+      "canton": "FR",
+      "npa": "1741"
+    },
+    {
+      "name": "Courchapoix",
+      "canton": "JU",
+      "npa": "2825"
+    },
+    {
+      "name": "Courchavon",
+      "canton": "JU",
+      "npa": "2922"
+    },
+    {
+      "name": "Courgenay",
+      "canton": "JU",
+      "npa": "2950"
+    },
+    {
+      "name": "Courgevaux",
+      "canton": "FR",
+      "npa": "1796"
+    },
+    {
+      "name": "Courrendlin",
+      "canton": "JU",
+      "npa": "2830"
+    },
+    {
+      "name": "Courroux",
+      "canton": "JU",
+      "npa": "2822"
+    },
+    {
+      "name": "Courtedoux",
+      "canton": "JU",
+      "npa": "2905"
+    },
+    {
+      "name": "Courtepin",
+      "canton": "FR",
+      "npa": "1784"
+    },
+    {
+      "name": "Courtételle",
+      "canton": "JU",
+      "npa": "2852"
+    },
+    {
+      "name": "Crans (VD)",
+      "canton": "VD",
+      "npa": "1299"
+    },
+    {
+      "name": "Crans-Montana",
+      "canton": "VS",
+      "npa": "3963"
+    },
+    {
+      "name": "Crassier",
+      "canton": "VD",
+      "npa": "1263"
+    },
+    {
+      "name": "Cressier (FR)",
+      "canton": "FR",
+      "npa": "1785"
+    },
+    {
+      "name": "Cressier (NE)",
+      "canton": "NE",
+      "npa": "2088"
+    },
+    {
+      "name": "Crissier",
+      "canton": "VD",
+      "npa": "1023"
+    },
+    {
+      "name": "Cronay",
+      "canton": "VD",
+      "npa": "1406"
+    },
+    {
+      "name": "Croy",
+      "canton": "VD",
+      "npa": "1322"
+    },
+    {
+      "name": "Crésuz",
+      "canton": "FR",
+      "npa": "1653"
+    },
+    {
+      "name": "Cuarnens",
+      "canton": "VD",
+      "npa": "1148"
+    },
+    {
+      "name": "Cuarny",
+      "canton": "VD",
+      "npa": "1404"
+    },
+    {
+      "name": "Cudrefin",
+      "canton": "VD",
+      "npa": "1588"
+    },
+    {
+      "name": "Cugy (FR)",
+      "canton": "FR",
+      "npa": "1482"
+    },
+    {
+      "name": "Cugy (VD)",
+      "canton": "VD",
+      "npa": "1053"
+    },
+    {
+      "name": "Curtilles",
+      "canton": "VD",
+      "npa": "1521"
+    },
+    {
+      "name": "Céligny",
+      "canton": "GE",
+      "npa": "1298"
+    },
+    {
+      "name": "Dagmersellen",
+      "canton": "LU",
+      "npa": "6252"
+    },
+    {
+      "name": "Daillens",
+      "canton": "VD",
+      "npa": "1306"
+    },
+    {
+      "name": "Damphreux-Lugnez",
+      "canton": "JU",
+      "npa": "2933"
+    },
+    {
+      "name": "Dardagny",
+      "canton": "GE",
+      "npa": "1283"
+    },
+    {
+      "name": "Delley-Portalban",
+      "canton": "FR",
+      "npa": "1567"
+    },
+    {
+      "name": "Delémont",
+      "canton": "JU",
+      "npa": "2800"
+    },
+    {
+      "name": "Denens",
+      "canton": "VD",
+      "npa": "1135"
+    },
+    {
+      "name": "Denges",
+      "canton": "VD",
+      "npa": "1026"
+    },
+    {
+      "name": "Develier",
+      "canton": "JU",
+      "npa": "2802"
+    },
+    {
+      "name": "Dierikon",
+      "canton": "LU",
+      "npa": "6036"
+    },
+    {
+      "name": "Dizy",
+      "canton": "VD",
+      "npa": "1304"
+    },
+    {
+      "name": "Dompierre (VD)",
+      "canton": "VD",
+      "npa": "1682"
+    },
+    {
+      "name": "Donneloye",
+      "canton": "VD",
+      "npa": "1407"
+    },
+    {
+      "name": "Doppleschwand",
+      "canton": "LU",
+      "npa": "6112"
+    },
+    {
+      "name": "Dorénaz",
+      "canton": "VS",
+      "npa": "1905"
+    },
+    {
+      "name": "Duillier",
+      "canton": "VD",
+      "npa": "1266"
+    },
+    {
+      "name": "Dully",
+      "canton": "VD",
+      "npa": "1195"
+    },
+    {
+      "name": "Démoret",
+      "canton": "VD",
+      "npa": "1415"
+    },
+    {
+      "name": "Düdingen",
+      "canton": "FR",
+      "npa": "3186"
+    },
+    {
+      "name": "Ebikon",
+      "canton": "LU",
+      "npa": "6030"
+    },
+    {
+      "name": "Echallens",
+      "canton": "VD",
+      "npa": "1040"
+    },
+    {
+      "name": "Echandens",
+      "canton": "VD",
+      "npa": "1026"
+    },
+    {
+      "name": "Echarlens",
+      "canton": "FR",
+      "npa": "1646"
+    },
+    {
+      "name": "Echichens",
+      "canton": "VD",
+      "npa": "1112"
+    },
+    {
+      "name": "Eclépens",
+      "canton": "VD",
+      "npa": "1312"
+    },
+    {
+      "name": "Ecublens (VD)",
+      "canton": "VD",
+      "npa": "1024"
+    },
+    {
+      "name": "Ederswiler",
+      "canton": "JU",
+      "npa": "2813"
+    },
+    {
+      "name": "Eggerberg",
+      "canton": "VS",
+      "npa": "3939"
+    },
+    {
+      "name": "Egolzwil",
+      "canton": "LU",
+      "npa": "6243"
+    },
+    {
+      "name": "Eich",
+      "canton": "LU",
+      "npa": "6205"
+    },
+    {
+      "name": "Eischoll",
+      "canton": "VS",
+      "npa": "3943"
+    },
+    {
+      "name": "Eisten",
+      "canton": "VS",
+      "npa": "3922"
+    },
+    {
+      "name": "Embd",
+      "canton": "VS",
+      "npa": "3926"
+    },
+    {
+      "name": "Emmen",
+      "canton": "LU",
+      "npa": "6032"
+    },
+    {
+      "name": "Entlebuch",
+      "canton": "LU",
+      "npa": "6162"
+    },
+    {
+      "name": "Epalinges",
+      "canton": "VD",
+      "npa": "1066"
+    },
+    {
+      "name": "Ependes (VD)",
+      "canton": "VD",
+      "npa": "1434"
+    },
+    {
+      "name": "Ergisch",
+      "canton": "VS",
+      "npa": "3947"
+    },
+    {
+      "name": "Ermensee",
+      "canton": "LU",
+      "npa": "6294"
+    },
+    {
+      "name": "Ernen",
+      "canton": "VS",
+      "npa": "3995"
+    },
+    {
+      "name": "Eschenbach (LU)",
+      "canton": "LU",
+      "npa": "6274"
+    },
+    {
+      "name": "Escholzmatt-Marbach",
+      "canton": "LU",
+      "npa": "6182"
+    },
+    {
+      "name": "Essertines-sur-Rolle",
+      "canton": "VD",
+      "npa": "1186"
+    },
+    {
+      "name": "Essertines-sur-Yverdon",
+      "canton": "VD",
+      "npa": "1417"
+    },
+    {
+      "name": "Estavayer",
+      "canton": "FR",
+      "npa": "1470"
+    },
+    {
+      "name": "Etagnières",
+      "canton": "VD",
+      "npa": "1037"
+    },
+    {
+      "name": "Etoy",
+      "canton": "VD",
+      "npa": "1163"
+    },
+    {
+      "name": "Ettiswil",
+      "canton": "LU",
+      "npa": "6218"
+    },
+    {
+      "name": "Evionnaz",
+      "canton": "VS",
+      "npa": "1902"
+    },
+    {
+      "name": "Evolène",
+      "canton": "VS",
+      "npa": "1983"
+    },
+    {
+      "name": "Eysins",
+      "canton": "VD",
+      "npa": "1262"
+    },
+    {
+      "name": "Fahy",
+      "canton": "JU",
+      "npa": "2916"
+    },
+    {
+      "name": "Faoug",
+      "canton": "VD",
+      "npa": "1595"
+    },
+    {
+      "name": "Ferden",
+      "canton": "VS",
+      "npa": "3916"
+    },
+    {
+      "name": "Ferpicloz",
+      "canton": "FR",
+      "npa": "1724"
+    },
+    {
+      "name": "Ferreyres",
+      "canton": "VD",
+      "npa": "1313"
+    },
+    {
+      "name": "Fey",
+      "canton": "VD",
+      "npa": "1044"
+    },
+    {
+      "name": "Fiesch",
+      "canton": "VS",
+      "npa": "3984"
+    },
+    {
+      "name": "Fieschertal",
+      "canton": "VS",
+      "npa": "3984"
+    },
+    {
+      "name": "Fiez",
+      "canton": "VD",
+      "npa": "1420"
+    },
+    {
+      "name": "Finhaut",
+      "canton": "VS",
+      "npa": "1925"
+    },
+    {
+      "name": "Fischbach",
+      "canton": "LU",
+      "npa": "6145"
+    },
+    {
+      "name": "Flühli",
+      "canton": "LU",
+      "npa": "6173"
+    },
+    {
+      "name": "Fontaines-sur-Grandson",
+      "canton": "VD",
+      "npa": "1421"
+    },
+    {
+      "name": "Fontenais",
+      "canton": "JU",
+      "npa": "2902"
+    },
+    {
+      "name": "Forel (Lavaux)",
+      "canton": "VD",
+      "npa": "1072"
+    },
+    {
+      "name": "Founex",
+      "canton": "VD",
+      "npa": "1297"
+    },
+    {
+      "name": "Fribourg",
+      "canton": "FR",
+      "npa": "1700"
+    },
+    {
+      "name": "Froideville",
+      "canton": "VD",
+      "npa": "1055"
+    },
+    {
+      "name": "Fräschels",
+      "canton": "FR",
+      "npa": "3284"
+    },
+    {
+      "name": "Fully",
+      "canton": "VS",
+      "npa": "1926"
+    },
+    {
+      "name": "Féchy",
+      "canton": "VD",
+      "npa": "1173"
+    },
+    {
+      "name": "Fétigny",
+      "canton": "FR",
+      "npa": "1532"
+    },
+    {
+      "name": "Gampel-Bratsch",
+      "canton": "VS",
+      "npa": "3945"
+    },
+    {
+      "name": "Genolier",
+      "canton": "VD",
+      "npa": "1272"
+    },
+    {
+      "name": "Genthod",
+      "canton": "GE",
+      "npa": "1294"
+    },
+    {
+      "name": "Genève",
+      "canton": "GE",
+      "npa": "1200"
+    },
+    {
+      "name": "Geuensee",
+      "canton": "LU",
+      "npa": "6232"
+    },
+    {
+      "name": "Gibloux",
+      "canton": "FR",
+      "npa": "1695"
+    },
+    {
+      "name": "Giez",
+      "canton": "VD",
+      "npa": "1429"
+    },
+    {
+      "name": "Giffers",
+      "canton": "FR",
+      "npa": "1735"
+    },
+    {
+      "name": "Gilly",
+      "canton": "VD",
+      "npa": "1182"
+    },
+    {
+      "name": "Gimel",
+      "canton": "VD",
+      "npa": "1188"
+    },
+    {
+      "name": "Gingins",
+      "canton": "VD",
+      "npa": "1276"
+    },
+    {
+      "name": "Gisikon",
+      "canton": "LU",
+      "npa": "6038"
+    },
+    {
+      "name": "Givisiez",
+      "canton": "FR",
+      "npa": "1762"
+    },
+    {
+      "name": "Givrins",
+      "canton": "VD",
+      "npa": "1271"
+    },
+    {
+      "name": "Gland",
+      "canton": "VD",
+      "npa": "1196"
+    },
+    {
+      "name": "Gletterens",
+      "canton": "FR",
+      "npa": "1544"
+    },
+    {
+      "name": "Gollion",
+      "canton": "VD",
+      "npa": "1124"
+    },
+    {
+      "name": "Goms",
+      "canton": "VS",
+      "npa": "3989"
+    },
+    {
+      "name": "Goumoëns",
+      "canton": "VD",
+      "npa": "1376"
+    },
+    {
+      "name": "Grancy",
+      "canton": "VD",
+      "npa": "1117"
+    },
+    {
+      "name": "Grandcour",
+      "canton": "VD",
+      "npa": "1543"
+    },
+    {
+      "name": "Grandevent",
+      "canton": "VD",
+      "npa": "1421"
+    },
+    {
+      "name": "Grandfontaine",
+      "canton": "JU",
+      "npa": "2908"
+    },
+    {
+      "name": "Grandson",
+      "canton": "VD",
+      "npa": "1422"
+    },
+    {
+      "name": "Grandvillard",
+      "canton": "FR",
+      "npa": "1666"
+    },
+    {
+      "name": "Granges (Veveyse)",
+      "canton": "FR",
+      "npa": "1614"
+    },
+    {
+      "name": "Granges-Paccot",
+      "canton": "FR",
+      "npa": "1763"
+    },
+    {
+      "name": "Grangettes",
+      "canton": "FR",
+      "npa": "1686"
+    },
+    {
+      "name": "Greng",
+      "canton": "FR",
+      "npa": "3280"
+    },
+    {
+      "name": "Grengiols",
+      "canton": "VS",
+      "npa": "3993"
+    },
+    {
+      "name": "Grens",
+      "canton": "VD",
+      "npa": "1274"
+    },
+    {
+      "name": "Greppen",
+      "canton": "LU",
+      "npa": "6404"
+    },
+    {
+      "name": "Grimisuat",
+      "canton": "VS",
+      "npa": "1971"
+    },
+    {
+      "name": "Grolley-Ponthaux",
+      "canton": "FR",
+      "npa": "1772"
+    },
+    {
+      "name": "Grossdietwil",
+      "canton": "LU",
+      "npa": "6146"
+    },
+    {
+      "name": "Grosswangen",
+      "canton": "LU",
+      "npa": "6022"
+    },
+    {
+      "name": "Gruyères",
+      "canton": "FR",
+      "npa": "1663"
+    },
+    {
+      "name": "Gryon",
+      "canton": "VD",
+      "npa": "1882"
+    },
+    {
+      "name": "Grächen",
+      "canton": "VS",
+      "npa": "3925"
+    },
+    {
+      "name": "Grône",
+      "canton": "VS",
+      "npa": "3979"
+    },
+    {
+      "name": "Gurmels",
+      "canton": "FR",
+      "npa": "3212"
+    },
+    {
+      "name": "Guttet-Feschel",
+      "canton": "VS",
+      "npa": "3956"
+    },
+    {
+      "name": "Gy",
+      "canton": "GE",
+      "npa": "1251"
+    },
+    {
+      "name": "Hasle (LU)",
+      "canton": "LU",
+      "npa": "6166"
+    },
+    {
+      "name": "Haut-Intyamon",
+      "canton": "FR",
+      "npa": "1669"
+    },
+    {
+      "name": "Haute-Ajoie",
+      "canton": "JU",
+      "npa": "2907"
+    },
+    {
+      "name": "Haute-Sorne",
+      "canton": "JU",
+      "npa": "2854"
+    },
+    {
+      "name": "Hautemorges",
+      "canton": "VD",
+      "npa": "1110"
+    },
+    {
+      "name": "Hauterive (FR)",
+      "canton": "FR",
+      "npa": "1725"
+    },
+    {
+      "name": "Hauteville",
+      "canton": "FR",
+      "npa": "1648"
+    },
+    {
+      "name": "Heitenried",
+      "canton": "FR",
+      "npa": "1714"
+    },
+    {
+      "name": "Henniez",
+      "canton": "VD",
+      "npa": "1525"
+    },
+    {
+      "name": "Hergiswil bei Willisau",
+      "canton": "LU",
+      "npa": "6133"
+    },
+    {
+      "name": "Hermance",
+      "canton": "GE",
+      "npa": "1248"
+    },
+    {
+      "name": "Hermenches",
+      "canton": "VD",
+      "npa": "1513"
+    },
+    {
+      "name": "Hildisrieden",
+      "canton": "LU",
+      "npa": "6024"
+    },
+    {
+      "name": "Hitzkirch",
+      "canton": "LU",
+      "npa": "6285"
+    },
+    {
+      "name": "Hochdorf",
+      "canton": "LU",
+      "npa": "6280"
+    },
+    {
+      "name": "Hohenrain",
+      "canton": "LU",
+      "npa": "6276"
+    },
+    {
+      "name": "Horw",
+      "canton": "LU",
+      "npa": "6048"
+    },
+    {
+      "name": "Hérémence",
+      "canton": "VS",
+      "npa": "1987"
+    },
+    {
+      "name": "Icogne",
+      "canton": "VS",
+      "npa": "1977"
+    },
+    {
+      "name": "Inden",
+      "canton": "VS",
+      "npa": "3953"
+    },
+    {
+      "name": "Inwil",
+      "canton": "LU",
+      "npa": "6034"
+    },
+    {
+      "name": "Isérables",
+      "canton": "VS",
+      "npa": "1914"
+    },
+    {
+      "name": "Jaun",
+      "canton": "FR",
+      "npa": "1656"
+    },
+    {
+      "name": "Jongny",
+      "canton": "VD",
+      "npa": "1805"
+    },
+    {
+      "name": "Jorat-Menthue",
+      "canton": "VD",
+      "npa": "1054"
+    },
+    {
+      "name": "Jorat-Mézières",
+      "canton": "VD",
+      "npa": "1083"
+    },
+    {
+      "name": "Jouxtens-Mézery",
+      "canton": "VD",
+      "npa": "1008"
+    },
+    {
+      "name": "Juriens",
+      "canton": "VD",
+      "npa": "1326"
+    },
+    {
+      "name": "Jussy",
+      "canton": "GE",
+      "npa": "1254"
+    },
+    {
+      "name": "Kerzers",
+      "canton": "FR",
+      "npa": "3210"
+    },
+    {
+      "name": "Kippel",
+      "canton": "VS",
+      "npa": "3917"
+    },
+    {
+      "name": "Kleinbösingen",
+      "canton": "FR",
+      "npa": "3213"
+    },
+    {
+      "name": "Knutwil",
+      "canton": "LU",
+      "npa": "6213"
+    },
+    {
+      "name": "Kriens",
+      "canton": "LU",
+      "npa": "6010"
+    },
+    {
+      "name": "L'Abbaye",
+      "canton": "VD",
+      "npa": "1344"
+    },
+    {
+      "name": "L'Abergement",
+      "canton": "VD",
+      "npa": "1355"
+    },
+    {
+      "name": "L'Isle",
+      "canton": "VD",
+      "npa": "1148"
+    },
+    {
+      "name": "La Baroche",
+      "canton": "JU",
+      "npa": "2908"
+    },
+    {
+      "name": "La Brillaz",
+      "canton": "FR",
+      "npa": "1725"
+    },
+    {
+      "name": "La Brévine",
+      "canton": "NE",
+      "npa": "2406"
+    },
+    {
+      "name": "La Chaux (Cossonay)",
+      "canton": "VD",
+      "npa": "1308"
+    },
+    {
+      "name": "La Chaux-de-Fonds",
+      "canton": "NE",
+      "npa": "2300"
+    },
+    {
+      "name": "La Chaux-du-Milieu",
+      "canton": "NE",
+      "npa": "2405"
+    },
+    {
+      "name": "La Côte-aux-Fées",
+      "canton": "NE",
+      "npa": "2117"
+    },
+    {
+      "name": "La Grande Béroche",
+      "canton": "NE",
+      "npa": "2024"
+    },
+    {
+      "name": "La Praz",
+      "canton": "VD",
+      "npa": "1148"
+    },
+    {
+      "name": "La Rippe",
+      "canton": "VD",
+      "npa": "1278"
+    },
+    {
+      "name": "La Roche",
+      "canton": "FR",
+      "npa": "1634"
+    },
+    {
+      "name": "La Sagne",
+      "canton": "NE",
+      "npa": "2314"
+    },
+    {
+      "name": "La Sarraz",
+      "canton": "VD",
+      "npa": "1315"
+    },
+    {
+      "name": "La Sonnaz",
+      "canton": "FR",
+      "npa": "1782"
+    },
+    {
+      "name": "La Tour-de-Peilz",
+      "canton": "VD",
+      "npa": "1814"
+    },
+    {
+      "name": "La Verrerie",
+      "canton": "FR",
+      "npa": "1624"
+    },
+    {
+      "name": "Laconnex",
+      "canton": "GE",
+      "npa": "1287"
+    },
+    {
+      "name": "Lajoux (JU)",
+      "canton": "JU",
+      "npa": "2718"
+    },
+    {
+      "name": "Lalden",
+      "canton": "VS",
+      "npa": "3931"
+    },
+    {
+      "name": "Lancy",
+      "canton": "GE",
+      "npa": "1212"
+    },
+    {
+      "name": "Laténa",
+      "canton": "NE",
+      "npa": "2400"
+    },
+    {
+      "name": "Lausanne",
+      "canton": "VD",
+      "npa": "1000"
+    },
+    {
+      "name": "Lavey-Morcles",
+      "canton": "VD",
+      "npa": "1892"
+    },
+    {
+      "name": "Lavigny",
+      "canton": "VD",
+      "npa": "1175"
+    },
+    {
+      "name": "Lax",
+      "canton": "VS",
+      "npa": "3994"
+    },
+    {
+      "name": "Le Bémont (JU)",
+      "canton": "JU",
+      "npa": "2360"
+    },
+    {
+      "name": "Le Cerneux-Péquignot",
+      "canton": "NE",
+      "npa": "2414"
+    },
+    {
+      "name": "Le Chenit",
+      "canton": "VD",
+      "npa": "1347"
+    },
+    {
+      "name": "Le Châtelard",
+      "canton": "FR",
+      "npa": "1689"
+    },
+    {
+      "name": "Le Flon",
+      "canton": "FR",
+      "npa": "1699"
+    },
+    {
+      "name": "Le Grand-Saconnex",
+      "canton": "GE",
+      "npa": "1218"
+    },
+    {
+      "name": "Le Landeron",
+      "canton": "NE",
+      "npa": "2525"
+    },
+    {
+      "name": "Le Lieu",
+      "canton": "VD",
+      "npa": "1345"
+    },
+    {
+      "name": "Le Locle",
+      "canton": "NE",
+      "npa": "2400"
+    },
+    {
+      "name": "Le Mont-sur-Lausanne",
+      "canton": "VD",
+      "npa": "1052"
+    },
+    {
+      "name": "Le Mouret",
+      "canton": "FR",
+      "npa": "1724"
+    },
+    {
+      "name": "Le Noirmont",
+      "canton": "JU",
+      "npa": "2340"
+    },
+    {
+      "name": "Le Pâquier (FR)",
+      "canton": "FR",
+      "npa": "1661"
+    },
+    {
+      "name": "Le Vaud",
+      "canton": "VD",
+      "npa": "1261"
+    },
+    {
+      "name": "Lens",
+      "canton": "VS",
+      "npa": "1978"
+    },
+    {
+      "name": "Les Bois",
+      "canton": "JU",
+      "npa": "2336"
+    },
+    {
+      "name": "Les Breuleux",
+      "canton": "JU",
+      "npa": "2345"
+    },
+    {
+      "name": "Les Clées",
+      "canton": "VD",
+      "npa": "1356"
+    },
+    {
+      "name": "Les Enfers",
+      "canton": "JU",
+      "npa": "2363"
+    },
+    {
+      "name": "Les Genevez (JU)",
+      "canton": "JU",
+      "npa": "2714"
+    },
+    {
+      "name": "Les Montets",
+      "canton": "FR",
+      "npa": "1483"
+    },
+    {
+      "name": "Les Planchettes",
+      "canton": "NE",
+      "npa": "2325"
+    },
+    {
+      "name": "Les Ponts-de-Martel",
+      "canton": "NE",
+      "npa": "2316"
+    },
+    {
+      "name": "Les Verrières",
+      "canton": "NE",
+      "npa": "2126"
+    },
+    {
+      "name": "Leuk",
+      "canton": "VS",
+      "npa": "3953"
+    },
+    {
+      "name": "Leukerbad",
+      "canton": "VS",
+      "npa": "3954"
+    },
+    {
+      "name": "Leysin",
+      "canton": "VD",
+      "npa": "1854"
+    },
+    {
+      "name": "Leytron",
+      "canton": "VS",
+      "npa": "1912"
+    },
+    {
+      "name": "Liddes",
+      "canton": "VS",
+      "npa": "1945"
+    },
+    {
+      "name": "Lignerolle",
+      "canton": "VD",
+      "npa": "1357"
+    },
+    {
+      "name": "Lignières",
+      "canton": "NE",
+      "npa": "2523"
+    },
+    {
+      "name": "Lonay",
+      "canton": "VD",
+      "npa": "1027"
+    },
+    {
+      "name": "Longirod",
+      "canton": "VD",
+      "npa": "1261"
+    },
+    {
+      "name": "Lovatens",
+      "canton": "VD",
+      "npa": "1682"
+    },
+    {
+      "name": "Lucens",
+      "canton": "VD",
+      "npa": "1522"
+    },
+    {
+      "name": "Luins",
+      "canton": "VD",
+      "npa": "1184"
+    },
+    {
+      "name": "Lully (FR)",
+      "canton": "FR",
+      "npa": "1470"
+    },
+    {
+      "name": "Lully (VD)",
+      "canton": "VD",
+      "npa": "1132"
+    },
+    {
+      "name": "Lussery-Villars",
+      "canton": "VD",
+      "npa": "1307"
+    },
+    {
+      "name": "Lussy-sur-Morges",
+      "canton": "VD",
+      "npa": "1167"
+    },
+    {
+      "name": "Luthern",
+      "canton": "LU",
+      "npa": "6156"
+    },
+    {
+      "name": "Lutry",
+      "canton": "VD",
+      "npa": "1095"
+    },
+    {
+      "name": "Luzern",
+      "canton": "LU",
+      "npa": "6003"
+    },
+    {
+      "name": "Malters",
+      "canton": "LU",
+      "npa": "6102"
+    },
+    {
+      "name": "Maracon",
+      "canton": "VD",
+      "npa": "1613"
+    },
+    {
+      "name": "Marchissy",
+      "canton": "VD",
+      "npa": "1261"
+    },
+    {
+      "name": "Marly",
+      "canton": "FR",
+      "npa": "1723"
+    },
+    {
+      "name": "Marsens",
+      "canton": "FR",
+      "npa": "1633"
+    },
+    {
+      "name": "Martigny",
+      "canton": "VS",
+      "npa": "1920"
+    },
+    {
+      "name": "Martigny-Combe",
+      "canton": "VS",
+      "npa": "1921"
+    },
+    {
+      "name": "Massongex",
+      "canton": "VS",
+      "npa": "1869"
+    },
+    {
+      "name": "Massonnens",
+      "canton": "FR",
+      "npa": "1692"
+    },
+    {
+      "name": "Mathod",
+      "canton": "VD",
+      "npa": "1438"
+    },
+    {
+      "name": "Matran",
+      "canton": "FR",
+      "npa": "1753"
+    },
+    {
+      "name": "Mauborget",
+      "canton": "VD",
+      "npa": "1450"
+    },
+    {
+      "name": "Mauensee",
+      "canton": "LU",
+      "npa": "6216"
+    },
+    {
+      "name": "Mauraz",
+      "canton": "VD",
+      "npa": "1148"
+    },
+    {
+      "name": "Meggen",
+      "canton": "LU",
+      "npa": "6045"
+    },
+    {
+      "name": "Meierskappel",
+      "canton": "LU",
+      "npa": "6344"
+    },
+    {
+      "name": "Meinier",
+      "canton": "GE",
+      "npa": "1252"
+    },
+    {
+      "name": "Menznau",
+      "canton": "LU",
+      "npa": "6125"
+    },
+    {
+      "name": "Mervelier",
+      "canton": "JU",
+      "npa": "2827"
+    },
+    {
+      "name": "Mettembert",
+      "canton": "JU",
+      "npa": "2806"
+    },
+    {
+      "name": "Mex (VD)",
+      "canton": "VD",
+      "npa": "1031"
+    },
+    {
+      "name": "Meyriez",
+      "canton": "FR",
+      "npa": "3280"
+    },
+    {
+      "name": "Meyrin",
+      "canton": "GE",
+      "npa": "1217"
+    },
+    {
+      "name": "Mies",
+      "canton": "VD",
+      "npa": "1295"
+    },
+    {
+      "name": "Milvignes",
+      "canton": "NE",
+      "npa": "2013"
+    },
+    {
+      "name": "Misery-Courtion",
+      "canton": "FR",
+      "npa": "1721"
+    },
+    {
+      "name": "Missy",
+      "canton": "VD",
+      "npa": "1565"
+    },
+    {
+      "name": "Moiry",
+      "canton": "VD",
+      "npa": "1148"
+    },
+    {
+      "name": "Mollens (VD)",
+      "canton": "VD",
+      "npa": "1146"
+    },
+    {
+      "name": "Molondin",
+      "canton": "VD",
+      "npa": "1415"
+    },
+    {
+      "name": "Mont-Noble",
+      "canton": "VS",
+      "npa": "1966"
+    },
+    {
+      "name": "Mont-Vully",
+      "canton": "FR",
+      "npa": "1786"
+    },
+    {
+      "name": "Mont-la-Ville",
+      "canton": "VD",
+      "npa": "1148"
+    },
+    {
+      "name": "Mont-sur-Rolle",
+      "canton": "VD",
+      "npa": "1185"
+    },
+    {
+      "name": "Montagny (FR)",
+      "canton": "FR",
+      "npa": "1776"
+    },
+    {
+      "name": "Montagny-près-Yverdon",
+      "canton": "VD",
+      "npa": "1442"
+    },
+    {
+      "name": "Montanaire",
+      "canton": "VD",
+      "npa": "1407"
+    },
+    {
+      "name": "Montcherand",
+      "canton": "VD",
+      "npa": "1354"
+    },
+    {
+      "name": "Montfaucon",
+      "canton": "JU",
+      "npa": "2362"
+    },
+    {
+      "name": "Monthey",
+      "canton": "VS",
+      "npa": "1870"
+    },
+    {
+      "name": "Montilliez",
+      "canton": "VD",
+      "npa": "1041"
+    },
+    {
+      "name": "Montpreveyres",
+      "canton": "VD",
+      "npa": "1081"
+    },
+    {
+      "name": "Montreux",
+      "canton": "VD",
+      "npa": "1820"
+    },
+    {
+      "name": "Montricher",
+      "canton": "VD",
+      "npa": "1147"
+    },
+    {
+      "name": "Morges",
+      "canton": "VD",
+      "npa": "1110"
+    },
+    {
+      "name": "Morlon",
+      "canton": "FR",
+      "npa": "1638"
+    },
+    {
+      "name": "Morrens (VD)",
+      "canton": "VD",
+      "npa": "1054"
+    },
+    {
+      "name": "Moudon",
+      "canton": "VD",
+      "npa": "1510"
+    },
+    {
+      "name": "Movelier",
+      "canton": "JU",
+      "npa": "2812"
+    },
+    {
+      "name": "Muntelier",
+      "canton": "FR",
+      "npa": "3286"
+    },
+    {
+      "name": "Muriaux",
+      "canton": "JU",
+      "npa": "2338"
+    },
+    {
+      "name": "Murten",
+      "canton": "FR",
+      "npa": "3280"
+    },
+    {
+      "name": "Mutrux",
+      "canton": "VD",
+      "npa": "1428"
+    },
+    {
+      "name": "Ménières",
+      "canton": "FR",
+      "npa": "1533"
+    },
+    {
+      "name": "Mézières (FR)",
+      "canton": "FR",
+      "npa": "1684"
+    },
+    {
+      "name": "Mörel-Filet",
+      "canton": "VS",
+      "npa": "3983"
+    },
+    {
+      "name": "Naters",
+      "canton": "VS",
+      "npa": "3904"
+    },
+    {
+      "name": "Nebikon",
+      "canton": "LU",
+      "npa": "6244"
+    },
+    {
+      "name": "Nendaz",
+      "canton": "VS",
+      "npa": "1997"
+    },
+    {
+      "name": "Neuchâtel",
+      "canton": "NE",
+      "npa": "2000"
+    },
+    {
+      "name": "Neuenkirch",
+      "canton": "LU",
+      "npa": "6206"
+    },
+    {
+      "name": "Neyruz (FR)",
+      "canton": "FR",
+      "npa": "1740"
+    },
+    {
+      "name": "Niedergesteln",
+      "canton": "VS",
+      "npa": "3942"
+    },
+    {
+      "name": "Noble-Contrée",
+      "canton": "VS",
+      "npa": "3979"
+    },
+    {
+      "name": "Nottwil",
+      "canton": "LU",
+      "npa": "6207"
+    },
+    {
+      "name": "Novalles",
+      "canton": "VD",
+      "npa": "1431"
+    },
+    {
+      "name": "Noville",
+      "canton": "VD",
+      "npa": "1845"
+    },
+    {
+      "name": "Nuvilly",
+      "canton": "FR",
+      "npa": "1485"
+    },
+    {
+      "name": "Nyon",
+      "canton": "VD",
+      "npa": "1260"
+    },
+    {
+      "name": "Oberems",
+      "canton": "VS",
+      "npa": "3948"
+    },
+    {
+      "name": "Obergoms",
+      "canton": "VS",
+      "npa": "3988"
+    },
+    {
+      "name": "Oberkirch",
+      "canton": "LU",
+      "npa": "6208"
+    },
+    {
+      "name": "Ogens",
+      "canton": "VD",
+      "npa": "1045"
+    },
+    {
+      "name": "Ollon",
+      "canton": "VD",
+      "npa": "1867"
+    },
+    {
+      "name": "Onex",
+      "canton": "GE",
+      "npa": "1213"
+    },
+    {
+      "name": "Onnens (VD)",
+      "canton": "VD",
+      "npa": "1425"
+    },
+    {
+      "name": "Oppens",
+      "canton": "VD",
+      "npa": "1047"
+    },
+    {
+      "name": "Orbe",
+      "canton": "VD",
+      "npa": "1350"
+    },
+    {
+      "name": "Orges",
+      "canton": "VD",
+      "npa": "1430"
+    },
+    {
+      "name": "Ormont-Dessous",
+      "canton": "VD",
+      "npa": "1862"
+    },
+    {
+      "name": "Ormont-Dessus",
+      "canton": "VD",
+      "npa": "1865"
+    },
+    {
+      "name": "Orny",
+      "canton": "VD",
+      "npa": "1317"
+    },
+    {
+      "name": "Oron",
+      "canton": "VD",
+      "npa": "1610"
+    },
+    {
+      "name": "Orsières",
+      "canton": "VS",
+      "npa": "1937"
+    },
+    {
+      "name": "Orzens",
+      "canton": "VD",
+      "npa": "1413"
+    },
+    {
+      "name": "Oulens-sous-Echallens",
+      "canton": "VD",
+      "npa": "1377"
+    },
+    {
+      "name": "Pailly",
+      "canton": "VD",
+      "npa": "1416"
+    },
+    {
+      "name": "Paudex",
+      "canton": "VD",
+      "npa": "1094"
+    },
+    {
+      "name": "Payerne",
+      "canton": "VD",
+      "npa": "1530"
+    },
+    {
+      "name": "Penthalaz",
+      "canton": "VD",
+      "npa": "1305"
+    },
+    {
+      "name": "Penthaz",
+      "canton": "VD",
+      "npa": "1303"
+    },
+    {
+      "name": "Penthéréaz",
+      "canton": "VD",
+      "npa": "1375"
+    },
+    {
+      "name": "Perly-Certoux",
+      "canton": "GE",
+      "npa": "1258"
+    },
+    {
+      "name": "Perroy",
+      "canton": "VD",
+      "npa": "1166"
+    },
+    {
+      "name": "Pfaffnau",
+      "canton": "LU",
+      "npa": "6264"
+    },
+    {
+      "name": "Pierrafortscha",
+      "canton": "FR",
+      "npa": "1723"
+    },
+    {
+      "name": "Plaffeien",
+      "canton": "FR",
+      "npa": "1716"
+    },
+    {
+      "name": "Plan-les-Ouates",
+      "canton": "GE",
+      "npa": "1228"
+    },
+    {
+      "name": "Plasselb",
+      "canton": "FR",
+      "npa": "1737"
+    },
+    {
+      "name": "Pleigne",
+      "canton": "JU",
+      "npa": "2807"
+    },
+    {
+      "name": "Poliez-Pittet",
+      "canton": "VD",
+      "npa": "1041"
+    },
+    {
+      "name": "Pompaples",
+      "canton": "VD",
+      "npa": "1318"
+    },
+    {
+      "name": "Pomy",
+      "canton": "VD",
+      "npa": "1405"
+    },
+    {
+      "name": "Pont-en-Ogoz",
+      "canton": "FR",
+      "npa": "1690"
+    },
+    {
+      "name": "Pont-la-Ville",
+      "canton": "FR",
+      "npa": "1649"
+    },
+    {
+      "name": "Porrentruy",
+      "canton": "JU",
+      "npa": "2900"
+    },
+    {
+      "name": "Port-Valais",
+      "canton": "VS",
+      "npa": "1897"
+    },
+    {
+      "name": "Prangins",
+      "canton": "VD",
+      "npa": "1197"
+    },
+    {
+      "name": "Pregny-Chambésy",
+      "canton": "GE",
+      "npa": "1292"
+    },
+    {
+      "name": "Premier",
+      "canton": "VD",
+      "npa": "1324"
+    },
+    {
+      "name": "Presinge",
+      "canton": "GE",
+      "npa": "1243"
+    },
+    {
+      "name": "Prez",
+      "canton": "FR",
+      "npa": "1746"
+    },
+    {
+      "name": "Prilly",
+      "canton": "VD",
+      "npa": "1008"
+    },
+    {
+      "name": "Provence",
+      "canton": "VD",
+      "npa": "1428"
+    },
+    {
+      "name": "Préverenges",
+      "canton": "VD",
+      "npa": "1028"
+    },
+    {
+      "name": "Prévondavaux",
+      "canton": "FR",
+      "npa": "1410"
+    },
+    {
+      "name": "Prévonloup",
+      "canton": "VD",
+      "npa": "1682"
+    },
+    {
+      "name": "Puidoux",
+      "canton": "VD",
+      "npa": "1070"
+    },
+    {
+      "name": "Pully",
+      "canton": "VD",
+      "npa": "1009"
+    },
+    {
+      "name": "Puplinge",
+      "canton": "GE",
+      "npa": "1241"
+    },
+    {
+      "name": "Rain",
+      "canton": "LU",
+      "npa": "6026"
+    },
+    {
+      "name": "Rances",
+      "canton": "VD",
+      "npa": "1439"
+    },
+    {
+      "name": "Randa",
+      "canton": "VS",
+      "npa": "3928"
+    },
+    {
+      "name": "Raron",
+      "canton": "VS",
+      "npa": "3942"
+    },
+    {
+      "name": "Rechthalten",
+      "canton": "FR",
+      "npa": "1718"
+    },
+    {
+      "name": "Reiden",
+      "canton": "LU",
+      "npa": "6260"
+    },
+    {
+      "name": "Remaufens",
+      "canton": "FR",
+      "npa": "1617"
+    },
+    {
+      "name": "Renens (VD)",
+      "canton": "VD",
+      "npa": "1020"
+    },
+    {
+      "name": "Rennaz",
+      "canton": "VD",
+      "npa": "1847"
+    },
+    {
+      "name": "Riaz",
+      "canton": "FR",
+      "npa": "1632"
+    },
+    {
+      "name": "Rickenbach (LU)",
+      "canton": "LU",
+      "npa": "6221"
+    },
+    {
+      "name": "Riddes",
+      "canton": "VS",
+      "npa": "1908"
+    },
+    {
+      "name": "Ried bei Kerzers",
+      "canton": "FR",
+      "npa": "3216"
+    },
+    {
+      "name": "Ried-Brig",
+      "canton": "VS",
+      "npa": "3911"
+    },
+    {
+      "name": "Riederalp",
+      "canton": "VS",
+      "npa": "3987"
+    },
+    {
+      "name": "Rivaz",
+      "canton": "VD",
+      "npa": "1071"
+    },
+    {
+      "name": "Roche (VD)",
+      "canton": "VD",
+      "npa": "1852"
+    },
+    {
+      "name": "Rochefort",
+      "canton": "NE",
+      "npa": "2019"
+    },
+    {
+      "name": "Roggliswil",
+      "canton": "LU",
+      "npa": "6265"
+    },
+    {
+      "name": "Rolle",
+      "canton": "VD",
+      "npa": "1180"
+    },
+    {
+      "name": "Romainmôtier-Envy",
+      "canton": "VD",
+      "npa": "1323"
+    },
+    {
+      "name": "Romanel-sur-Lausanne",
+      "canton": "VD",
+      "npa": "1032"
+    },
+    {
+      "name": "Romanel-sur-Morges",
+      "canton": "VD",
+      "npa": "1122"
+    },
+    {
+      "name": "Romont (FR)",
+      "canton": "FR",
+      "npa": "1680"
+    },
+    {
+      "name": "Romoos",
+      "canton": "LU",
+      "npa": "6113"
+    },
+    {
+      "name": "Root",
+      "canton": "LU",
+      "npa": "6037"
+    },
+    {
+      "name": "Ropraz",
+      "canton": "VD",
+      "npa": "1088"
+    },
+    {
+      "name": "Rossemaison",
+      "canton": "JU",
+      "npa": "2842"
+    },
+    {
+      "name": "Rossenges",
+      "canton": "VD",
+      "npa": "1513"
+    },
+    {
+      "name": "Rossinière",
+      "canton": "VD",
+      "npa": "1658"
+    },
+    {
+      "name": "Rothenburg",
+      "canton": "LU",
+      "npa": "6023"
+    },
+    {
+      "name": "Rougemont",
+      "canton": "VD",
+      "npa": "1659"
+    },
+    {
+      "name": "Rovray",
+      "canton": "VD",
+      "npa": "1463"
+    },
+    {
+      "name": "Rue",
+      "canton": "FR",
+      "npa": "1673"
+    },
+    {
+      "name": "Rueyres",
+      "canton": "VD",
+      "npa": "1046"
+    },
+    {
+      "name": "Russin",
+      "canton": "GE",
+      "npa": "1281"
+    },
+    {
+      "name": "Ruswil",
+      "canton": "LU",
+      "npa": "6017"
+    },
+    {
+      "name": "Römerswil",
+      "canton": "LU",
+      "npa": "6027"
+    },
+    {
+      "name": "Saas-Almagell",
+      "canton": "VS",
+      "npa": "3905"
+    },
+    {
+      "name": "Saas-Balen",
+      "canton": "VS",
+      "npa": "3908"
+    },
+    {
+      "name": "Saas-Fee",
+      "canton": "VS",
+      "npa": "3906"
+    },
+    {
+      "name": "Saas-Grund",
+      "canton": "VS",
+      "npa": "3910"
+    },
+    {
+      "name": "Saignelégier",
+      "canton": "JU",
+      "npa": "2350"
+    },
+    {
+      "name": "Saillon",
+      "canton": "VS",
+      "npa": "1913"
+    },
+    {
+      "name": "Saint-Aubin (FR)",
+      "canton": "FR",
+      "npa": "1566"
+    },
+    {
+      "name": "Saint-Barthélemy (VD)",
+      "canton": "VD",
+      "npa": "1040"
+    },
+    {
+      "name": "Saint-Brais",
+      "canton": "JU",
+      "npa": "2364"
+    },
+    {
+      "name": "Saint-Cergue",
+      "canton": "VD",
+      "npa": "1264"
+    },
+    {
+      "name": "Saint-George",
+      "canton": "VD",
+      "npa": "1188"
+    },
+    {
+      "name": "Saint-Gingolph",
+      "canton": "VS",
+      "npa": "1898"
+    },
+    {
+      "name": "Saint-Livres",
+      "canton": "VD",
+      "npa": "1176"
+    },
+    {
+      "name": "Saint-Léonard",
+      "canton": "VS",
+      "npa": "1958"
+    },
+    {
+      "name": "Saint-Martin (FR)",
+      "canton": "FR",
+      "npa": "1609"
+    },
+    {
+      "name": "Saint-Martin (VS)",
+      "canton": "VS",
+      "npa": "1969"
+    },
+    {
+      "name": "Saint-Maurice",
+      "canton": "VS",
+      "npa": "1890"
+    },
+    {
+      "name": "Saint-Oyens",
+      "canton": "VD",
+      "npa": "1187"
+    },
+    {
+      "name": "Saint-Prex",
+      "canton": "VD",
+      "npa": "1162"
+    },
+    {
+      "name": "Saint-Saphorin (Lavaux)",
+      "canton": "VD",
+      "npa": "1071"
+    },
+    {
+      "name": "Saint-Sulpice (VD)",
+      "canton": "VD",
+      "npa": "1025"
+    },
+    {
+      "name": "Sainte-Croix",
+      "canton": "VD",
+      "npa": "1450"
+    },
+    {
+      "name": "Salgesch",
+      "canton": "VS",
+      "npa": "3970"
+    },
+    {
+      "name": "Salvan",
+      "canton": "VS",
+      "npa": "1922"
+    },
+    {
+      "name": "Satigny",
+      "canton": "GE",
+      "npa": "1242"
+    },
+    {
+      "name": "Saubraz",
+      "canton": "VD",
+      "npa": "1189"
+    },
+    {
+      "name": "Saulcy",
+      "canton": "JU",
+      "npa": "2873"
+    },
+    {
+      "name": "Savigny",
+      "canton": "VD",
+      "npa": "1073"
+    },
+    {
+      "name": "Savièse",
+      "canton": "VS",
+      "npa": "1965"
+    },
+    {
+      "name": "Saxon",
+      "canton": "VS",
+      "npa": "1907"
+    },
+    {
+      "name": "Schenkon",
+      "canton": "LU",
+      "npa": "6214"
+    },
+    {
+      "name": "Schlierbach",
+      "canton": "LU",
+      "npa": "6231"
+    },
+    {
+      "name": "Schmitten (FR)",
+      "canton": "FR",
+      "npa": "3185"
+    },
+    {
+      "name": "Schongau",
+      "canton": "LU",
+      "npa": "6288"
+    },
+    {
+      "name": "Schwarzenberg",
+      "canton": "LU",
+      "npa": "6103"
+    },
+    {
+      "name": "Schötz",
+      "canton": "LU",
+      "npa": "6247"
+    },
+    {
+      "name": "Schüpfheim",
+      "canton": "LU",
+      "npa": "6170"
+    },
+    {
+      "name": "Sembrancher",
+      "canton": "VS",
+      "npa": "1933"
+    },
+    {
+      "name": "Sempach",
+      "canton": "LU",
+      "npa": "6204"
+    },
+    {
+      "name": "Semsales",
+      "canton": "FR",
+      "npa": "1623"
+    },
+    {
+      "name": "Senarclens",
+      "canton": "VD",
+      "npa": "1304"
+    },
+    {
+      "name": "Sergey",
+      "canton": "VD",
+      "npa": "1355"
+    },
+    {
+      "name": "Servion",
+      "canton": "VD",
+      "npa": "1077"
+    },
+    {
+      "name": "Sierre",
+      "canton": "VS",
+      "npa": "3960"
+    },
+    {
+      "name": "Signy-Avenex",
+      "canton": "VD",
+      "npa": "1274"
+    },
+    {
+      "name": "Simplon",
+      "canton": "VS",
+      "npa": "3907"
+    },
+    {
+      "name": "Sion",
+      "canton": "VS",
+      "npa": "1950"
+    },
+    {
+      "name": "Siviriez",
+      "canton": "FR",
+      "npa": "1678"
+    },
+    {
+      "name": "Soral",
+      "canton": "GE",
+      "npa": "1286"
+    },
+    {
+      "name": "Sorens",
+      "canton": "FR",
+      "npa": "1642"
+    },
+    {
+      "name": "Soubey",
+      "canton": "JU",
+      "npa": "2887"
+    },
+    {
+      "name": "Soyhières",
+      "canton": "JU",
+      "npa": "2805"
+    },
+    {
+      "name": "St. Niklaus",
+      "canton": "VS",
+      "npa": "3924"
+    },
+    {
+      "name": "St. Silvester",
+      "canton": "FR",
+      "npa": "1736"
+    },
+    {
+      "name": "St. Ursen",
+      "canton": "FR",
+      "npa": "1717"
+    },
+    {
+      "name": "Stalden (VS)",
+      "canton": "VS",
+      "npa": "3922"
+    },
+    {
+      "name": "Staldenried",
+      "canton": "VS",
+      "npa": "3933"
+    },
+    {
+      "name": "Steg-Hohtenn",
+      "canton": "VS",
+      "npa": "3940"
+    },
+    {
+      "name": "Suchy",
+      "canton": "VD",
+      "npa": "1433"
+    },
+    {
+      "name": "Sullens",
+      "canton": "VD",
+      "npa": "1036"
+    },
+    {
+      "name": "Surpierre",
+      "canton": "FR",
+      "npa": "1528"
+    },
+    {
+      "name": "Sursee",
+      "canton": "LU",
+      "npa": "6210"
+    },
+    {
+      "name": "Suscévaz",
+      "canton": "VD",
+      "npa": "1433"
+    },
+    {
+      "name": "Syens",
+      "canton": "VD",
+      "npa": "1510"
+    },
+    {
+      "name": "Sâles",
+      "canton": "FR",
+      "npa": "1625"
+    },
+    {
+      "name": "Sévaz",
+      "canton": "FR",
+      "npa": "1541"
+    },
+    {
+      "name": "Tafers",
+      "canton": "FR",
+      "npa": "1712"
+    },
+    {
+      "name": "Tannay",
+      "canton": "VD",
+      "npa": "1295"
+    },
+    {
+      "name": "Tartegnin",
+      "canton": "VD",
+      "npa": "1180"
+    },
+    {
+      "name": "Tentlingen",
+      "canton": "FR",
+      "npa": "1734"
+    },
+    {
+      "name": "Termen",
+      "canton": "VS",
+      "npa": "3912"
+    },
+    {
+      "name": "Thônex",
+      "canton": "GE",
+      "npa": "1226"
+    },
+    {
+      "name": "Tolochenaz",
+      "canton": "VD",
+      "npa": "1131"
+    },
+    {
+      "name": "Torny",
+      "canton": "FR",
+      "npa": "1748"
+    },
+    {
+      "name": "Trey",
+      "canton": "VD",
+      "npa": "1552"
+    },
+    {
+      "name": "Treycovagnes",
+      "canton": "VD",
+      "npa": "1436"
+    },
+    {
+      "name": "Treytorrens (Payerne)",
+      "canton": "VD",
+      "npa": "1538"
+    },
+    {
+      "name": "Treyvaux",
+      "canton": "FR",
+      "npa": "1733"
+    },
+    {
+      "name": "Triengen",
+      "canton": "LU",
+      "npa": "6234"
+    },
+    {
+      "name": "Trient",
+      "canton": "VS",
+      "npa": "1929"
+    },
+    {
+      "name": "Troinex",
+      "canton": "GE",
+      "npa": "1256"
+    },
+    {
+      "name": "Troistorrents",
+      "canton": "VS",
+      "npa": "1872"
+    },
+    {
+      "name": "Trélex",
+      "canton": "VD",
+      "npa": "1270"
+    },
+    {
+      "name": "Turtmann-Unterems",
+      "canton": "VS",
+      "npa": "3946"
+    },
+    {
+      "name": "Täsch",
+      "canton": "VS",
+      "npa": "3929"
+    },
+    {
+      "name": "Tévenon",
+      "canton": "VD",
+      "npa": "1423"
+    },
+    {
+      "name": "Törbel",
+      "canton": "VS",
+      "npa": "3923"
+    },
+    {
+      "name": "Udligenswil",
+      "canton": "LU",
+      "npa": "6044"
+    },
+    {
+      "name": "Ueberstorf",
+      "canton": "FR",
+      "npa": "3182"
+    },
+    {
+      "name": "Ufhusen",
+      "canton": "LU",
+      "npa": "6153"
+    },
+    {
+      "name": "Ulmiz",
+      "canton": "FR",
+      "npa": "3214"
+    },
+    {
+      "name": "Unterbäch",
+      "canton": "VS",
+      "npa": "3944"
+    },
+    {
+      "name": "Ursins",
+      "canton": "VD",
+      "npa": "1412"
+    },
+    {
+      "name": "Ursy",
+      "canton": "FR",
+      "npa": "1670"
+    },
+    {
+      "name": "Val Terbi",
+      "canton": "JU",
+      "npa": "2824"
+    },
+    {
+      "name": "Val de Bagnes",
+      "canton": "VS",
+      "npa": "1934"
+    },
+    {
+      "name": "Val-d'Illiez",
+      "canton": "VS",
+      "npa": "1873"
+    },
+    {
+      "name": "Val-de-Charmey",
+      "canton": "FR",
+      "npa": "1637"
+    },
+    {
+      "name": "Val-de-Ruz",
+      "canton": "NE",
+      "npa": "2052"
+    },
+    {
+      "name": "Val-de-Travers",
+      "canton": "NE",
+      "npa": "2114"
+    },
+    {
+      "name": "Valbroye",
+      "canton": "VD",
+      "npa": "1536"
+    },
+    {
+      "name": "Valeyres-sous-Montagny",
+      "canton": "VD",
+      "npa": "1441"
+    },
+    {
+      "name": "Valeyres-sous-Rances",
+      "canton": "VD",
+      "npa": "1358"
+    },
+    {
+      "name": "Valeyres-sous-Ursins",
+      "canton": "VD",
+      "npa": "1412"
+    },
+    {
+      "name": "Vallon",
+      "canton": "FR",
+      "npa": "1565"
+    },
+    {
+      "name": "Vallorbe",
+      "canton": "VD",
+      "npa": "1337"
+    },
+    {
+      "name": "Vandoeuvres",
+      "canton": "GE",
+      "npa": "1253"
+    },
+    {
+      "name": "Varen",
+      "canton": "VS",
+      "npa": "3953"
+    },
+    {
+      "name": "Vaulion",
+      "canton": "VD",
+      "npa": "1325"
+    },
+    {
+      "name": "Vaulruz",
+      "canton": "FR",
+      "npa": "1627"
+    },
+    {
+      "name": "Vaux-sur-Morges",
+      "canton": "VD",
+      "npa": "1126"
+    },
+    {
+      "name": "Vendlincourt",
+      "canton": "JU",
+      "npa": "2943"
+    },
+    {
+      "name": "Vernayaz",
+      "canton": "VS",
+      "npa": "1904"
+    },
+    {
+      "name": "Vernier",
+      "canton": "GE",
+      "npa": "1214"
+    },
+    {
+      "name": "Versoix",
+      "canton": "GE",
+      "npa": "1290"
+    },
+    {
+      "name": "Vevey",
+      "canton": "VD",
+      "npa": "1800"
+    },
+    {
+      "name": "Vex",
+      "canton": "VS",
+      "npa": "1981"
+    },
+    {
+      "name": "Veyrier",
+      "canton": "GE",
+      "npa": "1255"
+    },
+    {
+      "name": "Veysonnaz",
+      "canton": "VS",
+      "npa": "1993"
+    },
+    {
+      "name": "Veytaux",
+      "canton": "VD",
+      "npa": "1820"
+    },
+    {
+      "name": "Vich",
+      "canton": "VD",
+      "npa": "1267"
+    },
+    {
+      "name": "Villars-Epeney",
+      "canton": "VD",
+      "npa": "1404"
+    },
+    {
+      "name": "Villars-Sainte-Croix",
+      "canton": "VD",
+      "npa": "1029"
+    },
+    {
+      "name": "Villars-le-Comte",
+      "canton": "VD",
+      "npa": "1515"
+    },
+    {
+      "name": "Villars-le-Terroir",
+      "canton": "VD",
+      "npa": "1040"
+    },
+    {
+      "name": "Villars-sous-Yens",
+      "canton": "VD",
+      "npa": "1168"
+    },
+    {
+      "name": "Villars-sur-Glâne",
+      "canton": "FR",
+      "npa": "1752"
+    },
+    {
+      "name": "Villarsel-sur-Marly",
+      "canton": "FR",
+      "npa": "1723"
+    },
+    {
+      "name": "Villarzel",
+      "canton": "VD",
+      "npa": "1555"
+    },
+    {
+      "name": "Villaz",
+      "canton": "FR",
+      "npa": "1690"
+    },
+    {
+      "name": "Villeneuve (VD)",
+      "canton": "VD",
+      "npa": "1844"
+    },
+    {
+      "name": "Villorsonnens",
+      "canton": "FR",
+      "npa": "1694"
+    },
+    {
+      "name": "Vinzel",
+      "canton": "VD",
+      "npa": "1184"
+    },
+    {
+      "name": "Vionnaz",
+      "canton": "VS",
+      "npa": "1895"
+    },
+    {
+      "name": "Visp",
+      "canton": "VS",
+      "npa": "3930"
+    },
+    {
+      "name": "Visperterminen",
+      "canton": "VS",
+      "npa": "3932"
+    },
+    {
+      "name": "Vitznau",
+      "canton": "LU",
+      "npa": "6354"
+    },
+    {
+      "name": "Vouvry",
+      "canton": "VS",
+      "npa": "1896"
+    },
+    {
+      "name": "Vuadens",
+      "canton": "FR",
+      "npa": "1628"
+    },
+    {
+      "name": "Vuarrens",
+      "canton": "VD",
+      "npa": "1418"
+    },
+    {
+      "name": "Vucherens",
+      "canton": "VD",
+      "npa": "1509"
+    },
+    {
+      "name": "Vufflens-la-Ville",
+      "canton": "VD",
+      "npa": "1302"
+    },
+    {
+      "name": "Vufflens-le-Château",
+      "canton": "VD",
+      "npa": "1134"
+    },
+    {
+      "name": "Vugelles-La Mothe",
+      "canton": "VD",
+      "npa": "1431"
+    },
+    {
+      "name": "Vuisternens-devant-Romont",
+      "canton": "FR",
+      "npa": "1687"
+    },
+    {
+      "name": "Vuiteboeuf",
+      "canton": "VD",
+      "npa": "1445"
+    },
+    {
+      "name": "Vulliens",
+      "canton": "VD",
+      "npa": "1085"
+    },
+    {
+      "name": "Vullierens",
+      "canton": "VD",
+      "npa": "1115"
+    },
+    {
+      "name": "Vully-les-Lacs",
+      "canton": "VD",
+      "npa": "1585"
+    },
+    {
+      "name": "Vérossaz",
+      "canton": "VS",
+      "npa": "1891"
+    },
+    {
+      "name": "Vétroz",
+      "canton": "VS",
+      "npa": "1963"
+    },
+    {
+      "name": "Wauwil",
+      "canton": "LU",
+      "npa": "6242"
+    },
+    {
+      "name": "Weggis",
+      "canton": "LU",
+      "npa": "6353"
+    },
+    {
+      "name": "Werthenstein",
+      "canton": "LU",
+      "npa": "6106"
+    },
+    {
+      "name": "Wikon",
+      "canton": "LU",
+      "npa": "4806"
+    },
+    {
+      "name": "Wiler (Lötschen)",
+      "canton": "VS",
+      "npa": "3918"
+    },
+    {
+      "name": "Willisau",
+      "canton": "LU",
+      "npa": "6130"
+    },
+    {
+      "name": "Wolhusen",
+      "canton": "LU",
+      "npa": "6110"
+    },
+    {
+      "name": "Wünnewil-Flamatt",
+      "canton": "FR",
+      "npa": "3175"
+    },
+    {
+      "name": "Yens",
+      "canton": "VD",
+      "npa": "1169"
+    },
+    {
+      "name": "Yverdon-les-Bains",
+      "canton": "VD",
+      "npa": "1400"
+    },
+    {
+      "name": "Yvonand",
+      "canton": "VD",
+      "npa": "1462"
+    },
+    {
+      "name": "Yvorne",
+      "canton": "VD",
+      "npa": "1853"
+    },
+    {
+      "name": "Zell (LU)",
+      "canton": "LU",
+      "npa": "6144"
+    },
+    {
+      "name": "Zeneggen",
+      "canton": "VS",
+      "npa": "3934"
+    },
+    {
+      "name": "Zermatt",
+      "canton": "VS",
+      "npa": "3920"
+    },
+    {
+      "name": "Zwischbergen",
+      "canton": "VS",
+      "npa": "3901"
+    }
+  ]
+}

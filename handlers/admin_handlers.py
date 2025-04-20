@@ -3,7 +3,8 @@ from telegram.ext import CommandHandler, CallbackContext
 from database.models import Trip, Booking, User
 import os
 
-ADMIN_IDS = list(map(int, os.getenv('ADMIN_USER_IDS', '').split(',')))
+# Définition directe de votre ID admin
+ADMIN_IDS = [5932296330]  # Votre ID Telegram vérifié
 
 async def admin_panel(update: Update, context: CallbackContext):
     """Panneau d'administration"""
@@ -22,6 +23,6 @@ async def admin_panel(update: Update, context: CallbackContext):
         reply_markup=InlineKeyboardMarkup(keyboard)
     )
 
-def register(application):
+def register(dispatcher):
     """Enregistre les handlers admin"""
-    application.add_handler(CommandHandler("admin", admin_panel))
+    dispatcher.add_handler(CommandHandler("admin", admin_panel))
