@@ -1,6 +1,6 @@
 import os
 import sys
-from database import init_db
+from database.db_manager import init_db
 import logging
 
 logging.basicConfig(level=logging.INFO)

@@ -1,16 +1,11 @@
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackQueryHandler
 from utils.languages import TRANSLATIONS
-import logging
 
 async def handle_menu_buttons(update: Update, context):
     """Gère les clics sur les boutons du menu"""
     query = update.callback_query
     user_lang = context.user_data.get('language', 'fr')
-    
-    # Debug logs
-    print(f"DEBUG: Menu button clicked: {query.data}")
-    logging.info(f"Menu button clicked: {query.data}")
     
     if query.data == "search_trip":
         keyboard = [
@@ -38,7 +33,7 @@ async def handle_menu_buttons(update: Update, context):
     
     elif query.data == "my_trips":
         keyboard = [
-            [InlineKeyboardButton("�� Trajets conducteur", callback_data="driver_trips")],
+            [InlineKeyboardButton("🚗 Trajets conducteur", callback_data="driver_trips")],
             [InlineKeyboardButton("🧍 Trajets passager", callback_data="passenger_trips")],
             [InlineKeyboardButton("🔄 Menu principal", callback_data="back_to_menu")]
         ]
@@ -65,9 +60,4 @@ async def handle_menu_buttons(update: Update, context):
 
 def register(application):
     """Enregistre les handlers du menu"""
-    # Debug log
-    print("DEBUG: Registering menu handlers")
-    logging.info("Registering menu handlers")
-    
-    # Add a handler for menu buttons with a broader pattern
     application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern='^(search_trip|create_trip|my_trips|profile|back_to_menu)'))
