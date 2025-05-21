@@ -1,5 +1,5 @@
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import CommandHandler, MessageHandler, filters
+from telegram.ext import CommandHandler, MessageHandler, filters, CallbackQueryHandler
 from database.models import Message, User
 from database import get_db
 
@@ -42,4 +42,9 @@ async def show_conversations(update: Update, context):
 def register(application):
     """Enregistre les handlers de messagerie"""
     application.add_handler(CommandHandler("messages", show_conversations))
-    # ...autres handlers de messagerie
+    
+    # Handler pour les callbacks de conversation
+    application.add_handler(CallbackQueryHandler(
+        lambda u, c: u.callback_query.answer("Fonctionnalité en développement"),
+        pattern="^chat_"
+    ))

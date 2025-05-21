@@ -1,0 +1,23 @@
+2025-05-17 14:49:54,967 - __main__ - INFO - Diagnostic démarré, logs écrits dans logs/diagnostic_final_20250517_144954.log
+2025-05-17 14:49:55,329 - utils.swiss_cities - INFO - Trying to load localities from /Users/margaux/CovoiturageSuisse/data/swiss_localities.json
+2025-05-17 14:49:55,330 - utils.swiss_cities - INFO - Loaded 741 localities from direct format
+2025-05-17 14:49:55,331 - utils.swiss_cities - INFO - Trying to load localities from /Users/margaux/CovoiturageSuisse/data/swiss_localities.json
+2025-05-17 14:49:55,332 - utils.swiss_cities - INFO - Loaded 741 localities from direct format
+2025-05-17 14:49:55,332 - handlers.trip_handlers - INFO - Chargé 741 localités
+2025-05-17 14:49:55,779 - utils.swiss_cities - INFO - Trying to load localities from /Users/margaux/CovoiturageSuisse/data/swiss_localities.json
+2025-05-17 14:49:55,779 - utils.swiss_cities - INFO - Loaded 741 localities from direct format
+2025-05-17 14:49:55,779 - handlers.create_trip_handler - INFO - Chargé 741 localités pour create_trip_handler
+2025-05-17 14:49:55,781 - utils.swiss_cities - INFO - Trying to load localities from /Users/margaux/CovoiturageSuisse/data/swiss_localities.json
+2025-05-17 14:49:55,783 - utils.swiss_cities - INFO - Loaded 741 localities from direct format
+2025-05-17 14:49:55,783 - handlers.search_trip_handler - INFO - Chargé 741 localités pour search_trip_handler
+2025-05-17 14:49:55,784 - __main__ - INFO - Enregistrement des handlers...
+2025-05-17 14:49:55,784 - handlers.create_trip_handler - INFO - 🔄 Enregistrement des handlers de création de trajet...
+2025-05-17 14:49:55,784 - handlers.create_trip_handler - INFO - ✅ ConversationHandler pour création de trajet enregistré avec succès
+2025-05-17 14:49:55,784 - handlers.create_trip_handler - INFO - ✅ Handler pour publication de trajet enregistré avec succès
+2025-05-17 14:49:55,784 - handlers.create_trip_handler - INFO - États disponibles dans ConversationHandler: [0, 1, 2, 3, 8, 9, 10, 11, 5, 6, 7]
+2025-05-17 14:49:55,784 - handlers.create_trip_handler - INFO - ✅ Tous les handlers de création de trajet enregistrés avec succès.
+2025-05-17 14:49:55,784 - handlers.menu_handlers - INFO - Enregistrement des handlers de menu
+2025-05-17 14:49:55,785 - handlers.help_handlers - INFO - Enregistrement des handlers d'aide
+2025-05-17 14:49:55,786 - handlers.search_trip_handler - INFO - Handlers de recherche de trajet enregistrés.
+2025-05-17 14:49:55,786 - __main__ - INFO - Analyse des handlers...
+2025-05-17 14:49:55,786 - __main__ - ERROR - Erreur lors de l'inspection des handlers: 'ConversationHandler' object has no attribute '_priority'

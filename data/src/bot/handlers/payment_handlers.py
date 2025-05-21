@@ -1,9 +1,13 @@
 import stripe
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
+import os
+import sys
+from dotenv import load_dotenv
+
+# Ajout du chemin parent au chemin d'importation Python
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))))
 from database import get_db
 from database.models import Payment, Trip, User
-import os
-from dotenv import load_dotenv
 
 # Chargement des variables d'environnement
 load_dotenv()

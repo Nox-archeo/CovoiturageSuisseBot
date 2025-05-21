@@ -1,82 +1,79 @@
-from typing import List, Dict
+from typing import List, Dict, Any, Optional
 from pathlib import Path
 import json
+import os
 import logging
 from unidecode import unidecode
 
 logger = logging.getLogger(__name__)
 
-# Structure de données pour les localités
-SWISS_LOCALITIES: Dict[str, Dict[str, str]] = {
-    # Format: "Nom": {"zip": "code postal", "canton": "canton"}
-    "Fribourg": {"zip": "1700", "canton": "FR"},
-    "Givisiez": {"zip": "1762", "canton": "FR"},
-    "Granges-Paccot": {"zip": "1763", "canton": "FR"},
-    "Marly": {"zip": "1723", "canton": "FR"},
-    "Villars-sur-Glâne": {"zip": "1752", "canton": "FR"},
-    "Bulle": {"zip": "1630", "canton": "FR"},
-    "Rechthalten": {"zip": "1718", "canton": "FR"},
-    # ... Chargement du fichier complet des localités
-}
+# Chemin vers le fichier JSON des localités suisses
+JSON_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'scripts', 'data', 'swiss_localities.json')
 
-def load_localities() -> Dict:
-    """Charge la liste des localités depuis le fichier JSON"""
-    try:
-        file_path = Path(__file__).parent.parent / 'data' / 'swiss_localities.json'
-        logger.info(f"Loading localities from {file_path}")
-        with open(file_path, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-            logger.info(f"Loaded {len(data)} localities")
-            return data
-    except FileNotFoundError:
-        logger.error(f"Localities file not found at {file_path}")
-        return {}
-    except json.JSONDecodeError as e:
-        logger.error(f"Error decoding JSON: {e}")
-        return {}
+# Cache pour les données chargées
+_localities_data = None
 
-def find_locality(query: str) -> List[Dict]:
-    """Recherche une localité par nom ou NPA avec gestion des accents"""
-    if not query:
-        return []
-        
-    localities = load_localities()
-    if not localities:
-        logger.error("No localities loaded!")
-        return []
-
-    results = []
-    query = query.lower().strip()
-    query_unaccented = unidecode(query)
+def load_localities() -> Dict[str, Dict[str, str]]:
+    """Charge les données des localités suisses depuis le fichier JSON"""
+    global _localities_data
     
-    logger.info(f"Searching for: {query}")
+    if _localities_data is None:
+        try:
+            with open(JSON_PATH, 'r', encoding='utf-8') as f:
+                _localities_data = json.load(f)
+            logger.info(f"Données des localités suisses chargées: {len(_localities_data)} localités")
+        except Exception as e:
+            logger.error(f"Erreur lors du chargement des localités suisses: {e}")
+            _localities_data = {}
+    
+    return _localities_data
 
-    # Recherche par NPA
+# Pour assurer la compatibilité avec le code existant
+def load_all_localities() -> Dict[str, Dict[str, str]]:
+    """Fonction alias pour load_localities pour compatibilité"""
+    return load_localities()
+
+def find_locality(query: str) -> List[Dict[str, str]]:
+    """
+    Recherche une localité dans les données suisses.
+    Peut chercher par nom de ville ou code postal.
+    
+    Args:
+        query: Partie du nom de la ville ou code postal
+        
+    Returns:
+        Liste de localités correspondantes
+    """
+    localities = load_localities()
+    results = []
+    
+    if not query or not localities:
+        return results
+    
+    query = query.strip().lower()
+    
+    # Si la requête ressemble à un code postal (uniquement des chiffres)
     if query.isdigit():
-        for loc_data in localities.values():
-            if loc_data['zip'].startswith(query):
-                results.append(loc_data)
-                logger.info(f"Found by ZIP: {loc_data['name']}")
-
-    # Recherche par nom
+        for name, data in localities.items():
+            if data.get("zip", "").startswith(query):
+                results.append({
+                    "name": name,
+                    "canton": data.get("canton", ""),
+                    "zip": data.get("zip", "")
+                })
+    # Sinon, on cherche par nom
     else:
-        for loc_data in localities.values():
-            name_lower = loc_data['name'].lower()
-            name_unaccented = unidecode(name_lower)
-            
-            # Correspondance exacte
-            if query == name_lower or query_unaccented == name_unaccented:
-                results.insert(0, loc_data)
-                logger.info(f"Exact match: {loc_data['name']}")
-                continue
-                
-            # Correspondance partielle
-            if query in name_lower or query_unaccented in name_unaccented:
-                results.append(loc_data)
-                logger.info(f"Partial match: {loc_data['name']}")
-
-    logger.info(f"Found {len(results)} matches")
-    return results[:5]
+        for name, data in localities.items():
+            if query in name.lower():
+                results.append({
+                    "name": name,
+                    "canton": data.get("canton", ""),
+                    "zip": data.get("zip", "")
+                })
+    
+    # Trier les résultats par nom
+    results.sort(key=lambda x: x["name"])
+    return results
 
 def is_valid_locality(locality: str) -> bool:
     """Vérifie si une localité existe dans la base"""
@@ -88,11 +85,22 @@ def is_valid_locality(locality: str) -> bool:
             return True
     return False
 
-def format_locality_result(locality: Dict) -> str:
-    """Formate l'affichage d'une localité"""
-    return f"{locality['name']} ({locality['zip']}, {locality['canton']})"
+def format_locality_result(locality: Dict[str, str]) -> str:
+    """Formate le résultat d'une localité pour l'affichage"""
+    return f"{locality['name']} ({locality['canton']}) - {locality['zip']}"
 
-def get_locality_info(name: str) -> Dict[str, str]:
-    """Récupère les informations d'une localité par son nom"""
+def get_locality_by_name(name: str) -> Optional[Dict[str, str]]:
+    """Récupère les détails d'une localité par son nom"""
     localities = load_localities()
-    return localities.get(name, None)
+    if name in localities:
+        return {
+            "name": name,
+            "canton": localities[name].get("canton", ""),
+            "zip": localities[name].get("zip", "")
+        }
+    return None
+
+# Fonction utilitaire pour récupérer directement les villes principales pour les boutons
+def get_major_cities() -> List[str]:
+    """Retourne une liste des principales villes suisses pour les boutons rapides"""
+    return ["Fribourg", "Genève", "Lausanne", "Zürich", "Berne", "Bâle"]

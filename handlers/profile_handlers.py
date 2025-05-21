@@ -1,159 +1,162 @@
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
-    CommandHandler,
-    CallbackQueryHandler,
-    MessageHandler,
-    filters,
-    ConversationHandler
+    CallbackQueryHandler, CommandHandler, CallbackContext, 
+    ConversationHandler, MessageHandler, filters
 )
-from database.models import User
-from database import get_db
+from database.models import User # Assuming User model
+from database import get_db      # Assuming get_db function
+
 import logging
+logger = logging.getLogger(__name__)
 
-# États de conversation
-CHOOSING, TYPING_PHONE = range(2)  # Simplification des états
+# States for profile conversation
+PROFILE_CHOOSING, TYPING_PHONE, EDIT_VEHICLE, VIEW_RATINGS = range(4) # Example states
 
-async def profile_menu(update: Update, context):
-    """Menu principal du profil"""
-    try:
-        user_id = update.effective_user.id
-        db = get_db()
-        user = db.query(User).filter_by(telegram_id=user_id).first()
-        
-        if not user:
-            user = User(telegram_id=user_id, username=update.effective_user.username)
-            db.add(user)
-            db.commit()
+async def profile_menu(update: Update, context: CallbackContext):
+    """Shows the main profile menu."""
+    query = update.callback_query
+    if query:
+        await query.answer()
 
-        keyboard = [
-            [
-                InlineKeyboardButton("🚗 Mode Conducteur", callback_data="driver"),
-                InlineKeyboardButton("🧍 Mode Passager", callback_data="passenger")
-            ],
-            [InlineKeyboardButton("📱 Ajouter téléphone", callback_data="phone")],
-            [InlineKeyboardButton("🔙 Menu principal", callback_data="menu")]
-        ]
+    user_id = update.effective_user.id
+    # db = get_db()
+    # user = db.query(User).filter(User.telegram_id == user_id).first()
+    # if not user:
+    #     # Handle user not found, perhaps create one or ask to /start
+    #     text = "Veuillez d'abord utiliser /start pour initialiser votre profil."
+    #     if query: await query.edit_message_text(text)
+    #     else: await update.message.reply_text(text)
+    #     return ConversationHandler.END
 
-        text = (
-            f"👤 Profil de {update.effective_user.first_name}\n\n"
-            f"📱 Téléphone: {user.phone or 'Non renseigné'}\n"
-            f"Mode: {'Conducteur' if user.is_driver else 'Passager' if user.is_passenger else 'Non défini'}"
-        )
+    keyboard = [
+        # [InlineKeyboardButton(f"{'✅' if user.is_driver else '☑️'} Mode Conducteur", callback_data="profile:set_driver")],
+        # [InlineKeyboardButton(f"{'✅' if user.is_passenger else '☑️'} Mode Passager", callback_data="profile:set_passenger")],
+        [InlineKeyboardButton("📱 Gérer Téléphone", callback_data="profile:phone")],
+        [InlineKeyboardButton("🚗 Gérer Véhicule", callback_data="profile:vehicle")], # Example
+        [InlineKeyboardButton("⭐ Mes Évaluations", callback_data="profile:ratings")], # Example
+        [InlineKeyboardButton("⬅️ Retour au menu", callback_data="menu:back_to_menu")] # Consistent back
+    ]
+    
+    text = "👤 *Mon Profil*\n\nQue souhaitez-vous faire?"
+    if query:
+        await query.edit_message_text(text, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode="Markdown")
+    else:
+        await update.message.reply_text(text, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode="Markdown")
+    return PROFILE_CHOOSING
 
-        if update.callback_query:
-            await update.callback_query.edit_message_text(
-                text=text,
-                reply_markup=InlineKeyboardMarkup(keyboard)
-            )
-        else:
-            await update.message.reply_text(
-                text=text,
-                reply_markup=InlineKeyboardMarkup(keyboard)
-            )
-        return CHOOSING
-
-    except Exception as e:
-        print(f"Error in profile_menu: {str(e)}")
-        return ConversationHandler.END
-
-async def handle_button(update: Update, context):
-    """Gère les clics sur les boutons"""
+async def handle_profile_choice(update: Update, context: CallbackContext):
+    """Handles choices from the profile menu."""
     query = update.callback_query
     await query.answer()
-    choice = query.data
-    
-    try:
-        db = get_db()
-        user = db.query(User).filter_by(telegram_id=query.from_user.id).first()
+    choice = query.data.split(":")[1] # e.g., "profile:phone" -> "phone"
 
-        if choice == "driver":
-            user.is_driver = True
-            db.commit()
-            await query.edit_message_text("✅ Mode conducteur activé!")
-            return CHOOSING
-
-        elif choice == "passenger":
-            user.is_passenger = True
-            db.commit()
-            await query.edit_message_text("✅ Mode passager activé!")
-            return CHOOSING
-
-        elif choice == "phone":
-            await query.edit_message_text(
-                "📱 Veuillez entrer votre numéro de téléphone\n"
-                "Format: +41 XX XXX XX XX ou 07X XXX XX XX"
-            )
-            return TYPING_PHONE
-
-        elif choice == "menu":
-            return await profile_menu(update, context)
-
-    except Exception as e:
-        print(f"Error: {str(e)}")
-        await query.edit_message_text("Une erreur est survenue.")
+    db = get_db()
+    user = db.query(User).filter(User.telegram_id == query.from_user.id).first()
+    if not user: # Should ideally be handled by an earlier check or user creation
+        await query.edit_message_text("Utilisateur non trouvé. Veuillez réessayer /start.")
         return ConversationHandler.END
 
-async def handle_phone_input(update: Update, context):
-    """Traite l'entrée du numéro de téléphone"""
-    if not update.message:
-        return TYPING_PHONE
+    if choice == "set_driver":
+        user.is_driver = not getattr(user, 'is_driver', False) # Toggle
+        db.commit()
+        await query.edit_message_text(f"Mode conducteur {'activé' if user.is_driver else 'désactivé'}!")
+        return await profile_menu(update, context) # Refresh menu
 
-    phone = update.message.text.strip()
-    
-    # Nettoyage du numéro
-    phone = phone.replace(" ", "")
-    if phone.startswith("0"):
-        phone = "+41" + phone[1:]
-    
-    # Validation du format
-    if not (phone.startswith('+41') and len(phone) == 12 and phone[1:].isdigit()):
-        await update.message.reply_text(
-            "❌ Format invalide. Veuillez utiliser:\n"
-            "+41 XX XXX XX XX ou\n"
-            "07X XXX XX XX"
+    elif choice == "set_passenger":
+        user.is_passenger = not getattr(user, 'is_passenger', False) # Toggle
+        db.commit()
+        await query.edit_message_text(f"Mode passager {'activé' if user.is_passenger else 'désactivé'}!")
+        return await profile_menu(update, context) # Refresh menu
+
+    elif choice == "phone":
+        await query.edit_message_text(
+            "📱 Veuillez entrer votre numéro de téléphone (ex: +41791234567)\n"
+            "Ou tapez /annuler pour revenir."
         )
         return TYPING_PHONE
+    
+    elif choice == "vehicle":
+        # Placeholder for vehicle management
+        await query.edit_message_text("Gestion du véhicule en développement.")
+        return PROFILE_CHOOSING # Stay in menu
 
-    try:
-        db = get_db()
-        user = db.query(User).filter_by(telegram_id=update.effective_user.id).first()
-        user.phone = phone
+    elif choice == "ratings":
+        # Placeholder for ratings view
+        await query.edit_message_text("Consultation des évaluations en développement.")
+        return PROFILE_CHOOSING # Stay in menu
+        
+    elif choice == "back_to_menu":
+        # Import ici pour éviter les imports circulaires
+        from handlers.menu_handlers import start_command as show_main_menu
+        await show_main_menu(update, context)
+        return ConversationHandler.END
+
+    return PROFILE_CHOOSING # Default fallback within conversation
+
+async def handle_phone_input(update: Update, context: CallbackContext):
+    """Handles the phone number input."""
+    phone_number = update.message.text
+    # Add validation for phone_number here
+    # ...
+    db = get_db()
+    user = db.query(User).filter(User.telegram_id == update.effective_user.id).first()
+    if user:
+        user.phone_number = phone_number # Save validated number
         db.commit()
-        
-        # Retour au menu profil avec confirmation
-        await update.message.reply_text("✅ Numéro de téléphone enregistré!")
-        return await profile_menu(update, context)
-        
-    except Exception as e:
-        print(f"Error saving phone: {str(e)}")
-        await update.message.reply_text("Une erreur est survenue.")
-        return TYPING_PHONE
+        await update.message.reply_text(f"✅ Numéro de téléphone enregistré: {phone_number}")
+    else:
+        await update.message.reply_text("Erreur: utilisateur non trouvé.")
 
-def get_user_mode(user):
-    """Retourne le mode actuel de l'utilisateur"""
-    if user.is_driver and user.is_passenger:
-        return "Conducteur et Passager"
-    elif user.is_driver:
-        return "Conducteur"
-    elif user.is_passenger:
-        return "Passager"
-    return "Non défini"
+    # Go back to profile menu
+    await profile_menu(update, context)
+    return PROFILE_CHOOSING
+
+
+async def cancel_profile_conversation(update: Update, context: CallbackContext):
+    query = update.callback_query
+    if query:
+        await query.answer()
+        await query.edit_message_text("Modification du profil annulée.")
+    else:
+        await update.message.reply_text("Modification du profil annulée.")
+    
+    # Go back to main menu
+    from handlers.menu_handlers import start_command as show_main_menu
+    await show_main_menu(update, context)
+    return ConversationHandler.END
+
+profile_conv_handler = ConversationHandler(
+    entry_points=[
+        CallbackQueryHandler(profile_menu, pattern="^menu:profile$"),
+        CommandHandler("profile", profile_menu) # Allow direct command
+    ],
+    states={
+        PROFILE_CHOOSING: [
+            CallbackQueryHandler(handle_profile_choice, pattern="^profile:(set_driver|set_passenger|phone|vehicle|ratings)$"),
+            CallbackQueryHandler(cancel_profile_conversation, pattern="^profile:cancel$"), # Specific cancel for profile
+            CallbackQueryHandler(lambda u,c: __import__('handlers.menu_handlers').menu_handlers.handle_menu_buttons(u,c), pattern="^menu:back_to_menu$")
+
+        ],
+        TYPING_PHONE: [
+            MessageHandler(filters.TEXT & ~filters.COMMAND, handle_phone_input),
+        ],
+        # Define other states like EDIT_VEHICLE, VIEW_RATINGS and their handlers
+    },
+    fallbacks=[
+        CommandHandler("cancel", cancel_profile_conversation),
+        CallbackQueryHandler(cancel_profile_conversation, pattern="^profile:cancel$"),
+        # Fallback for unexpected input within this conversation
+        MessageHandler(filters.ALL, lambda u, c: u.message.reply_text("Entrée non valide. Utilisez les boutons ou /cancel.") if u.message else c.bot.answer_callback_query(u.callback_query.id, "Action non valide.", show_alert=True) )
+    ],
+    map_to_parent={ # If called from a main menu conversation, how to return
+        ConversationHandler.END: ConversationHandler.END # Or a specific state in parent
+    },
+    name="profile_conversation",  # Ajouté - c'est obligatoire pour persistent=True
+    persistent=True,
+    allow_reentry=True,
+    per_message=False  # Changé - évite les warnings
+)
 
 def register(application):
-    """Enregistre les handlers"""
-    conv_handler = ConversationHandler(
-        entry_points=[CommandHandler('profil', profile_menu)],
-        states={
-            CHOOSING: [
-                CallbackQueryHandler(handle_button)
-            ],
-            TYPING_PHONE: [
-                MessageHandler(filters.TEXT & ~filters.COMMAND, handle_phone_input),
-                CallbackQueryHandler(profile_menu, pattern='^back_to_profile$')
-            ]
-        },
-        fallbacks=[CommandHandler('cancel', lambda u,c: ConversationHandler.END)],
-        allow_reentry=True
-    )
-    
-    application.add_handler(conv_handler)
+    application.add_handler(profile_conv_handler)
+    logger.info("Profile handlers registered.")

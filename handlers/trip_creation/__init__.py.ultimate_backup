@@ -1,0 +1,20 @@
+"""
+Module de création de trajets pour CovoiturageSuisse.
+"""
+from .driver_trip_handler import register as register_driver_handlers
+from .passenger_trip_handler import register as register_passenger_handlers
+
+def register(application):
+    """Enregistre tous les handlers pour la création de trajets"""
+    # On enregistre d'abord le driver handler car c'est le plus prioritaire
+    import logging
+    logger = logging.getLogger(__name__)
+    logger.info("🔍 Enregistrement des handlers de création de trajet")
+    
+    # Important: enregistrer d'abord le handler driver (trip_type:driver)
+    register_driver_handlers(application)
+    
+    # Puis enregistrer le handler passager (trip_type:passenger)
+    register_passenger_handlers(application)
+    
+    logger.info("✅ Handlers de création de trajet enregistrés")

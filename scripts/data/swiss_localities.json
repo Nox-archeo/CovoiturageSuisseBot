@@ -1,0 +1,3707 @@
+{
+  "Aclens": {
+    "name": "Aclens",
+    "canton": "VD",
+    "zip": "1123"
+  },
+  "Adligenswil": {
+    "name": "Adligenswil",
+    "canton": "LU",
+    "zip": "6043"
+  },
+  "Aesch (LU)": {
+    "name": "Aesch (LU)",
+    "canton": "LU",
+    "zip": "6287"
+  },
+  "Agarn": {
+    "name": "Agarn",
+    "canton": "VS",
+    "zip": "3951"
+  },
+  "Agiez": {
+    "name": "Agiez",
+    "canton": "VD",
+    "zip": "1352"
+  },
+  "Aigle": {
+    "name": "Aigle",
+    "canton": "VD",
+    "zip": "1860"
+  },
+  "Aire-la-Ville": {
+    "name": "Aire-la-Ville",
+    "canton": "GE",
+    "zip": "1288"
+  },
+  "Alberswil": {
+    "name": "Alberswil",
+    "canton": "LU",
+    "zip": "6248"
+  },
+  "Albinen": {
+    "name": "Albinen",
+    "canton": "VS",
+    "zip": "3955"
+  },
+  "Allaman": {
+    "name": "Allaman",
+    "canton": "VD",
+    "zip": "1165"
+  },
+  "Alle": {
+    "name": "Alle",
+    "canton": "JU",
+    "zip": "2942"
+  },
+  "Altbüron": {
+    "name": "Altbüron",
+    "canton": "LU",
+    "zip": "6147"
+  },
+  "Altishofen": {
+    "name": "Altishofen",
+    "canton": "LU",
+    "zip": "6246"
+  },
+  "Anières": {
+    "name": "Anières",
+    "canton": "GE",
+    "zip": "1247"
+  },
+  "Anniviers": {
+    "name": "Anniviers",
+    "canton": "VS",
+    "zip": "3961"
+  },
+  "Arbaz": {
+    "name": "Arbaz",
+    "canton": "VS",
+    "zip": "1974"
+  },
+  "Ardon": {
+    "name": "Ardon",
+    "canton": "VS",
+    "zip": "1957"
+  },
+  "Arnex-sur-Nyon": {
+    "name": "Arnex-sur-Nyon",
+    "canton": "VD",
+    "zip": "1277"
+  },
+  "Arnex-sur-Orbe": {
+    "name": "Arnex-sur-Orbe",
+    "canton": "VD",
+    "zip": "1321"
+  },
+  "Arzier-Le Muids": {
+    "name": "Arzier-Le Muids",
+    "canton": "VD",
+    "zip": "1273"
+  },
+  "Assens": {
+    "name": "Assens",
+    "canton": "VD",
+    "zip": "1042"
+  },
+  "Attalens": {
+    "name": "Attalens",
+    "canton": "FR",
+    "zip": "1616"
+  },
+  "Aubonne": {
+    "name": "Aubonne",
+    "canton": "VD",
+    "zip": "1170"
+  },
+  "Ausserberg": {
+    "name": "Ausserberg",
+    "canton": "VS",
+    "zip": "3938"
+  },
+  "Autigny": {
+    "name": "Autigny",
+    "canton": "FR",
+    "zip": "1742"
+  },
+  "Avenches": {
+    "name": "Avenches",
+    "canton": "VD",
+    "zip": "1580"
+  },
+  "Avry": {
+    "name": "Avry",
+    "canton": "FR",
+    "zip": "1754"
+  },
+  "Avully": {
+    "name": "Avully",
+    "canton": "GE",
+    "zip": "1237"
+  },
+  "Avusy": {
+    "name": "Avusy",
+    "canton": "GE",
+    "zip": "1285"
+  },
+  "Ayent": {
+    "name": "Ayent",
+    "canton": "VS",
+    "zip": "1966"
+  },
+  "Ballaigues": {
+    "name": "Ballaigues",
+    "canton": "VD",
+    "zip": "1338"
+  },
+  "Ballens": {
+    "name": "Ballens",
+    "canton": "VD",
+    "zip": "1144"
+  },
+  "Ballwil": {
+    "name": "Ballwil",
+    "canton": "LU",
+    "zip": "6275"
+  },
+  "Baltschieder": {
+    "name": "Baltschieder",
+    "canton": "VS",
+    "zip": "3937"
+  },
+  "Bardonnex": {
+    "name": "Bardonnex",
+    "canton": "GE",
+    "zip": "1257"
+  },
+  "Bas-Intyamon": {
+    "name": "Bas-Intyamon",
+    "canton": "FR",
+    "zip": "1669"
+  },
+  "Basse-Allaine": {
+    "name": "Basse-Allaine",
+    "canton": "JU",
+    "zip": "2904"
+  },
+  "Basse-Vendline": {
+    "name": "Basse-Vendline",
+    "canton": "JU",
+    "zip": "2926"
+  },
+  "Bassins": {
+    "name": "Bassins",
+    "canton": "VD",
+    "zip": "1269"
+  },
+  "Baulmes": {
+    "name": "Baulmes",
+    "canton": "VD",
+    "zip": "1446"
+  },
+  "Bavois": {
+    "name": "Bavois",
+    "canton": "VD",
+    "zip": "1372"
+  },
+  "Begnins": {
+    "name": "Begnins",
+    "canton": "VD",
+    "zip": "1268"
+  },
+  "Belfaux": {
+    "name": "Belfaux",
+    "canton": "FR",
+    "zip": "1782"
+  },
+  "Bellevue": {
+    "name": "Bellevue",
+    "canton": "GE",
+    "zip": "1293"
+  },
+  "Bellwald": {
+    "name": "Bellwald",
+    "canton": "VS",
+    "zip": "3997"
+  },
+  "Belmont-Broye": {
+    "name": "Belmont-Broye",
+    "canton": "FR",
+    "zip": "1773"
+  },
+  "Belmont-sur-Lausanne": {
+    "name": "Belmont-sur-Lausanne",
+    "canton": "VD",
+    "zip": "1092"
+  },
+  "Belmont-sur-Yverdon": {
+    "name": "Belmont-sur-Yverdon",
+    "canton": "VD",
+    "zip": "1432"
+  },
+  "Bercher": {
+    "name": "Bercher",
+    "canton": "VD",
+    "zip": "1038"
+  },
+  "Bernex": {
+    "name": "Bernex",
+    "canton": "GE",
+    "zip": "1233"
+  },
+  "Berolle": {
+    "name": "Berolle",
+    "canton": "VD",
+    "zip": "1149"
+  },
+  "Beromünster": {
+    "name": "Beromünster",
+    "canton": "LU",
+    "zip": "6215"
+  },
+  "Bettens": {
+    "name": "Bettens",
+    "canton": "VD",
+    "zip": "1042"
+  },
+  "Bettmeralp": {
+    "name": "Bettmeralp",
+    "canton": "VS",
+    "zip": "3992"
+  },
+  "Bex": {
+    "name": "Bex",
+    "canton": "VD",
+    "zip": "1880"
+  },
+  "Billens-Hennens": {
+    "name": "Billens-Hennens",
+    "canton": "FR",
+    "zip": "1681"
+  },
+  "Binn": {
+    "name": "Binn",
+    "canton": "VS",
+    "zip": "3996"
+  },
+  "Bioley-Magnoux": {
+    "name": "Bioley-Magnoux",
+    "canton": "VD",
+    "zip": "1407"
+  },
+  "Bister": {
+    "name": "Bister",
+    "canton": "VS",
+    "zip": "3983"
+  },
+  "Bitsch": {
+    "name": "Bitsch",
+    "canton": "VS",
+    "zip": "3982"
+  },
+  "Bière": {
+    "name": "Bière",
+    "canton": "VD",
+    "zip": "1145"
+  },
+  "Blatten": {
+    "name": "Blatten",
+    "canton": "VS",
+    "zip": "3919"
+  },
+  "Blonay - Saint-Légier": {
+    "name": "Blonay - Saint-Légier",
+    "canton": "VD",
+    "zip": "1807"
+  },
+  "Bofflens": {
+    "name": "Bofflens",
+    "canton": "VD",
+    "zip": "1353"
+  },
+  "Bogis-Bossey": {
+    "name": "Bogis-Bossey",
+    "canton": "VD",
+    "zip": "1279"
+  },
+  "Bois-d'Amont": {
+    "name": "Bois-d'Amont",
+    "canton": "FR",
+    "zip": "1610"
+  },
+  "Boncourt": {
+    "name": "Boncourt",
+    "canton": "JU",
+    "zip": "2926"
+  },
+  "Bonvillars": {
+    "name": "Bonvillars",
+    "canton": "VD",
+    "zip": "1427"
+  },
+  "Borex": {
+    "name": "Borex",
+    "canton": "VD",
+    "zip": "1277"
+  },
+  "Bossonnens": {
+    "name": "Bossonnens",
+    "canton": "FR",
+    "zip": "1615"
+  },
+  "Bottens": {
+    "name": "Bottens",
+    "canton": "VD",
+    "zip": "1041"
+  },
+  "Botterens": {
+    "name": "Botterens",
+    "canton": "FR",
+    "zip": "1652"
+  },
+  "Boudry": {
+    "name": "Boudry",
+    "canton": "NE",
+    "zip": "2017"
+  },
+  "Bougy-Villars": {
+    "name": "Bougy-Villars",
+    "canton": "VD",
+    "zip": "1172"
+  },
+  "Boulens": {
+    "name": "Boulens",
+    "canton": "VD",
+    "zip": "1063"
+  },
+  "Bourg-Saint-Pierre": {
+    "name": "Bourg-Saint-Pierre",
+    "canton": "VS",
+    "zip": "1946"
+  },
+  "Bourg-en-Lavaux": {
+    "name": "Bourg-en-Lavaux",
+    "canton": "VD",
+    "zip": "1091"
+  },
+  "Bournens": {
+    "name": "Bournens",
+    "canton": "VD",
+    "zip": "1035"
+  },
+  "Bourrignon": {
+    "name": "Bourrignon",
+    "canton": "JU",
+    "zip": "2803"
+  },
+  "Boussens": {
+    "name": "Boussens",
+    "canton": "VD",
+    "zip": "1034"
+  },
+  "Bovernier": {
+    "name": "Bovernier",
+    "canton": "VS",
+    "zip": "1932"
+  },
+  "Boécourt": {
+    "name": "Boécourt",
+    "canton": "JU",
+    "zip": "2856"
+  },
+  "Bremblens": {
+    "name": "Bremblens",
+    "canton": "VD",
+    "zip": "1121"
+  },
+  "Bretigny-sur-Morrens": {
+    "name": "Bretigny-sur-Morrens",
+    "canton": "VD",
+    "zip": "1053"
+  },
+  "Bretonnières": {
+    "name": "Bretonnières",
+    "canton": "VD",
+    "zip": "1329"
+  },
+  "Brig-Glis": {
+    "name": "Brig-Glis",
+    "canton": "VS",
+    "zip": "3900"
+  },
+  "Broc": {
+    "name": "Broc",
+    "canton": "FR",
+    "zip": "1636"
+  },
+  "Brot-Plamboz": {
+    "name": "Brot-Plamboz",
+    "canton": "NE",
+    "zip": "2318"
+  },
+  "Brünisried": {
+    "name": "Brünisried",
+    "canton": "FR",
+    "zip": "1719"
+  },
+  "Buchillon": {
+    "name": "Buchillon",
+    "canton": "VD",
+    "zip": "1164"
+  },
+  "Buchrain": {
+    "name": "Buchrain",
+    "canton": "LU",
+    "zip": "6033"
+  },
+  "Bulle": {
+    "name": "Bulle",
+    "canton": "FR",
+    "zip": "1630"
+  },
+  "Bullet": {
+    "name": "Bullet",
+    "canton": "VD",
+    "zip": "1453"
+  },
+  "Bure": {
+    "name": "Bure",
+    "canton": "JU",
+    "zip": "2915"
+  },
+  "Bursinel": {
+    "name": "Bursinel",
+    "canton": "VD",
+    "zip": "1195"
+  },
+  "Bursins": {
+    "name": "Bursins",
+    "canton": "VD",
+    "zip": "1183"
+  },
+  "Burtigny": {
+    "name": "Burtigny",
+    "canton": "VD",
+    "zip": "1268"
+  },
+  "Bussigny": {
+    "name": "Bussigny",
+    "canton": "VD",
+    "zip": "1030"
+  },
+  "Bussy-sur-Moudon": {
+    "name": "Bussy-sur-Moudon",
+    "canton": "VD",
+    "zip": "1514"
+  },
+  "Buttisholz": {
+    "name": "Buttisholz",
+    "canton": "LU",
+    "zip": "6018"
+  },
+  "Bösingen": {
+    "name": "Bösingen",
+    "canton": "FR",
+    "zip": "3178"
+  },
+  "Bürchen": {
+    "name": "Bürchen",
+    "canton": "VS",
+    "zip": "3935"
+  },
+  "Büron": {
+    "name": "Büron",
+    "canton": "LU",
+    "zip": "6233"
+  },
+  "Carouge (GE)": {
+    "name": "Carouge (GE)",
+    "canton": "GE",
+    "zip": "1227"
+  },
+  "Cartigny": {
+    "name": "Cartigny",
+    "canton": "GE",
+    "zip": "1236"
+  },
+  "Chalais": {
+    "name": "Chalais",
+    "canton": "VS",
+    "zip": "3966"
+  },
+  "Chamblon": {
+    "name": "Chamblon",
+    "canton": "VD",
+    "zip": "1436"
+  },
+  "Chamoson": {
+    "name": "Chamoson",
+    "canton": "VS",
+    "zip": "1955"
+  },
+  "Champagne": {
+    "name": "Champagne",
+    "canton": "VD",
+    "zip": "1424"
+  },
+  "Champtauroz": {
+    "name": "Champtauroz",
+    "canton": "VD",
+    "zip": "1537"
+  },
+  "Champvent": {
+    "name": "Champvent",
+    "canton": "VD",
+    "zip": "1443"
+  },
+  "Champéry": {
+    "name": "Champéry",
+    "canton": "VS",
+    "zip": "1874"
+  },
+  "Chancy": {
+    "name": "Chancy",
+    "canton": "GE",
+    "zip": "1284"
+  },
+  "Chardonne": {
+    "name": "Chardonne",
+    "canton": "VD",
+    "zip": "1803"
+  },
+  "Chavannes-de-Bogis": {
+    "name": "Chavannes-de-Bogis",
+    "canton": "VD",
+    "zip": "1279"
+  },
+  "Chavannes-des-Bois": {
+    "name": "Chavannes-des-Bois",
+    "canton": "VD",
+    "zip": "1290"
+  },
+  "Chavannes-le-Chêne": {
+    "name": "Chavannes-le-Chêne",
+    "canton": "VD",
+    "zip": "1464"
+  },
+  "Chavannes-le-Veyron": {
+    "name": "Chavannes-le-Veyron",
+    "canton": "VD",
+    "zip": "1148"
+  },
+  "Chavannes-près-Renens": {
+    "name": "Chavannes-près-Renens",
+    "canton": "VD",
+    "zip": "1022"
+  },
+  "Chavannes-sur-Moudon": {
+    "name": "Chavannes-sur-Moudon",
+    "canton": "VD",
+    "zip": "1512"
+  },
+  "Chavornay": {
+    "name": "Chavornay",
+    "canton": "VD",
+    "zip": "1373"
+  },
+  "Cheseaux-Noréaz": {
+    "name": "Cheseaux-Noréaz",
+    "canton": "VD",
+    "zip": "1400"
+  },
+  "Cheseaux-sur-Lausanne": {
+    "name": "Cheseaux-sur-Lausanne",
+    "canton": "VD",
+    "zip": "1033"
+  },
+  "Chessel": {
+    "name": "Chessel",
+    "canton": "VD",
+    "zip": "1846"
+  },
+  "Chevilly": {
+    "name": "Chevilly",
+    "canton": "VD",
+    "zip": "1316"
+  },
+  "Chevroux": {
+    "name": "Chevroux",
+    "canton": "VD",
+    "zip": "1545"
+  },
+  "Chexbres": {
+    "name": "Chexbres",
+    "canton": "VD",
+    "zip": "1071"
+  },
+  "Cheyres-Châbles": {
+    "name": "Cheyres-Châbles",
+    "canton": "FR",
+    "zip": "1468"
+  },
+  "Chigny": {
+    "name": "Chigny",
+    "canton": "VD",
+    "zip": "1134"
+  },
+  "Chippis": {
+    "name": "Chippis",
+    "canton": "VS",
+    "zip": "3965"
+  },
+  "Choulex": {
+    "name": "Choulex",
+    "canton": "GE",
+    "zip": "1244"
+  },
+  "Château-d'Oex": {
+    "name": "Château-d'Oex",
+    "canton": "VD",
+    "zip": "1660"
+  },
+  "Châtel-Saint-Denis": {
+    "name": "Châtel-Saint-Denis",
+    "canton": "FR",
+    "zip": "1618"
+  },
+  "Châtel-sur-Montsalvens": {
+    "name": "Châtel-sur-Montsalvens",
+    "canton": "FR",
+    "zip": "1653"
+  },
+  "Châtillon (FR)": {
+    "name": "Châtillon (FR)",
+    "canton": "FR",
+    "zip": "1473"
+  },
+  "Châtillon (JU)": {
+    "name": "Châtillon (JU)",
+    "canton": "JU",
+    "zip": "2843"
+  },
+  "Châtonnaye": {
+    "name": "Châtonnaye",
+    "canton": "FR",
+    "zip": "1553"
+  },
+  "Chénens": {
+    "name": "Chénens",
+    "canton": "FR",
+    "zip": "1744"
+  },
+  "Chéserex": {
+    "name": "Chéserex",
+    "canton": "VD",
+    "zip": "1275"
+  },
+  "Chêne-Bougeries": {
+    "name": "Chêne-Bougeries",
+    "canton": "GE",
+    "zip": "1224"
+  },
+  "Chêne-Bourg": {
+    "name": "Chêne-Bourg",
+    "canton": "GE",
+    "zip": "1225"
+  },
+  "Chêne-Pâquier": {
+    "name": "Chêne-Pâquier",
+    "canton": "VD",
+    "zip": "1464"
+  },
+  "Clarmont": {
+    "name": "Clarmont",
+    "canton": "VD",
+    "zip": "1127"
+  },
+  "Clos du Doubs": {
+    "name": "Clos du Doubs",
+    "canton": "JU",
+    "zip": "2883"
+  },
+  "Coeuve": {
+    "name": "Coeuve",
+    "canton": "JU",
+    "zip": "2932"
+  },
+  "Coinsins": {
+    "name": "Coinsins",
+    "canton": "VD",
+    "zip": "1267"
+  },
+  "Collex-Bossy": {
+    "name": "Collex-Bossy",
+    "canton": "GE",
+    "zip": "1239"
+  },
+  "Collombey-Muraz": {
+    "name": "Collombey-Muraz",
+    "canton": "VS",
+    "zip": "1893"
+  },
+  "Collonge-Bellerive": {
+    "name": "Collonge-Bellerive",
+    "canton": "GE",
+    "zip": "1245"
+  },
+  "Collonges": {
+    "name": "Collonges",
+    "canton": "VS",
+    "zip": "1903"
+  },
+  "Cologny": {
+    "name": "Cologny",
+    "canton": "GE",
+    "zip": "1223"
+  },
+  "Commugny": {
+    "name": "Commugny",
+    "canton": "VD",
+    "zip": "1291"
+  },
+  "Concise": {
+    "name": "Concise",
+    "canton": "VD",
+    "zip": "1426"
+  },
+  "Confignon": {
+    "name": "Confignon",
+    "canton": "GE",
+    "zip": "1232"
+  },
+  "Conthey": {
+    "name": "Conthey",
+    "canton": "VS",
+    "zip": "1964"
+  },
+  "Coppet": {
+    "name": "Coppet",
+    "canton": "VD",
+    "zip": "1296"
+  },
+  "Corbeyrier": {
+    "name": "Corbeyrier",
+    "canton": "VD",
+    "zip": "1856"
+  },
+  "Corbières": {
+    "name": "Corbières",
+    "canton": "FR",
+    "zip": "1647"
+  },
+  "Corcelles-le-Jorat": {
+    "name": "Corcelles-le-Jorat",
+    "canton": "VD",
+    "zip": "1082"
+  },
+  "Corcelles-près-Concise": {
+    "name": "Corcelles-près-Concise",
+    "canton": "VD",
+    "zip": "1426"
+  },
+  "Corcelles-près-Payerne": {
+    "name": "Corcelles-près-Payerne",
+    "canton": "VD",
+    "zip": "1562"
+  },
+  "Corminboeuf": {
+    "name": "Corminboeuf",
+    "canton": "FR",
+    "zip": "1720"
+  },
+  "Cornaux": {
+    "name": "Cornaux",
+    "canton": "NE",
+    "zip": "2087"
+  },
+  "Cornol": {
+    "name": "Cornol",
+    "canton": "JU",
+    "zip": "2952"
+  },
+  "Corseaux": {
+    "name": "Corseaux",
+    "canton": "VD",
+    "zip": "1802"
+  },
+  "Corsier (GE)": {
+    "name": "Corsier (GE)",
+    "canton": "GE",
+    "zip": "1246"
+  },
+  "Corsier-sur-Vevey": {
+    "name": "Corsier-sur-Vevey",
+    "canton": "VD",
+    "zip": "1804"
+  },
+  "Cortaillod": {
+    "name": "Cortaillod",
+    "canton": "NE",
+    "zip": "2016"
+  },
+  "Cossonay": {
+    "name": "Cossonay",
+    "canton": "VD",
+    "zip": "1304"
+  },
+  "Cottens (FR)": {
+    "name": "Cottens (FR)",
+    "canton": "FR",
+    "zip": "1741"
+  },
+  "Courchapoix": {
+    "name": "Courchapoix",
+    "canton": "JU",
+    "zip": "2825"
+  },
+  "Courchavon": {
+    "name": "Courchavon",
+    "canton": "JU",
+    "zip": "2922"
+  },
+  "Courgenay": {
+    "name": "Courgenay",
+    "canton": "JU",
+    "zip": "2950"
+  },
+  "Courgevaux": {
+    "name": "Courgevaux",
+    "canton": "FR",
+    "zip": "1796"
+  },
+  "Courrendlin": {
+    "name": "Courrendlin",
+    "canton": "JU",
+    "zip": "2830"
+  },
+  "Courroux": {
+    "name": "Courroux",
+    "canton": "JU",
+    "zip": "2822"
+  },
+  "Courtedoux": {
+    "name": "Courtedoux",
+    "canton": "JU",
+    "zip": "2905"
+  },
+  "Courtepin": {
+    "name": "Courtepin",
+    "canton": "FR",
+    "zip": "1784"
+  },
+  "Courtételle": {
+    "name": "Courtételle",
+    "canton": "JU",
+    "zip": "2852"
+  },
+  "Crans (VD)": {
+    "name": "Crans (VD)",
+    "canton": "VD",
+    "zip": "1299"
+  },
+  "Crans-Montana": {
+    "name": "Crans-Montana",
+    "canton": "VS",
+    "zip": "3963"
+  },
+  "Crassier": {
+    "name": "Crassier",
+    "canton": "VD",
+    "zip": "1263"
+  },
+  "Cressier (FR)": {
+    "name": "Cressier (FR)",
+    "canton": "FR",
+    "zip": "1785"
+  },
+  "Cressier (NE)": {
+    "name": "Cressier (NE)",
+    "canton": "NE",
+    "zip": "2088"
+  },
+  "Crissier": {
+    "name": "Crissier",
+    "canton": "VD",
+    "zip": "1023"
+  },
+  "Cronay": {
+    "name": "Cronay",
+    "canton": "VD",
+    "zip": "1406"
+  },
+  "Croy": {
+    "name": "Croy",
+    "canton": "VD",
+    "zip": "1322"
+  },
+  "Crésuz": {
+    "name": "Crésuz",
+    "canton": "FR",
+    "zip": "1653"
+  },
+  "Cuarnens": {
+    "name": "Cuarnens",
+    "canton": "VD",
+    "zip": "1148"
+  },
+  "Cuarny": {
+    "name": "Cuarny",
+    "canton": "VD",
+    "zip": "1404"
+  },
+  "Cudrefin": {
+    "name": "Cudrefin",
+    "canton": "VD",
+    "zip": "1588"
+  },
+  "Cugy (FR)": {
+    "name": "Cugy (FR)",
+    "canton": "FR",
+    "zip": "1482"
+  },
+  "Cugy (VD)": {
+    "name": "Cugy (VD)",
+    "canton": "VD",
+    "zip": "1053"
+  },
+  "Curtilles": {
+    "name": "Curtilles",
+    "canton": "VD",
+    "zip": "1521"
+  },
+  "Céligny": {
+    "name": "Céligny",
+    "canton": "GE",
+    "zip": "1298"
+  },
+  "Dagmersellen": {
+    "name": "Dagmersellen",
+    "canton": "LU",
+    "zip": "6252"
+  },
+  "Daillens": {
+    "name": "Daillens",
+    "canton": "VD",
+    "zip": "1306"
+  },
+  "Damphreux-Lugnez": {
+    "name": "Damphreux-Lugnez",
+    "canton": "JU",
+    "zip": "2933"
+  },
+  "Dardagny": {
+    "name": "Dardagny",
+    "canton": "GE",
+    "zip": "1283"
+  },
+  "Delley-Portalban": {
+    "name": "Delley-Portalban",
+    "canton": "FR",
+    "zip": "1567"
+  },
+  "Delémont": {
+    "name": "Delémont",
+    "canton": "JU",
+    "zip": "2800"
+  },
+  "Denens": {
+    "name": "Denens",
+    "canton": "VD",
+    "zip": "1135"
+  },
+  "Denges": {
+    "name": "Denges",
+    "canton": "VD",
+    "zip": "1026"
+  },
+  "Develier": {
+    "name": "Develier",
+    "canton": "JU",
+    "zip": "2802"
+  },
+  "Dierikon": {
+    "name": "Dierikon",
+    "canton": "LU",
+    "zip": "6036"
+  },
+  "Dizy": {
+    "name": "Dizy",
+    "canton": "VD",
+    "zip": "1304"
+  },
+  "Dompierre (VD)": {
+    "name": "Dompierre (VD)",
+    "canton": "VD",
+    "zip": "1682"
+  },
+  "Donneloye": {
+    "name": "Donneloye",
+    "canton": "VD",
+    "zip": "1407"
+  },
+  "Doppleschwand": {
+    "name": "Doppleschwand",
+    "canton": "LU",
+    "zip": "6112"
+  },
+  "Dorénaz": {
+    "name": "Dorénaz",
+    "canton": "VS",
+    "zip": "1905"
+  },
+  "Duillier": {
+    "name": "Duillier",
+    "canton": "VD",
+    "zip": "1266"
+  },
+  "Dully": {
+    "name": "Dully",
+    "canton": "VD",
+    "zip": "1195"
+  },
+  "Démoret": {
+    "name": "Démoret",
+    "canton": "VD",
+    "zip": "1415"
+  },
+  "Düdingen": {
+    "name": "Düdingen",
+    "canton": "FR",
+    "zip": "3186"
+  },
+  "Ebikon": {
+    "name": "Ebikon",
+    "canton": "LU",
+    "zip": "6030"
+  },
+  "Echallens": {
+    "name": "Echallens",
+    "canton": "VD",
+    "zip": "1040"
+  },
+  "Echandens": {
+    "name": "Echandens",
+    "canton": "VD",
+    "zip": "1026"
+  },
+  "Echarlens": {
+    "name": "Echarlens",
+    "canton": "FR",
+    "zip": "1646"
+  },
+  "Echichens": {
+    "name": "Echichens",
+    "canton": "VD",
+    "zip": "1112"
+  },
+  "Eclépens": {
+    "name": "Eclépens",
+    "canton": "VD",
+    "zip": "1312"
+  },
+  "Ecublens (VD)": {
+    "name": "Ecublens (VD)",
+    "canton": "VD",
+    "zip": "1024"
+  },
+  "Ederswiler": {
+    "name": "Ederswiler",
+    "canton": "JU",
+    "zip": "2813"
+  },
+  "Eggerberg": {
+    "name": "Eggerberg",
+    "canton": "VS",
+    "zip": "3939"
+  },
+  "Egolzwil": {
+    "name": "Egolzwil",
+    "canton": "LU",
+    "zip": "6243"
+  },
+  "Eich": {
+    "name": "Eich",
+    "canton": "LU",
+    "zip": "6205"
+  },
+  "Eischoll": {
+    "name": "Eischoll",
+    "canton": "VS",
+    "zip": "3943"
+  },
+  "Eisten": {
+    "name": "Eisten",
+    "canton": "VS",
+    "zip": "3922"
+  },
+  "Embd": {
+    "name": "Embd",
+    "canton": "VS",
+    "zip": "3926"
+  },
+  "Emmen": {
+    "name": "Emmen",
+    "canton": "LU",
+    "zip": "6032"
+  },
+  "Entlebuch": {
+    "name": "Entlebuch",
+    "canton": "LU",
+    "zip": "6162"
+  },
+  "Epalinges": {
+    "name": "Epalinges",
+    "canton": "VD",
+    "zip": "1066"
+  },
+  "Ependes (VD)": {
+    "name": "Ependes (VD)",
+    "canton": "VD",
+    "zip": "1434"
+  },
+  "Ergisch": {
+    "name": "Ergisch",
+    "canton": "VS",
+    "zip": "3947"
+  },
+  "Ermensee": {
+    "name": "Ermensee",
+    "canton": "LU",
+    "zip": "6294"
+  },
+  "Ernen": {
+    "name": "Ernen",
+    "canton": "VS",
+    "zip": "3995"
+  },
+  "Eschenbach (LU)": {
+    "name": "Eschenbach (LU)",
+    "canton": "LU",
+    "zip": "6274"
+  },
+  "Escholzmatt-Marbach": {
+    "name": "Escholzmatt-Marbach",
+    "canton": "LU",
+    "zip": "6182"
+  },
+  "Essertines-sur-Rolle": {
+    "name": "Essertines-sur-Rolle",
+    "canton": "VD",
+    "zip": "1186"
+  },
+  "Essertines-sur-Yverdon": {
+    "name": "Essertines-sur-Yverdon",
+    "canton": "VD",
+    "zip": "1417"
+  },
+  "Estavayer": {
+    "name": "Estavayer",
+    "canton": "FR",
+    "zip": "1470"
+  },
+  "Etagnières": {
+    "name": "Etagnières",
+    "canton": "VD",
+    "zip": "1037"
+  },
+  "Etoy": {
+    "name": "Etoy",
+    "canton": "VD",
+    "zip": "1163"
+  },
+  "Ettiswil": {
+    "name": "Ettiswil",
+    "canton": "LU",
+    "zip": "6218"
+  },
+  "Evionnaz": {
+    "name": "Evionnaz",
+    "canton": "VS",
+    "zip": "1902"
+  },
+  "Evolène": {
+    "name": "Evolène",
+    "canton": "VS",
+    "zip": "1983"
+  },
+  "Eysins": {
+    "name": "Eysins",
+    "canton": "VD",
+    "zip": "1262"
+  },
+  "Fahy": {
+    "name": "Fahy",
+    "canton": "JU",
+    "zip": "2916"
+  },
+  "Faoug": {
+    "name": "Faoug",
+    "canton": "VD",
+    "zip": "1595"
+  },
+  "Ferden": {
+    "name": "Ferden",
+    "canton": "VS",
+    "zip": "3916"
+  },
+  "Ferpicloz": {
+    "name": "Ferpicloz",
+    "canton": "FR",
+    "zip": "1724"
+  },
+  "Ferreyres": {
+    "name": "Ferreyres",
+    "canton": "VD",
+    "zip": "1313"
+  },
+  "Fey": {
+    "name": "Fey",
+    "canton": "VD",
+    "zip": "1044"
+  },
+  "Fiesch": {
+    "name": "Fiesch",
+    "canton": "VS",
+    "zip": "3984"
+  },
+  "Fieschertal": {
+    "name": "Fieschertal",
+    "canton": "VS",
+    "zip": "3984"
+  },
+  "Fiez": {
+    "name": "Fiez",
+    "canton": "VD",
+    "zip": "1420"
+  },
+  "Finhaut": {
+    "name": "Finhaut",
+    "canton": "VS",
+    "zip": "1925"
+  },
+  "Fischbach": {
+    "name": "Fischbach",
+    "canton": "LU",
+    "zip": "6145"
+  },
+  "Flühli": {
+    "name": "Flühli",
+    "canton": "LU",
+    "zip": "6173"
+  },
+  "Fontaines-sur-Grandson": {
+    "name": "Fontaines-sur-Grandson",
+    "canton": "VD",
+    "zip": "1421"
+  },
+  "Fontenais": {
+    "name": "Fontenais",
+    "canton": "JU",
+    "zip": "2902"
+  },
+  "Forel (Lavaux)": {
+    "name": "Forel (Lavaux)",
+    "canton": "VD",
+    "zip": "1072"
+  },
+  "Founex": {
+    "name": "Founex",
+    "canton": "VD",
+    "zip": "1297"
+  },
+  "Fribourg": {
+    "name": "Fribourg",
+    "canton": "FR",
+    "zip": "1700"
+  },
+  "Froideville": {
+    "name": "Froideville",
+    "canton": "VD",
+    "zip": "1055"
+  },
+  "Fräschels": {
+    "name": "Fräschels",
+    "canton": "FR",
+    "zip": "3284"
+  },
+  "Fully": {
+    "name": "Fully",
+    "canton": "VS",
+    "zip": "1926"
+  },
+  "Féchy": {
+    "name": "Féchy",
+    "canton": "VD",
+    "zip": "1173"
+  },
+  "Fétigny": {
+    "name": "Fétigny",
+    "canton": "FR",
+    "zip": "1532"
+  },
+  "Gampel-Bratsch": {
+    "name": "Gampel-Bratsch",
+    "canton": "VS",
+    "zip": "3945"
+  },
+  "Genolier": {
+    "name": "Genolier",
+    "canton": "VD",
+    "zip": "1272"
+  },
+  "Genthod": {
+    "name": "Genthod",
+    "canton": "GE",
+    "zip": "1294"
+  },
+  "Genève": {
+    "name": "Genève",
+    "canton": "GE",
+    "zip": "1200"
+  },
+  "Geuensee": {
+    "name": "Geuensee",
+    "canton": "LU",
+    "zip": "6232"
+  },
+  "Gibloux": {
+    "name": "Gibloux",
+    "canton": "FR",
+    "zip": "1695"
+  },
+  "Giez": {
+    "name": "Giez",
+    "canton": "VD",
+    "zip": "1429"
+  },
+  "Giffers": {
+    "name": "Giffers",
+    "canton": "FR",
+    "zip": "1735"
+  },
+  "Gilly": {
+    "name": "Gilly",
+    "canton": "VD",
+    "zip": "1182"
+  },
+  "Gimel": {
+    "name": "Gimel",
+    "canton": "VD",
+    "zip": "1188"
+  },
+  "Gingins": {
+    "name": "Gingins",
+    "canton": "VD",
+    "zip": "1276"
+  },
+  "Gisikon": {
+    "name": "Gisikon",
+    "canton": "LU",
+    "zip": "6038"
+  },
+  "Givisiez": {
+    "name": "Givisiez",
+    "canton": "FR",
+    "zip": "1762"
+  },
+  "Givrins": {
+    "name": "Givrins",
+    "canton": "VD",
+    "zip": "1271"
+  },
+  "Gland": {
+    "name": "Gland",
+    "canton": "VD",
+    "zip": "1196"
+  },
+  "Gletterens": {
+    "name": "Gletterens",
+    "canton": "FR",
+    "zip": "1544"
+  },
+  "Gollion": {
+    "name": "Gollion",
+    "canton": "VD",
+    "zip": "1124"
+  },
+  "Goms": {
+    "name": "Goms",
+    "canton": "VS",
+    "zip": "3989"
+  },
+  "Goumoëns": {
+    "name": "Goumoëns",
+    "canton": "VD",
+    "zip": "1376"
+  },
+  "Grancy": {
+    "name": "Grancy",
+    "canton": "VD",
+    "zip": "1117"
+  },
+  "Grandcour": {
+    "name": "Grandcour",
+    "canton": "VD",
+    "zip": "1543"
+  },
+  "Grandevent": {
+    "name": "Grandevent",
+    "canton": "VD",
+    "zip": "1421"
+  },
+  "Grandfontaine": {
+    "name": "Grandfontaine",
+    "canton": "JU",
+    "zip": "2908"
+  },
+  "Grandson": {
+    "name": "Grandson",
+    "canton": "VD",
+    "zip": "1422"
+  },
+  "Grandvillard": {
+    "name": "Grandvillard",
+    "canton": "FR",
+    "zip": "1666"
+  },
+  "Granges (Veveyse)": {
+    "name": "Granges (Veveyse)",
+    "canton": "FR",
+    "zip": "1614"
+  },
+  "Granges-Paccot": {
+    "name": "Granges-Paccot",
+    "canton": "FR",
+    "zip": "1763"
+  },
+  "Grangettes": {
+    "name": "Grangettes",
+    "canton": "FR",
+    "zip": "1686"
+  },
+  "Greng": {
+    "name": "Greng",
+    "canton": "FR",
+    "zip": "3280"
+  },
+  "Grengiols": {
+    "name": "Grengiols",
+    "canton": "VS",
+    "zip": "3993"
+  },
+  "Grens": {
+    "name": "Grens",
+    "canton": "VD",
+    "zip": "1274"
+  },
+  "Greppen": {
+    "name": "Greppen",
+    "canton": "LU",
+    "zip": "6404"
+  },
+  "Grimisuat": {
+    "name": "Grimisuat",
+    "canton": "VS",
+    "zip": "1971"
+  },
+  "Grolley-Ponthaux": {
+    "name": "Grolley-Ponthaux",
+    "canton": "FR",
+    "zip": "1772"
+  },
+  "Grossdietwil": {
+    "name": "Grossdietwil",
+    "canton": "LU",
+    "zip": "6146"
+  },
+  "Grosswangen": {
+    "name": "Grosswangen",
+    "canton": "LU",
+    "zip": "6022"
+  },
+  "Gruyères": {
+    "name": "Gruyères",
+    "canton": "FR",
+    "zip": "1663"
+  },
+  "Gryon": {
+    "name": "Gryon",
+    "canton": "VD",
+    "zip": "1882"
+  },
+  "Grächen": {
+    "name": "Grächen",
+    "canton": "VS",
+    "zip": "3925"
+  },
+  "Grône": {
+    "name": "Grône",
+    "canton": "VS",
+    "zip": "3979"
+  },
+  "Gurmels": {
+    "name": "Gurmels",
+    "canton": "FR",
+    "zip": "3212"
+  },
+  "Guttet-Feschel": {
+    "name": "Guttet-Feschel",
+    "canton": "VS",
+    "zip": "3956"
+  },
+  "Gy": {
+    "name": "Gy",
+    "canton": "GE",
+    "zip": "1251"
+  },
+  "Hasle (LU)": {
+    "name": "Hasle (LU)",
+    "canton": "LU",
+    "zip": "6166"
+  },
+  "Haut-Intyamon": {
+    "name": "Haut-Intyamon",
+    "canton": "FR",
+    "zip": "1669"
+  },
+  "Haute-Ajoie": {
+    "name": "Haute-Ajoie",
+    "canton": "JU",
+    "zip": "2907"
+  },
+  "Haute-Sorne": {
+    "name": "Haute-Sorne",
+    "canton": "JU",
+    "zip": "2854"
+  },
+  "Hautemorges": {
+    "name": "Hautemorges",
+    "canton": "VD",
+    "zip": "1110"
+  },
+  "Hauterive (FR)": {
+    "name": "Hauterive (FR)",
+    "canton": "FR",
+    "zip": "1725"
+  },
+  "Hauteville": {
+    "name": "Hauteville",
+    "canton": "FR",
+    "zip": "1648"
+  },
+  "Heitenried": {
+    "name": "Heitenried",
+    "canton": "FR",
+    "zip": "1714"
+  },
+  "Henniez": {
+    "name": "Henniez",
+    "canton": "VD",
+    "zip": "1525"
+  },
+  "Hergiswil bei Willisau": {
+    "name": "Hergiswil bei Willisau",
+    "canton": "LU",
+    "zip": "6133"
+  },
+  "Hermance": {
+    "name": "Hermance",
+    "canton": "GE",
+    "zip": "1248"
+  },
+  "Hermenches": {
+    "name": "Hermenches",
+    "canton": "VD",
+    "zip": "1513"
+  },
+  "Hildisrieden": {
+    "name": "Hildisrieden",
+    "canton": "LU",
+    "zip": "6024"
+  },
+  "Hitzkirch": {
+    "name": "Hitzkirch",
+    "canton": "LU",
+    "zip": "6285"
+  },
+  "Hochdorf": {
+    "name": "Hochdorf",
+    "canton": "LU",
+    "zip": "6280"
+  },
+  "Hohenrain": {
+    "name": "Hohenrain",
+    "canton": "LU",
+    "zip": "6276"
+  },
+  "Horw": {
+    "name": "Horw",
+    "canton": "LU",
+    "zip": "6048"
+  },
+  "Hérémence": {
+    "name": "Hérémence",
+    "canton": "VS",
+    "zip": "1987"
+  },
+  "Icogne": {
+    "name": "Icogne",
+    "canton": "VS",
+    "zip": "1977"
+  },
+  "Inden": {
+    "name": "Inden",
+    "canton": "VS",
+    "zip": "3953"
+  },
+  "Inwil": {
+    "name": "Inwil",
+    "canton": "LU",
+    "zip": "6034"
+  },
+  "Isérables": {
+    "name": "Isérables",
+    "canton": "VS",
+    "zip": "1914"
+  },
+  "Jaun": {
+    "name": "Jaun",
+    "canton": "FR",
+    "zip": "1656"
+  },
+  "Jongny": {
+    "name": "Jongny",
+    "canton": "VD",
+    "zip": "1805"
+  },
+  "Jorat-Menthue": {
+    "name": "Jorat-Menthue",
+    "canton": "VD",
+    "zip": "1054"
+  },
+  "Jorat-Mézières": {
+    "name": "Jorat-Mézières",
+    "canton": "VD",
+    "zip": "1083"
+  },
+  "Jouxtens-Mézery": {
+    "name": "Jouxtens-Mézery",
+    "canton": "VD",
+    "zip": "1008"
+  },
+  "Juriens": {
+    "name": "Juriens",
+    "canton": "VD",
+    "zip": "1326"
+  },
+  "Jussy": {
+    "name": "Jussy",
+    "canton": "GE",
+    "zip": "1254"
+  },
+  "Kerzers": {
+    "name": "Kerzers",
+    "canton": "FR",
+    "zip": "3210"
+  },
+  "Kippel": {
+    "name": "Kippel",
+    "canton": "VS",
+    "zip": "3917"
+  },
+  "Kleinbösingen": {
+    "name": "Kleinbösingen",
+    "canton": "FR",
+    "zip": "3213"
+  },
+  "Knutwil": {
+    "name": "Knutwil",
+    "canton": "LU",
+    "zip": "6213"
+  },
+  "Kriens": {
+    "name": "Kriens",
+    "canton": "LU",
+    "zip": "6010"
+  },
+  "L'Abbaye": {
+    "name": "L'Abbaye",
+    "canton": "VD",
+    "zip": "1344"
+  },
+  "L'Abergement": {
+    "name": "L'Abergement",
+    "canton": "VD",
+    "zip": "1355"
+  },
+  "L'Isle": {
+    "name": "L'Isle",
+    "canton": "VD",
+    "zip": "1148"
+  },
+  "La Baroche": {
+    "name": "La Baroche",
+    "canton": "JU",
+    "zip": "2908"
+  },
+  "La Brillaz": {
+    "name": "La Brillaz",
+    "canton": "FR",
+    "zip": "1725"
+  },
+  "La Brévine": {
+    "name": "La Brévine",
+    "canton": "NE",
+    "zip": "2406"
+  },
+  "La Chaux (Cossonay)": {
+    "name": "La Chaux (Cossonay)",
+    "canton": "VD",
+    "zip": "1308"
+  },
+  "La Chaux-de-Fonds": {
+    "name": "La Chaux-de-Fonds",
+    "canton": "NE",
+    "zip": "2300"
+  },
+  "La Chaux-du-Milieu": {
+    "name": "La Chaux-du-Milieu",
+    "canton": "NE",
+    "zip": "2405"
+  },
+  "La Côte-aux-Fées": {
+    "name": "La Côte-aux-Fées",
+    "canton": "NE",
+    "zip": "2117"
+  },
+  "La Grande Béroche": {
+    "name": "La Grande Béroche",
+    "canton": "NE",
+    "zip": "2024"
+  },
+  "La Praz": {
+    "name": "La Praz",
+    "canton": "VD",
+    "zip": "1148"
+  },
+  "La Rippe": {
+    "name": "La Rippe",
+    "canton": "VD",
+    "zip": "1278"
+  },
+  "La Roche": {
+    "name": "La Roche",
+    "canton": "FR",
+    "zip": "1634"
+  },
+  "La Sagne": {
+    "name": "La Sagne",
+    "canton": "NE",
+    "zip": "2314"
+  },
+  "La Sarraz": {
+    "name": "La Sarraz",
+    "canton": "VD",
+    "zip": "1315"
+  },
+  "La Sonnaz": {
+    "name": "La Sonnaz",
+    "canton": "FR",
+    "zip": "1782"
+  },
+  "La Tour-de-Peilz": {
+    "name": "La Tour-de-Peilz",
+    "canton": "VD",
+    "zip": "1814"
+  },
+  "La Verrerie": {
+    "name": "La Verrerie",
+    "canton": "FR",
+    "zip": "1624"
+  },
+  "Laconnex": {
+    "name": "Laconnex",
+    "canton": "GE",
+    "zip": "1287"
+  },
+  "Lajoux (JU)": {
+    "name": "Lajoux (JU)",
+    "canton": "JU",
+    "zip": "2718"
+  },
+  "Lalden": {
+    "name": "Lalden",
+    "canton": "VS",
+    "zip": "3931"
+  },
+  "Lancy": {
+    "name": "Lancy",
+    "canton": "GE",
+    "zip": "1212"
+  },
+  "Laténa": {
+    "name": "Laténa",
+    "canton": "NE",
+    "zip": "2400"
+  },
+  "Lausanne": {
+    "name": "Lausanne",
+    "canton": "VD",
+    "zip": "1000"
+  },
+  "Lavey-Morcles": {
+    "name": "Lavey-Morcles",
+    "canton": "VD",
+    "zip": "1892"
+  },
+  "Lavigny": {
+    "name": "Lavigny",
+    "canton": "VD",
+    "zip": "1175"
+  },
+  "Lax": {
+    "name": "Lax",
+    "canton": "VS",
+    "zip": "3994"
+  },
+  "Le Bémont (JU)": {
+    "name": "Le Bémont (JU)",
+    "canton": "JU",
+    "zip": "2360"
+  },
+  "Le Cerneux-Péquignot": {
+    "name": "Le Cerneux-Péquignot",
+    "canton": "NE",
+    "zip": "2414"
+  },
+  "Le Chenit": {
+    "name": "Le Chenit",
+    "canton": "VD",
+    "zip": "1347"
+  },
+  "Le Châtelard": {
+    "name": "Le Châtelard",
+    "canton": "FR",
+    "zip": "1689"
+  },
+  "Le Flon": {
+    "name": "Le Flon",
+    "canton": "FR",
+    "zip": "1699"
+  },
+  "Le Grand-Saconnex": {
+    "name": "Le Grand-Saconnex",
+    "canton": "GE",
+    "zip": "1218"
+  },
+  "Le Landeron": {
+    "name": "Le Landeron",
+    "canton": "NE",
+    "zip": "2525"
+  },
+  "Le Lieu": {
+    "name": "Le Lieu",
+    "canton": "VD",
+    "zip": "1345"
+  },
+  "Le Locle": {
+    "name": "Le Locle",
+    "canton": "NE",
+    "zip": "2400"
+  },
+  "Le Mont-sur-Lausanne": {
+    "name": "Le Mont-sur-Lausanne",
+    "canton": "VD",
+    "zip": "1052"
+  },
+  "Le Mouret": {
+    "name": "Le Mouret",
+    "canton": "FR",
+    "zip": "1724"
+  },
+  "Le Noirmont": {
+    "name": "Le Noirmont",
+    "canton": "JU",
+    "zip": "2340"
+  },
+  "Le Pâquier (FR)": {
+    "name": "Le Pâquier (FR)",
+    "canton": "FR",
+    "zip": "1661"
+  },
+  "Le Vaud": {
+    "name": "Le Vaud",
+    "canton": "VD",
+    "zip": "1261"
+  },
+  "Lens": {
+    "name": "Lens",
+    "canton": "VS",
+    "zip": "1978"
+  },
+  "Les Bois": {
+    "name": "Les Bois",
+    "canton": "JU",
+    "zip": "2336"
+  },
+  "Les Breuleux": {
+    "name": "Les Breuleux",
+    "canton": "JU",
+    "zip": "2345"
+  },
+  "Les Clées": {
+    "name": "Les Clées",
+    "canton": "VD",
+    "zip": "1356"
+  },
+  "Les Enfers": {
+    "name": "Les Enfers",
+    "canton": "JU",
+    "zip": "2363"
+  },
+  "Les Genevez (JU)": {
+    "name": "Les Genevez (JU)",
+    "canton": "JU",
+    "zip": "2714"
+  },
+  "Les Montets": {
+    "name": "Les Montets",
+    "canton": "FR",
+    "zip": "1483"
+  },
+  "Les Planchettes": {
+    "name": "Les Planchettes",
+    "canton": "NE",
+    "zip": "2325"
+  },
+  "Les Ponts-de-Martel": {
+    "name": "Les Ponts-de-Martel",
+    "canton": "NE",
+    "zip": "2316"
+  },
+  "Les Verrières": {
+    "name": "Les Verrières",
+    "canton": "NE",
+    "zip": "2126"
+  },
+  "Leuk": {
+    "name": "Leuk",
+    "canton": "VS",
+    "zip": "3953"
+  },
+  "Leukerbad": {
+    "name": "Leukerbad",
+    "canton": "VS",
+    "zip": "3954"
+  },
+  "Leysin": {
+    "name": "Leysin",
+    "canton": "VD",
+    "zip": "1854"
+  },
+  "Leytron": {
+    "name": "Leytron",
+    "canton": "VS",
+    "zip": "1912"
+  },
+  "Liddes": {
+    "name": "Liddes",
+    "canton": "VS",
+    "zip": "1945"
+  },
+  "Lignerolle": {
+    "name": "Lignerolle",
+    "canton": "VD",
+    "zip": "1357"
+  },
+  "Lignières": {
+    "name": "Lignières",
+    "canton": "NE",
+    "zip": "2523"
+  },
+  "Lonay": {
+    "name": "Lonay",
+    "canton": "VD",
+    "zip": "1027"
+  },
+  "Longirod": {
+    "name": "Longirod",
+    "canton": "VD",
+    "zip": "1261"
+  },
+  "Lovatens": {
+    "name": "Lovatens",
+    "canton": "VD",
+    "zip": "1682"
+  },
+  "Lucens": {
+    "name": "Lucens",
+    "canton": "VD",
+    "zip": "1522"
+  },
+  "Luins": {
+    "name": "Luins",
+    "canton": "VD",
+    "zip": "1184"
+  },
+  "Lully (FR)": {
+    "name": "Lully (FR)",
+    "canton": "FR",
+    "zip": "1470"
+  },
+  "Lully (VD)": {
+    "name": "Lully (VD)",
+    "canton": "VD",
+    "zip": "1132"
+  },
+  "Lussery-Villars": {
+    "name": "Lussery-Villars",
+    "canton": "VD",
+    "zip": "1307"
+  },
+  "Lussy-sur-Morges": {
+    "name": "Lussy-sur-Morges",
+    "canton": "VD",
+    "zip": "1167"
+  },
+  "Luthern": {
+    "name": "Luthern",
+    "canton": "LU",
+    "zip": "6156"
+  },
+  "Lutry": {
+    "name": "Lutry",
+    "canton": "VD",
+    "zip": "1095"
+  },
+  "Luzern": {
+    "name": "Luzern",
+    "canton": "LU",
+    "zip": "6003"
+  },
+  "Malters": {
+    "name": "Malters",
+    "canton": "LU",
+    "zip": "6102"
+  },
+  "Maracon": {
+    "name": "Maracon",
+    "canton": "VD",
+    "zip": "1613"
+  },
+  "Marchissy": {
+    "name": "Marchissy",
+    "canton": "VD",
+    "zip": "1261"
+  },
+  "Marly": {
+    "name": "Marly",
+    "canton": "FR",
+    "zip": "1723"
+  },
+  "Marsens": {
+    "name": "Marsens",
+    "canton": "FR",
+    "zip": "1633"
+  },
+  "Martigny": {
+    "name": "Martigny",
+    "canton": "VS",
+    "zip": "1920"
+  },
+  "Martigny-Combe": {
+    "name": "Martigny-Combe",
+    "canton": "VS",
+    "zip": "1921"
+  },
+  "Massongex": {
+    "name": "Massongex",
+    "canton": "VS",
+    "zip": "1869"
+  },
+  "Massonnens": {
+    "name": "Massonnens",
+    "canton": "FR",
+    "zip": "1692"
+  },
+  "Mathod": {
+    "name": "Mathod",
+    "canton": "VD",
+    "zip": "1438"
+  },
+  "Matran": {
+    "name": "Matran",
+    "canton": "FR",
+    "zip": "1753"
+  },
+  "Mauborget": {
+    "name": "Mauborget",
+    "canton": "VD",
+    "zip": "1450"
+  },
+  "Mauensee": {
+    "name": "Mauensee",
+    "canton": "LU",
+    "zip": "6216"
+  },
+  "Mauraz": {
+    "name": "Mauraz",
+    "canton": "VD",
+    "zip": "1148"
+  },
+  "Meggen": {
+    "name": "Meggen",
+    "canton": "LU",
+    "zip": "6045"
+  },
+  "Meierskappel": {
+    "name": "Meierskappel",
+    "canton": "LU",
+    "zip": "6344"
+  },
+  "Meinier": {
+    "name": "Meinier",
+    "canton": "GE",
+    "zip": "1252"
+  },
+  "Menznau": {
+    "name": "Menznau",
+    "canton": "LU",
+    "zip": "6125"
+  },
+  "Mervelier": {
+    "name": "Mervelier",
+    "canton": "JU",
+    "zip": "2827"
+  },
+  "Mettembert": {
+    "name": "Mettembert",
+    "canton": "JU",
+    "zip": "2806"
+  },
+  "Mex (VD)": {
+    "name": "Mex (VD)",
+    "canton": "VD",
+    "zip": "1031"
+  },
+  "Meyriez": {
+    "name": "Meyriez",
+    "canton": "FR",
+    "zip": "3280"
+  },
+  "Meyrin": {
+    "name": "Meyrin",
+    "canton": "GE",
+    "zip": "1217"
+  },
+  "Mies": {
+    "name": "Mies",
+    "canton": "VD",
+    "zip": "1295"
+  },
+  "Milvignes": {
+    "name": "Milvignes",
+    "canton": "NE",
+    "zip": "2013"
+  },
+  "Misery-Courtion": {
+    "name": "Misery-Courtion",
+    "canton": "FR",
+    "zip": "1721"
+  },
+  "Missy": {
+    "name": "Missy",
+    "canton": "VD",
+    "zip": "1565"
+  },
+  "Moiry": {
+    "name": "Moiry",
+    "canton": "VD",
+    "zip": "1148"
+  },
+  "Mollens (VD)": {
+    "name": "Mollens (VD)",
+    "canton": "VD",
+    "zip": "1146"
+  },
+  "Molondin": {
+    "name": "Molondin",
+    "canton": "VD",
+    "zip": "1415"
+  },
+  "Mont-Noble": {
+    "name": "Mont-Noble",
+    "canton": "VS",
+    "zip": "1966"
+  },
+  "Mont-Vully": {
+    "name": "Mont-Vully",
+    "canton": "FR",
+    "zip": "1786"
+  },
+  "Mont-la-Ville": {
+    "name": "Mont-la-Ville",
+    "canton": "VD",
+    "zip": "1148"
+  },
+  "Mont-sur-Rolle": {
+    "name": "Mont-sur-Rolle",
+    "canton": "VD",
+    "zip": "1185"
+  },
+  "Montagny (FR)": {
+    "name": "Montagny (FR)",
+    "canton": "FR",
+    "zip": "1776"
+  },
+  "Montagny-près-Yverdon": {
+    "name": "Montagny-près-Yverdon",
+    "canton": "VD",
+    "zip": "1442"
+  },
+  "Montanaire": {
+    "name": "Montanaire",
+    "canton": "VD",
+    "zip": "1407"
+  },
+  "Montcherand": {
+    "name": "Montcherand",
+    "canton": "VD",
+    "zip": "1354"
+  },
+  "Montfaucon": {
+    "name": "Montfaucon",
+    "canton": "JU",
+    "zip": "2362"
+  },
+  "Monthey": {
+    "name": "Monthey",
+    "canton": "VS",
+    "zip": "1870"
+  },
+  "Montilliez": {
+    "name": "Montilliez",
+    "canton": "VD",
+    "zip": "1041"
+  },
+  "Montpreveyres": {
+    "name": "Montpreveyres",
+    "canton": "VD",
+    "zip": "1081"
+  },
+  "Montreux": {
+    "name": "Montreux",
+    "canton": "VD",
+    "zip": "1820"
+  },
+  "Montricher": {
+    "name": "Montricher",
+    "canton": "VD",
+    "zip": "1147"
+  },
+  "Morges": {
+    "name": "Morges",
+    "canton": "VD",
+    "zip": "1110"
+  },
+  "Morlon": {
+    "name": "Morlon",
+    "canton": "FR",
+    "zip": "1638"
+  },
+  "Morrens (VD)": {
+    "name": "Morrens (VD)",
+    "canton": "VD",
+    "zip": "1054"
+  },
+  "Moudon": {
+    "name": "Moudon",
+    "canton": "VD",
+    "zip": "1510"
+  },
+  "Movelier": {
+    "name": "Movelier",
+    "canton": "JU",
+    "zip": "2812"
+  },
+  "Muntelier": {
+    "name": "Muntelier",
+    "canton": "FR",
+    "zip": "3286"
+  },
+  "Muriaux": {
+    "name": "Muriaux",
+    "canton": "JU",
+    "zip": "2338"
+  },
+  "Murten": {
+    "name": "Murten",
+    "canton": "FR",
+    "zip": "3280"
+  },
+  "Mutrux": {
+    "name": "Mutrux",
+    "canton": "VD",
+    "zip": "1428"
+  },
+  "Ménières": {
+    "name": "Ménières",
+    "canton": "FR",
+    "zip": "1533"
+  },
+  "Mézières (FR)": {
+    "name": "Mézières (FR)",
+    "canton": "FR",
+    "zip": "1684"
+  },
+  "Mörel-Filet": {
+    "name": "Mörel-Filet",
+    "canton": "VS",
+    "zip": "3983"
+  },
+  "Naters": {
+    "name": "Naters",
+    "canton": "VS",
+    "zip": "3904"
+  },
+  "Nebikon": {
+    "name": "Nebikon",
+    "canton": "LU",
+    "zip": "6244"
+  },
+  "Nendaz": {
+    "name": "Nendaz",
+    "canton": "VS",
+    "zip": "1997"
+  },
+  "Neuchâtel": {
+    "name": "Neuchâtel",
+    "canton": "NE",
+    "zip": "2000"
+  },
+  "Neuenkirch": {
+    "name": "Neuenkirch",
+    "canton": "LU",
+    "zip": "6206"
+  },
+  "Neyruz (FR)": {
+    "name": "Neyruz (FR)",
+    "canton": "FR",
+    "zip": "1740"
+  },
+  "Niedergesteln": {
+    "name": "Niedergesteln",
+    "canton": "VS",
+    "zip": "3942"
+  },
+  "Noble-Contrée": {
+    "name": "Noble-Contrée",
+    "canton": "VS",
+    "zip": "3979"
+  },
+  "Nottwil": {
+    "name": "Nottwil",
+    "canton": "LU",
+    "zip": "6207"
+  },
+  "Novalles": {
+    "name": "Novalles",
+    "canton": "VD",
+    "zip": "1431"
+  },
+  "Noville": {
+    "name": "Noville",
+    "canton": "VD",
+    "zip": "1845"
+  },
+  "Nuvilly": {
+    "name": "Nuvilly",
+    "canton": "FR",
+    "zip": "1485"
+  },
+  "Nyon": {
+    "name": "Nyon",
+    "canton": "VD",
+    "zip": "1260"
+  },
+  "Oberems": {
+    "name": "Oberems",
+    "canton": "VS",
+    "zip": "3948"
+  },
+  "Obergoms": {
+    "name": "Obergoms",
+    "canton": "VS",
+    "zip": "3988"
+  },
+  "Oberkirch": {
+    "name": "Oberkirch",
+    "canton": "LU",
+    "zip": "6208"
+  },
+  "Ogens": {
+    "name": "Ogens",
+    "canton": "VD",
+    "zip": "1045"
+  },
+  "Ollon": {
+    "name": "Ollon",
+    "canton": "VD",
+    "zip": "1867"
+  },
+  "Onex": {
+    "name": "Onex",
+    "canton": "GE",
+    "zip": "1213"
+  },
+  "Onnens (VD)": {
+    "name": "Onnens (VD)",
+    "canton": "VD",
+    "zip": "1425"
+  },
+  "Oppens": {
+    "name": "Oppens",
+    "canton": "VD",
+    "zip": "1047"
+  },
+  "Orbe": {
+    "name": "Orbe",
+    "canton": "VD",
+    "zip": "1350"
+  },
+  "Orges": {
+    "name": "Orges",
+    "canton": "VD",
+    "zip": "1430"
+  },
+  "Ormont-Dessous": {
+    "name": "Ormont-Dessous",
+    "canton": "VD",
+    "zip": "1862"
+  },
+  "Ormont-Dessus": {
+    "name": "Ormont-Dessus",
+    "canton": "VD",
+    "zip": "1865"
+  },
+  "Orny": {
+    "name": "Orny",
+    "canton": "VD",
+    "zip": "1317"
+  },
+  "Oron": {
+    "name": "Oron",
+    "canton": "VD",
+    "zip": "1610"
+  },
+  "Orsières": {
+    "name": "Orsières",
+    "canton": "VS",
+    "zip": "1937"
+  },
+  "Orzens": {
+    "name": "Orzens",
+    "canton": "VD",
+    "zip": "1413"
+  },
+  "Oulens-sous-Echallens": {
+    "name": "Oulens-sous-Echallens",
+    "canton": "VD",
+    "zip": "1377"
+  },
+  "Pailly": {
+    "name": "Pailly",
+    "canton": "VD",
+    "zip": "1416"
+  },
+  "Paudex": {
+    "name": "Paudex",
+    "canton": "VD",
+    "zip": "1094"
+  },
+  "Payerne": {
+    "name": "Payerne",
+    "canton": "VD",
+    "zip": "1530"
+  },
+  "Penthalaz": {
+    "name": "Penthalaz",
+    "canton": "VD",
+    "zip": "1305"
+  },
+  "Penthaz": {
+    "name": "Penthaz",
+    "canton": "VD",
+    "zip": "1303"
+  },
+  "Penthéréaz": {
+    "name": "Penthéréaz",
+    "canton": "VD",
+    "zip": "1375"
+  },
+  "Perly-Certoux": {
+    "name": "Perly-Certoux",
+    "canton": "GE",
+    "zip": "1258"
+  },
+  "Perroy": {
+    "name": "Perroy",
+    "canton": "VD",
+    "zip": "1166"
+  },
+  "Pfaffnau": {
+    "name": "Pfaffnau",
+    "canton": "LU",
+    "zip": "6264"
+  },
+  "Pierrafortscha": {
+    "name": "Pierrafortscha",
+    "canton": "FR",
+    "zip": "1723"
+  },
+  "Plaffeien": {
+    "name": "Plaffeien",
+    "canton": "FR",
+    "zip": "1716"
+  },
+  "Plan-les-Ouates": {
+    "name": "Plan-les-Ouates",
+    "canton": "GE",
+    "zip": "1228"
+  },
+  "Plasselb": {
+    "name": "Plasselb",
+    "canton": "FR",
+    "zip": "1737"
+  },
+  "Pleigne": {
+    "name": "Pleigne",
+    "canton": "JU",
+    "zip": "2807"
+  },
+  "Poliez-Pittet": {
+    "name": "Poliez-Pittet",
+    "canton": "VD",
+    "zip": "1041"
+  },
+  "Pompaples": {
+    "name": "Pompaples",
+    "canton": "VD",
+    "zip": "1318"
+  },
+  "Pomy": {
+    "name": "Pomy",
+    "canton": "VD",
+    "zip": "1405"
+  },
+  "Pont-en-Ogoz": {
+    "name": "Pont-en-Ogoz",
+    "canton": "FR",
+    "zip": "1690"
+  },
+  "Pont-la-Ville": {
+    "name": "Pont-la-Ville",
+    "canton": "FR",
+    "zip": "1649"
+  },
+  "Porrentruy": {
+    "name": "Porrentruy",
+    "canton": "JU",
+    "zip": "2900"
+  },
+  "Port-Valais": {
+    "name": "Port-Valais",
+    "canton": "VS",
+    "zip": "1897"
+  },
+  "Prangins": {
+    "name": "Prangins",
+    "canton": "VD",
+    "zip": "1197"
+  },
+  "Pregny-Chambésy": {
+    "name": "Pregny-Chambésy",
+    "canton": "GE",
+    "zip": "1292"
+  },
+  "Premier": {
+    "name": "Premier",
+    "canton": "VD",
+    "zip": "1324"
+  },
+  "Presinge": {
+    "name": "Presinge",
+    "canton": "GE",
+    "zip": "1243"
+  },
+  "Prez": {
+    "name": "Prez",
+    "canton": "FR",
+    "zip": "1746"
+  },
+  "Prilly": {
+    "name": "Prilly",
+    "canton": "VD",
+    "zip": "1008"
+  },
+  "Provence": {
+    "name": "Provence",
+    "canton": "VD",
+    "zip": "1428"
+  },
+  "Préverenges": {
+    "name": "Préverenges",
+    "canton": "VD",
+    "zip": "1028"
+  },
+  "Prévondavaux": {
+    "name": "Prévondavaux",
+    "canton": "FR",
+    "zip": "1410"
+  },
+  "Prévonloup": {
+    "name": "Prévonloup",
+    "canton": "VD",
+    "zip": "1682"
+  },
+  "Puidoux": {
+    "name": "Puidoux",
+    "canton": "VD",
+    "zip": "1070"
+  },
+  "Pully": {
+    "name": "Pully",
+    "canton": "VD",
+    "zip": "1009"
+  },
+  "Puplinge": {
+    "name": "Puplinge",
+    "canton": "GE",
+    "zip": "1241"
+  },
+  "Rain": {
+    "name": "Rain",
+    "canton": "LU",
+    "zip": "6026"
+  },
+  "Rances": {
+    "name": "Rances",
+    "canton": "VD",
+    "zip": "1439"
+  },
+  "Randa": {
+    "name": "Randa",
+    "canton": "VS",
+    "zip": "3928"
+  },
+  "Raron": {
+    "name": "Raron",
+    "canton": "VS",
+    "zip": "3942"
+  },
+  "Rechthalten": {
+    "name": "Rechthalten",
+    "canton": "FR",
+    "zip": "1718"
+  },
+  "Reiden": {
+    "name": "Reiden",
+    "canton": "LU",
+    "zip": "6260"
+  },
+  "Remaufens": {
+    "name": "Remaufens",
+    "canton": "FR",
+    "zip": "1617"
+  },
+  "Renens (VD)": {
+    "name": "Renens (VD)",
+    "canton": "VD",
+    "zip": "1020"
+  },
+  "Rennaz": {
+    "name": "Rennaz",
+    "canton": "VD",
+    "zip": "1847"
+  },
+  "Riaz": {
+    "name": "Riaz",
+    "canton": "FR",
+    "zip": "1632"
+  },
+  "Rickenbach (LU)": {
+    "name": "Rickenbach (LU)",
+    "canton": "LU",
+    "zip": "6221"
+  },
+  "Riddes": {
+    "name": "Riddes",
+    "canton": "VS",
+    "zip": "1908"
+  },
+  "Ried bei Kerzers": {
+    "name": "Ried bei Kerzers",
+    "canton": "FR",
+    "zip": "3216"
+  },
+  "Ried-Brig": {
+    "name": "Ried-Brig",
+    "canton": "VS",
+    "zip": "3911"
+  },
+  "Riederalp": {
+    "name": "Riederalp",
+    "canton": "VS",
+    "zip": "3987"
+  },
+  "Rivaz": {
+    "name": "Rivaz",
+    "canton": "VD",
+    "zip": "1071"
+  },
+  "Roche (VD)": {
+    "name": "Roche (VD)",
+    "canton": "VD",
+    "zip": "1852"
+  },
+  "Rochefort": {
+    "name": "Rochefort",
+    "canton": "NE",
+    "zip": "2019"
+  },
+  "Roggliswil": {
+    "name": "Roggliswil",
+    "canton": "LU",
+    "zip": "6265"
+  },
+  "Rolle": {
+    "name": "Rolle",
+    "canton": "VD",
+    "zip": "1180"
+  },
+  "Romainmôtier-Envy": {
+    "name": "Romainmôtier-Envy",
+    "canton": "VD",
+    "zip": "1323"
+  },
+  "Romanel-sur-Lausanne": {
+    "name": "Romanel-sur-Lausanne",
+    "canton": "VD",
+    "zip": "1032"
+  },
+  "Romanel-sur-Morges": {
+    "name": "Romanel-sur-Morges",
+    "canton": "VD",
+    "zip": "1122"
+  },
+  "Romont (FR)": {
+    "name": "Romont (FR)",
+    "canton": "FR",
+    "zip": "1680"
+  },
+  "Romoos": {
+    "name": "Romoos",
+    "canton": "LU",
+    "zip": "6113"
+  },
+  "Root": {
+    "name": "Root",
+    "canton": "LU",
+    "zip": "6037"
+  },
+  "Ropraz": {
+    "name": "Ropraz",
+    "canton": "VD",
+    "zip": "1088"
+  },
+  "Rossemaison": {
+    "name": "Rossemaison",
+    "canton": "JU",
+    "zip": "2842"
+  },
+  "Rossenges": {
+    "name": "Rossenges",
+    "canton": "VD",
+    "zip": "1513"
+  },
+  "Rossinière": {
+    "name": "Rossinière",
+    "canton": "VD",
+    "zip": "1658"
+  },
+  "Rothenburg": {
+    "name": "Rothenburg",
+    "canton": "LU",
+    "zip": "6023"
+  },
+  "Rougemont": {
+    "name": "Rougemont",
+    "canton": "VD",
+    "zip": "1659"
+  },
+  "Rovray": {
+    "name": "Rovray",
+    "canton": "VD",
+    "zip": "1463"
+  },
+  "Rue": {
+    "name": "Rue",
+    "canton": "FR",
+    "zip": "1673"
+  },
+  "Rueyres": {
+    "name": "Rueyres",
+    "canton": "VD",
+    "zip": "1046"
+  },
+  "Russin": {
+    "name": "Russin",
+    "canton": "GE",
+    "zip": "1281"
+  },
+  "Ruswil": {
+    "name": "Ruswil",
+    "canton": "LU",
+    "zip": "6017"
+  },
+  "Römerswil": {
+    "name": "Römerswil",
+    "canton": "LU",
+    "zip": "6027"
+  },
+  "Saas-Almagell": {
+    "name": "Saas-Almagell",
+    "canton": "VS",
+    "zip": "3905"
+  },
+  "Saas-Balen": {
+    "name": "Saas-Balen",
+    "canton": "VS",
+    "zip": "3908"
+  },
+  "Saas-Fee": {
+    "name": "Saas-Fee",
+    "canton": "VS",
+    "zip": "3906"
+  },
+  "Saas-Grund": {
+    "name": "Saas-Grund",
+    "canton": "VS",
+    "zip": "3910"
+  },
+  "Saignelégier": {
+    "name": "Saignelégier",
+    "canton": "JU",
+    "zip": "2350"
+  },
+  "Saillon": {
+    "name": "Saillon",
+    "canton": "VS",
+    "zip": "1913"
+  },
+  "Saint-Aubin (FR)": {
+    "name": "Saint-Aubin (FR)",
+    "canton": "FR",
+    "zip": "1566"
+  },
+  "Saint-Barthélemy (VD)": {
+    "name": "Saint-Barthélemy (VD)",
+    "canton": "VD",
+    "zip": "1040"
+  },
+  "Saint-Brais": {
+    "name": "Saint-Brais",
+    "canton": "JU",
+    "zip": "2364"
+  },
+  "Saint-Cergue": {
+    "name": "Saint-Cergue",
+    "canton": "VD",
+    "zip": "1264"
+  },
+  "Saint-George": {
+    "name": "Saint-George",
+    "canton": "VD",
+    "zip": "1188"
+  },
+  "Saint-Gingolph": {
+    "name": "Saint-Gingolph",
+    "canton": "VS",
+    "zip": "1898"
+  },
+  "Saint-Livres": {
+    "name": "Saint-Livres",
+    "canton": "VD",
+    "zip": "1176"
+  },
+  "Saint-Léonard": {
+    "name": "Saint-Léonard",
+    "canton": "VS",
+    "zip": "1958"
+  },
+  "Saint-Martin (FR)": {
+    "name": "Saint-Martin (FR)",
+    "canton": "FR",
+    "zip": "1609"
+  },
+  "Saint-Martin (VS)": {
+    "name": "Saint-Martin (VS)",
+    "canton": "VS",
+    "zip": "1969"
+  },
+  "Saint-Maurice": {
+    "name": "Saint-Maurice",
+    "canton": "VS",
+    "zip": "1890"
+  },
+  "Saint-Oyens": {
+    "name": "Saint-Oyens",
+    "canton": "VD",
+    "zip": "1187"
+  },
+  "Saint-Prex": {
+    "name": "Saint-Prex",
+    "canton": "VD",
+    "zip": "1162"
+  },
+  "Saint-Saphorin (Lavaux)": {
+    "name": "Saint-Saphorin (Lavaux)",
+    "canton": "VD",
+    "zip": "1071"
+  },
+  "Saint-Sulpice (VD)": {
+    "name": "Saint-Sulpice (VD)",
+    "canton": "VD",
+    "zip": "1025"
+  },
+  "Sainte-Croix": {
+    "name": "Sainte-Croix",
+    "canton": "VD",
+    "zip": "1450"
+  },
+  "Salgesch": {
+    "name": "Salgesch",
+    "canton": "VS",
+    "zip": "3970"
+  },
+  "Salvan": {
+    "name": "Salvan",
+    "canton": "VS",
+    "zip": "1922"
+  },
+  "Satigny": {
+    "name": "Satigny",
+    "canton": "GE",
+    "zip": "1242"
+  },
+  "Saubraz": {
+    "name": "Saubraz",
+    "canton": "VD",
+    "zip": "1189"
+  },
+  "Saulcy": {
+    "name": "Saulcy",
+    "canton": "JU",
+    "zip": "2873"
+  },
+  "Savigny": {
+    "name": "Savigny",
+    "canton": "VD",
+    "zip": "1073"
+  },
+  "Savièse": {
+    "name": "Savièse",
+    "canton": "VS",
+    "zip": "1965"
+  },
+  "Saxon": {
+    "name": "Saxon",
+    "canton": "VS",
+    "zip": "1907"
+  },
+  "Schenkon": {
+    "name": "Schenkon",
+    "canton": "LU",
+    "zip": "6214"
+  },
+  "Schlierbach": {
+    "name": "Schlierbach",
+    "canton": "LU",
+    "zip": "6231"
+  },
+  "Schmitten (FR)": {
+    "name": "Schmitten (FR)",
+    "canton": "FR",
+    "zip": "3185"
+  },
+  "Schongau": {
+    "name": "Schongau",
+    "canton": "LU",
+    "zip": "6288"
+  },
+  "Schwarzenberg": {
+    "name": "Schwarzenberg",
+    "canton": "LU",
+    "zip": "6103"
+  },
+  "Schötz": {
+    "name": "Schötz",
+    "canton": "LU",
+    "zip": "6247"
+  },
+  "Schüpfheim": {
+    "name": "Schüpfheim",
+    "canton": "LU",
+    "zip": "6170"
+  },
+  "Sembrancher": {
+    "name": "Sembrancher",
+    "canton": "VS",
+    "zip": "1933"
+  },
+  "Sempach": {
+    "name": "Sempach",
+    "canton": "LU",
+    "zip": "6204"
+  },
+  "Semsales": {
+    "name": "Semsales",
+    "canton": "FR",
+    "zip": "1623"
+  },
+  "Senarclens": {
+    "name": "Senarclens",
+    "canton": "VD",
+    "zip": "1304"
+  },
+  "Sergey": {
+    "name": "Sergey",
+    "canton": "VD",
+    "zip": "1355"
+  },
+  "Servion": {
+    "name": "Servion",
+    "canton": "VD",
+    "zip": "1077"
+  },
+  "Sierre": {
+    "name": "Sierre",
+    "canton": "VS",
+    "zip": "3960"
+  },
+  "Signy-Avenex": {
+    "name": "Signy-Avenex",
+    "canton": "VD",
+    "zip": "1274"
+  },
+  "Simplon": {
+    "name": "Simplon",
+    "canton": "VS",
+    "zip": "3907"
+  },
+  "Sion": {
+    "name": "Sion",
+    "canton": "VS",
+    "zip": "1950"
+  },
+  "Siviriez": {
+    "name": "Siviriez",
+    "canton": "FR",
+    "zip": "1678"
+  },
+  "Soral": {
+    "name": "Soral",
+    "canton": "GE",
+    "zip": "1286"
+  },
+  "Sorens": {
+    "name": "Sorens",
+    "canton": "FR",
+    "zip": "1642"
+  },
+  "Soubey": {
+    "name": "Soubey",
+    "canton": "JU",
+    "zip": "2887"
+  },
+  "Soyhières": {
+    "name": "Soyhières",
+    "canton": "JU",
+    "zip": "2805"
+  },
+  "St. Niklaus": {
+    "name": "St. Niklaus",
+    "canton": "VS",
+    "zip": "3924"
+  },
+  "St. Silvester": {
+    "name": "St. Silvester",
+    "canton": "FR",
+    "zip": "1736"
+  },
+  "St. Ursen": {
+    "name": "St. Ursen",
+    "canton": "FR",
+    "zip": "1717"
+  },
+  "Stalden (VS)": {
+    "name": "Stalden (VS)",
+    "canton": "VS",
+    "zip": "3922"
+  },
+  "Staldenried": {
+    "name": "Staldenried",
+    "canton": "VS",
+    "zip": "3933"
+  },
+  "Steg-Hohtenn": {
+    "name": "Steg-Hohtenn",
+    "canton": "VS",
+    "zip": "3940"
+  },
+  "Suchy": {
+    "name": "Suchy",
+    "canton": "VD",
+    "zip": "1433"
+  },
+  "Sullens": {
+    "name": "Sullens",
+    "canton": "VD",
+    "zip": "1036"
+  },
+  "Surpierre": {
+    "name": "Surpierre",
+    "canton": "FR",
+    "zip": "1528"
+  },
+  "Sursee": {
+    "name": "Sursee",
+    "canton": "LU",
+    "zip": "6210"
+  },
+  "Suscévaz": {
+    "name": "Suscévaz",
+    "canton": "VD",
+    "zip": "1433"
+  },
+  "Syens": {
+    "name": "Syens",
+    "canton": "VD",
+    "zip": "1510"
+  },
+  "Sâles": {
+    "name": "Sâles",
+    "canton": "FR",
+    "zip": "1625"
+  },
+  "Sévaz": {
+    "name": "Sévaz",
+    "canton": "FR",
+    "zip": "1541"
+  },
+  "Tafers": {
+    "name": "Tafers",
+    "canton": "FR",
+    "zip": "1712"
+  },
+  "Tannay": {
+    "name": "Tannay",
+    "canton": "VD",
+    "zip": "1295"
+  },
+  "Tartegnin": {
+    "name": "Tartegnin",
+    "canton": "VD",
+    "zip": "1180"
+  },
+  "Tentlingen": {
+    "name": "Tentlingen",
+    "canton": "FR",
+    "zip": "1734"
+  },
+  "Termen": {
+    "name": "Termen",
+    "canton": "VS",
+    "zip": "3912"
+  },
+  "Thônex": {
+    "name": "Thônex",
+    "canton": "GE",
+    "zip": "1226"
+  },
+  "Tolochenaz": {
+    "name": "Tolochenaz",
+    "canton": "VD",
+    "zip": "1131"
+  },
+  "Torny": {
+    "name": "Torny",
+    "canton": "FR",
+    "zip": "1748"
+  },
+  "Trey": {
+    "name": "Trey",
+    "canton": "VD",
+    "zip": "1552"
+  },
+  "Treycovagnes": {
+    "name": "Treycovagnes",
+    "canton": "VD",
+    "zip": "1436"
+  },
+  "Treytorrens (Payerne)": {
+    "name": "Treytorrens (Payerne)",
+    "canton": "VD",
+    "zip": "1538"
+  },
+  "Treyvaux": {
+    "name": "Treyvaux",
+    "canton": "FR",
+    "zip": "1733"
+  },
+  "Triengen": {
+    "name": "Triengen",
+    "canton": "LU",
+    "zip": "6234"
+  },
+  "Trient": {
+    "name": "Trient",
+    "canton": "VS",
+    "zip": "1929"
+  },
+  "Troinex": {
+    "name": "Troinex",
+    "canton": "GE",
+    "zip": "1256"
+  },
+  "Troistorrents": {
+    "name": "Troistorrents",
+    "canton": "VS",
+    "zip": "1872"
+  },
+  "Trélex": {
+    "name": "Trélex",
+    "canton": "VD",
+    "zip": "1270"
+  },
+  "Turtmann-Unterems": {
+    "name": "Turtmann-Unterems",
+    "canton": "VS",
+    "zip": "3946"
+  },
+  "Täsch": {
+    "name": "Täsch",
+    "canton": "VS",
+    "zip": "3929"
+  },
+  "Tévenon": {
+    "name": "Tévenon",
+    "canton": "VD",
+    "zip": "1423"
+  },
+  "Törbel": {
+    "name": "Törbel",
+    "canton": "VS",
+    "zip": "3923"
+  },
+  "Udligenswil": {
+    "name": "Udligenswil",
+    "canton": "LU",
+    "zip": "6044"
+  },
+  "Ueberstorf": {
+    "name": "Ueberstorf",
+    "canton": "FR",
+    "zip": "3182"
+  },
+  "Ufhusen": {
+    "name": "Ufhusen",
+    "canton": "LU",
+    "zip": "6153"
+  },
+  "Ulmiz": {
+    "name": "Ulmiz",
+    "canton": "FR",
+    "zip": "3214"
+  },
+  "Unterbäch": {
+    "name": "Unterbäch",
+    "canton": "VS",
+    "zip": "3944"
+  },
+  "Ursins": {
+    "name": "Ursins",
+    "canton": "VD",
+    "zip": "1412"
+  },
+  "Ursy": {
+    "name": "Ursy",
+    "canton": "FR",
+    "zip": "1670"
+  },
+  "Val Terbi": {
+    "name": "Val Terbi",
+    "canton": "JU",
+    "zip": "2824"
+  },
+  "Val de Bagnes": {
+    "name": "Val de Bagnes",
+    "canton": "VS",
+    "zip": "1934"
+  },
+  "Val-d'Illiez": {
+    "name": "Val-d'Illiez",
+    "canton": "VS",
+    "zip": "1873"
+  },
+  "Val-de-Charmey": {
+    "name": "Val-de-Charmey",
+    "canton": "FR",
+    "zip": "1637"
+  },
+  "Val-de-Ruz": {
+    "name": "Val-de-Ruz",
+    "canton": "NE",
+    "zip": "2052"
+  },
+  "Val-de-Travers": {
+    "name": "Val-de-Travers",
+    "canton": "NE",
+    "zip": "2114"
+  },
+  "Valbroye": {
+    "name": "Valbroye",
+    "canton": "VD",
+    "zip": "1536"
+  },
+  "Valeyres-sous-Montagny": {
+    "name": "Valeyres-sous-Montagny",
+    "canton": "VD",
+    "zip": "1441"
+  },
+  "Valeyres-sous-Rances": {
+    "name": "Valeyres-sous-Rances",
+    "canton": "VD",
+    "zip": "1358"
+  },
+  "Valeyres-sous-Ursins": {
+    "name": "Valeyres-sous-Ursins",
+    "canton": "VD",
+    "zip": "1412"
+  },
+  "Vallon": {
+    "name": "Vallon",
+    "canton": "FR",
+    "zip": "1565"
+  },
+  "Vallorbe": {
+    "name": "Vallorbe",
+    "canton": "VD",
+    "zip": "1337"
+  },
+  "Vandoeuvres": {
+    "name": "Vandoeuvres",
+    "canton": "GE",
+    "zip": "1253"
+  },
+  "Varen": {
+    "name": "Varen",
+    "canton": "VS",
+    "zip": "3953"
+  },
+  "Vaulion": {
+    "name": "Vaulion",
+    "canton": "VD",
+    "zip": "1325"
+  },
+  "Vaulruz": {
+    "name": "Vaulruz",
+    "canton": "FR",
+    "zip": "1627"
+  },
+  "Vaux-sur-Morges": {
+    "name": "Vaux-sur-Morges",
+    "canton": "VD",
+    "zip": "1126"
+  },
+  "Vendlincourt": {
+    "name": "Vendlincourt",
+    "canton": "JU",
+    "zip": "2943"
+  },
+  "Vernayaz": {
+    "name": "Vernayaz",
+    "canton": "VS",
+    "zip": "1904"
+  },
+  "Vernier": {
+    "name": "Vernier",
+    "canton": "GE",
+    "zip": "1214"
+  },
+  "Versoix": {
+    "name": "Versoix",
+    "canton": "GE",
+    "zip": "1290"
+  },
+  "Vevey": {
+    "name": "Vevey",
+    "canton": "VD",
+    "zip": "1800"
+  },
+  "Vex": {
+    "name": "Vex",
+    "canton": "VS",
+    "zip": "1981"
+  },
+  "Veyrier": {
+    "name": "Veyrier",
+    "canton": "GE",
+    "zip": "1255"
+  },
+  "Veysonnaz": {
+    "name": "Veysonnaz",
+    "canton": "VS",
+    "zip": "1993"
+  },
+  "Veytaux": {
+    "name": "Veytaux",
+    "canton": "VD",
+    "zip": "1820"
+  },
+  "Vich": {
+    "name": "Vich",
+    "canton": "VD",
+    "zip": "1267"
+  },
+  "Villars-Epeney": {
+    "name": "Villars-Epeney",
+    "canton": "VD",
+    "zip": "1404"
+  },
+  "Villars-Sainte-Croix": {
+    "name": "Villars-Sainte-Croix",
+    "canton": "VD",
+    "zip": "1029"
+  },
+  "Villars-le-Comte": {
+    "name": "Villars-le-Comte",
+    "canton": "VD",
+    "zip": "1515"
+  },
+  "Villars-le-Terroir": {
+    "name": "Villars-le-Terroir",
+    "canton": "VD",
+    "zip": "1040"
+  },
+  "Villars-sous-Yens": {
+    "name": "Villars-sous-Yens",
+    "canton": "VD",
+    "zip": "1168"
+  },
+  "Villars-sur-Glâne": {
+    "name": "Villars-sur-Glâne",
+    "canton": "FR",
+    "zip": "1752"
+  },
+  "Villarsel-sur-Marly": {
+    "name": "Villarsel-sur-Marly",
+    "canton": "FR",
+    "zip": "1723"
+  },
+  "Villarzel": {
+    "name": "Villarzel",
+    "canton": "VD",
+    "zip": "1555"
+  },
+  "Villaz": {
+    "name": "Villaz",
+    "canton": "FR",
+    "zip": "1690"
+  },
+  "Villeneuve (VD)": {
+    "name": "Villeneuve (VD)",
+    "canton": "VD",
+    "zip": "1844"
+  },
+  "Villorsonnens": {
+    "name": "Villorsonnens",
+    "canton": "FR",
+    "zip": "1694"
+  },
+  "Vinzel": {
+    "name": "Vinzel",
+    "canton": "VD",
+    "zip": "1184"
+  },
+  "Vionnaz": {
+    "name": "Vionnaz",
+    "canton": "VS",
+    "zip": "1895"
+  },
+  "Visp": {
+    "name": "Visp",
+    "canton": "VS",
+    "zip": "3930"
+  },
+  "Visperterminen": {
+    "name": "Visperterminen",
+    "canton": "VS",
+    "zip": "3932"
+  },
+  "Vitznau": {
+    "name": "Vitznau",
+    "canton": "LU",
+    "zip": "6354"
+  },
+  "Vouvry": {
+    "name": "Vouvry",
+    "canton": "VS",
+    "zip": "1896"
+  },
+  "Vuadens": {
+    "name": "Vuadens",
+    "canton": "FR",
+    "zip": "1628"
+  },
+  "Vuarrens": {
+    "name": "Vuarrens",
+    "canton": "VD",
+    "zip": "1418"
+  },
+  "Vucherens": {
+    "name": "Vucherens",
+    "canton": "VD",
+    "zip": "1509"
+  },
+  "Vufflens-la-Ville": {
+    "name": "Vufflens-la-Ville",
+    "canton": "VD",
+    "zip": "1302"
+  },
+  "Vufflens-le-Château": {
+    "name": "Vufflens-le-Château",
+    "canton": "VD",
+    "zip": "1134"
+  },
+  "Vugelles-La Mothe": {
+    "name": "Vugelles-La Mothe",
+    "canton": "VD",
+    "zip": "1431"
+  },
+  "Vuisternens-devant-Romont": {
+    "name": "Vuisternens-devant-Romont",
+    "canton": "FR",
+    "zip": "1687"
+  },
+  "Vuiteboeuf": {
+    "name": "Vuiteboeuf",
+    "canton": "VD",
+    "zip": "1445"
+  },
+  "Vulliens": {
+    "name": "Vulliens",
+    "canton": "VD",
+    "zip": "1085"
+  },
+  "Vullierens": {
+    "name": "Vullierens",
+    "canton": "VD",
+    "zip": "1115"
+  },
+  "Vully-les-Lacs": {
+    "name": "Vully-les-Lacs",
+    "canton": "VD",
+    "zip": "1585"
+  },
+  "Vérossaz": {
+    "name": "Vérossaz",
+    "canton": "VS",
+    "zip": "1891"
+  },
+  "Vétroz": {
+    "name": "Vétroz",
+    "canton": "VS",
+    "zip": "1963"
+  },
+  "Wauwil": {
+    "name": "Wauwil",
+    "canton": "LU",
+    "zip": "6242"
+  },
+  "Weggis": {
+    "name": "Weggis",
+    "canton": "LU",
+    "zip": "6353"
+  },
+  "Werthenstein": {
+    "name": "Werthenstein",
+    "canton": "LU",
+    "zip": "6106"
+  },
+  "Wikon": {
+    "name": "Wikon",
+    "canton": "LU",
+    "zip": "4806"
+  },
+  "Wiler (Lötschen)": {
+    "name": "Wiler (Lötschen)",
+    "canton": "VS",
+    "zip": "3918"
+  },
+  "Willisau": {
+    "name": "Willisau",
+    "canton": "LU",
+    "zip": "6130"
+  },
+  "Wolhusen": {
+    "name": "Wolhusen",
+    "canton": "LU",
+    "zip": "6110"
+  },
+  "Wünnewil-Flamatt": {
+    "name": "Wünnewil-Flamatt",
+    "canton": "FR",
+    "zip": "3175"
+  },
+  "Yens": {
+    "name": "Yens",
+    "canton": "VD",
+    "zip": "1169"
+  },
+  "Yverdon-les-Bains": {
+    "name": "Yverdon-les-Bains",
+    "canton": "VD",
+    "zip": "1400"
+  },
+  "Yvonand": {
+    "name": "Yvonand",
+    "canton": "VD",
+    "zip": "1462"
+  },
+  "Yvorne": {
+    "name": "Yvorne",
+    "canton": "VD",
+    "zip": "1853"
+  },
+  "Zell (LU)": {
+    "name": "Zell (LU)",
+    "canton": "LU",
+    "zip": "6144"
+  },
+  "Zeneggen": {
+    "name": "Zeneggen",
+    "canton": "VS",
+    "zip": "3934"
+  },
+  "Zermatt": {
+    "name": "Zermatt",
+    "canton": "VS",
+    "zip": "3920"
+  },
+  "Zwischbergen": {
+    "name": "Zwischbergen",
+    "canton": "VS",
+    "zip": "3901"
+  }
+}

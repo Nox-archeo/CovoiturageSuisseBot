@@ -50,3 +50,40 @@ async def handle_dispute_description(update: Update, context):
         "Votre litige a été enregistré. Un administrateur va examiner votre demande."
     )
     return ConversationHandler.END
+
+# Fonction manquante pour get_recent_bookings
+def get_recent_bookings(user_id):
+    """Récupère les réservations récentes d'un utilisateur"""
+    from database import get_db
+    db = get_db()
+    return db.query(Booking).filter_by(passenger_id=user_id).all()
+
+def register(application):
+    """Enregistre les handlers de litige"""
+    conv_handler = ConversationHandler(
+        entry_points=[CommandHandler("litige", open_dispute)],
+        states={
+            DESCRIBE_ISSUE: [
+                MessageHandler(filters.TEXT & ~filters.COMMAND, handle_dispute_description),
+                CallbackQueryHandler(
+                    lambda u, c: u.callback_query.answer("Sélection du litige"),
+                    pattern="^dispute_"
+                )
+            ],
+        },
+        fallbacks=[CommandHandler("cancel", lambda u, c: ConversationHandler.END)],
+        per_message=True,
+        per_chat=True
+    )
+    
+    application.add_handler(conv_handler)
+    
+    # Handler pour les boutons de résolution de litige (admin)
+    application.add_handler(CallbackQueryHandler(
+        lambda u, c: u.callback_query.answer("Demande de remboursement transmise"),
+        pattern="^refund_"
+    ))
+    application.add_handler(CallbackQueryHandler(
+        lambda u, c: u.callback_query.answer("Litige rejeté"),
+        pattern="^reject_dispute_"
+    ))

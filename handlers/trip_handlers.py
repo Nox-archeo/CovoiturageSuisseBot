@@ -1,8 +1,9 @@
 import os
 import json
 import logging
+import traceback
 from datetime import datetime
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import (
     CommandHandler,
     CallbackContext,
@@ -14,7 +15,22 @@ from telegram.ext import (
 from database.models import Trip, User, Booking
 from database import get_db
 from utils.validators import validate_date, validate_price, validate_seats
-from .trip_preferences import show_preferences_menu
+from utils.swiss_cities import find_locality, format_locality_result
+from utils.date_picker import (
+    start_date_selection, handle_calendar_navigation, 
+    handle_day_selection, handle_time_selection, handle_minute_selection, handle_datetime_action,
+    handle_flex_time_selection,
+    CALENDAR_NAVIGATION_PATTERN, CALENDAR_DAY_SELECTION_PATTERN, 
+    CALENDAR_CANCEL_PATTERN, TIME_SELECTION_PATTERN, TIME_BACK_PATTERN, TIME_CANCEL_PATTERN,
+    MINUTE_SELECTION_PATTERN, MINUTE_BACK_PATTERN, MINUTE_CANCEL_PATTERN,
+    FLEX_TIME_PATTERN
+)
+from utils.location_picker import (
+    start_location_selection, handle_location_selection, handle_location_query,
+    LOCATION_SELECTION_PATTERN
+)
+# from .trip_preferences import show_preferences_menu # If used
+# from .profile_handlers import profile_menu # If used
 
 # Configuration du logger
 logger = logging.getLogger(__name__)
@@ -26,234 +42,76 @@ logger = logging.getLogger(__name__)
     CHOOSING_DESTINATION,
     ENTERING_DEPARTURE,
     ENTERING_ARRIVAL,
-    DEPARTURE,
-    ARRIVAL,
     DATE,
     SEATS,
     PRICE,
     CONFIRM,
     TRIP_TYPE,
+    DEPARTURE,
+    ARRIVAL,
     ADDING_STOP,
-    MEETING_POINT
-) = range(14)
+    MEETING_POINT,
+    TRIP_OPTIONS
+) = range(15)
 
 def load_cities():
-    """Charge le fichier cities.json"""
+    """Charge les villes depuis swiss_localities.json"""
     try:
-        cities_file = os.path.join(
-            os.path.dirname(os.path.dirname(__file__)), 
-            'src', 'bot', 'data', 'cities.json'
-        )
-        with open(cities_file, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-            return [city['name'] for city in data['cities']]
+        # Utiliser la fonction de utils/swiss_cities.py pour charger les localités
+        from utils.swiss_cities import load_localities
+        
+        localities = load_localities()
+        if localities:
+            logger.info(f"Chargé {len(localities)} localités")
+            return list(localities.keys())
+        else:
+            logger.warning("Aucune localité trouvée, utilisation de la liste par défaut")
+            return [
+                "Zürich", "Genève", "Bâle", "Lausanne", "Berne", 
+                "Lucerne", "Fribourg", "Neuchâtel", "Sion"
+            ]
     except Exception as e:
-        logger.error(f"Erreur chargement cities.json: {e}")
-        return ["Zürich", "Genève", "Bâle", "Lausanne", "Berne"]
+        logger.error(f"Erreur chargement des localités: {e}")
+        return [
+            "Zürich", "Genève", "Bâle", "Lausanne", "Berne", 
+            "Lucerne", "Fribourg", "Neuchâtel", "Sion"
+        ]  # Liste par défaut
 
+# Charger les villes au démarrage
 SWISS_CITIES = load_cities()
 
-async def create_trip_start(update: Update, context: CallbackContext):
-    """Démarre le processus de création d'un trajet"""
-    # Add debug logs
-    print(f"DEBUG: create_trip_start called with update type: {type(update)}")
-    if update.callback_query:
-        print(f"DEBUG: Callback query data: {update.callback_query.data}")
+async def create_trip(update: Update, context):
+    """Processus de création de trajet amélioré - Étape 1: Choix du rôle"""
+    # S'assurer que le mode est bien réglé sur "create" et pas "search"
+    context.user_data.clear()  # Clear any previous data
+    context.user_data['mode'] = 'create'
+    logger.info("🔍 Mode réglé sur 'create' dans create_trip")
     
     keyboard = [
         [
-            InlineKeyboardButton("🔄 Régulier", callback_data="type_regular"),
-            InlineKeyboardButton("1️⃣ Unique", callback_data="type_single")
+            InlineKeyboardButton("🚗 Conducteur", callback_data="trip_type:driver"),
+            InlineKeyboardButton("🧍 Passager", callback_data="trip_type:passenger")
         ],
-        [InlineKeyboardButton("❌ Annuler", callback_data="cancel")]
-    ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    
-    if update.message:
-        await update.message.reply_text(
-            "Quel type de trajet souhaitez-vous créer ?",
-            reply_markup=reply_markup
-        )
-    else:
-        await update.callback_query.edit_message_text(
-            "Quel type de trajet souhaitez-vous créer ?",
-            reply_markup=reply_markup
-        )
-    return DEPARTURE
-
-async def ask_departure(update: Update, context: CallbackContext):
-    """Demande la ville de départ"""
-    query = update.callback_query
-    await query.answer()
-    
-    trip_type = query.data.split('_')[1]
-    context.user_data['trip_type'] = trip_type
-    
-    buttons = [[InlineKeyboardButton(city, callback_data=f"dep_{city}")] for city in SWISS_CITIES[:5]]
-    buttons.append([InlineKeyboardButton("❌ Annuler", callback_data="cancel")])
-    reply_markup = InlineKeyboardMarkup(buttons)
-    
-    await query.edit_message_text(
-        "🚗 De quelle ville partez-vous ?",
-        reply_markup=reply_markup
-    )
-    return ARRIVAL
-
-async def ask_arrival(update: Update, context: CallbackContext):
-    """Demande la ville d'arrivée"""
-    query = update.callback_query
-    await query.answer()
-    
-    departure = query.data.split('_')[1]
-    context.user_data['departure'] = departure
-    
-    buttons = [[InlineKeyboardButton(city, callback_data=f"arr_{city}")] 
-               for city in SWISS_CITIES[:5] if city != departure]
-    buttons.append([InlineKeyboardButton("❌ Annuler", callback_data="cancel")])
-    reply_markup = InlineKeyboardMarkup(buttons)
-    
-    await query.edit_message_text(
-        f"🎯 Vers quelle ville allez-vous ?\nDépart: {departure}",
-        reply_markup=reply_markup
-    )
-    return DATE
-
-async def ask_date(update: Update, context: CallbackContext):
-    """Demande la date du trajet"""
-    query = update.callback_query
-    await query.answer()
-    
-    arrival = query.data.split('_')[1]
-    context.user_data['arrival'] = arrival
-    
-    today = datetime.now()
-    dates = [(today.date().replace(day=today.day + i), f"date_{i}") for i in range(7)]
-    buttons = [[InlineKeyboardButton(d[0].strftime("%d/%m/%Y"), callback_data=d[1])] for d in dates]
-    buttons.append([InlineKeyboardButton("❌ Annuler", callback_data="cancel")])
-    
-    await query.edit_message_text(
-        f"📅 Quand partez-vous ?\nDe: {context.user_data['departure']}\nVers: {arrival}",
-        reply_markup=InlineKeyboardMarkup(buttons)
-    )
-    return SEATS
-
-async def ask_seats(update: Update, context: CallbackContext):
-    """Demande le nombre de places"""
-    query = update.callback_query
-    await query.answer()
-    
-    day_offset = int(query.data.split('_')[1])
-    selected_date = datetime.now().date().replace(day=datetime.now().day + day_offset)
-    context.user_data['date'] = selected_date.strftime("%Y-%m-%d")
-    
-    buttons = [[InlineKeyboardButton(str(i), callback_data=f"seats_{i}")] for i in range(1, 5)]
-    buttons.append([InlineKeyboardButton("❌ Annuler", callback_data="cancel")])
-    
-    await query.edit_message_text(
-        "👥 Combien de places proposez-vous ?",
-        reply_markup=InlineKeyboardMarkup(buttons)
-    )
-    return PRICE
-
-async def ask_price(update: Update, context: CallbackContext):
-    """Demande le prix par place"""
-    query = update.callback_query
-    await query.answer()
-    
-    seats = int(query.data.split('_')[1])
-    context.user_data['seats'] = seats
-    
-    prices = [15, 20, 25, 30, 35]
-    buttons = [[InlineKeyboardButton(f"{p} CHF", callback_data=f"price_{p}")] for p in prices]
-    buttons.append([InlineKeyboardButton("❌ Annuler", callback_data="cancel")])
-    
-    await query.edit_message_text(
-        "💰 Quel est le prix par place ?",
-        reply_markup=InlineKeyboardMarkup(buttons)
-    )
-    return CONFIRM
-
-async def confirm_trip(update: Update, context: CallbackContext):
-    """Confirme les détails du trajet"""
-    query = update.callback_query
-    await query.answer()
-    
-    price = int(query.data.split('_')[1])
-    context.user_data['price'] = price
-    
-    trip_data = context.user_data
-    confirmation_text = (
-        "📋 Récapitulatif du trajet:\n"
-        f"Type: {'Régulier' if trip_data['trip_type'] == 'regular' else 'Unique'}\n"
-        f"De: {trip_data['departure']}\n"
-        f"Vers: {trip_data['arrival']}\n"
-        f"Date: {trip_data['date']}\n"
-        f"Places: {trip_data['seats']}\n"
-        f"Prix: {trip_data['price']} CHF\n\n"
-        "Confirmez-vous ces informations ?"
-    )
-    
-    buttons = [
         [
-            InlineKeyboardButton("✅ Confirmer", callback_data="confirm_yes"),
-            InlineKeyboardButton("❌ Annuler", callback_data="confirm_no")
+            InlineKeyboardButton("❌ Annuler", callback_data="trip_type:cancel")
         ]
     ]
     
-    await query.edit_message_text(
-        confirmation_text,
-        reply_markup=InlineKeyboardMarkup(buttons)
-    )
-    return CONFIRM
-
-async def save_trip(update: Update, context: CallbackContext):
-    """Sauvegarde le trajet dans la base de données"""
-    query = update.callback_query
-    await query.answer()
-    
-    if query.data == "confirm_no":
-        await query.edit_message_text("Création du trajet annulée.")
-        return ConversationHandler.END
-    
-    try:
-        trip_data = context.user_data
-        trip = Trip(
-            driver_id=update.effective_user.id,
-            departure_city=trip_data['departure'],
-            arrival_city=trip_data['arrival'],
-            departure_time=trip_data['date'],
-            available_seats=trip_data['seats'],
-            price_per_seat=trip_data['price'],
-            is_regular=trip_data['trip_type'] == 'regular'
+    if update.message:
+        await update.message.reply_text(
+            "🚗 *Création d'un nouveau trajet*\n\n"
+            "Étape 1️⃣ - Choisissez votre rôle pour ce trajet:",
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode="Markdown"
         )
-        
-        # Sauvegarder dans la base de données
-        session = get_db()
-        session.add(trip)
-        session.commit()
-        
-        await query.edit_message_text(
-            "✅ Votre trajet a été créé avec succès!\n"
-            "Les passagers intéressés pourront maintenant le réserver."
+    elif update.callback_query:
+        await update.callback_query.edit_message_text(
+            "🚗 *Création d'un nouveau trajet*\n\n"
+            "Étape 1️⃣ - Choisissez votre rôle pour ce trajet:",
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode="Markdown"
         )
-        
-    except Exception as e:
-        logger.error(f"Erreur lors de la création du trajet: {str(e)}")
-        await query.edit_message_text(
-            "❌ Une erreur est survenue lors de la création du trajet.\n"
-            "Veuillez réessayer plus tard."
-        )
-    
-    context.user_data.clear()
-    return ConversationHandler.END
-
-async def cancel(update: Update, context: CallbackContext):
-    """Annule la création du trajet"""
-    query = update.callback_query
-    await query.answer()
-    await query.edit_message_text("Création du trajet annulée.")
-    context.user_data.clear()
-    return ConversationHandler.END
+    return TRIP_TYPE
 
 async def add_stops(update: Update, context):
     """Ajoute des arrêts intermédiaires"""
@@ -294,6 +152,12 @@ async def handle_preferences(update: Update, context):
 
 async def search_trip(update: Update, context: CallbackContext):
     """Commence la recherche de trajet"""
+    # Indiquer que nous sommes en mode recherche
+    context.user_data.clear()  # Clear any previous data
+    context.user_data['mode'] = 'search'
+    logger.info("🔍 Mode réglé sur 'search' dans search_trip")
+    
+    # Créer un clavier avec les villes principales
     keyboard = []
     popular_cities = ["Fribourg", "Genève", "Lausanne", "Zürich", "Berne", "Bâle"]
     
@@ -304,13 +168,22 @@ async def search_trip(update: Update, context: CallbackContext):
     
     reply_markup = InlineKeyboardMarkup(keyboard)
     
-    await update.message.reply_text(
-        "🔍 Recherche de trajets\n\n"
-        "1️⃣ Choisissez votre ville de départ:\n"
-        "- Sélectionnez une ville dans la liste\n"
-        "- Ou utilisez la recherche avancée",
-        reply_markup=reply_markup
-    )
+    if update.callback_query:
+        await update.callback_query.edit_message_text(
+            "🔍 Recherche de trajets\n\n"
+            "1️⃣ Choisissez votre ville de départ:\n"
+            "- Sélectionnez une ville dans la liste\n"
+            "- Ou utilisez la recherche avancée",
+            reply_markup=reply_markup
+        )
+    else:
+        await update.message.reply_text(
+            "🔍 Recherche de trajets\n\n"
+            "1️⃣ Choisissez votre ville de départ:\n"
+            "- Sélectionnez une ville dans la liste\n"
+            "- Ou utilisez la recherche avancée",
+            reply_markup=reply_markup
+        )
     return ENTERING_DEPARTURE
 
 async def list_my_trips(update: Update, context):
@@ -351,283 +224,88 @@ async def list_my_trips(update: Update, context):
         reply_markup=InlineKeyboardMarkup(keyboard)
     )
 
-async def handle_trip_type(update: Update, context):
-    """Gère le choix du type de trajet"""
+async def list_my_trips_menu(update: Update, context: CallbackContext):
+    """Shows options for viewing user's trips."""
     query = update.callback_query
-    if query:
-        await query.answer()
-        
-        choice = query.data.replace("trip_", "")
-        context.user_data['trip_type'] = choice
-        
-        keyboard = []
-        for city in SWISS_CITIES[:6]:
-            keyboard.append([InlineKeyboardButton(city, callback_data=f"dep_{city}")])
-        
-        keyboard.append([InlineKeyboardButton("🔍 Autre ville", callback_data="other_city")])
-        keyboard.append([InlineKeyboardButton("❌ Annuler", callback_data="cancel_trip")])
-        
-        await query.edit_message_text(
-            "🚗 Création d'un nouveau trajet\n\n"
-            "1️⃣ Choisissez la ville de départ:",
-            reply_markup=InlineKeyboardMarkup(keyboard)
-        )
-        return DEPARTURE
-
-async def handle_stop(update: Update, context):
-    """Gère l'ajout d'un arrêt intermédiaire"""
-    if 'stops' not in context.user_data:
-        context.user_data['stops'] = []
-    
-    new_stop = update.message.text
-    if new_stop in SWISS_CITIES:
-        context.user_data['stops'].append(new_stop)
-        keyboard = [
-            [InlineKeyboardButton("✅ Terminer les arrêts", callback_data="stops_done")],
-            [InlineKeyboardButton("➕ Ajouter un autre arrêt", callback_data="stops_add")],
-            [InlineKeyboardButton("❌ Annuler", callback_data="stops_cancel")]
-        ]
-        await update.message.reply_text(
-            f"Arrêt ajouté: {new_stop}\n"
-            f"Arrêts actuels: {', '.join(context.user_data['stops'])}\n\n"
-            "Voulez-vous ajouter un autre arrêt?",
-            reply_markup=InlineKeyboardMarkup(keyboard)
-        )
-        return ADDING_STOP
-    else:
-        await update.message.reply_text(
-            "Cette ville n'est pas dans notre liste. Veuillez choisir une ville suisse valide."
-        )
-        return ADDING_STOP
-
-async def add_meeting_point(update: Update, context):
-    """Ajoute un point de rendez-vous précis"""
     keyboard = [
-        [InlineKeyboardButton("📍 Partager ma position", callback_data="share_location")],
-        [InlineKeyboardButton("✏️ Décrire le lieu", callback_data="describe_location")]
+        [InlineKeyboardButton("🚗 Mes trajets (Conducteur)", callback_data="trips:list_driver")],
+        [InlineKeyboardButton("🧍 Mes réservations (Passager)", callback_data="trips:list_passenger")],
+        [InlineKeyboardButton("⬅️ Retour au menu", callback_data="menu:back_to_menu")]
     ]
-    await update.message.reply_text(
-        "Où exactement retrouverez-vous les passagers?\n"
-        "Choisissez une option:",
-        reply_markup=InlineKeyboardMarkup(keyboard)
-    )
-    return MEETING_POINT
-
-def get_popular_destinations():
-    """Retourne une liste des destinations populaires"""
-    return [
-        {"name": "Genève", "zip": "1200", "canton": "GE"},
-        {"name": "Lausanne", "zip": "1000", "canton": "VD"},
-        {"name": "Berne", "zip": "3000", "canton": "BE"},
-        {"name": "Zürich", "zip": "8000", "canton": "ZH"},
-        {"name": "Bâle", "zip": "4000", "canton": "BS"}
-    ]
-
-async def handle_departure(update: Update, context: CallbackContext):
-    """Traite la ville de départ"""
-    query = update.callback_query
+    text = "📋 *Mes Trajets*\n\nChoisissez une catégorie à afficher:"
     if query:
         await query.answer()
-        if query.data == "advanced_search":
-            await query.edit_message_text(
-                "📍 Entrez le nom de votre ville de départ:\n"
-                "Par exemple: Bulle, Neuchâtel, etc."
-            )
-            return ENTERING_DEPARTURE
-        
-        city = query.data.replace("from_", "")
-        context.user_data['departure'] = city
-        
-        keyboard = []
-        for dest in get_popular_destinations():
-            if dest['name'] != city:
-                keyboard.append([InlineKeyboardButton(dest['name'], callback_data=f"to_{dest['name']}")])
-        
-        keyboard.append([InlineKeyboardButton("🔍 Autre destination", callback_data="other_destination")])
-        keyboard.append([InlineKeyboardButton("❌ Annuler", callback_data="cancel")])
-        
-        await query.edit_message_text(
-            f"Départ: {city}\n\n"
-            "2️⃣ Choisissez votre destination:",
-            reply_markup=InlineKeyboardMarkup(keyboard)
-        )
-        return ENTERING_ARRIVAL
+        await query.edit_message_text(text, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode="Markdown")
     else:
-        # Recherche de ville par texte
-        city = update.message.text
-        if city.lower() not in [c.lower() for c in SWISS_CITIES]:
-            closest_matches = get_closest_matches(city, SWISS_CITIES)
-            keyboard = [[InlineKeyboardButton(c, callback_data=f"from_{c}")] for c in closest_matches]
-            keyboard.append([InlineKeyboardButton("❌ Annuler", callback_data="cancel")])
-            await update.message.reply_text(
-                "Ville non trouvée. Voulez-vous dire:\n",
-                reply_markup=InlineKeyboardMarkup(keyboard)
-            )
-            return ENTERING_DEPARTURE
-        
-        context.user_data['departure'] = city
-        keyboard = []
-        for dest in get_popular_destinations():
-            if dest['name'] != city:
-                keyboard.append([InlineKeyboardButton(dest['name'], callback_data=f"to_{dest['name']}")])
-        
-        keyboard.append([InlineKeyboardButton("🔍 Autre destination", callback_data="other_destination")])
-        keyboard.append([InlineKeyboardButton("❌ Annuler", callback_data="cancel")])
-        
-        await update.message.reply_text(
-            f"Départ: {city}\n\n"
-            "2️⃣ Choisissez votre destination:",
-            reply_markup=InlineKeyboardMarkup(keyboard)
-        )
-        return ENTERING_ARRIVAL
+        await update.message.reply_text(text, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode="Markdown")
+    return # Or a state if this becomes a conversation
 
-async def handle_arrival(update: Update, context: CallbackContext):
-    """Traite la ville d'arrivée"""
+async def list_specific_trips(update: Update, context: CallbackContext, trip_role: str):
+    """Helper to list trips based on role (driver/passenger)."""
     query = update.callback_query
+    user_id = update.effective_user.id
+    db = get_db()
+    message_parts = []
+    
+    if trip_role == "driver":
+        driver_trips = db.query(Trip).join(User, Trip.driver_id == User.id).filter(User.telegram_id == user_id).all()
+        if driver_trips:
+            message_parts.append("*En tant que conducteur:*")
+            for trip in driver_trips:
+                status = "Publié" if trip.is_published else "Brouillon"
+                message_parts.append(f"• {trip.departure_city} → {trip.arrival_city} le {trip.departure_time.strftime('%d/%m/%Y %H:%M')} ({status}) - ID: {trip.id}")
+                # Add buttons to manage/view trip
+        else:
+            message_parts.append("Vous n'avez aucun trajet en tant que conducteur.")
+            
+    elif trip_role == "passenger":
+        passenger_bookings = db.query(Booking).join(User).filter(User.telegram_id == user_id).all()
+        if passenger_bookings:
+            message_parts.append("*En tant que passager (réservations):*")
+            for booking in passenger_bookings:
+                trip = booking.trip
+                message_parts.append(f"• {trip.departure_city} → {trip.arrival_city} le {trip.departure_time.strftime('%d/%m/%Y %H:%M')} (Conducteur: {trip.driver.first_name if trip.driver else 'N/A'})")
+                # Add buttons to view booking/trip
+        else:
+            message_parts.append("Vous n'avez aucune réservation en tant que passager.")
+            
+    if not message_parts:
+        final_message = "Vous n'avez pas encore de trajets."
+    else:
+        final_message = "\n".join(message_parts)
+
+    keyboard = [[InlineKeyboardButton("⬅️ Retour à Mes Trajets", callback_data="menu:my_trips")],
+                [InlineKeyboardButton("🏠 Menu principal", callback_data="menu:back_to_menu")]]
+
     if query:
         await query.answer()
-        
-        if query.data == "other_destination":
-            await query.edit_message_text(
-                "📍 Entrez le nom de votre ville d'arrivée:\n"
-                "Par exemple: Bulle, Neuchâtel, etc."
-            )
-            return ENTERING_ARRIVAL
-        
-        city = query.data.replace("to_", "")
-        context.user_data['arrival'] = city
-    else:
-        city = update.message.text
-        if city.lower() not in [c.lower() for c in SWISS_CITIES]:
-            closest_matches = get_closest_matches(city, SWISS_CITIES)
-            keyboard = [[InlineKeyboardButton(c, callback_data=f"to_{c}")] for c in closest_matches]
-            keyboard.append([InlineKeyboardButton("❌ Annuler", callback_data="cancel")])
-            await update.message.reply_text(
-                "Ville non trouvée. Voulez-vous dire:\n",
-                reply_markup=InlineKeyboardMarkup(keyboard)
-            )
-            return ENTERING_ARRIVAL
-        
-        context.user_data['arrival'] = city
-    
-    # Afficher les trajets disponibles
-    session = get_db()
-    trips = session.query(Trip).filter(
-        Trip.departure_city == context.user_data['departure'],
-        Trip.arrival_city == context.user_data['arrival']
-    ).all()
-    
-    if trips:
-        message = "🔍 Trajets trouvés:\n\n"
-        keyboard = []
-        for trip in trips:
-            message += f"• {trip.departure_city} → {trip.arrival_city}\n"
-            message += f"  📅 {trip.departure_time}\n"
-            message += f"  💺 {trip.available_seats} places\n"
-            message += f"  💰 {trip.price_per_seat} CHF\n\n"
-            keyboard.append([
-                InlineKeyboardButton(
-                    f"Réserver ({trip.price_per_seat} CHF)", 
-                    callback_data=f"book_{trip.id}"
-                )
-            ])
-    else:
-        message = "❌ Aucun trajet trouvé pour cet itinéraire.\n"
-        keyboard = [
-            [
-                InlineKeyboardButton("🔄 Nouvelle recherche", callback_data="search_trip"),
-                InlineKeyboardButton("🚗 Créer un trajet", callback_data="create_trip")
-            ]
-        ]
-    
-    keyboard.append([InlineKeyboardButton("❌ Annuler", callback_data="cancel")])
-    
-    if query:
-        await query.edit_message_text(
-            message,
-            reply_markup=InlineKeyboardMarkup(keyboard)
-        )
-    else:
-        await update.message.reply_text(
-            message,
-            reply_markup=InlineKeyboardMarkup(keyboard)
-        )
-    
-    return ConversationHandler.END
+        await query.edit_message_text(final_message, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode="Markdown")
+    else: # Should not happen if called from button
+        await update.message.reply_text(final_message, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode="Markdown")
 
-def get_closest_matches(city, cities_list, max_matches=3):
-    """Trouve les villes les plus proches dans la liste"""
-    return [c for c in cities_list if city.lower() in c.lower()][:max_matches]
+
+async def handle_trip_list_choice(update: Update, context: CallbackContext):
+    query = update.callback_query
+    action = query.data.split(":")[1]
+
+    if action == "list_driver":
+        return await list_specific_trips(update, context, "driver")
+    elif action == "list_passenger":
+        return await list_specific_trips(update, context, "passenger")
+    return # Or a state
+
+# Remove old create_trip, handle_trip_type, show_trip_options if they are fully replaced by create_trip_handler.py
+# ...
 
 def register(application):
-    """Enregistre les handlers pour les trajets"""
-    # Handler principal pour la création de trajet
-    conv_handler = ConversationHandler(
-        entry_points=[
-            CommandHandler('creer', create_trip_start),
-            CallbackQueryHandler(create_trip_start, pattern='^create_trip$')
-        ],
-        states={
-            DEPARTURE: [
-                CallbackQueryHandler(ask_departure, pattern='^type_'),
-            ],
-            ARRIVAL: [
-                CallbackQueryHandler(ask_arrival, pattern='^dep_'),
-            ],
-            DATE: [
-                CallbackQueryHandler(ask_date, pattern='^arr_'),
-            ],
-            SEATS: [
-                CallbackQueryHandler(ask_seats, pattern='^date_'),
-            ],
-            PRICE: [
-                CallbackQueryHandler(ask_price, pattern='^seats_'),
-            ],
-            CONFIRM: [
-                CallbackQueryHandler(confirm_trip, pattern='^price_'),
-                CallbackQueryHandler(save_trip, pattern='^confirm_'),
-            ],
-            ADDING_STOP: [
-                MessageHandler(filters.TEXT & ~filters.COMMAND, handle_stop),
-                CallbackQueryHandler(handle_stop, pattern='^stops_'),
-            ],
-            MEETING_POINT: [
-                CallbackQueryHandler(add_meeting_point, pattern='^(share|describe)_location$'),
-            ]
-        },
-        fallbacks=[CallbackQueryHandler(cancel, pattern='^cancel$')],
-    )
+    # Handler for "Mes trajets" button in main menu
+    application.add_handler(CallbackQueryHandler(list_my_trips_menu, pattern="^menu:my_trips$"))
+    # Handlers for choices within "Mes trajets" menu
+    application.add_handler(CallbackQueryHandler(handle_trip_list_choice, pattern="^trips:(list_driver|list_passenger)$"))
     
-    # Handler pour la recherche de trajet
-    search_handler = ConversationHandler(
-        entry_points=[
-            CommandHandler('chercher', search_trip),
-            CallbackQueryHandler(search_trip, pattern='^search_trip$')
-        ],
-        states={
-            ENTERING_DEPARTURE: [
-                CallbackQueryHandler(handle_departure, pattern='^from_'),
-                CallbackQueryHandler(handle_departure, pattern='^advanced_search$'),
-                MessageHandler(filters.TEXT & ~filters.COMMAND, handle_departure),
-            ],
-            ENTERING_ARRIVAL: [
-                CallbackQueryHandler(handle_arrival, pattern='^to_'),
-                CallbackQueryHandler(handle_arrival, pattern='^other_destination$'),
-                MessageHandler(filters.TEXT & ~filters.COMMAND, handle_arrival),
-            ]
-        },
-        fallbacks=[
-            CallbackQueryHandler(cancel, pattern='^cancel$'),
-            CommandHandler('cancel', cancel)
-        ],
-    )
+    # Add other handlers from this file, e.g., for viewing/editing specific trips if you build that
+    logger.info("Trip (viewing/management) handlers registered.")
 
-    # Ajouter tous les handlers
-    application.add_handler(conv_handler)
-    application.add_handler(search_handler)
-    application.add_handler(CommandHandler("mes_trajets", list_my_trips))
-    
-    # Ajout d'un handler global pour les callbacks qui ne seraient pas capturés par les ConversationHandler
-    application.add_handler(CallbackQueryHandler(cancel, pattern='^cancel_trip$'))
-```
-</copilot-edited-file>
+# ... (rest of trip_handlers.py, ensure SWISS_CITIES and load_cities are used if needed by other functions here)
+# The states like CHOOSING_TYPE, DEPARTURE etc. should be removed if not used by a ConversationHandler in this file.
+# If search_trip is still relevant here and not fully in search_trip_handler, it needs proper integration.

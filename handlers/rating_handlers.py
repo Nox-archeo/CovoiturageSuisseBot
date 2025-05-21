@@ -22,6 +22,8 @@ async def rate_trip(update: Update, context):
 async def handle_rating(update: Update, context):
     """Traite la note donnée"""
     query = update.callback_query
+    await query.answer()
+    
     _, booking_id, rating = query.data.split('_')
     rating = int(rating)
     
@@ -37,7 +39,7 @@ async def handle_rating(update: Update, context):
             passenger.passenger_rating = (passenger.passenger_rating + rating) / 2
         db.commit()
         
-    await query.message.edit_text("Merci pour votre évaluation! ⭐")
+    await query.edit_message_text("Merci pour votre évaluation! ⭐")
 
 def register(application):
     """Enregistre les handlers de notation"""

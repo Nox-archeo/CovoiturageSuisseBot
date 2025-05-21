@@ -87,4 +87,8 @@ async def handle_payment_success(update: Update, context):
 def register(application):
     """Enregistre les handlers de paiement"""
     application.add_handler(CallbackQueryHandler(initiate_payment, pattern="^pay_booking_"))
-    application.add_handler(CallbackQueryHandler(handle_payment_success, pattern="^payment_success"))
+    application.add_handler(CallbackQueryHandler(handle_payment_success, pattern="^payment_success$"))
+    application.add_handler(CallbackQueryHandler(
+        lambda u, c: u.callback_query.edit_message_text("Paiement annulé."),
+        pattern="^cancel_payment$"
+    ))

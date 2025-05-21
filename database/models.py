@@ -82,6 +82,7 @@ class Trip(Base):
     flexible_time = Column(Boolean, default=False)  # Horaire flexible
     women_only = Column(Boolean, default=False)  # Option "Entre femmes"
     instant_booking = Column(Boolean, default=True)  # Réservation instantanée
+    is_published = Column(Boolean, default=False)  # Trajet publié dans l'annuaire public
 
     # Ajout de fonctionnalités essentielles
     recurring = Column(Boolean, default=False)  # Trajet régulier

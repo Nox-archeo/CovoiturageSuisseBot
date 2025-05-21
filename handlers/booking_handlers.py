@@ -54,10 +54,37 @@ async def confirm_booking_callback(update: Update, context: CallbackContext):
     )
     await process_payment(update, context)
 
+# Fonction manquante qui est appelée dans confirm_booking_callback
+async def process_payment(update, context):
+    """Redirige vers le processus de paiement"""
+    query = update.callback_query
+    await query.answer()
+    
+    # Cette fonction devrait normalement être liée à payment_handlers.py
+    keyboard = [
+        [InlineKeyboardButton("💳 Payer maintenant", callback_data=f"pay_booking_{context.user_data.get('booking_id')}")],
+        [InlineKeyboardButton("❌ Annuler", callback_data="cancel_booking")]
+    ]
+    
+    await query.edit_message_text(
+        "Votre réservation a été créée. Procédez au paiement pour la confirmer.",
+        reply_markup=InlineKeyboardMarkup(keyboard)
+    )
+
 def register(application):
     """Enregistre les handlers de réservation"""
     application.add_handler(CommandHandler("reserver", book_trip))
     application.add_handler(CallbackQueryHandler(
         confirm_booking_callback,
         pattern='^confirm_booking_'
+    ))
+    application.add_handler(CallbackQueryHandler(
+        lambda u, c: u.callback_query.edit_message_text("Réservation annulée."),
+        pattern='^cancel_booking$'
+    ))
+    
+    # Pour gérer les boutons book_{trip_id}
+    application.add_handler(CallbackQueryHandler(
+        lambda u, c: book_trip(u, c),
+        pattern='^book_'
     ))

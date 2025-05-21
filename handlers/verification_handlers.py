@@ -1,5 +1,5 @@
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import CommandHandler, MessageHandler, filters, ConversationHandler
+from telegram.ext import CommandHandler, MessageHandler, filters, ConversationHandler, CallbackQueryHandler
 from database.models import User
 from database import get_db
 import os
@@ -80,11 +80,18 @@ def register(application):
     os.makedirs("verifications", exist_ok=True)
     
     conv_handler = ConversationHandler(
-        entry_points=[CommandHandler('verifier', start_verification)],
+        entry_points=[
+            CommandHandler('verifier', start_verification),
+            CallbackQueryHandler(start_verification, pattern='^verify_identity$')
+        ],
         states={
             UPLOAD_ID: [MessageHandler(filters.PHOTO, handle_verification_photo)],
             UPLOAD_SELFIE: [MessageHandler(filters.PHOTO, handle_verification_photo)]
         },
-        fallbacks=[CommandHandler('annuler', cancel)]
+        fallbacks=[CommandHandler('annuler', cancel)],
+        name="verification_conversation",  # Ajouté pour persistent=True
+        persistent=True,
+        allow_reentry=True,
+        per_message=False  # Important : évite le warning PTBUserWarning
     )
     application.add_handler(conv_handler)

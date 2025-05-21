@@ -1,0 +1,741 @@
+import logging
+import json
+from datetime import datetime
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import (
+    CommandHandler,
+    CallbackContext,
+    ConversationHandler,
+    MessageHandler,
+    CallbackQueryHandler,
+    filters
+)
+from database.models import Trip, User
+from database import get_db
+from utils.validators import validate_date, validate_price, validate_seats
+from utils.swiss_cities import find_locality, format_locality_result, load_localities as load_all_localities
+from utils.date_picker import (
+    start_date_selection, handle_calendar_navigation, 
+    handle_day_selection, handle_time_selection, handle_minute_selection,
+    handle_flex_time_selection,
+    CALENDAR_NAVIGATION_PATTERN, CALENDAR_DAY_SELECTION_PATTERN, 
+    CALENDAR_CANCEL_PATTERN, TIME_SELECTION_PATTERN, TIME_BACK_PATTERN, TIME_CANCEL_PATTERN,
+    MINUTE_SELECTION_PATTERN, MINUTE_BACK_PATTERN, MINUTE_CANCEL_PATTERN,
+    FLEX_TIME_PATTERN, DATETIME_ACTION_PATTERN
+)
+
+# Configuration du logger
+logger = logging.getLogger(__name__)
+
+# États de conversation pour la création de trajet
+(
+    CREATE_TRIP_TYPE,
+    CREATE_TRIP_OPTIONS,
+    CREATE_DEPARTURE,
+    CREATE_ARRIVAL,
+    CREATE_DATE,
+    CREATE_SEATS,
+    CREATE_PRICE,
+    CREATE_CONFIRM,
+    CREATE_CALENDAR, # État pour la sélection du calendrier
+    CREATE_TIME,     # État pour la sélection de l'heure
+    CREATE_MINUTE,   # État pour la sélection des minutes
+    CREATE_CONFIRM_DATETIME # État pour la confirmation de la date/heure
+) = range(12) # Ajusté le range
+
+# Charger les villes au démarrage
+def load_cities_list():
+    """Charge les villes depuis swiss_localities.json pour les suggestions."""
+    try:
+        localities = load_all_localities()
+        if localities:
+            logger.info(f"Chargé {len(localities)} localités pour create_trip_handler")
+            # Retourner une liste de noms de ville pour les suggestions rapides
+            # Ou une structure plus complète si nécessaire pour les callbacks
+            return sorted(list(localities.keys())) 
+        else:
+            logger.warning("Aucune localité trouvée dans create_trip_handler, utilisation de la liste par défaut")
+            return sorted([
+                "Zürich", "Genève", "Bâle", "Lausanne", "Berne", 
+                "Lucerne", "Fribourg", "Neuchâtel", "Sion"
+            ])
+    except Exception as e:
+        logger.error(f"Erreur chargement des localités dans create_trip_handler: {e}")
+        return sorted([
+            "Zürich", "Genève", "Bâle", "Lausanne", "Berne", 
+            "Lucerne", "Fribourg", "Neuchâtel", "Sion"
+        ])
+
+SWISS_CITIES_SUGGESTIONS = load_cities_list()
+
+async def start_create_trip(update: Update, context: CallbackContext):
+    """Lance le processus de création de trajet."""
+    context.user_data.clear()
+    context.user_data['mode'] = 'create'
+    # Garder une trace de l'état actuel pour les fallbacks
+    context.user_data['current_state'] = CREATE_TRIP_TYPE
+    logger.info("Mode réglé sur 'create' dans start_create_trip")
+    
+    # Utiliser une notation unique pour les callbacks afin d'éviter les conflits
+    keyboard = [
+        [
+            InlineKeyboardButton("🚗 Conducteur", callback_data="trip_type:driver"),
+            InlineKeyboardButton("🧍 Passager", callback_data="trip_type:passenger")
+        ],
+        [InlineKeyboardButton("❌ Annuler", callback_data="create_cancel")]
+    ]
+    
+    message_text = "🚗 *Création d'un nouveau trajet*\n\nÉtape 1️⃣ - Choisissez votre rôle pour ce trajet:"
+    
+    if update.callback_query:
+        await update.callback_query.answer()
+        await update.callback_query.edit_message_text(
+            message_text,
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode="Markdown"
+        )
+    else:
+        await update.message.reply_text(
+            message_text,
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode="Markdown"
+        )
+    return CREATE_TRIP_TYPE
+
+async def handle_create_trip_type(update: Update, context: CallbackContext):
+    """Gère le choix du type de trajet (conducteur/passager)."""
+    query = update.callback_query
+    await query.answer()
+    
+    try:
+        choice = query.data.split(":")[1]
+        logger.info(f"✅ Callback reçu dans handle_create_trip_type: {query.data}, choix: {choice}")
+        
+        if choice == "cancel":
+            await query.edit_message_text("❌ Création de trajet annulée.")
+            context.user_data.clear()
+            return ConversationHandler.END
+            
+        context.user_data['trip_type'] = choice
+        logger.info(f"Type de trajet (création) enregistré: {choice}")
+        
+        # Mettre à jour l'état courant pour le fallback
+        context.user_data['current_state'] = CREATE_TRIP_OPTIONS
+        
+        # Transition vers les options de trajet
+        return await show_create_trip_options(update, context)
+    except Exception as e:
+        logger.error(f"Erreur dans handle_create_trip_type: {e}")
+        # Fallback en cas d'erreur
+        try:
+            await query.message.reply_text("Une erreur s'est produite. Veuillez réessayer.")
+        except:
+            pass
+        return ConversationHandler.END
+
+async def show_create_trip_options(update: Update, context: CallbackContext):
+    """Affiche les options supplémentaires pour la création de trajet."""
+    logger.info(f"Entrée dans show_create_trip_options avec update type: {type(update)}")
+    
+    # Si la fonction est appelée directement depuis handle_create_trip_type
+    # nous avons encore accès à update.callback_query
+    query = update.callback_query if hasattr(update, 'callback_query') else None
+    
+    # Log pour le debug
+    if query:
+        logger.info(f"Query data: {query.data}")
+    else:
+        logger.warning("Aucune query disponible dans show_create_trip_options")
+
+    # Initialiser les options si elles n'existent pas
+    if 'trip_options' not in context.user_data:
+        context.user_data['trip_options'] = {}
+    
+    trip_type = context.user_data.get('trip_type', '')
+    logger.info(f"Options de trajet pour type: {trip_type}")
+
+    # Option "Entre femmes" - à adapter selon la logique de profil utilisateur si nécessaire
+    is_woman = False # Placeholder, à remplacer par une vraie vérification si pertinent
+    
+    keyboard = [
+        [
+            InlineKeyboardButton(
+                f"{'✅' if context.user_data['trip_options'].get('simple', False) else '☑️'} Trajet simple", 
+                callback_data="create_trip_option:simple"
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                f"{'✅' if context.user_data['trip_options'].get('regular', False) else '☑️'} Trajet régulier", 
+                callback_data="create_trip_option:regular"
+            ),
+            InlineKeyboardButton(
+                f"{'✅' if context.user_data['trip_options'].get('round_trip', False) else '☑️'} Aller-retour", 
+                callback_data="create_trip_option:round_trip"
+            )
+        ]
+    ]
+    if is_woman:
+        keyboard.append([
+            InlineKeyboardButton(
+                f"{'✅' if context.user_data['trip_options'].get('women_only', False) else '☑️'} Entre femmes uniquement", 
+                callback_data="create_trip_option:women_only"
+            )
+        ])
+    keyboard.append([
+        InlineKeyboardButton("▶️ Continuer", callback_data="create_trip_options:continue"),
+        InlineKeyboardButton("❌ Annuler", callback_data="create_cancel")
+    ])
+    
+    role = context.user_data.get('trip_type', 'conducteur') # default au cas où
+    role_text = "conducteur" if role == "driver" else "passager"
+    
+    message_text = (
+        f"🚗 *Création d'un nouveau trajet* ({role_text})\n\n"
+        f"Étape 2️⃣ - Options supplémentaires (optionnel):\n"
+        f"Cliquez sur une option pour l'activer/désactiver."
+    )
+    
+    # S'assurer que query est bien défini avant d'appeler edit_message_text
+    if query:
+        await query.edit_message_text(
+            message_text,
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode="Markdown"
+        )
+    else: # Fallback si pas de query, par exemple si on vient d'un message
+        await update.effective_message.reply_text(
+            message_text,
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode="Markdown"
+        )
+    return CREATE_TRIP_OPTIONS
+
+async def handle_create_trip_options(update: Update, context: CallbackContext):
+    """Gère la sélection des options de trajet."""
+    query = update.callback_query
+    await query.answer()
+    
+    action_part = query.data.split(":")[1]
+    
+    if action_part == "continue":
+        # Passer à la sélection de la ville de départ
+        keyboard_dep = []
+        for city in SWISS_CITIES_SUGGESTIONS[:5]: # Limiter le nombre de suggestions
+            keyboard_dep.append([InlineKeyboardButton(city, callback_data=f"create_dep_city:{city}")])
+        keyboard_dep.append([InlineKeyboardButton("Autre ville...", callback_data="create_dep_other")])
+        keyboard_dep.append([InlineKeyboardButton("❌ Annuler", callback_data="create_cancel")])
+        
+        await query.edit_message_text(
+            "Étape 3️⃣ - Choisissez votre ville de départ:",
+            reply_markup=InlineKeyboardMarkup(keyboard_dep)
+        )
+        return CREATE_DEPARTURE
+        
+    elif action_part == "cancel": # Devrait être create_cancel
+        await query.edit_message_text("❌ Création de trajet annulée.")
+        context.user_data.clear()
+        return ConversationHandler.END
+    else: # C'est une option à toggler
+        option_name = action_part
+        if 'trip_options' not in context.user_data:
+            context.user_data['trip_options'] = {}
+        
+        context.user_data['trip_options'][option_name] = not context.user_data['trip_options'].get(option_name, False)
+        logger.info(f"Option de trajet (création) '{option_name}' mise à jour: {context.user_data['trip_options'][option_name]}")
+        
+        # Re-afficher les options avec l'état mis à jour
+        return await show_create_trip_options(update, context)
+
+async def handle_create_departure_city_callback(update: Update, context: CallbackContext):
+    """Gère le clic sur un bouton de ville de départ suggérée ou 'Autre ville'."""
+    query = update.callback_query
+    await query.answer()
+    
+    callback_data = query.data
+
+    if callback_data == "create_dep_other":
+        await query.edit_message_text("Veuillez entrer le nom de votre ville de départ ou son NPA:")
+        return CREATE_DEPARTURE # Reste dans le même état pour attendre le texte
+    elif callback_data.startswith("create_dep_city:"):
+        city_name = callback_data.split(":")[1]
+        context.user_data['departure'] = city_name
+        logger.info(f"Ville de départ (création) sélectionnée: {city_name}")
+        
+        # Passer à la sélection de la ville d'arrivée
+        keyboard_arr = []
+        for city in SWISS_CITIES_SUGGESTIONS[:5]:
+            if city != city_name: # Ne pas suggérer la même ville
+                 keyboard_arr.append([InlineKeyboardButton(city, callback_data=f"create_arr_city:{city}")])
+        keyboard_arr.append([InlineKeyboardButton("Autre ville...", callback_data="create_arr_other")])
+        keyboard_arr.append([InlineKeyboardButton("❌ Annuler", callback_data="create_cancel")])
+
+        await query.edit_message_text(
+            f"Départ: {city_name}\nÉtape 4️⃣ - Choisissez votre ville d'arrivée:",
+            reply_markup=InlineKeyboardMarkup(keyboard_arr)
+        )
+        return CREATE_ARRIVAL
+    return CREATE_DEPARTURE # Fallback
+
+async def handle_create_departure_text(update: Update, context: CallbackContext):
+    """Gère la saisie texte pour la ville de départ."""
+    user_input = update.message.text.strip()
+    matches = find_locality(user_input)
+
+    if matches:
+        keyboard = []
+        for match in matches[:5]: # Limiter les résultats
+            display_text = format_locality_result(match)
+            # Utiliser un format de callback qui peut être parsé pour récupérer nom et NPA si besoin
+            callback_data = f"create_dep_loc:{match['name']}|{match['zip']}" 
+            keyboard.append([InlineKeyboardButton(display_text, callback_data=callback_data)])
+        keyboard.append([InlineKeyboardButton("Ce n'est pas listé / Réessayer", callback_data="create_dep_retry_text")])
+        keyboard.append([InlineKeyboardButton("❌ Annuler", callback_data="create_cancel")])
+        
+        await update.message.reply_text(
+            "Voici les localités correspondantes. Choisissez votre ville de départ:",
+            reply_markup=InlineKeyboardMarkup(keyboard)
+        )
+        # Reste dans CREATE_DEPARTURE pour gérer le clic sur ces boutons
+    else:
+        await update.message.reply_text(
+            "❌ Ville non trouvée. Veuillez réessayer d'entrer le nom ou le NPA de votre ville de départ, ou annuler.",
+            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("❌ Annuler", callback_data="create_cancel")]])
+        )
+    return CREATE_DEPARTURE
+
+async def handle_create_departure_loc_callback(update: Update, context: CallbackContext):
+    """Gère le clic sur une localité spécifique après recherche texte."""
+    query = update.callback_query
+    await query.answer()
+    
+    callback_data = query.data
+
+    if callback_data == "create_dep_retry_text":
+        await query.edit_message_text("Veuillez entrer le nom de votre ville de départ ou son NPA:")
+        return CREATE_DEPARTURE
+
+    elif callback_data.startswith("create_dep_loc:"):
+        locality_part = callback_data.split(":")[1]
+        name, zip_code = locality_part.split('|')
+        # Stocker sous forme de dictionnaire pour avoir nom et NPA
+        context.user_data['departure'] = {'name': name, 'zip': zip_code}
+        logger.info(f"Ville de départ (création) confirmée: {name} ({zip_code})")
+
+        # Passer à la sélection de la ville d'arrivée
+        keyboard_arr = []
+        for city in SWISS_CITIES_SUGGESTIONS[:5]:
+             # Éviter de suggérer la même ville, comparer les noms
+            if city.lower() != name.lower():
+                 keyboard_arr.append([InlineKeyboardButton(city, callback_data=f"create_arr_city:{city}")])
+        keyboard_arr.append([InlineKeyboardButton("Autre ville...", callback_data="create_arr_other")])
+        keyboard_arr.append([InlineKeyboardButton("❌ Annuler", callback_data="create_cancel")])
+        
+        await query.edit_message_text(
+            f"Départ: {name}\nÉtape 4️⃣ - Choisissez votre ville d'arrivée:",
+            reply_markup=InlineKeyboardMarkup(keyboard_arr)
+        )
+        return CREATE_ARRIVAL
+    return CREATE_DEPARTURE # Fallback
+
+async def handle_create_arrival_city_callback(update: Update, context: CallbackContext):
+    """Gère le clic sur un bouton de ville d'arrivée suggérée ou 'Autre ville'."""
+    query = update.callback_query
+    await query.answer()
+    
+    callback_data = query.data
+    departure_display = context.user_data.get('departure', {}).get('name', context.user_data.get('departure', 'N/A'))
+
+
+    if callback_data == "create_arr_other":
+        await query.edit_message_text(f"Départ: {departure_display}\nVeuillez entrer le nom de votre ville d'arrivée ou son NPA:")
+        return CREATE_ARRIVAL # Reste dans le même état pour attendre le texte
+    elif callback_data.startswith("create_arr_city:"):
+        city_name = callback_data.split(":")[1]
+        context.user_data['arrival'] = city_name
+        logger.info(f"Ville d'arrivée (création) sélectionnée: {city_name}")
+        
+        # Passer à la sélection de la date
+        await query.edit_message_text(
+            f"Départ: {departure_display}\nArrivée: {city_name}\n\nÉtape 5️⃣ - Date et Heure du trajet."
+        )
+        # Lancer le sélecteur de date/heure
+        return await start_date_selection(update, context, "📅 Sélectionnez la date et l'heure du trajet:", 다음단계=CREATE_SEATS, 상태_캘린더=CREATE_CALENDAR, 상태_시간=CREATE_TIME, 상태_분=CREATE_MINUTE, 상태_날짜시간_확인=CREATE_CONFIRM_DATETIME, action_prefix="create_cal")
+
+    return CREATE_ARRIVAL # Fallback
+
+async def handle_create_arrival_text(update: Update, context: CallbackContext):
+    """Gère la saisie texte pour la ville d'arrivée."""
+    user_input = update.message.text.strip()
+    matches = find_locality(user_input)
+    departure_display = context.user_data.get('departure', {}).get('name', context.user_data.get('departure', 'N/A'))
+
+    if matches:
+        keyboard = []
+        for match in matches[:5]: # Limiter les résultats
+            display_text = format_locality_result(match)
+            callback_data = f"create_arr_loc:{match['name']}|{match['zip']}"
+            keyboard.append([InlineKeyboardButton(display_text, callback_data=callback_data)])
+        keyboard.append([InlineKeyboardButton("Ce n'est pas listé / Réessayer", callback_data="create_arr_retry_text")])
+        keyboard.append([InlineKeyboardButton("❌ Annuler", callback_data="create_cancel")])
+        
+        await update.message.reply_text(
+            f"Départ: {departure_display}\nVoici les localités correspondantes pour l'arrivée. Choisissez:",
+            reply_markup=InlineKeyboardMarkup(keyboard)
+        )
+    else:
+        await update.message.reply_text(
+            f"Départ: {departure_display}\n❌ Ville d'arrivée non trouvée. Veuillez réessayer ou annuler.",
+            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("❌ Annuler", callback_data="create_cancel")]])
+        )
+    return CREATE_ARRIVAL
+
+async def handle_create_arrival_loc_callback(update: Update, context: CallbackContext):
+    """Gère le clic sur une localité spécifique pour l'arrivée après recherche texte."""
+    query = update.callback_query
+    await query.answer()
+    
+    callback_data = query.data
+    departure_display = context.user_data.get('departure', {}).get('name', context.user_data.get('departure', 'N/A'))
+
+    if callback_data == "create_arr_retry_text":
+        await query.edit_message_text(f"Départ: {departure_display}\nVeuillez entrer le nom de votre ville d'arrivée ou son NPA:")
+        return CREATE_ARRIVAL
+
+    elif callback_data.startswith("create_arr_loc:"):
+        locality_part = callback_data.split(":")[1]
+        name, zip_code = locality_part.split('|')
+        context.user_data['arrival'] = {'name': name, 'zip': zip_code}
+        arrival_display = name
+        logger.info(f"Ville d'arrivée (création) confirmée: {name} ({zip_code})")
+
+        # Passer à la sélection de la date
+        await query.edit_message_text(
+             f"Départ: {departure_display}\nArrivée: {arrival_display}\n\nÉtape 5️⃣ - Date et Heure du trajet."
+        )
+        return await start_date_selection(update, context, "📅 Sélectionnez la date et l'heure du trajet:", 다음단계=CREATE_SEATS, 상태_캘린더=CREATE_CALENDAR, 상태_시간=CREATE_TIME, 상태_분=CREATE_MINUTE, 상태_날짜시간_확인=CREATE_CONFIRM_DATETIME, action_prefix="create_cal")
+
+    return CREATE_ARRIVAL # Fallback
+
+# La fonction handle_date est maintenant gérée par le date_picker et la transition vers CREATE_SEATS
+# se fait via le paramètre `다음단계` de `start_date_selection`.
+
+async def handle_create_date_confirmed(update: Update, context: CallbackContext):
+    """Appelé après confirmation de la date et heure par le date_picker."""
+    # selected_datetime devrait être dans context.user_data par le date_picker
+    selected_dt = context.user_data.get('selected_datetime')
+    if not selected_dt:
+        logger.error("selected_datetime non trouvé dans handle_create_date_confirmed")
+        # Gérer l'erreur, peut-être redemander la date ou annuler
+        await update.effective_message.reply_text("Une erreur s'est produite avec la date. Veuillez réessayer.")
+        return CREATE_DATE # ou une autre étape appropriée
+
+    context.user_data['date'] = selected_dt.strftime('%d/%m/%Y %H:%M')
+    context.user_data['datetime_obj'] = selected_dt
+    
+    departure_display = context.user_data.get('departure', {}).get('name', context.user_data.get('departure', 'N/A'))
+    arrival_display = context.user_data.get('arrival', {}).get('name', context.user_data.get('arrival', 'N/A'))
+    date_display = context.user_data['date']
+
+    message_text = (
+        f"Récapitulatif partiel:\n"
+        f"De: {departure_display}\n"
+        f"À: {arrival_display}\n"
+        f"Date: {date_display}\n\n"
+        "Étape 6️⃣ - Combien de places disponibles? (1-8)"
+    )
+    if update.callback_query:
+        await update.callback_query.edit_message_text(message_text)
+    else:
+        await update.message.reply_text(message_text)
+    return CREATE_SEATS
+
+
+async def handle_create_seats(update: Update, context: CallbackContext):
+    """Gère l'entrée du nombre de sièges."""
+    seats_text = update.message.text
+    if not validate_seats(seats_text):
+        await update.message.reply_text("❌ Nombre de places invalide. Entrez un nombre entre 1 et 8.")
+        return CREATE_SEATS
+    
+    context.user_data['seats'] = int(seats_text)
+    logger.info(f"Nombre de sièges (création): {seats_text}")
+    
+    await update.message.reply_text("Étape 7️⃣ - Quel est le prix par place en CHF?")
+    return CREATE_PRICE
+
+async def handle_create_price(update: Update, context: CallbackContext):
+    """Gère l'entrée du prix."""
+    price_text = update.message.text
+    if not validate_price(price_text):
+        await update.message.reply_text("❌ Prix invalide. Entrez un montant entre 0 et 1000 CHF.")
+        return CREATE_PRICE
+        
+    context.user_data['price'] = float(price_text)
+    logger.info(f"Prix (création): {price_text}")
+    
+    # Afficher le résumé pour confirmation
+    dep = context.user_data.get('departure')
+    arr = context.user_data.get('arrival')
+    dep_display = dep.get('name', dep) if isinstance(dep, dict) else dep
+    arr_display = arr.get('name', arr) if isinstance(arr, dict) else arr
+    
+    summary = (
+        "📋 *Résumé du trajet à créer*:\n\n"
+        f"Rôle: {context.user_data.get('trip_type', 'N/A')}\n"
+        f"Options: {context.user_data.get('trip_options', {})}\n"
+        f"De: {dep_display}\n"
+        f"À: {arr_display}\n"
+        f"Date: {context.user_data.get('date', 'N/A')}\n"
+        f"Places: {context.user_data.get('seats', 'N/A')}\n"
+        f"Prix: {context.user_data.get('price', 'N/A')} CHF\n\n"
+        "Confirmez-vous la création de ce trajet?"
+    )
+    keyboard = [
+        [InlineKeyboardButton("✅ Confirmer", callback_data="create_confirm_yes")],
+        [InlineKeyboardButton("❌ Annuler", callback_data="create_cancel")]
+    ]
+    await update.message.reply_text(summary, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode="Markdown")
+    return CREATE_CONFIRM
+
+async def handle_create_confirm(update: Update, context: CallbackContext):
+    """Confirme et sauvegarde le trajet."""
+    query = update.callback_query
+    await query.answer()
+    
+    if query.data == "create_confirm_yes":
+        try:
+            db = get_db()
+            user_id = update.effective_user.id
+            user = db.query(User).filter(User.telegram_id == user_id).first()
+            if not user:
+                # Idéalement, l'utilisateur devrait être créé/identifié plus tôt
+                logger.warning(f"Utilisateur {user_id} non trouvé lors de la confirmation du trajet.")
+                user = User(
+                    telegram_id=user_id,
+                    first_name=update.effective_user.first_name,
+                    username=update.effective_user.username
+                )
+                db.add(user)
+                db.commit() # Commit pour obtenir user.id
+                db.refresh(user)
+
+            dep_data = context.user_data['departure']
+            arr_data = context.user_data['arrival']
+
+            departure_city = dep_data['name'] if isinstance(dep_data, dict) else dep_data
+            arrival_city = arr_data['name'] if isinstance(arr_data, dict) else arr_data
+            
+            # Assurer que datetime_obj est bien un objet datetime
+            departure_time_obj = context.user_data.get('datetime_obj')
+            if not isinstance(departure_time_obj, datetime):
+                # Essayer de parser depuis la chaîne 'date' si datetime_obj est manquant ou incorrect
+                date_str = context.user_data.get('date')
+                try:
+                    departure_time_obj = datetime.strptime(date_str, "%d/%m/%Y %H:%M")
+                except (ValueError, TypeError) as e:
+                    logger.error(f"Erreur de conversion de date lors de la confirmation: {e}. Date string: {date_str}")
+                    await query.edit_message_text("❌ Erreur avec le format de la date. Création annulée.")
+                    context.user_data.clear()
+                    return ConversationHandler.END
+            
+            new_trip = Trip(
+                driver_id=user.id, # Assumer que le créateur est le conducteur pour l'instant
+                departure_city=departure_city,
+                arrival_city=arrival_city,
+                departure_time=departure_time_obj,
+                seats_available=int(context.user_data['seats']),
+                available_seats=int(context.user_data['seats']), # Initialement toutes les places sont dispo
+                price_per_seat=float(context.user_data['price']),
+                trip_type=context.user_data.get('trip_type', 'driver'), # driver ou passenger
+                options=json.dumps(context.user_data.get('trip_options', {})), # Sauvegarder les options
+                is_published=False # Par défaut non publié
+            )
+            db.add(new_trip)
+            db.commit()
+            db.refresh(new_trip)
+            
+            logger.info(f"Trajet créé ID: {new_trip.id} par utilisateur {user_id}")
+            
+            # Message de succès et options suivantes
+            keyboard_success = [
+                [InlineKeyboardButton("🔊 Publier ce trajet", callback_data=f"publish_trip:{new_trip.id}")],
+                [InlineKeyboardButton("📋 Mes trajets", callback_data="main_menu:my_trips")], # main_menu:my_trips pour aller au menu
+                [InlineKeyboardButton("🆕 Créer un autre trajet", callback_data="create_trip_start")], # Pour relancer la création
+                [InlineKeyboardButton("🏠 Menu principal", callback_data="main_menu:start")]
+            ]
+            await query.edit_message_text(
+                "✅ Trajet créé avec succès!\n\n"
+                "Que souhaitez-vous faire maintenant?",
+                reply_markup=InlineKeyboardMarkup(keyboard_success)
+            )
+        except Exception as e:
+            logger.error(f"Erreur lors de la sauvegarde du trajet: {e}", exc_info=True)
+            await query.edit_message_text("❌ Une erreur est survenue lors de la création du trajet. Veuillez réessayer.")
+    else: # create_cancel ou autre
+        await query.edit_message_text("❌ Création de trajet annulée.")
+
+    context.user_data.clear()
+    return ConversationHandler.END
+
+async def handle_create_cancel(update: Update, context: CallbackContext):
+    """Annule la conversation de création de trajet."""
+    if update.callback_query:
+        await update.callback_query.answer()
+        await update.callback_query.edit_message_text("❌ Opération annulée.")
+    else:
+        await update.message.reply_text("❌ Opération annulée.")
+    context.user_data.clear()
+    return ConversationHandler.END
+
+async def handle_unexpected_input(update: Update, context: CallbackContext):
+    """Fonction de fallback pour gérer les entrées inattendues dans la conversation."""
+    logger.warning(f"Entrée inattendue reçue dans la conversation create_trip: {update}")
+    
+    message = "Désolé, je n'ai pas compris cette entrée. Veuillez utiliser les options fournies."
+    
+    if update.callback_query:
+        await update.callback_query.answer()
+        await update.callback_query.message.reply_text(message)
+    elif update.message:
+        await update.message.reply_text(message)
+    
+    # Retour à l'état actuel (ne pas terminer la conversation)
+    return context.user_data.get('current_state', CREATE_TRIP_TYPE)
+
+# Handler pour le bouton de publication (en dehors de la conversation)
+async def publish_created_trip(update: Update, context: CallbackContext):
+    query = update.callback_query
+    await query.answer()
+    trip_id = int(query.data.split(":")[1])
+    
+    db = get_db()
+    trip = db.query(Trip).filter(Trip.id == trip_id).first()
+    
+    if not trip:
+        await query.edit_message_text("❌ Trajet introuvable.")
+        return
+    
+    # Vérifier si le trajet appartient à l'utilisateur (sécurité additionnelle)
+    # user_id = update.effective_user.id
+    # if trip.driver.telegram_id != user_id: # ou une logique plus complexe si passagers peuvent publier
+    #     await query.edit_message_text("❌ Vous n'êtes pas autorisé à publier ce trajet.")
+    #     return
+
+    trip.is_published = True
+    db.commit()
+    logger.info(f"Trajet ID {trip_id} publié.")
+    
+    keyboard_published = [
+        [InlineKeyboardButton("📋 Mes trajets", callback_data="main_menu:my_trips")],
+        [InlineKeyboardButton("🏠 Menu principal", callback_data="main_menu:start")]
+    ]
+    await query.edit_message_text(
+        f"✅ Trajet {trip.departure_city} → {trip.arrival_city} publié avec succès!",
+        reply_markup=InlineKeyboardMarkup(keyboard_published)
+    )
+    # Pas de `return ConversationHandler.END` ici car ce n'est pas dans une conversation
+
+# Définition du ConversationHandler pour la création de trajet
+create_trip_conv_handler = ConversationHandler(
+    entry_points=[
+        CommandHandler('creer', start_create_trip),
+        CallbackQueryHandler(start_create_trip, pattern='^create_trip_start$')
+    ],
+    states={
+        CREATE_TRIP_TYPE: [
+            # Utiliser un pattern plus précis pour éviter les conflits avec d'autres handlers
+            CallbackQueryHandler(handle_create_trip_type, pattern='^create_trip_type:(driver|passenger)$'),
+            # CallbackQueryHandler supplémentaire au cas où des formats incorrects seraient présents
+            CallbackQueryHandler(handle_create_trip_type, pattern='^trip_type:(driver|passenger)$'),
+        ],
+        CREATE_TRIP_OPTIONS: [
+            CallbackQueryHandler(handle_create_trip_options, pattern='^create_trip_option:'),
+            CallbackQueryHandler(handle_create_trip_options, pattern='^create_trip_options:(continue|cancel)$'),
+        ],
+        CREATE_DEPARTURE: [
+            CallbackQueryHandler(handle_create_departure_city_callback, pattern='^create_dep_city:'),
+            CallbackQueryHandler(handle_create_departure_city_callback, pattern='^create_dep_other$'),
+            MessageHandler(filters.TEXT & ~filters.COMMAND, handle_create_departure_text),
+            CallbackQueryHandler(handle_create_departure_loc_callback, pattern='^create_dep_loc:'),
+            CallbackQueryHandler(handle_create_departure_loc_callback, pattern='^create_dep_retry_text$'),
+        ],
+        CREATE_ARRIVAL: [
+            CallbackQueryHandler(handle_create_arrival_city_callback, pattern='^create_arr_city:'),
+            CallbackQueryHandler(handle_create_arrival_city_callback, pattern='^create_arr_other$'),
+            MessageHandler(filters.TEXT & ~filters.COMMAND, handle_create_arrival_text),
+            CallbackQueryHandler(handle_create_arrival_loc_callback, pattern='^create_arr_loc:'),
+            CallbackQueryHandler(handle_create_arrival_loc_callback, pattern='^create_arr_retry_text$'),
+        ],
+        # Les états pour le date_picker sont gérés par les callbacks du date_picker lui-même.
+        # La transition vers CREATE_SEATS se fait après la confirmation de la date.
+        CREATE_CALENDAR: [ # Utilisé par date_picker
+            CallbackQueryHandler(handle_calendar_navigation, pattern=f"^{CALENDAR_NAVIGATION_PATTERN.replace('^', '').replace('$', '')}$"),
+            CallbackQueryHandler(handle_day_selection, pattern=f"^{CALENDAR_DAY_SELECTION_PATTERN.replace('^', '').replace('$', '')}$"),
+            CallbackQueryHandler(handle_create_cancel, pattern=f"^{CALENDAR_CANCEL_PATTERN.replace('^', '').replace('$', '')}$") 
+        ],
+        CREATE_TIME: [ # Utilisé par date_picker
+            CallbackQueryHandler(handle_time_selection, pattern=f"^{TIME_SELECTION_PATTERN.replace('^', '').replace('$', '')}$"),
+            CallbackQueryHandler(handle_flex_time_selection, pattern=f"^{FLEX_TIME_PATTERN.replace('^', '').replace('$', '')}$"),
+            # Retour au calendrier: start_date_selection est appelé par handle_time_selection avec action 'back'
+            CallbackQueryHandler(lambda u,c: start_date_selection(u,c, "📅 Sélectionnez la date et l'heure du trajet:", 다음단계=CREATE_SEATS, 상태_캘린더=CREATE_CALENDAR, 상태_시간=CREATE_TIME, 상태_분=CREATE_MINUTE, 상태_날짜시간_확인=CREATE_CONFIRM_DATETIME, action_prefix="create_cal"), pattern=f"^{TIME_BACK_PATTERN.replace('^', '').replace('$', '')}$"),
+            CallbackQueryHandler(handle_create_cancel, pattern=f"^{TIME_CANCEL_PATTERN.replace('^', '').replace('$', '')}$")
+        ],
+        CREATE_MINUTE: [ # Utilisé par date_picker
+            CallbackQueryHandler(handle_minute_selection, pattern=f"^{MINUTE_SELECTION_PATTERN.replace('^', '').replace('$', '')}$"),
+            # Retour à la sélection de l'heure
+            CallbackQueryHandler(lambda u,c: handle_day_selection(u,c,bypass_date_check=True), pattern=f"^{MINUTE_BACK_PATTERN.replace('^', '').replace('$', '')}$"), # Simule un retour à la sélection d'heure
+            CallbackQueryHandler(handle_create_cancel, pattern=f"^{MINUTE_CANCEL_PATTERN.replace('^', '').replace('$', '')}$")
+        ],
+        CREATE_CONFIRM_DATETIME: [ # Utilisé par date_picker pour confirmer/modifier/annuler la date+heure
+             CallbackQueryHandler(handle_create_date_confirmed, pattern=f"^{DATETIME_ACTION_PATTERN.replace('^', '').replace('$', '').replace('(confirm|change|cancel)', 'confirm')}$"),
+             CallbackQueryHandler(lambda u,c: start_date_selection(u,c, "📅 Sélectionnez la date et l'heure du trajet:", 다음단계=CREATE_SEATS, 상태_캘린더=CREATE_CALENDAR, 상태_시간=CREATE_TIME, 상태_분=CREATE_MINUTE, 상태_날짜시간_확인=CREATE_CONFIRM_DATETIME, action_prefix="create_cal"), pattern=f"^{DATETIME_ACTION_PATTERN.replace('^', '').replace('$', '').replace('(confirm|change|cancel)', 'change')}$"),
+             CallbackQueryHandler(handle_create_cancel, pattern=f"^{DATETIME_ACTION_PATTERN.replace('^', '').replace('$', '').replace('(confirm|change|cancel)', 'cancel')}$")
+        ],
+        CREATE_SEATS: [
+            MessageHandler(filters.TEXT & ~filters.COMMAND, handle_create_seats),
+        ],
+        CREATE_PRICE: [
+            MessageHandler(filters.TEXT & ~filters.COMMAND, handle_create_price),
+        ],
+        CREATE_CONFIRM: [
+            CallbackQueryHandler(handle_create_confirm, pattern='^create_confirm_yes$'),
+        ],
+    },
+    fallbacks=[
+        CallbackQueryHandler(handle_create_cancel, pattern='^create_cancel$'),
+        CommandHandler('cancel', handle_create_cancel), # Commande /cancel globale pour cette conversation
+        # Fallback global pour les erreurs
+        MessageHandler(filters.ALL, lambda u, c: handle_unexpected_input(u, c))
+    ],
+    name="create_trip_conversation",
+    persistent=False, # Normalement False pour les conversations, True si vous voulez persister entre redémarrages
+    allow_reentry=True
+)
+
+# Handler pour le bouton de publication (en dehors de la conversation)
+publish_trip_handler = CallbackQueryHandler(publish_created_trip, pattern=r"^publish_trip:\d+$")
+
+def register(application):
+    logger.info("🔄 Enregistrement des handlers de création de trajet...")
+    try:
+        application.add_handler(create_trip_conv_handler)
+        logger.info("✅ ConversationHandler pour création de trajet enregistré avec succès")
+        
+        application.add_handler(publish_trip_handler)
+        logger.info("✅ Handler pour publication de trajet enregistré avec succès")
+        
+        # Tracer quels états et patterns sont enregistrés
+        logger.info(f"États disponibles dans ConversationHandler: {list(create_trip_conv_handler.states.keys())}")
+        logger.info("✅ Tous les handlers de création de trajet enregistrés avec succès.")
+    except Exception as e:
+        logger.error(f"❌ Erreur lors de l'enregistrement des handlers: {e}")
+        import traceback
+        logger.error(traceback.format_exc())
+
+# Fonction d'entrée principale, appelée depuis bot.py
+async def create_trip(update: Update, context: CallbackContext):
+    """Point d'entrée pour la commande /creer - Appelle start_create_trip"""
+    # Cette fonction est un alias pour start_create_trip, utilisée depuis bot.py
+    return await start_create_trip(update, context)
+

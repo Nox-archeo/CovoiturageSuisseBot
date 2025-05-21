@@ -1,95 +1,89 @@
-import logging
+#!/usr/bin/env python
+"""
+Bot principal CovoiturageSuisse
+Ce fichier a été modifié pour utiliser l'approche synchrone qui fonctionne correctement.
+"""
 import os
-import asyncio
-from telegram import Bot, Update
-from telegram.ext import Application, CommandHandler, PicklePersistence
+import sys
+import logging
 from dotenv import load_dotenv
-from handlers import (
-    trip_handlers, user_handlers, booking_handlers, payment_handlers,
-    menu_handlers, menu_action_handlers, profile_handlers, verification_handlers
+from telegram.ext import (
+    Application, 
+    CommandHandler, 
+    PicklePersistence,
+    CallbackQueryHandler
 )
 
-# Configuration du logging
+# Import handlers (correction des imports)
+from handlers.create_trip_handler import create_trip_conv_handler, publish_trip_handler
+from handlers.search_trip_handler import search_trip_conv_handler
+from handlers.menu_handlers import start_command, handle_menu_buttons  # Changé menu_handler en start_command
+from handlers.profile_handlers import profile_conv_handler
+from handlers.trip_handlers import register as register_trip_handlers
+from handlers.booking_handlers import register as register_booking_handlers
+from handlers.message_handlers import register as register_message_handlers
+from handlers.verification_handlers import register as register_verification_handlers
+from handlers.subscription_handlers import register as register_subscription_handlers
+from handlers.admin_handlers import register as register_admin_handlers
+from handlers.user_handlers import register as register_user_handlers
+from handlers.contact_handlers import register as register_contact_handlers
+
+# Configure logging
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO
 )
-
 logger = logging.getLogger(__name__)
 
-def get_clean_token():
-    """Récupère et nettoie le token"""
-    load_dotenv()
-    token = os.getenv('TELEGRAM_BOT_TOKEN')
-    if not token:
-        raise ValueError("Token Telegram non trouvé dans .env")
-    
-    # Nettoyer le token de toute altération possible
-    token = token.encode().decode('unicode_escape')  # Gère les caractères échappés
-    token = token.strip().strip('"').strip("'")  # Enlève les guillemets/espaces
-    if not token or '\\' in token or '%' in token:
-        raise ValueError("Token invalide")
-    return token
-
-async def start_command(update, context):
-    await update.message.reply_text(
-        "Bienvenue sur CovoiturageSuisse! 🚗\n\n"
-        "/chercher - Rechercher un trajet\n"
-        "/creer - Créer un nouveau trajet\n"
-        "/aide - Obtenir de l'aide"
-    )
-
-async def help_command(update, context):
-    await update.message.reply_text("Comment puis-je vous aider ?")
-
-async def run_polling():
-    """Fonction séparée pour le polling pour éviter les problèmes d'Updater"""
-    token = get_clean_token()
-    
-    # Configuration de la persistence
-    persistence = PicklePersistence(filepath="conversation_states.pickle")
-    
-    # Création de l'application
-    app = Application.builder().token(token).persistence(persistence).build()
-    
-    # Ajouter les commandes de base
-    app.add_handler(CommandHandler("start", start_command))
-    app.add_handler(CommandHandler("aide", help_command))
-    
-    # Enregistrer les handlers des différents modules dans un ordre optimisé
-    # Enregistrer les handlers de conversation spécifiques qui utilisent des commandes
-    profile_handlers.register(app)
-    verification_handlers.register(app)
-    
-    # Enregistrer les handlers de création et recherche de trajet
-    trip_handlers.register(app)
-    
-    # Puis les handlers généraux qui capturent les boutons de menu
-    menu_handlers.register(app)
-    menu_action_handlers.register(app)
-    
-    # Et enfin les handlers pour les commandes simples
-    booking_handlers.register(app)
-    payment_handlers.register(app)
-    user_handlers.register(app)
-    
-    # Démarrer le bot
-    logger.info("Démarrage du bot...")
-    await app.initialize()
-    await app.start()
-    await app.run_polling(drop_pending_updates=True)
+# Load environment variables
+load_dotenv()
 
 def main():
-    """Point d'entrée principal"""
+    """Main function to start the bot"""
     try:
-        # Utiliser asyncio.run() pour gérer la boucle d'événements
-        asyncio.run(run_polling())
-    except KeyboardInterrupt:
-        logger.info("Bot arrêté par l'utilisateur")
+        # Récupérer le token depuis .env
+        BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+        if not BOT_TOKEN:
+            raise ValueError("Token non trouvé dans le fichier .env")
+        
+        # Initialize persistence
+        persistence = PicklePersistence(filepath="bot_data.pickle")
+        
+        # Create application
+        application = Application.builder().token(BOT_TOKEN).persistence(persistence).build()
+
+        # Add handlers in correct order
+        logger.info("Registering handlers...")
+        
+        # Core handlers
+        application.add_handler(CommandHandler("start", start_command))  # Utiliser start_command au lieu de menu_handler
+        
+        # Feature handlers
+        application.add_handler(profile_conv_handler)
+        application.add_handler(create_trip_conv_handler)
+        application.add_handler(publish_trip_handler)
+        application.add_handler(search_trip_conv_handler)
+        
+        # Register other handlers using their register functions
+        register_trip_handlers(application)
+        register_booking_handlers(application)
+        register_message_handlers(application)
+        register_verification_handlers(application)
+        register_subscription_handlers(application)
+        register_admin_handlers(application)
+        register_user_handlers(application)
+        register_contact_handlers(application)
+        
+        # Add general button handler last
+        application.add_handler(CallbackQueryHandler(handle_menu_buttons))
+
+        # Start polling
+        logger.info("Bot started successfully!")
+        application.run_polling()
+
     except Exception as e:
-        logger.error(f"Erreur: {str(e)}")
-        raise
+        logger.error(f"Erreur lors du démarrage du bot: {str(e)}", exc_info=True)
+        sys.exit(1)
 
 if __name__ == '__main__':
-    print("🚀 Démarrage du bot CovoiturageSuisse...")
     main()

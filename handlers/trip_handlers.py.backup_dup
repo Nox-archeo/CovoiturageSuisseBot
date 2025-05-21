@@ -13,6 +13,7 @@ from telegram.ext import (
 from database.models import Trip, User, Booking
 from database import get_db
 from utils.validators import validate_date, validate_price, validate_seats
+from utils.swiss_cities import find_locality, format_locality_result
 from .trip_preferences import show_preferences_menu
 
 # Configuration du logger
@@ -28,8 +29,13 @@ logger = logging.getLogger(__name__)
     DATE,
     SEATS,
     PRICE,
-    CONFIRM
-) = range(9)
+    CONFIRM,
+    TRIP_TYPE,
+    DEPARTURE,
+    ARRIVAL,
+    ADDING_STOP,
+    MEETING_POINT
+) = range(14)
 
 def load_cities():
     """Charge le fichier cities.json"""
@@ -132,28 +138,84 @@ async def search_trip(update: Update, context: CallbackContext):
 
 async def handle_departure(update: Update, context):
     """Traite la ville de départ"""
+    logger.info("Entrée dans handle_departure")
     try:
+        # Cas 1: Réponse à un callback query (bouton pressé)
         if update.callback_query:
             query = update.callback_query
             await query.answer()
-            if query.data == "other_city":
+            logger.info(f"Callback query data: {query.data}")
+
+            if query.data == "advanced_search" or query.data == "other_city":
                 await query.edit_message_text(
                     "🏙️ Entrez le nom de la ville ou le code postal:\n"
                     "Exemple: Bulle, 1630, Fribourg, etc."
                 )
                 return DEPARTURE
-            city_info = query.data.replace("dep_", "").split('|')
-            if len(city_info) == 2:
-                context.user_data['departure'] = {
-                    'name': city_info[0],
-                    'zip': city_info[1]
-                }
+            
+            # Gestion du format "from_city"
+            if query.data.startswith("from_"):
+                city = query.data.replace("from_", "")
+                context.user_data['departure'] = city
+                logger.info(f"Ville de départ sélectionnée: {city}")
+                
+                # Afficher le choix de la destination
+                keyboard = []
+                for city in SWISS_CITIES[:6]:
+                    if city.lower() != context.user_data['departure'].lower():
+                        keyboard.append([InlineKeyboardButton(city, callback_data=f"to_{city}")])
+                keyboard.append([InlineKeyboardButton("🔍 Autre destination", callback_data="other_destination")])
+                
+                await query.edit_message_text(
+                    f"Départ: {context.user_data['departure']}\n\n"
+                    "2️⃣ Choisissez votre destination:",
+                    reply_markup=InlineKeyboardMarkup(keyboard)
+                )
+                return ENTERING_ARRIVAL
+            
+            # Gestion du format "dep_nom|code"
+            if query.data.startswith("dep_"):
+                city_info = query.data.replace("dep_", "").split('|')
+                if len(city_info) == 2:
+                    context.user_data['departure'] = {
+                        'name': city_info[0],
+                        'zip': city_info[1]
+                    }
+                    logger.info(f"Ville de départ sélectionnée: {city_info[0]} ({city_info[1]})")
+                    
+                    # Passer à l'étape suivante pour la ville d'arrivée
+                    departure = context.user_data['departure']
+                    keyboard = []
+                    for city in get_popular_destinations():
+                        if city['name'] != departure['name']:
+                            display_text = format_locality_result(city)
+                            callback_data = f"arr_{city['name']}|{city['zip']}"
+                            keyboard.append([InlineKeyboardButton(display_text, callback_data=callback_data)])
+                    
+                    keyboard.append([InlineKeyboardButton("🔍 Autre ville", callback_data="other_arrival")])
+                    keyboard.append([InlineKeyboardButton("❌ Annuler", callback_data="cancel_trip")])
+                    
+                    message_text = (
+                        f"Départ depuis : {departure['name']} ({departure['zip']})\n\n"
+                        "Choisissez la ville d'arrivée :"
+                    )
+                    
+                    await query.edit_message_text(
+                        text=message_text,
+                        reply_markup=InlineKeyboardMarkup(keyboard)
+                    )
+                    return ARRIVAL
+        
+        # Cas 2: Entrée directe de texte par l'utilisateur
         else:
             user_input = update.message.text.strip()
-            logger.info(f"Searching locality: {user_input}")
+            logger.info(f"Recherche de localité: {user_input}")
+            
+            # Importer la fonction ici pour éviter les problèmes d'import
+            from utils.swiss_cities import find_locality, format_locality_result
             
             matches = find_locality(user_input)
-            logger.info(f"Found matches: {matches}")
+            logger.info(f"Correspondances trouvées: {len(matches)}")
             
             if matches:
                 keyboard = []
@@ -170,41 +232,40 @@ async def handle_departure(update: Update, context):
                 )
                 return DEPARTURE
             else:
-                await update.message.reply_text(
-                    "❌ Ville non trouvée.\n"
-                    "Veuillez entrer un nom de ville ou un code postal valide."
-                )
-                return DEPARTURE
-
-        # Si on a une ville valide, passer à l'étape suivante
-        if 'departure' in context.user_data:
-            departure = context.user_data['departure']
-            keyboard = []
-            for city in get_popular_destinations():
-                if city['name'] != departure['name']:
-                    display_text = format_locality_result(city)
-                    callback_data = f"arr_{city['name']}|{city['zip']}"
-                    keyboard.append([InlineKeyboardButton(display_text, callback_data=callback_data)])
-            
-            keyboard.append([InlineKeyboardButton("🔍 Autre ville", callback_data="other_arrival")])
-            keyboard.append([InlineKeyboardButton("❌ Annuler", callback_data="cancel_trip")])
-            
-            message_text = (
-                f"Départ depuis : {departure['name']} ({departure['zip']})\n\n"
-                "Choisissez la ville d'arrivée :"
-            )
-            
-            if update.callback_query:
-                await update.callback_query.edit_message_text(
-                    text=message_text,
-                    reply_markup=InlineKeyboardMarkup(keyboard)
-                )
-            else:
-                await update.message.reply_text(
-                    text=message_text,
-                    reply_markup=InlineKeyboardMarkup(keyboard)
-                )
-            return ARRIVAL
+                # Recherche dans SWISS_CITIES si pas de résultat avec find_locality
+                if user_input.lower() in [c.lower() for c in SWISS_CITIES]:
+                    context.user_data['departure'] = user_input
+                    logger.info(f"Ville trouvée dans SWISS_CITIES: {user_input}")
+                    
+                    # Afficher choix destination
+                    keyboard = []
+                    for city in SWISS_CITIES[:6]:
+                        if city.lower() != user_input.lower():
+                            keyboard.append([InlineKeyboardButton(city, callback_data=f"to_{city}")])
+                    
+                    keyboard.append([InlineKeyboardButton("🔍 Autre destination", callback_data="other_destination")])
+                    await update.message.reply_text(
+                        f"Départ: {context.user_data['departure']}\n\n"
+                        "2️⃣ Choisissez votre destination:",
+                        reply_markup=InlineKeyboardMarkup(keyboard)
+                    )
+                    return ENTERING_ARRIVAL
+                else:
+                    # Suggérer des villes similaires
+                    closest_matches = get_closest_matches(user_input, SWISS_CITIES)
+                    
+                    if closest_matches:
+                        keyboard = [[InlineKeyboardButton(c, callback_data=f"from_{c}")] for c in closest_matches]
+                        await update.message.reply_text(
+                            "❌ Ville non trouvée. Voulez-vous dire:\n",
+                            reply_markup=InlineKeyboardMarkup(keyboard)
+                        )
+                    else:
+                        await update.message.reply_text(
+                            "❌ Ville non trouvée.\n"
+                            "Veuillez entrer un nom de ville ou un code postal valide."
+                        )
+                    return ENTERING_DEPARTURE
 
     except Exception as e:
         logger.error(f"Error in handle_departure: {str(e)}")
@@ -350,68 +411,126 @@ async def cancel(update: Update, context):
     await update.message.reply_text("Création du trajet annulée.")
     return ConversationHandler.END
 
-async def handle_departure(update: Update, context):
-    """Traite la ville de départ"""
-    query = update.callback_query
-    
-    if query and query.data == "advanced_search":
-        await query.message.reply_text(
-            "📍 Entrez le nom de votre ville de départ:\n"
-            "Par exemple: Bulle, Neuchâtel, etc."
-        )
-        return ENTERING_DEPARTURE
-    
-    if query:
-        city = query.data.replace("from_", "")
-        context.user_data['departure'] = city
-        await query.answer()  # Acquitter le callback
-    else:
-        city = update.message.text
-        if city.lower() not in [c.lower() for c in SWISS_CITIES]:
-            closest_matches = get_closest_matches(city, SWISS_CITIES)
-            keyboard = [[InlineKeyboardButton(c, callback_data=f"from_{c}")] for c in closest_matches]
-            await update.message.reply_text(
-                "Ville non trouvée. Voulez-vous dire:\n",
-                reply_markup=InlineKeyboardMarkup(keyboard)
-            )
-            return ENTERING_DEPARTURE
-        context.user_data['departure'] = city
-
-    # Afficher le choix de la destination
-    keyboard = []
-    for city in SWISS_CITIES[:6]:
-        if city.lower() != context.user_data['departure'].lower():
-            keyboard.append([InlineKeyboardButton(city, callback_data=f"to_{city}")])
-    keyboard.append([InlineKeyboardButton("🔍 Autre destination", callback_data="other_destination")])
-    
-    await query.message.edit_text(
-        f"Départ: {context.user_data['departure']}\n\n"
-        "2️⃣ Choisissez votre destination:",
-        reply_markup=InlineKeyboardMarkup(keyboard)
-    )
-    return ENTERING_ARRIVAL
+# Fonction handle_departure remplacée par la version unifiée plus haut
 
 async def handle_arrival(update: Update, context):
     """Traite la ville d'arrivée"""
-    query = update.callback_query
-    if query:
-        city = query.data.replace("to_", "")
-        context.user_data['arrival'] = city
-    else:
-        city = update.message.text
-        if city not in SWISS_CITIES:
+    logger.info("Entrée dans handle_arrival")
+    try:
+        if update.callback_query:
+            query = update.callback_query
+            await query.answer()
+            logger.info(f"Callback query data: {query.data}")
+            
+            if query.data == "other_arrival" or query.data == "other_destination":
+                await query.edit_message_text(
+                    "🏙️ Entrez la ville d'arrivée:\n"
+                    "Par exemple: Bulle, Bienne, etc."
+                )
+                return ARRIVAL
+                
+            # Format "to_city"
+            if query.data.startswith("to_"):
+                city = query.data.replace("to_", "")
+                context.user_data['arrival'] = city
+                logger.info(f"Ville d'arrivée sélectionnée: {city}")
+                
+                # Passer à l'étape suivante
+                if isinstance(context.user_data['departure'], str):
+                    departure_text = context.user_data['departure']
+                else:
+                    departure_text = f"{context.user_data['departure']['name']} ({context.user_data['departure']['zip']})"
+                
+                await query.edit_message_text(
+                    f"🚗 Nouveau trajet\n\n"
+                    f"De: {departure_text}\n"
+                    f"À: {city}\n\n"
+                    f"📅 Entrez la date et l'heure du départ\n"
+                    f"Format: JJ/MM/AAAA HH:MM\n"
+                    f"Exemple: 25/04/2024 14:30"
+                )
+                return DATE
+            
+            # Format "arr_nom|code"
+            if query.data.startswith("arr_"):
+                city_info = query.data.replace("arr_", "").split('|')
+                if len(city_info) == 2:
+                    context.user_data['arrival'] = {
+                        'name': city_info[0],
+                        'zip': city_info[1]
+                    }
+                    logger.info(f"Ville d'arrivée sélectionnée: {city_info[0]} ({city_info[1]})")
+                    
+                    # Passer à l'étape suivante pour la date
+                    departure = context.user_data['departure']
+                    arrival = context.user_data['arrival']
+                    
+                    message_text = (
+                        "🚗 Nouveau trajet\n\n"
+                        f"De: {departure['name']} ({departure['zip']})\n"
+                        f"À: {arrival['name']} ({arrival['zip']})\n\n"
+                        "📅 Entrez la date et l'heure du départ\n"
+                        "Format: JJ/MM/AAAA HH:MM\n"
+                        "Exemple: 25/04/2024 14:30"
+                    )
+                    
+                    await query.edit_message_text(text=message_text)
+                    return DATE
+        else:
+            # Entrée directe d'une ville par l'utilisateur
+            city = update.message.text.strip()
+            logger.info(f"Recherche de ville d'arrivée: {city}")
+            
+            # Vérifier avec find_locality
+            matches = find_locality(city)
+            logger.info(f"Correspondances trouvées: {len(matches)}")
+            
+            if matches:
+                keyboard = []
+                for match in matches:
+                    display_text = format_locality_result(match)
+                    callback_data = f"arr_{match['name']}|{match['zip']}"
+                    keyboard.append([InlineKeyboardButton(display_text, callback_data=callback_data)])
+                
+                keyboard.append([InlineKeyboardButton("❌ Annuler", callback_data="cancel_trip")])
+                
+                await update.message.reply_text(
+                    "Sélectionnez la localité :",
+                    reply_markup=InlineKeyboardMarkup(keyboard)
+                )
+                return ARRIVAL
+            elif city.lower() in [c.lower() for c in SWISS_CITIES]:
+                # Ville trouvée dans la liste simple
+                context.user_data['arrival'] = city
+                
+                if isinstance(context.user_data['departure'], str):
+                    departure_text = context.user_data['departure']
+                else:
+                    departure_text = f"{context.user_data['departure']['name']} ({context.user_data['departure']['zip']})"
+                
+                await update.message.reply_text(
+                    f"🚗 Nouveau trajet\n\n"
+                    f"De: {departure_text}\n"
+                    f"À: {city}\n\n"
+                    f"📅 Entrez la date et l'heure du départ\n"
+                    f"Format: JJ/MM/AAAA HH:MM\n"
+                    f"Exemple: 25/04/2024 14:30"
+                )
+                return DATE
+            else:
+                await update.message.reply_text(
+                    "❌ Localité non trouvée.\n"
+                    "Veuillez entrer un nom de ville ou un code postal (NPA) valide."
+                )
+                return ARRIVAL
+    
+    except Exception as e:
+        logger.error(f"Error in handle_arrival: {str(e)}")
+        if update.message:
             await update.message.reply_text(
-                "Cette ville n'est pas dans notre liste. Veuillez choisir une ville suisse:"
+                "Une erreur est survenue. Veuillez réessayer avec /creer"
             )
-            return ENTERING_ARRIVAL
-        context.user_data['arrival'] = city
-
-    # Afficher les trajets disponibles
-    await update.message.reply_text(
-        f"Recherche des trajets de {context.user_data['departure']} à {context.user_data['arrival']}...\n"
-        "Cette fonctionnalité sera bientôt disponible!"
-    )
-    return ConversationHandler.END
+        return ConversationHandler.END
 
 def get_closest_matches(city, cities_list, max_matches=3):
     """Trouve les villes les plus proches dans la liste"""
@@ -712,14 +831,22 @@ def register(application):
             CONFIRM: [
                 CallbackQueryHandler(confirm, pattern='^confirm_trip$'),
                 CallbackQueryHandler(cancel, pattern='^cancel_trip$')
+            ],
+            ENTERING_DEPARTURE: [
+                MessageHandler(filters.TEXT & ~filters.COMMAND, handle_departure),
+                CallbackQueryHandler(handle_departure, pattern='^from_|^advanced_search$')
+            ],
+            ENTERING_ARRIVAL: [
+                MessageHandler(filters.TEXT & ~filters.COMMAND, handle_arrival),
+                CallbackQueryHandler(handle_arrival, pattern='^to_|^other_destination$')
             ]
         },
         fallbacks=[
             CommandHandler('cancel', cancel),
             CallbackQueryHandler(cancel, pattern='^cancel_trip$')
         ],
-        per_message=False,
-        per_chat=True
+        name="create_trip_handler",  # Ajout d'un nom unique pour faciliter le debug
+        allow_reentry=True  # Permettre de rentrer à nouveau dans la conversation
     )
 
     search_handler = ConversationHandler(
@@ -730,16 +857,24 @@ def register(application):
         states={
             ENTERING_DEPARTURE: [
                 MessageHandler(filters.TEXT & ~filters.COMMAND, handle_departure),
-                CallbackQueryHandler(handle_departure, pattern='^from_')
+                CallbackQueryHandler(handle_departure, pattern='^from_|^advanced_search$')
             ],
             ENTERING_ARRIVAL: [
                 MessageHandler(filters.TEXT & ~filters.COMMAND, handle_arrival),
-                CallbackQueryHandler(handle_arrival, pattern='^to_')
+                CallbackQueryHandler(handle_arrival, pattern='^to_|^other_destination$')
+            ],
+            DEPARTURE: [
+                MessageHandler(filters.TEXT & ~filters.COMMAND, handle_departure),
+                CallbackQueryHandler(handle_departure, pattern='^dep_|^other_city$')
+            ],
+            ARRIVAL: [
+                MessageHandler(filters.TEXT & ~filters.COMMAND, handle_arrival),
+                CallbackQueryHandler(handle_arrival, pattern='^arr_|^other_arrival$')
             ]
         },
         fallbacks=[CommandHandler('cancel', cancel)],
-        per_message=False,
-        per_chat=True
+        name="search_handler",  # Ajout d'un nom unique pour faciliter le debug
+        allow_reentry=True  # Permettre de rentrer à nouveau dans la conversation
     )
 
     # Handlers pour les commandes de base

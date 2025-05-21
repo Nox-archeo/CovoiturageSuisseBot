@@ -6,9 +6,14 @@ from telegram.ext import (
     filters,
     ConversationHandler
 )
+import sys
+import os
+import logging
+
+# Ajout du chemin parent au chemin d'importation Python
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))))
 from database.models import User
 from database import get_db
-import logging
 
 # États de conversation
 CHOOSING, TYPING_PHONE = range(2)  # Simplification des états

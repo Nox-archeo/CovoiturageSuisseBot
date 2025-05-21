@@ -89,3 +89,10 @@ def is_premium(user_id: int) -> bool:
 def register(application):
     """Enregistre les handlers d'abonnement"""
     application.add_handler(CommandHandler("subscribe", subscribe_command))
+    
+    # Handler pour le bouton de création d'abonnement
+    application.add_handler(CallbackQueryHandler(create_subscription, pattern="^create_subscription$"))
+    
+    # Handler pour les callbacks de succès/échec de l'abonnement
+    application.add_handler(CallbackQueryHandler(lambda u, c: u.callback_query.answer("Abonnement activé!"), pattern="^sub_success$"))
+    application.add_handler(CallbackQueryHandler(lambda u, c: u.callback_query.answer("Abonnement annulé."), pattern="^sub_cancel$"))

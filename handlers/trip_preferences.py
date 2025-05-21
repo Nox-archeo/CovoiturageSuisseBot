@@ -72,6 +72,20 @@ async def finalize_trip_preferences(update: Update, context):
     # ...
     return await show_trip_summary(update, context)
 
+# Fonction manquante nécessaire pour éviter une erreur
+async def show_trip_summary(update: Update, context):
+    """Affiche le résumé du trajet après avoir défini les préférences"""
+    query = update.callback_query
+    
+    # Afficher un résumé des préférences
+    prefs = context.user_data.get('trip_preferences', {})
+    summary = "✅ Préférences enregistrées!\n\n"
+    
+    # Revenir à l'écran de confirmation du trajet
+    # Cette fonction devrait normalement être liée à confirm_trip dans trip_handlers.py
+    await query.edit_message_text(summary)
+    return ConversationHandler.END
+
 def register(application):
     """Enregistre les handlers de préférences"""
     # Handlers pour les préférences

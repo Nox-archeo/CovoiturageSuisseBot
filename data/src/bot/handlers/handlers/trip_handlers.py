@@ -45,7 +45,9 @@ def register(application):
                 CommandHandler('creer', start_trip)  # Permettre de redémarrer
             ]
         },
-        fallbacks=[CommandHandler('cancel', cancel)]
+        fallbacks=[CommandHandler('cancel', cancel)],
+        per_message=True,
+        per_chat=False
     )
     
     # Supprimer tous les autres handlers pour éviter les conflits

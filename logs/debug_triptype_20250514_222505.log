@@ -1,0 +1,9 @@
+2025-05-14 22:25:05,626 - DEBUG_TRIPTYPE - INFO - 🚀 Démarrage du script de débogage des callbacks trip_type...
+2025-05-14 22:25:05,635 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2025-05-14 22:25:05,636 - httpx - DEBUG - load_verify_locations cafile='/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/certifi/cacert.pem'
+2025-05-14 22:25:05,648 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2025-05-14 22:25:05,648 - httpx - DEBUG - load_verify_locations cafile='/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/certifi/cacert.pem'
+2025-05-14 22:25:05,864 - utils.swiss_cities - INFO - Trying to load localities from /Users/margaux/CovoiturageSuisse/data/swiss_localities.json
+2025-05-14 22:25:05,865 - utils.swiss_cities - INFO - Loaded 741 localities from direct format
+2025-05-14 22:25:05,870 - DEBUG_TRIPTYPE - INFO - Enregistrement des handlers de création de trajet...
+2025-05-14 22:25:05,870 - handlers.trip_creation.driver_trip_handler - INFO - Enregistrement des handlers de création de trajet conducteur

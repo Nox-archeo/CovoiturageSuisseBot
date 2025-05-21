@@ -83,3 +83,8 @@ def register(application):
     """Enregistre les handlers des actions du menu"""
     application.add_handler(CallbackQueryHandler(handle_driver_profile, pattern="^driver_profile$"))
     application.add_handler(CallbackQueryHandler(handle_passenger_profile, pattern="^passenger_profile$"))
+    
+    # Ajouter d'autres handlers pour les boutons du profil
+    application.add_handler(CallbackQueryHandler(handle_driver_profile, pattern="^edit_driver$"))
+    application.add_handler(CallbackQueryHandler(handle_passenger_profile, pattern="^edit_passenger$"))
+    application.add_handler(CallbackQueryHandler(handle_driver_profile, pattern="^back_to_profile$"))

@@ -1,8 +1,12 @@
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CommandHandler, MessageHandler, filters, ConversationHandler
+import sys
+import os
+
+# Ajout du chemin parent au chemin d'importation Python
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))))
 from database.models import User
 from database import get_db
-import os
 
 UPLOAD_ID, UPLOAD_SELFIE = range(2)
 
