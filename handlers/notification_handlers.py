@@ -10,10 +10,14 @@ async def send_trip_reminder(context):
     # Récupérer les trajets de demain
     db = get_db()
     trips = db.query(Trip).filter(
-        Trip.departure_time.between(tomorrow, tomorrow + timedelta(days=1))
+        Trip.departure_time.between(tomorrow, tomorrow + timedelta(days=1)),
+        (Trip.is_cancelled == False) | (Trip.is_cancelled.is_(None))
     ).all()
     
     for trip in trips:
+        if getattr(trip, 'is_cancelled', False):
+            continue
+        
         # Notification au conducteur
         driver_message = (
             "🚗 Rappel: Vous avez un trajet demain\n\n"
@@ -45,6 +49,9 @@ async def notify_booking_request(trip_id, passenger_id):
     """Notifie le conducteur d'une nouvelle demande de réservation"""
     db = get_db()
     trip = db.query(Trip).get(trip_id)
+    if not trip or getattr(trip, 'is_cancelled', False):
+        return  # Ne pas notifier pour un trajet annulé
+    
     passenger = db.query(User).get(passenger_id)
     
     keyboard = [

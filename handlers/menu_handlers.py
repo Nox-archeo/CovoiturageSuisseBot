@@ -15,8 +15,8 @@ from database import get_db
 import logging
 from handlers.create_trip_handler import start_create_trip as enter_create_trip_flow
 from handlers.search_trip_handler import start_search_trip as enter_search_trip_flow
-# Assuming profile_menu is the entry to profile conversation
-from handlers.profile_handlers import profile_menu
+# Utiliser le nouveau gestionnaire de profil
+from handlers.profile_handler import profile_handler
 
 logger = logging.getLogger(__name__)
 
@@ -83,6 +83,15 @@ async def handle_menu_buttons(update: Update, context: CallbackContext):
     query = update.callback_query
     await query.answer()
     
+    # Ajouter un log pour voir quel callback est intercepté
+    logger.info(f"Menu handler intercepted callback: {query.data}")
+    
+    # Ne pas intercepter les callbacks du profil ou menu:profile
+    if query.data.startswith("profile:") or query.data == "menu:profile":
+        logger.info(f"Menu handler: Ignorer le callback de profil: {query.data}")
+        # Assurez-vous que le callback n'est pas géré par ce handler
+        return ConversationHandler.END
+    
     # Vérifier si c'est un callback de calendrier, le menu handler ne devrait pas les intercepter
     if query.data.startswith("create_cal_") or query.data.startswith("calendar:"):
         logger.info(f"Menu handler: Ignorer le callback de calendrier: {query.data}")
@@ -106,8 +115,14 @@ async def handle_menu_buttons(update: Update, context: CallbackContext):
         return await list_my_trips_menu(update, context)
         
     elif action == "profile":
-        # This should call the entry point of the profile_conv_handler
-        return await profile_menu(update, context) # profile_menu should be an entry point
+        # Utiliser le nouveau gestionnaire de profil
+        logger.info("Button profile clicked, redirecting to profile_handler")
+        try:
+            return await profile_handler(update, context)
+        except Exception as e:
+            logger.error(f"Error in profile_handler: {str(e)}", exc_info=True)
+            await query.edit_message_text("Une erreur s'est produite lors de l'affichage du profil. Veuillez réessayer.")
+            return ConversationHandler.END
 
     elif action == "help":
         from handlers.help_handlers import help_guide # Assuming help_guide function
@@ -171,12 +186,12 @@ def register(application):
     application.add_handler(CommandHandler("start", start_command))
     # General handler for menu callbacks that don't start a new major conversation
     # N'interceptez que des motifs très spécifiques pour éviter les conflits avec d'autres handlers
-    application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^menu:"))
+    application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^menu:(?!profile$).*"))  # Exclure menu:profile
     application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^back_to_menu$"))
     # Ajoutez les callbacks spécifiques pour les boutons de menu principaux
     application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^creer_trajet$"))
     application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^rechercher$"))
-    application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^profil$"))
+    # Ne pas gérer "profil" ici car il est géré par profile_handler
     application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^mes_trajets$"))
 
 

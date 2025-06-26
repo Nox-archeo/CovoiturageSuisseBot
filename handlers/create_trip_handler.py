@@ -26,6 +26,10 @@ from utils.date_picker import (
     MINUTE_SELECTION_PATTERN, MINUTE_BACK_PATTERN, MINUTE_CANCEL_PATTERN,
     FLEX_TIME_PATTERN, DATETIME_ACTION_PATTERN
 )
+import os
+import json
+import logging
+from geopy.distance import geodesic
 
 # Configuration du logger
 logger = logging.getLogger(__name__)
@@ -47,6 +51,41 @@ logger = logging.getLogger(__name__)
     FLEX_HOUR,
     HOUR  # État pour la saisie de l'heure après la date
 ) = range(14)
+
+# --- UTILS GPS pour calcul automatique du prix ---
+CITIES_COORDS_PATH = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    'src', 'bot', 'data', 'cities.json'
+)
+def load_city_coords():
+    with open(CITIES_COORDS_PATH, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    return { (c['name'], c.get('npa')): (c.get('lat'), c.get('lon')) for c in data['cities'] if 'lat' in c and 'lon' in c }
+
+CITY_COORDS = load_city_coords()
+
+def get_coords(city):
+    name = city.get('name')
+    npa = city.get('zip') or city.get('npa')
+    # Recherche stricte puis souple
+    return CITY_COORDS.get((name, npa)) or next((v for (n, z), v in CITY_COORDS.items() if n == name), (None, None))
+
+def compute_price_auto(dep, arr):
+    latlon1 = get_coords(dep)
+    latlon2 = get_coords(arr)
+    if not latlon1 or not latlon2 or None in latlon1 or None in latlon2:
+        return None, None
+    dist_km = geodesic(latlon1, latlon2).km
+    # Barème
+    if 1 <= dist_km < 25:
+        price = dist_km * 0.75
+    elif 25 <= dist_km <= 40:
+        price = dist_km * 0.5
+    elif dist_km > 40:
+        price = dist_km * 0.25
+    else:
+        price = 0
+    return round(price, 2), round(dist_km, 1)
 
 async def handle_hour_input(update: Update, context: CallbackContext):
     """Gère l'entrée manuelle de l'heure du trajet."""
@@ -548,26 +587,28 @@ async def handle_create_seats(update: Update, context: CallbackContext):
     
     context.user_data['seats'] = int(seats_text)
     logger.info(f"Nombre de sièges (création): {seats_text}")
-    
-    await update.message.reply_text("Étape 7️⃣ - Quel est le prix par place en CHF?")
-    return CREATE_PRICE
+    # --- Calcul automatique du prix ---
+    dep = context.user_data.get('departure', {})
+    arr = context.user_data.get('arrival', {})
+    prix, dist = compute_price_auto(dep, arr)
+    context.user_data['price'] = prix
+    context.user_data['distance_km'] = dist
+    if prix is None:
+        await update.message.reply_text("Impossible de calculer le prix automatiquement (coordonnées manquantes). Veuillez contacter le support.")
+        return ConversationHandler.END
+    await update.message.reply_text(f"Le prix par place est automatiquement calculé : {prix} CHF pour {dist} km.")
+    # Passer directement à la confirmation
+    return await handle_create_price(update, context, auto=True)
 
-async def handle_create_price(update: Update, context: CallbackContext):
-    """Gère l'entrée du prix."""
-    price_text = update.message.text
-    if not validate_price(price_text):
-        await update.message.reply_text("❌ Prix invalide. Entrez un montant entre 0 et 1000 CHF.")
-        return CREATE_PRICE
-        
-    context.user_data['price'] = float(price_text)
-    logger.info(f"Prix (création): {price_text}")
-    
-    # Afficher le résumé pour confirmation
+# --- Modification du résumé pour afficher le prix auto ---
+async def handle_create_price(update: Update, context: CallbackContext, auto=False):
+    # Ne pas demander de saisie, juste afficher le résumé
     dep = context.user_data.get('departure', {})
     arr = context.user_data.get('arrival', {})
     dep_display = dep.get('name', dep) if isinstance(dep, dict) else dep
     arr_display = arr.get('name', arr) if isinstance(arr, dict) else arr
-    
+    prix = context.user_data.get('price', 'N/A')
+    dist = context.user_data.get('distance_km', 'N/A')
     summary = (
         "📋 *Résumé du trajet à créer*:\n\n"
         f"Rôle: {context.user_data.get('trip_type', 'N/A')}\n"
@@ -575,15 +616,19 @@ async def handle_create_price(update: Update, context: CallbackContext):
         f"De: {dep_display}\n"
         f"À: {arr_display}\n"
         f"Date: {context.user_data.get('date', 'N/A')}\n"
+        f"Distance: {dist} km\n"
         f"Places: {context.user_data.get('seats', 'N/A')}\n"
-        f"Prix: {context.user_data.get('price', 'N/A')} CHF\n\n"
+        f"Prix (auto): {prix} CHF\n\n"
         "Confirmez-vous la création de ce trajet?"
     )
     keyboard = [
         [InlineKeyboardButton("✅ Confirmer", callback_data="create_confirm_yes")],
         [InlineKeyboardButton("❌ Annuler", callback_data="create_trip:cancel_confirm")]
     ]
-    await update.message.reply_text(summary, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode="Markdown")
+    if update.message:
+        await update.message.reply_text(summary, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode="Markdown")
+    else:
+        await update.callback_query.edit_message_text(summary, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode="Markdown")
     return CREATE_CONFIRM
 
 async def handle_create_confirm(update: Update, context: CallbackContext):
@@ -676,6 +721,10 @@ async def handle_create_cancel(update: Update, context: CallbackContext):
 
 async def handle_unexpected_input(update: Update, context: CallbackContext):
     """Fonction de fallback pour gérer les entrées inattendues dans la conversation."""
+    # Si le mode est "search", ne pas intercepter l'entrée
+    if context.user_data.get('mode') == 'search':
+        return -1  # -1 signifie "continuer à chercher d'autres gestionnaires"
+        
     logger.warning(f"Entrée inattendue reçue dans la conversation create_trip: {update}")
     
     message = "Désolé, je n'ai pas compris cette entrée. Veuillez utiliser les options fournies."
@@ -1062,6 +1111,26 @@ async def handle_flex_time_selection(update: Update, context: CallbackContext):
     )
     return FLEX_HOUR
 
+# --- HANDLERS pour les boutons après création de trajet ---
+async def handle_show_my_trips(update: Update, context: CallbackContext):
+    """Affiche la liste des trajets de l'utilisateur après création."""
+    query = update.callback_query
+    await query.answer()
+    # Redirige vers le handler de profil ou de mes trajets (à adapter selon votre logique existante)
+    # Ici, on simule un message simple, à remplacer par l'appel réel si besoin
+    await query.edit_message_text("Voici vos trajets (fonctionnalité à compléter selon votre logique existante).")
+    # Ou appelez le vrai handler: await show_my_trips(update, context)
+    return ConversationHandler.END
+
+async def handle_main_menu(update: Update, context: CallbackContext):
+    """Affiche le menu principal après création de trajet."""
+    query = update.callback_query
+    await query.answer()
+    # Redirige vers le menu principal (à adapter selon votre logique)
+    await query.edit_message_text("Menu principal (fonctionnalité à compléter selon votre logique existante).")
+    # Ou appelez le vrai handler: await show_main_menu(update, context)
+    return ConversationHandler.END
+
 # ConversationHandler pour la création de trajet
 create_trip_conv_handler = ConversationHandler(
     entry_points=[
@@ -1124,11 +1193,10 @@ create_trip_conv_handler = ConversationHandler(
         CREATE_SEATS: [
             MessageHandler(filters.TEXT & ~filters.COMMAND, handle_create_seats)
         ],
-        CREATE_PRICE: [
-            MessageHandler(filters.TEXT & ~filters.COMMAND, handle_create_price)
-        ],
         CREATE_CONFIRM: [
             CallbackQueryHandler(handle_create_confirm, pattern='^create_confirm_yes$'),
+            CallbackQueryHandler(handle_show_my_trips, pattern='^main_menu:my_trips$'),
+            CallbackQueryHandler(handle_main_menu, pattern='^main_menu:start$'),
             CallbackQueryHandler(handle_create_cancel, pattern='^create_trip:cancel_confirm$')
         ],
         FLEX_HOUR: [
@@ -1138,7 +1206,7 @@ create_trip_conv_handler = ConversationHandler(
     fallbacks=[
         CallbackQueryHandler(handle_create_cancel, pattern='^create_trip:cancel'),
         CommandHandler('cancel', handle_create_cancel),
-        MessageHandler(filters.ALL, handle_unexpected_input)
+        MessageHandler(filters.ALL & ~filters.Command(['chercher']), handle_unexpected_input)
     ],
     name="create_trip_conversation",
     persistent=True,

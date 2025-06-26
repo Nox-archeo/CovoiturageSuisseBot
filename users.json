@@ -1,0 +1,14 @@
+{
+  "5932296330": {
+    "vehicle": {
+      "brand": "mitshubishi",
+      "model": "pinin",
+      "year": 2022,
+      "color": "bleu",
+      "seats": 5,
+      "fuel": "Essence",
+      "smoking": true,
+      "air_conditioning": true
+    }
+  }
+}

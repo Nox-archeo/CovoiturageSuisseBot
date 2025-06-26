@@ -3,3707 +3,5189 @@
     {
       "name": "Aclens",
       "canton": "VD",
-      "npa": "1123"
+      "npa": "1123",
+      "lat": 46.5680294,
+      "lon": 6.51076
     },
     {
       "name": "Adligenswil",
       "canton": "LU",
-      "npa": "6043"
+      "npa": "6043",
+      "lat": 47.070535,
+      "lon": 8.368244
     },
     {
       "name": "Aesch (LU)",
       "canton": "LU",
-      "npa": "6287"
+      "npa": "6287",
+      "lat": 47.2570523,
+      "lon": 8.2406691
     },
     {
       "name": "Agarn",
       "canton": "VS",
-      "npa": "3951"
+      "npa": "3951",
+      "lat": 46.2967076,
+      "lon": 7.6652777
     },
     {
       "name": "Agiez",
       "canton": "VD",
-      "npa": "1352"
+      "npa": "1352",
+      "lat": 46.7199018,
+      "lon": 6.508106
     },
     {
       "name": "Aigle",
       "canton": "VD",
-      "npa": "1860"
+      "npa": "1860",
+      "lat": 46.3179006,
+      "lon": 6.9688929
     },
     {
       "name": "Aire-la-Ville",
       "canton": "GE",
-      "npa": "1288"
+      "npa": "1288",
+      "lat": 46.1905919,
+      "lon": 6.0428776
     },
     {
       "name": "Alberswil",
       "canton": "LU",
-      "npa": "6248"
+      "npa": "6248",
+      "lat": 47.1506183,
+      "lon": 8.0013407
     },
     {
       "name": "Albinen",
       "canton": "VS",
-      "npa": "3955"
+      "npa": "3955",
+      "lat": 46.3406442,
+      "lon": 7.6337277
     },
     {
       "name": "Allaman",
       "canton": "VD",
-      "npa": "1165"
+      "npa": "1165",
+      "lat": 46.4707776,
+      "lon": 6.396174
     },
     {
       "name": "Alle",
       "canton": "JU",
-      "npa": "2942"
+      "npa": "2942",
+      "lat": 47.4258096,
+      "lon": 7.1291258
     },
     {
       "name": "Altbüron",
       "canton": "LU",
-      "npa": "6147"
+      "npa": "6147",
+      "lat": 47.1816,
+      "lon": 7.88263
     },
     {
       "name": "Altishofen",
       "canton": "LU",
-      "npa": "6246"
+      "npa": "6246",
+      "lat": 47.200914,
+      "lon": 7.961177
     },
     {
       "name": "Anières",
       "canton": "GE",
-      "npa": "1247"
+      "npa": "1247",
+      "lat": 46.2760987,
+      "lon": 6.2237615
     },
     {
       "name": "Anniviers",
       "canton": "VS",
-      "npa": "3961"
+      "npa": "3961",
+      "lat": 46.1533805,
+      "lon": 7.5918568
     },
     {
       "name": "Arbaz",
       "canton": "VS",
-      "npa": "1974"
+      "npa": "1974",
+      "lat": 46.273328,
+      "lon": 7.3834555
     },
     {
       "name": "Ardon",
       "canton": "VS",
-      "npa": "1957"
+      "npa": "1957",
+      "lat": 46.2104977,
+      "lon": 7.2576107
     },
     {
       "name": "Arnex-sur-Nyon",
       "canton": "VD",
-      "npa": "1277"
+      "npa": "1277",
+      "lat": 46.3759907,
+      "lon": 6.1913819
     },
     {
       "name": "Arnex-sur-Orbe",
       "canton": "VD",
-      "npa": "1321"
+      "npa": "1321",
+      "lat": 46.6941594,
+      "lon": 6.5187517
     },
     {
       "name": "Arzier-Le Muids",
       "canton": "VD",
-      "npa": "1273"
+      "npa": "1273",
+      "lat": 46.4599808,
+      "lon": 6.208069
     },
     {
       "name": "Assens",
       "canton": "VD",
-      "npa": "1042"
+      "npa": "1042",
+      "lat": 46.6127871,
+      "lon": 6.6225936
     },
     {
       "name": "Attalens",
       "canton": "FR",
-      "npa": "1616"
+      "npa": "1616",
+      "lat": 46.5110996,
+      "lon": 6.8489696
     },
     {
       "name": "Aubonne",
       "canton": "VD",
-      "npa": "1170"
+      "npa": "1170",
+      "lat": 46.4952916,
+      "lon": 6.3915748
     },
     {
       "name": "Ausserberg",
       "canton": "VS",
-      "npa": "3938"
+      "npa": "3938",
+      "lat": 46.3153094,
+      "lon": 7.8525781
     },
     {
       "name": "Autigny",
       "canton": "FR",
-      "npa": "1742"
+      "npa": "1742",
+      "lat": 46.7370465,
+      "lon": 7.0200732
     },
     {
       "name": "Avenches",
       "canton": "VD",
-      "npa": "1580"
+      "npa": "1580",
+      "lat": 46.879575,
+      "lon": 7.040941
     },
     {
       "name": "Avry",
       "canton": "FR",
-      "npa": "1754"
+      "npa": "1754",
+      "lat": 46.7877054,
+      "lon": 7.0708826
     },
     {
       "name": "Avully",
       "canton": "GE",
-      "npa": "1237"
+      "npa": "1237",
+      "lat": 46.1695458,
+      "lon": 6.0013516
     },
     {
       "name": "Avusy",
       "canton": "GE",
-      "npa": "1285"
+      "npa": "1285",
+      "lat": 46.1516784,
+      "lon": 5.9947436
     },
     {
       "name": "Ayent",
       "canton": "VS",
-      "npa": "1966"
+      "npa": "1966",
+      "lat": 46.3190236,
+      "lon": 7.4166423
     },
     {
       "name": "Ballaigues",
       "canton": "VD",
-      "npa": "1338"
+      "npa": "1338",
+      "lat": 46.7305278,
+      "lon": 6.4132441
     },
     {
       "name": "Ballens",
       "canton": "VD",
-      "npa": "1144"
+      "npa": "1144",
+      "lat": 46.5542745,
+      "lon": 6.3750843
     },
     {
       "name": "Ballwil",
       "canton": "LU",
-      "npa": "6275"
+      "npa": "6275",
+      "lat": 47.1521716,
+      "lon": 8.3185717
     },
     {
       "name": "Baltschieder",
       "canton": "VS",
-      "npa": "3937"
+      "npa": "3937",
+      "lat": 46.3079079,
+      "lon": 7.8646512
     },
     {
       "name": "Bardonnex",
       "canton": "GE",
-      "npa": "1257"
+      "npa": "1257",
+      "lat": 46.1499139,
+      "lon": 6.1051191
     },
     {
       "name": "Bas-Intyamon",
       "canton": "FR",
-      "npa": "1669"
+      "npa": "1669",
+      "lat": 46.5627725,
+      "lon": 7.0966531
     },
     {
       "name": "Basse-Allaine",
       "canton": "JU",
-      "npa": "2904"
+      "npa": "2904",
+      "lat": 47.47124,
+      "lon": 7.0362191
     },
     {
       "name": "Basse-Vendline",
       "canton": "JU",
-      "npa": "2926"
+      "npa": "2926",
+      "lat": 47.4817987,
+      "lon": 7.1555297
     },
     {
       "name": "Bassins",
       "canton": "VD",
-      "npa": "1269"
+      "npa": "1269",
+      "lat": 46.464053,
+      "lon": 6.2316394
     },
     {
       "name": "Baulmes",
       "canton": "VD",
-      "npa": "1446"
+      "npa": "1446",
+      "lat": 46.7903981,
+      "lon": 6.5212523
     },
     {
       "name": "Bavois",
       "canton": "VD",
-      "npa": "1372"
+      "npa": "1372",
+      "lat": 46.6853078,
+      "lon": 6.5651634
     },
     {
       "name": "Begnins",
       "canton": "VD",
-      "npa": "1268"
+      "npa": "1268",
+      "lat": 46.4411298,
+      "lon": 6.2492689
     },
     {
       "name": "Belfaux",
       "canton": "FR",
-      "npa": "1782"
+      "npa": "1782",
+      "lat": 46.8216259,
+      "lon": 7.1068684
     },
     {
       "name": "Bellevue",
       "canton": "GE",
-      "npa": "1293"
+      "npa": "1293",
+      "lat": 46.255,
+      "lon": 6.154317
     },
     {
       "name": "Bellwald",
       "canton": "VS",
-      "npa": "3997"
+      "npa": "3997",
+      "lat": 46.4237017,
+      "lon": 8.1599477
     },
     {
       "name": "Belmont-Broye",
       "canton": "FR",
-      "npa": "1773"
+      "npa": "1773",
+      "lat": 46.8485832,
+      "lon": 7.0054655
     },
     {
       "name": "Belmont-sur-Lausanne",
       "canton": "VD",
-      "npa": "1092"
+      "npa": "1092",
+      "lat": 46.5200729,
+      "lon": 6.6800519
     },
     {
       "name": "Belmont-sur-Yverdon",
       "canton": "VD",
-      "npa": "1432"
+      "npa": "1432",
+      "lat": 46.7454798,
+      "lon": 6.6241604
     },
     {
       "name": "Bercher",
       "canton": "VD",
-      "npa": "1038"
+      "npa": "1038",
+      "lat": 46.6920285,
+      "lon": 6.7089748
     },
     {
       "name": "Bernex",
       "canton": "GE",
-      "npa": "1233"
+      "npa": "1233",
+      "lat": 46.1746582,
+      "lon": 6.0721811
     },
     {
       "name": "Berolle",
       "canton": "VD",
-      "npa": "1149"
+      "npa": "1149",
+      "lat": 46.5583845,
+      "lon": 6.3373241
     },
     {
       "name": "Beromünster",
       "canton": "LU",
-      "npa": "6215"
+      "npa": "6215",
+      "lat": 47.2076373,
+      "lon": 8.1924386
     },
     {
       "name": "Bettens",
       "canton": "VD",
-      "npa": "1042"
+      "npa": "1042",
+      "lat": 46.6275904,
+      "lon": 6.5770883
     },
     {
       "name": "Bettmeralp",
       "canton": "VS",
-      "npa": "3992"
+      "npa": "3992",
+      "lat": 46.3905924,
+      "lon": 8.0627954
     },
     {
       "name": "Bex",
       "canton": "VD",
-      "npa": "1880"
+      "npa": "1880",
+      "lat": 46.2513776,
+      "lon": 7.0123881
     },
     {
       "name": "Billens-Hennens",
       "canton": "FR",
-      "npa": "1681"
+      "npa": "1681",
+      "lat": 46.6870318,
+      "lon": 6.8911551
     },
     {
       "name": "Binn",
       "canton": "VS",
-      "npa": "3996"
+      "npa": "3996",
+      "lat": 46.3655993,
+      "lon": 8.1883972
     },
     {
       "name": "Bioley-Magnoux",
       "canton": "VD",
-      "npa": "1407"
+      "npa": "1407",
+      "lat": 46.7255605,
+      "lon": 6.7108156
     },
     {
       "name": "Bister",
       "canton": "VS",
-      "npa": "3983"
+      "npa": "3983",
+      "lat": 46.3620412,
+      "lon": 8.0668223
     },
     {
       "name": "Bitsch",
       "canton": "VS",
-      "npa": "3982"
+      "npa": "3982",
+      "lat": 46.3374019,
+      "lon": 8.0136014
     },
     {
       "name": "Bière",
       "canton": "VD",
-      "npa": "1145"
+      "npa": "1145",
+      "lat": 46.5373773,
+      "lon": 6.3337235
     },
     {
       "name": "Blatten",
       "canton": "VS",
-      "npa": "3919"
+      "npa": "3919",
+      "lat": 46.4436311,
+      "lon": 7.856841
     },
     {
       "name": "Blonay - Saint-Légier",
       "canton": "VD",
-      "npa": "1807"
+      "npa": "1807",
+      "lat": 46.4650397,
+      "lon": 6.8951981
     },
     {
       "name": "Bofflens",
       "canton": "VD",
-      "npa": "1353"
+      "npa": "1353",
+      "lat": 46.7045569,
+      "lon": 6.4989467
     },
     {
       "name": "Bogis-Bossey",
       "canton": "VD",
-      "npa": "1279"
+      "npa": "1279",
+      "lat": 46.3515732,
+      "lon": 6.1648147
     },
     {
       "name": "Bois-d'Amont",
       "canton": "FR",
-      "npa": "1610"
+      "npa": "1610",
+      "lat": 46.7537789,
+      "lon": 7.1306571
     },
     {
       "name": "Boncourt",
       "canton": "JU",
-      "npa": "2926"
+      "npa": "2926",
+      "lat": 47.4979359,
+      "lon": 7.0127433
     },
     {
       "name": "Bonvillars",
       "canton": "VD",
-      "npa": "1427"
+      "npa": "1427",
+      "lat": 46.8375743,
+      "lon": 6.6706023
     },
     {
       "name": "Borex",
       "canton": "VD",
-      "npa": "1277"
+      "npa": "1277",
+      "lat": 46.379071,
+      "lon": 6.1777222
     },
     {
       "name": "Bossonnens",
       "canton": "FR",
-      "npa": "1615"
+      "npa": "1615",
+      "lat": 46.5217291,
+      "lon": 6.8495191
     },
     {
       "name": "Bottens",
       "canton": "VD",
-      "npa": "1041"
+      "npa": "1041",
+      "lat": 46.6169088,
+      "lon": 6.6607269
     },
     {
       "name": "Botterens",
       "canton": "FR",
-      "npa": "1652"
+      "npa": "1652",
+      "lat": 46.6179671,
+      "lon": 7.1123024
     },
     {
       "name": "Boudry",
       "canton": "NE",
-      "npa": "2017"
+      "npa": "2017",
+      "lat": 46.9487464,
+      "lon": 6.8358712
     },
     {
       "name": "Bougy-Villars",
       "canton": "VD",
-      "npa": "1172"
+      "npa": "1172",
+      "lat": 46.4787593,
+      "lon": 6.3545367
     },
     {
       "name": "Boulens",
       "canton": "VD",
-      "npa": "1063"
+      "npa": "1063",
+      "lat": 46.681059,
+      "lon": 6.7192139
     },
     {
       "name": "Bourg-Saint-Pierre",
       "canton": "VS",
-      "npa": "1946"
+      "npa": "1946",
+      "lat": 45.9489252,
+      "lon": 7.2088271
     },
     {
       "name": "Bourg-en-Lavaux",
       "canton": "VD",
-      "npa": "1091"
+      "npa": "1091",
+      "lat": 46.4700145,
+      "lon": 6.7185559
     },
     {
       "name": "Bournens",
       "canton": "VD",
-      "npa": "1035"
+      "npa": "1035",
+      "lat": 46.6041672,
+      "lon": 6.5633012
     },
     {
       "name": "Bourrignon",
       "canton": "JU",
-      "npa": "2803"
+      "npa": "2803",
+      "lat": 47.3966596,
+      "lon": 7.245026
     },
     {
       "name": "Boussens",
       "canton": "VD",
-      "npa": "1034"
+      "npa": "1034",
+      "lat": 46.6024104,
+      "lon": 6.5845617
     },
     {
       "name": "Bovernier",
       "canton": "VS",
-      "npa": "1932"
+      "npa": "1932",
+      "lat": 46.0799974,
+      "lon": 7.0868391
     },
     {
       "name": "Boécourt",
       "canton": "JU",
-      "npa": "2856"
+      "npa": "2856",
+      "lat": 47.3489482,
+      "lon": 7.2140576
     },
     {
       "name": "Bremblens",
       "canton": "VD",
-      "npa": "1121"
+      "npa": "1121",
+      "lat": 46.5461677,
+      "lon": 6.51777
     },
     {
       "name": "Bretigny-sur-Morrens",
       "canton": "VD",
-      "npa": "1053"
+      "npa": "1053",
+      "lat": 46.596563,
+      "lon": 6.640643
     },
     {
       "name": "Bretonnières",
       "canton": "VD",
-      "npa": "1329"
+      "npa": "1329",
+      "lat": 46.7122384,
+      "lon": 6.4734908
     },
     {
       "name": "Brig-Glis",
       "canton": "VS",
-      "npa": "3900"
+      "npa": "3900",
+      "lat": 46.2887324,
+      "lon": 7.9753084
     },
     {
       "name": "Broc",
       "canton": "FR",
-      "npa": "1636"
+      "npa": "1636",
+      "lat": 46.6044669,
+      "lon": 7.0989913
     },
     {
       "name": "Brot-Plamboz",
       "canton": "NE",
-      "npa": "2318"
+      "npa": "2318",
+      "lat": 46.9724714,
+      "lon": 6.7408701
     },
     {
       "name": "Brünisried",
       "canton": "FR",
-      "npa": "1719"
+      "npa": "1719",
+      "lat": 46.7601579,
+      "lon": 7.2780335
     },
     {
       "name": "Buchillon",
       "canton": "VD",
-      "npa": "1164"
+      "npa": "1164",
+      "lat": 46.4702466,
+      "lon": 6.4230108
     },
     {
       "name": "Buchrain",
       "canton": "LU",
-      "npa": "6033"
+      "npa": "6033",
+      "lat": 47.0941034,
+      "lon": 8.3472568
     },
     {
       "name": "Bulle",
       "canton": "FR",
-      "npa": "1630"
+      "npa": "1630",
+      "lat": 46.6190969,
+      "lon": 7.0581152
     },
     {
       "name": "Bullet",
       "canton": "VD",
-      "npa": "1453"
+      "npa": "1453",
+      "lat": 46.8309314,
+      "lon": 6.5546431
     },
     {
       "name": "Bure",
       "canton": "JU",
-      "npa": "2915"
+      "npa": "2915",
+      "lat": 47.4422662,
+      "lon": 7.0059901
     },
     {
       "name": "Bursinel",
       "canton": "VD",
-      "npa": "1195"
+      "npa": "1195",
+      "lat": 46.438423,
+      "lon": 6.3053467
     },
     {
       "name": "Bursins",
       "canton": "VD",
-      "npa": "1183"
+      "npa": "1183",
+      "lat": 46.4515535,
+      "lon": 6.2906369
     },
     {
       "name": "Burtigny",
       "canton": "VD",
-      "npa": "1268"
+      "npa": "1268",
+      "lat": 46.4687203,
+      "lon": 6.2567707
     },
     {
       "name": "Bussigny",
       "canton": "VD",
-      "npa": "1030"
+      "npa": "1030",
+      "lat": 46.5512503,
+      "lon": 6.553745
     },
     {
       "name": "Bussy-sur-Moudon",
       "canton": "VD",
-      "npa": "1514"
+      "npa": "1514",
+      "lat": 46.6858284,
+      "lon": 6.8108726
     },
     {
       "name": "Buttisholz",
       "canton": "LU",
-      "npa": "6018"
+      "npa": "6018",
+      "lat": 47.1139601,
+      "lon": 8.0935047
     },
     {
       "name": "Bösingen",
       "canton": "FR",
-      "npa": "3178"
+      "npa": "3178",
+      "lat": 46.8924179,
+      "lon": 7.2273544
     },
     {
       "name": "Bürchen",
       "canton": "VS",
-      "npa": "3935"
+      "npa": "3935",
+      "lat": 46.2805676,
+      "lon": 7.8163191
     },
     {
       "name": "Büron",
       "canton": "LU",
-      "npa": "6233"
+      "npa": "6233",
+      "lat": 47.2142552,
+      "lon": 8.0946583
     },
     {
       "name": "Carouge (GE)",
       "canton": "GE",
-      "npa": "1227"
+      "npa": "1227",
+      "lat": 46.1846691,
+      "lon": 6.1396839
     },
     {
       "name": "Cartigny",
       "canton": "GE",
-      "npa": "1236"
+      "npa": "1236",
+      "lat": 46.1736699,
+      "lon": 6.021701
     },
     {
       "name": "Chalais",
       "canton": "VS",
-      "npa": "3966"
+      "npa": "3966",
+      "lat": 46.2654381,
+      "lon": 7.5085408
     },
     {
       "name": "Chamblon",
       "canton": "VD",
-      "npa": "1436"
+      "npa": "1436",
+      "lat": 46.7772764,
+      "lon": 6.6044112
     },
     {
       "name": "Chamoson",
       "canton": "VS",
-      "npa": "1955"
+      "npa": "1955",
+      "lat": 46.2013342,
+      "lon": 7.2232538
     },
     {
       "name": "Champagne",
       "canton": "VD",
-      "npa": "1424"
+      "npa": "1424",
+      "lat": 46.8302611,
+      "lon": 6.6580976
     },
     {
       "name": "Champtauroz",
       "canton": "VD",
-      "npa": "1537"
+      "npa": "1537",
+      "lat": 46.760598,
+      "lon": 6.789151
     },
     {
       "name": "Champvent",
       "canton": "VD",
-      "npa": "1443"
+      "npa": "1443",
+      "lat": 46.7828052,
+      "lon": 6.5726094
     },
     {
       "name": "Champéry",
       "canton": "VS",
-      "npa": "1874"
+      "npa": "1874",
+      "lat": 46.1756791,
+      "lon": 6.8687665
     },
     {
       "name": "Chancy",
       "canton": "GE",
-      "npa": "1284"
+      "npa": "1284",
+      "lat": 46.1494836,
+      "lon": 5.9726439
     },
     {
       "name": "Chardonne",
       "canton": "VD",
-      "npa": "1803"
+      "npa": "1803",
+      "lat": 46.4770903,
+      "lon": 6.8271259
     },
     {
       "name": "Chavannes-de-Bogis",
       "canton": "VD",
-      "npa": "1279"
+      "npa": "1279",
+      "lat": 46.3446425,
+      "lon": 6.1625796
     },
     {
       "name": "Chavannes-des-Bois",
       "canton": "VD",
-      "npa": "1290"
+      "npa": "1290",
+      "lat": 46.3147141,
+      "lon": 6.132561
     },
     {
       "name": "Chavannes-le-Chêne",
       "canton": "VD",
-      "npa": "1464"
+      "npa": "1464",
+      "lat": 46.7768814,
+      "lon": 6.7780279
     },
     {
       "name": "Chavannes-le-Veyron",
       "canton": "VD",
-      "npa": "1148"
+      "npa": "1148",
+      "lat": 46.60645,
+      "lon": 6.4509017
     },
     {
       "name": "Chavannes-près-Renens",
       "canton": "VD",
-      "npa": "1022"
+      "npa": "1022",
+      "lat": 46.5285212,
+      "lon": 6.5726698
     },
     {
       "name": "Chavannes-sur-Moudon",
       "canton": "VD",
-      "npa": "1512"
+      "npa": "1512",
+      "lat": 46.6571671,
+      "lon": 6.8092169
     },
     {
       "name": "Chavornay",
       "canton": "VD",
-      "npa": "1373"
+      "npa": "1373",
+      "lat": 46.706261,
+      "lon": 6.5693871
     },
     {
       "name": "Cheseaux-Noréaz",
       "canton": "VD",
-      "npa": "1400"
+      "npa": "1400",
+      "lat": 46.7820326,
+      "lon": 6.6718258
     },
     {
       "name": "Cheseaux-sur-Lausanne",
       "canton": "VD",
-      "npa": "1033"
+      "npa": "1033",
+      "lat": 46.5854324,
+      "lon": 6.6061393
     },
     {
       "name": "Chessel",
       "canton": "VD",
-      "npa": "1846"
+      "npa": "1846",
+      "lat": 46.3495725,
+      "lon": 6.8944469
     },
     {
       "name": "Chevilly",
       "canton": "VD",
-      "npa": "1316"
+      "npa": "1316",
+      "lat": 46.642766,
+      "lon": 6.4771672
     },
     {
       "name": "Chevroux",
       "canton": "VD",
-      "npa": "1545"
+      "npa": "1545",
+      "lat": 46.8898441,
+      "lon": 6.9053929
     },
     {
       "name": "Chexbres",
       "canton": "VD",
-      "npa": "1071"
+      "npa": "1071",
+      "lat": 46.4809505,
+      "lon": 6.7803021
     },
     {
       "name": "Cheyres-Châbles",
       "canton": "FR",
-      "npa": "1468"
+      "npa": "1468",
+      "lat": 46.8225391,
+      "lon": 6.788489
     },
     {
       "name": "Chigny",
       "canton": "VD",
-      "npa": "1134"
+      "npa": "1134",
+      "lat": 46.5201861,
+      "lon": 6.4773257
     },
     {
       "name": "Chippis",
       "canton": "VS",
-      "npa": "3965"
+      "npa": "3965",
+      "lat": 46.2805414,
+      "lon": 7.5406261
     },
     {
       "name": "Choulex",
       "canton": "GE",
-      "npa": "1244"
+      "npa": "1244",
+      "lat": 46.2231863,
+      "lon": 6.2242767
     },
     {
       "name": "Château-d'Oex",
       "canton": "VD",
-      "npa": "1660"
+      "npa": "1660",
+      "lat": 46.4738413,
+      "lon": 7.1303012
     },
     {
       "name": "Châtel-Saint-Denis",
       "canton": "FR",
-      "npa": "1618"
+      "npa": "1618",
+      "lat": 46.5265288,
+      "lon": 6.8996536
     },
     {
       "name": "Châtel-sur-Montsalvens",
       "canton": "FR",
-      "npa": "1653"
+      "npa": "1653",
+      "lat": 46.6139677,
+      "lon": 7.1290698
     },
     {
       "name": "Châtillon (FR)",
       "canton": "FR",
-      "npa": "1473"
+      "npa": "1473",
+      "lat": 46.8328121,
+      "lon": 6.8289185
     },
     {
       "name": "Châtillon (JU)",
       "canton": "JU",
-      "npa": "2843"
+      "npa": "2843",
+      "lat": 47.3275306,
+      "lon": 7.3437721
     },
     {
       "name": "Châtonnaye",
       "canton": "FR",
-      "npa": "1553"
+      "npa": "1553",
+      "lat": 46.752828,
+      "lon": 6.938321
     },
     {
       "name": "Chénens",
       "canton": "FR",
-      "npa": "1744"
+      "npa": "1744",
+      "lat": 46.7408796,
+      "lon": 7.0023814
     },
     {
       "name": "Chéserex",
       "canton": "VD",
-      "npa": "1275"
+      "npa": "1275",
+      "lat": 46.3997632,
+      "lon": 6.1737875
     },
     {
       "name": "Chêne-Bougeries",
       "canton": "GE",
-      "npa": "1224"
+      "npa": "1224",
+      "lat": 46.1963639,
+      "lon": 6.1854072
     },
     {
       "name": "Chêne-Bourg",
       "canton": "GE",
-      "npa": "1225"
+      "npa": "1225",
+      "lat": 46.1942388,
+      "lon": 6.1934779
     },
     {
       "name": "Chêne-Pâquier",
       "canton": "VD",
-      "npa": "1464"
+      "npa": "1464",
+      "lat": 46.771165,
+      "lon": 6.7684976
     },
     {
       "name": "Clarmont",
       "canton": "VD",
-      "npa": "1127"
+      "npa": "1127",
+      "lat": 46.5474321,
+      "lon": 6.4501584
     },
     {
       "name": "Clos du Doubs",
       "canton": "JU",
-      "npa": "2883"
+      "npa": "2883",
+      "lat": 47.3493072,
+      "lon": 7.1208528
     },
     {
       "name": "Coeuve",
       "canton": "JU",
-      "npa": "2932"
+      "npa": "2932",
+      "lat": 47.454155,
+      "lon": 7.0975919
     },
     {
       "name": "Coinsins",
       "canton": "VD",
-      "npa": "1267"
+      "npa": "1267",
+      "lat": 46.4245995,
+      "lon": 6.2359205
     },
     {
       "name": "Collex-Bossy",
       "canton": "GE",
-      "npa": "1239"
+      "npa": "1239",
+      "lat": 46.2702127,
+      "lon": 6.1225354
     },
     {
       "name": "Collombey-Muraz",
       "canton": "VS",
-      "npa": "1893"
+      "npa": "1893",
+      "lat": 46.2676732,
+      "lon": 6.94607
     },
     {
       "name": "Collonge-Bellerive",
       "canton": "GE",
-      "npa": "1245"
+      "npa": "1245",
+      "lat": 46.2537418,
+      "lon": 6.2045928
     },
     {
       "name": "Collonges",
       "canton": "VS",
-      "npa": "1903"
+      "npa": "1903",
+      "lat": 46.1714906,
+      "lon": 7.0347121
     },
     {
       "name": "Cologny",
       "canton": "GE",
-      "npa": "1223"
+      "npa": "1223",
+      "lat": 46.2163962,
+      "lon": 6.1817613
     },
     {
       "name": "Commugny",
       "canton": "VD",
-      "npa": "1291"
+      "npa": "1291",
+      "lat": 46.3182308,
+      "lon": 6.1757684
     },
     {
       "name": "Concise",
       "canton": "VD",
-      "npa": "1426"
+      "npa": "1426",
+      "lat": 46.8511242,
+      "lon": 6.7205199
     },
     {
       "name": "Confignon",
       "canton": "GE",
-      "npa": "1232"
+      "npa": "1232",
+      "lat": 46.1742486,
+      "lon": 6.0851643
     },
     {
       "name": "Conthey",
       "canton": "VS",
-      "npa": "1964"
+      "npa": "1964",
+      "lat": 46.1880173,
+      "lon": 7.2903423
     },
     {
       "name": "Coppet",
       "canton": "VD",
-      "npa": "1296"
+      "npa": "1296",
+      "lat": 46.3164464,
+      "lon": 6.1927752
     },
     {
       "name": "Corbeyrier",
       "canton": "VD",
-      "npa": "1856"
+      "npa": "1856",
+      "lat": 46.3495001,
+      "lon": 6.9597544
     },
     {
       "name": "Corbières",
       "canton": "FR",
-      "npa": "1647"
+      "npa": "1647",
+      "lat": 46.6582727,
+      "lon": 7.1077166
     },
     {
       "name": "Corcelles-le-Jorat",
       "canton": "VD",
-      "npa": "1082"
+      "npa": "1082",
+      "lat": 46.6058744,
+      "lon": 6.7407986
     },
     {
       "name": "Corcelles-près-Concise",
       "canton": "VD",
-      "npa": "1426"
+      "npa": "1426",
+      "lat": 46.8480696,
+      "lon": 6.7079314
     },
     {
       "name": "Corcelles-près-Payerne",
       "canton": "VD",
-      "npa": "1562"
+      "npa": "1562",
+      "lat": 46.8331849,
+      "lon": 6.9614432
     },
     {
       "name": "Corminboeuf",
       "canton": "FR",
-      "npa": "1720"
+      "npa": "1720",
+      "lat": 46.8116318,
+      "lon": 7.1052486
     },
     {
       "name": "Cornaux",
       "canton": "NE",
-      "npa": "2087"
+      "npa": "2087",
+      "lat": 47.0383306,
+      "lon": 7.0188056
     },
     {
       "name": "Cornol",
       "canton": "JU",
-      "npa": "2952"
+      "npa": "2952",
+      "lat": 47.4073679,
+      "lon": 7.1612963
     },
     {
       "name": "Corseaux",
       "canton": "VD",
-      "npa": "1802"
+      "npa": "1802",
+      "lat": 46.4722747,
+      "lon": 6.8320071
     },
     {
       "name": "Corsier (GE)",
       "canton": "GE",
-      "npa": "1246"
+      "npa": "1246",
+      "lat": 46.2626753,
+      "lon": 6.2250187
     },
     {
       "name": "Corsier-sur-Vevey",
       "canton": "VD",
-      "npa": "1804"
+      "npa": "1804",
+      "lat": 46.4705779,
+      "lon": 6.8436858
     },
     {
       "name": "Cortaillod",
       "canton": "NE",
-      "npa": "2016"
+      "npa": "2016",
+      "lat": 46.9432319,
+      "lon": 6.8458944
     },
     {
       "name": "Cossonay",
       "canton": "VD",
-      "npa": "1304"
+      "npa": "1304",
+      "lat": 46.6138202,
+      "lon": 6.508938
     },
     {
       "name": "Cottens (FR)",
       "canton": "FR",
-      "npa": "1741"
+      "npa": "1741",
+      "lat": 46.7521088,
+      "lon": 7.0326696
     },
     {
       "name": "Courchapoix",
       "canton": "JU",
-      "npa": "2825"
+      "npa": "2825",
+      "lat": 47.3489876,
+      "lon": 7.4561999
     },
     {
       "name": "Courchavon",
       "canton": "JU",
-      "npa": "2922"
+      "npa": "2922",
+      "lat": 47.4407708,
+      "lon": 7.0570937
     },
     {
       "name": "Courgenay",
       "canton": "JU",
-      "npa": "2950"
+      "npa": "2950",
+      "lat": 47.4045434,
+      "lon": 7.1242961
     },
     {
       "name": "Courgevaux",
       "canton": "FR",
-      "npa": "1796"
+      "npa": "1796",
+      "lat": 46.9075278,
+      "lon": 7.1110471
     },
     {
       "name": "Courrendlin",
       "canton": "JU",
-      "npa": "2830"
+      "npa": "2830",
+      "lat": 47.3392989,
+      "lon": 7.3735698
     },
     {
       "name": "Courroux",
       "canton": "JU",
-      "npa": "2822"
+      "npa": "2822",
+      "lat": 47.359922,
+      "lon": 7.3782917
     },
     {
       "name": "Courtedoux",
       "canton": "JU",
-      "npa": "2905"
+      "npa": "2905",
+      "lat": 47.41021,
+      "lon": 7.0417935
     },
     {
       "name": "Courtepin",
       "canton": "FR",
-      "npa": "1784"
+      "npa": "1784",
+      "lat": 46.8660381,
+      "lon": 7.1228659
     },
     {
       "name": "Courtételle",
       "canton": "JU",
-      "npa": "2852"
+      "npa": "2852",
+      "lat": 47.3418687,
+      "lon": 7.3162671
     },
     {
       "name": "Crans (VD)",
       "canton": "VD",
-      "npa": "1299"
+      "npa": "1299",
+      "lat": 46.3579285,
+      "lon": 6.2058302
     },
     {
       "name": "Crans-Montana",
       "canton": "VS",
-      "npa": "3963"
+      "npa": "3963",
+      "lat": 46.3304899,
+      "lon": 7.5264358
     },
     {
       "name": "Crassier",
       "canton": "VD",
-      "npa": "1263"
+      "npa": "1263",
+      "lat": 46.374331,
+      "lon": 6.164548
     },
     {
       "name": "Cressier (FR)",
       "canton": "FR",
-      "npa": "1785"
+      "npa": "1785",
+      "lat": 46.8986683,
+      "lon": 7.1417574
     },
     {
       "name": "Cressier (NE)",
       "canton": "NE",
-      "npa": "2088"
+      "npa": "2088",
+      "lat": 47.0508386,
+      "lon": 7.0357396
     },
     {
       "name": "Crissier",
       "canton": "VD",
-      "npa": "1023"
+      "npa": "1023",
+      "lat": 46.5538658,
+      "lon": 6.5772501
     },
     {
       "name": "Cronay",
       "canton": "VD",
-      "npa": "1406"
+      "npa": "1406",
+      "lat": 46.7571842,
+      "lon": 6.6966405
     },
     {
       "name": "Croy",
       "canton": "VD",
-      "npa": "1322"
+      "npa": "1322",
+      "lat": 46.6945678,
+      "lon": 6.4771721
     },
     {
       "name": "Crésuz",
       "canton": "FR",
-      "npa": "1653"
+      "npa": "1653",
+      "lat": 46.6199886,
+      "lon": 7.140824
     },
     {
       "name": "Cuarnens",
       "canton": "VD",
-      "npa": "1148"
+      "npa": "1148",
+      "lat": 46.6248084,
+      "lon": 6.4382631
     },
     {
       "name": "Cuarny",
       "canton": "VD",
-      "npa": "1404"
+      "npa": "1404",
+      "lat": 46.7700368,
+      "lon": 6.6884422
     },
     {
       "name": "Cudrefin",
       "canton": "VD",
-      "npa": "1588"
+      "npa": "1588",
+      "lat": 46.9560359,
+      "lon": 7.0183078
     },
     {
       "name": "Cugy (FR)",
       "canton": "FR",
-      "npa": "1482"
+      "npa": "1482",
+      "lat": 46.815539,
+      "lon": 6.8910259
     },
     {
       "name": "Cugy (VD)",
       "canton": "VD",
-      "npa": "1053"
+      "npa": "1053",
+      "lat": 46.5842947,
+      "lon": 6.6404485
     },
     {
       "name": "Curtilles",
       "canton": "VD",
-      "npa": "1521"
+      "npa": "1521",
+      "lat": 46.7005524,
+      "lon": 6.8486858
     },
     {
       "name": "Céligny",
       "canton": "GE",
-      "npa": "1298"
+      "npa": "1298",
+      "lat": 46.3505844,
+      "lon": 6.1949435
     },
     {
       "name": "Dagmersellen",
       "canton": "LU",
-      "npa": "6252"
+      "npa": "6252",
+      "lat": 47.2135668,
+      "lon": 7.9901132
     },
     {
       "name": "Daillens",
       "canton": "VD",
-      "npa": "1306"
+      "npa": "1306",
+      "lat": 46.6202897,
+      "lon": 6.5487115
     },
     {
       "name": "Damphreux-Lugnez",
       "canton": "JU",
-      "npa": "2933"
+      "npa": "2933",
+      "lat": 47.4790074,
+      "lon": 7.101282
     },
     {
       "name": "Dardagny",
       "canton": "GE",
-      "npa": "1283"
+      "npa": "1283",
+      "lat": 46.1947104,
+      "lon": 5.9948422
     },
     {
       "name": "Delley-Portalban",
       "canton": "FR",
-      "npa": "1567"
+      "npa": "1567",
+      "lat": 46.9259498,
+      "lon": 6.9406454
     },
     {
       "name": "Delémont",
       "canton": "JU",
-      "npa": "2800"
+      "npa": "2800",
+      "lat": 47.3615882,
+      "lon": 7.354445
     },
     {
       "name": "Denens",
       "canton": "VD",
-      "npa": "1135"
+      "npa": "1135",
+      "lat": 46.518323,
+      "lon": 6.4564786
     },
     {
       "name": "Denges",
       "canton": "VD",
-      "npa": "1026"
+      "npa": "1026",
+      "lat": 46.5241679,
+      "lon": 6.5402546
     },
     {
       "name": "Develier",
       "canton": "JU",
-      "npa": "2802"
+      "npa": "2802",
+      "lat": 47.3567272,
+      "lon": 7.2910721
     },
     {
       "name": "Dierikon",
       "canton": "LU",
-      "npa": "6036"
+      "npa": "6036",
+      "lat": 47.0969574,
+      "lon": 8.3692841
     },
     {
       "name": "Dizy",
       "canton": "VD",
-      "npa": "1304"
+      "npa": "1304",
+      "lat": 46.6348867,
+      "lon": 6.4949896
     },
     {
       "name": "Dompierre (VD)",
       "canton": "VD",
-      "npa": "1682"
+      "npa": "1682",
+      "lat": 46.7081899,
+      "lon": 6.8835369
     },
     {
       "name": "Donneloye",
       "canton": "VD",
-      "npa": "1407"
+      "npa": "1407",
+      "lat": 46.744325,
+      "lon": 6.7155281
     },
     {
       "name": "Doppleschwand",
       "canton": "LU",
-      "npa": "6112"
+      "npa": "6112",
+      "lat": 47.0180974,
+      "lon": 8.0553111
     },
     {
       "name": "Dorénaz",
       "canton": "VS",
-      "npa": "1905"
+      "npa": "1905",
+      "lat": 46.1479018,
+      "lon": 7.0435276
     },
     {
       "name": "Duillier",
       "canton": "VD",
-      "npa": "1266"
+      "npa": "1266",
+      "lat": 46.4097312,
+      "lon": 6.235451
     },
     {
       "name": "Dully",
       "canton": "VD",
-      "npa": "1195"
+      "npa": "1195",
+      "lat": 46.4304617,
+      "lon": 6.2957383
     },
     {
       "name": "Démoret",
       "canton": "VD",
-      "npa": "1415"
+      "npa": "1415",
+      "lat": 46.7466929,
+      "lon": 6.7570249
     },
     {
       "name": "Düdingen",
       "canton": "FR",
-      "npa": "3186"
+      "npa": "3186",
+      "lat": 46.849747,
+      "lon": 7.1904436
     },
     {
       "name": "Ebikon",
       "canton": "LU",
-      "npa": "6030"
+      "npa": "6030",
+      "lat": 47.0812067,
+      "lon": 8.338521
     },
     {
       "name": "Echallens",
       "canton": "VD",
-      "npa": "1040"
+      "npa": "1040",
+      "lat": 46.6381163,
+      "lon": 6.6346951
     },
     {
       "name": "Echandens",
       "canton": "VD",
-      "npa": "1026"
+      "npa": "1026",
+      "lat": 46.534381,
+      "lon": 6.5410474
     },
     {
       "name": "Echarlens",
       "canton": "FR",
-      "npa": "1646"
+      "npa": "1646",
+      "lat": 46.646575,
+      "lon": 7.0758958
     },
     {
       "name": "Echichens",
       "canton": "VD",
-      "npa": "1112"
+      "npa": "1112",
+      "lat": 46.5265541,
+      "lon": 6.4978862
     },
     {
       "name": "Eclépens",
       "canton": "VD",
-      "npa": "1312"
+      "npa": "1312",
+      "lat": 46.6515007,
+      "lon": 6.5285061
     },
     {
       "name": "Ecublens (VD)",
       "canton": "VD",
-      "npa": "1024"
+      "npa": "1024",
+      "lat": 46.5258,
+      "lon": 6.5621137
     },
     {
       "name": "Ederswiler",
       "canton": "JU",
-      "npa": "2813"
+      "npa": "2813",
+      "lat": 47.425687,
+      "lon": 7.334709
     },
     {
       "name": "Eggerberg",
       "canton": "VS",
-      "npa": "3939"
+      "npa": "3939",
+      "lat": 46.3064931,
+      "lon": 7.8780148
     },
     {
       "name": "Egolzwil",
       "canton": "LU",
-      "npa": "6243"
+      "npa": "6243",
+      "lat": 47.1859718,
+      "lon": 8.0056254
     },
     {
       "name": "Eich",
       "canton": "LU",
-      "npa": "6205"
+      "npa": "6205",
+      "lat": 47.1515249,
+      "lon": 8.1691162
     },
     {
       "name": "Eischoll",
       "canton": "VS",
-      "npa": "3943"
+      "npa": "3943",
+      "lat": 46.2936189,
+      "lon": 7.7812181
     },
     {
       "name": "Eisten",
       "canton": "VS",
-      "npa": "3922"
+      "npa": "3922",
+      "lat": 46.1988458,
+      "lon": 7.8949076
     },
     {
       "name": "Embd",
       "canton": "VS",
-      "npa": "3926"
+      "npa": "3926",
+      "lat": 46.215848,
+      "lon": 7.8283567
     },
     {
       "name": "Emmen",
       "canton": "LU",
-      "npa": "6032"
+      "npa": "6032",
+      "lat": 47.0752429,
+      "lon": 8.2839456
     },
     {
       "name": "Entlebuch",
       "canton": "LU",
-      "npa": "6162"
+      "npa": "6162",
+      "lat": 46.9922358,
+      "lon": 8.0645622
     },
     {
       "name": "Epalinges",
       "canton": "VD",
-      "npa": "1066"
+      "npa": "1066",
+      "lat": 46.547327,
+      "lon": 6.6726245
     },
     {
       "name": "Ependes (VD)",
       "canton": "VD",
-      "npa": "1434"
+      "npa": "1434",
+      "lat": 46.7431583,
+      "lon": 6.6083432
     },
     {
       "name": "Ergisch",
       "canton": "VS",
-      "npa": "3947"
+      "npa": "3947",
+      "lat": 46.292777,
+      "lon": 7.7148033
     },
     {
       "name": "Ermensee",
       "canton": "LU",
-      "npa": "6294"
+      "npa": "6294",
+      "lat": 47.2282246,
+      "lon": 8.2409195
     },
     {
       "name": "Ernen",
       "canton": "VS",
-      "npa": "3995"
+      "npa": "3995",
+      "lat": 46.3988816,
+      "lon": 8.1460083
     },
     {
       "name": "Eschenbach (LU)",
       "canton": "LU",
-      "npa": "6274"
+      "npa": "6274",
+      "lat": 47.1330227,
+      "lon": 8.317969
     },
     {
       "name": "Escholzmatt-Marbach",
       "canton": "LU",
-      "npa": "6182"
+      "npa": "6182",
+      "lat": 46.8904314,
+      "lon": 7.9176511
     },
     {
       "name": "Essertines-sur-Rolle",
       "canton": "VD",
-      "npa": "1186"
+      "npa": "1186",
+      "lat": 46.4924891,
+      "lon": 6.3170166
     },
     {
       "name": "Essertines-sur-Yverdon",
       "canton": "VD",
-      "npa": "1417"
+      "npa": "1417",
+      "lat": 46.7152242,
+      "lon": 6.6383585
     },
     {
       "name": "Estavayer",
       "canton": "FR",
-      "npa": "1470"
+      "npa": "1470",
+      "lat": 46.865139,
+      "lon": 6.8456489
     },
     {
       "name": "Etagnières",
       "canton": "VD",
-      "npa": "1037"
+      "npa": "1037",
+      "lat": 46.6001382,
+      "lon": 6.6134167
     },
     {
       "name": "Etoy",
       "canton": "VD",
-      "npa": "1163"
+      "npa": "1163",
+      "lat": 46.4860906,
+      "lon": 6.4193113
     },
     {
       "name": "Ettiswil",
       "canton": "LU",
-      "npa": "6218"
+      "npa": "6218",
+      "lat": 47.1483925,
+      "lon": 8.0150668
     },
     {
       "name": "Evionnaz",
       "canton": "VS",
-      "npa": "1902"
+      "npa": "1902",
+      "lat": 46.1794464,
+      "lon": 7.0225695
     },
     {
       "name": "Evolène",
       "canton": "VS",
-      "npa": "1983"
+      "npa": "1983",
+      "lat": 46.1129048,
+      "lon": 7.4958022
     },
     {
       "name": "Eysins",
       "canton": "VD",
-      "npa": "1262"
+      "npa": "1262",
+      "lat": 46.3807218,
+      "lon": 6.2042596
     },
     {
       "name": "Fahy",
       "canton": "JU",
-      "npa": "2916"
+      "npa": "2916",
+      "lat": 47.4184563,
+      "lon": 6.9505047
     },
     {
       "name": "Faoug",
       "canton": "VD",
-      "npa": "1595"
+      "npa": "1595",
+      "lat": 46.9057923,
+      "lon": 7.0740011
     },
     {
       "name": "Ferden",
       "canton": "VS",
-      "npa": "3916"
+      "npa": "3916",
+      "lat": 46.3942848,
+      "lon": 7.7591799
     },
     {
       "name": "Ferpicloz",
       "canton": "FR",
-      "npa": "1724"
+      "npa": "1724",
+      "lat": 46.7468308,
+      "lon": 7.1643978
     },
     {
       "name": "Ferreyres",
       "canton": "VD",
-      "npa": "1313"
+      "npa": "1313",
+      "lat": 46.6577788,
+      "lon": 6.4860425
     },
     {
       "name": "Fey",
       "canton": "VD",
-      "npa": "1044"
+      "npa": "1044",
+      "lat": 46.675524,
+      "lon": 6.6827085
     },
     {
       "name": "Fiesch",
       "canton": "VS",
-      "npa": "3984"
+      "npa": "3984",
+      "lat": 46.402946,
+      "lon": 8.1341501
     },
     {
       "name": "Fieschertal",
       "canton": "VS",
-      "npa": "3984"
+      "npa": "3984",
+      "lat": 46.4245701,
+      "lon": 8.1427862
     },
     {
       "name": "Fiez",
       "canton": "VD",
-      "npa": "1420"
+      "npa": "1420",
+      "lat": 46.8280744,
+      "lon": 6.6240029
     },
     {
       "name": "Finhaut",
       "canton": "VS",
-      "npa": "1925"
+      "npa": "1925",
+      "lat": 46.082805,
+      "lon": 6.9765238
     },
     {
       "name": "Fischbach",
       "canton": "LU",
-      "npa": "6145"
+      "npa": "6145",
+      "lat": 47.1515399,
+      "lon": 7.9081489
     },
     {
       "name": "Flühli",
       "canton": "LU",
-      "npa": "6173"
+      "npa": "6173",
+      "lat": 46.8840067,
+      "lon": 8.01564
     },
     {
       "name": "Fontaines-sur-Grandson",
       "canton": "VD",
-      "npa": "1421"
+      "npa": "1421",
+      "lat": 46.8353764,
+      "lon": 6.6193942
     },
     {
       "name": "Fontenais",
       "canton": "JU",
-      "npa": "2902"
+      "npa": "2902",
+      "lat": 47.4034795,
+      "lon": 7.080589
     },
     {
       "name": "Forel (Lavaux)",
       "canton": "VD",
-      "npa": "1072"
+      "npa": "1072",
+      "lat": 46.5419511,
+      "lon": 6.77037
     },
     {
       "name": "Founex",
       "canton": "VD",
-      "npa": "1297"
+      "npa": "1297",
+      "lat": 46.3338174,
+      "lon": 6.1943733
     },
     {
       "name": "Fribourg",
       "canton": "FR",
-      "npa": "1700"
+      "npa": "1700",
+      "lat": 46.6789116,
+      "lon": 7.1027113
     },
     {
       "name": "Froideville",
       "canton": "VD",
-      "npa": "1055"
+      "npa": "1055",
+      "lat": 46.6012433,
+      "lon": 6.6816355
     },
     {
       "name": "Fräschels",
       "canton": "FR",
-      "npa": "3284"
+      "npa": "3284",
+      "lat": 46.9979736,
+      "lon": 7.2075009
     },
     {
       "name": "Fully",
       "canton": "VS",
-      "npa": "1926"
+      "npa": "1926",
+      "lat": 46.1390008,
+      "lon": 7.1146544
     },
     {
       "name": "Féchy",
       "canton": "VD",
-      "npa": "1173"
+      "npa": "1173",
+      "lat": 46.4786555,
+      "lon": 6.3747532
     },
     {
       "name": "Fétigny",
       "canton": "FR",
-      "npa": "1532"
+      "npa": "1532",
+      "lat": 46.7964416,
+      "lon": 6.9139995
     },
     {
       "name": "Gampel-Bratsch",
       "canton": "VS",
-      "npa": "3945"
+      "npa": "3945",
+      "lat": 46.336953,
+      "lon": 7.7263773
     },
     {
       "name": "Genolier",
       "canton": "VD",
-      "npa": "1272"
+      "npa": "1272",
+      "lat": 46.4350251,
+      "lon": 6.2178235
     },
     {
       "name": "Genthod",
       "canton": "GE",
-      "npa": "1294"
+      "npa": "1294",
+      "lat": 46.2644177,
+      "lon": 6.1570636
     },
     {
       "name": "Genève",
       "canton": "GE",
-      "npa": "1200"
+      "npa": "1200",
+      "lat": 46.2017559,
+      "lon": 6.1466014
     },
     {
       "name": "Geuensee",
       "canton": "LU",
-      "npa": "6232"
+      "npa": "6232",
+      "lat": 47.2002101,
+      "lon": 8.1095256
     },
     {
       "name": "Gibloux",
       "canton": "FR",
-      "npa": "1695"
+      "npa": "1695",
+      "lat": 46.6841642,
+      "lon": 7.0402724
     },
     {
       "name": "Giez",
       "canton": "VD",
-      "npa": "1429"
+      "npa": "1429",
+      "lat": 46.8117633,
+      "lon": 6.6177511
     },
     {
       "name": "Giffers",
       "canton": "FR",
-      "npa": "1735"
+      "npa": "1735",
+      "lat": 46.7615024,
+      "lon": 7.210014
     },
     {
       "name": "Gilly",
       "canton": "VD",
-      "npa": "1182"
+      "npa": "1182",
+      "lat": 46.4575111,
+      "lon": 6.2969883
     },
     {
       "name": "Gimel",
       "canton": "VD",
-      "npa": "1188"
+      "npa": "1188",
+      "lat": 46.5088102,
+      "lon": 6.3070695
     },
     {
       "name": "Gingins",
       "canton": "VD",
-      "npa": "1276"
+      "npa": "1276",
+      "lat": 46.4094508,
+      "lon": 6.1779167
     },
     {
       "name": "Gisikon",
       "canton": "LU",
-      "npa": "6038"
+      "npa": "6038",
+      "lat": 47.1262971,
+      "lon": 8.4006518
     },
     {
       "name": "Givisiez",
       "canton": "FR",
-      "npa": "1762"
+      "npa": "1762",
+      "lat": 46.8145053,
+      "lon": 7.1295693
     },
     {
       "name": "Givrins",
       "canton": "VD",
-      "npa": "1271"
+      "npa": "1271",
+      "lat": 46.4289779,
+      "lon": 6.2017676
     },
     {
       "name": "Gland",
       "canton": "VD",
-      "npa": "1196"
+      "npa": "1196",
+      "lat": 46.4239425,
+      "lon": 6.2655115
     },
     {
       "name": "Gletterens",
       "canton": "FR",
-      "npa": "1544"
+      "npa": "1544",
+      "lat": 46.8953435,
+      "lon": 6.9375533
     },
     {
       "name": "Gollion",
       "canton": "VD",
-      "npa": "1124"
+      "npa": "1124",
+      "lat": 46.5852339,
+      "lon": 6.5088361
     },
     {
       "name": "Goms",
       "canton": "VS",
-      "npa": "3989"
+      "npa": "3989",
+      "lat": 46.4802471,
+      "lon": 8.169441
     },
     {
       "name": "Goumoëns",
       "canton": "VD",
-      "npa": "1376"
+      "npa": "1376",
+      "lat": 46.6588604,
+      "lon": 6.6044891
     },
     {
       "name": "Grancy",
       "canton": "VD",
-      "npa": "1117"
+      "npa": "1117",
+      "lat": 46.5915221,
+      "lon": 6.4649462
     },
     {
       "name": "Grandcour",
       "canton": "VD",
-      "npa": "1543"
+      "npa": "1543",
+      "lat": 46.8718747,
+      "lon": 6.928747
     },
     {
       "name": "Grandevent",
       "canton": "VD",
-      "npa": "1421"
+      "npa": "1421",
+      "lat": 46.8388002,
+      "lon": 6.6065632
     },
     {
       "name": "Grandfontaine",
       "canton": "JU",
-      "npa": "2908"
+      "npa": "2908",
+      "lat": 47.3913356,
+      "lon": 6.9395757
     },
     {
       "name": "Grandson",
       "canton": "VD",
-      "npa": "1422"
+      "npa": "1422",
+      "lat": 46.8086306,
+      "lon": 6.6417532
     },
     {
       "name": "Grandvillard",
       "canton": "FR",
-      "npa": "1666"
+      "npa": "1666",
+      "lat": 46.5392932,
+      "lon": 7.0849664
     },
     {
       "name": "Granges (Veveyse)",
       "canton": "FR",
-      "npa": "1614"
+      "npa": "1614",
+      "lat": 46.5245766,
+      "lon": 6.829546
     },
     {
       "name": "Granges-Paccot",
       "canton": "FR",
-      "npa": "1763"
+      "npa": "1763",
+      "lat": 46.8239731,
+      "lon": 7.1441932
     },
     {
       "name": "Grangettes",
       "canton": "FR",
-      "npa": "1686"
+      "npa": "1686",
+      "lat": 46.6783349,
+      "lon": 6.9620824
     },
     {
       "name": "Greng",
       "canton": "FR",
-      "npa": "3280"
+      "npa": "3280",
+      "lat": 46.9133548,
+      "lon": 7.090703
     },
     {
       "name": "Grengiols",
       "canton": "VS",
-      "npa": "3993"
+      "npa": "3993",
+      "lat": 46.3729638,
+      "lon": 8.092535
     },
     {
       "name": "Grens",
       "canton": "VD",
-      "npa": "1274"
+      "npa": "1274",
+      "lat": 46.3937213,
+      "lon": 6.1916774
     },
     {
       "name": "Greppen",
       "canton": "LU",
-      "npa": "6404"
+      "npa": "6404",
+      "lat": 47.054825,
+      "lon": 8.4306044
     },
     {
       "name": "Grimisuat",
       "canton": "VS",
-      "npa": "1971"
+      "npa": "1971",
+      "lat": 46.2606742,
+      "lon": 7.385846
     },
     {
       "name": "Grolley-Ponthaux",
       "canton": "FR",
-      "npa": "1772"
+      "npa": "1772",
+      "lat": 46.8279037,
+      "lon": 7.0616159
     },
     {
       "name": "Grossdietwil",
       "canton": "LU",
-      "npa": "6146"
+      "npa": "6146",
+      "lat": 47.170687,
+      "lon": 7.887705
     },
     {
       "name": "Grosswangen",
       "canton": "LU",
-      "npa": "6022"
+      "npa": "6022",
+      "lat": 47.1322635,
+      "lon": 8.0491183
     },
     {
       "name": "Gruyères",
       "canton": "FR",
-      "npa": "1663"
+      "npa": "1663",
+      "lat": 46.5836823,
+      "lon": 7.08159
     },
     {
       "name": "Gryon",
       "canton": "VD",
-      "npa": "1882"
+      "npa": "1882",
+      "lat": 46.2746628,
+      "lon": 7.063671
     },
     {
       "name": "Grächen",
       "canton": "VS",
-      "npa": "3925"
+      "npa": "3925",
+      "lat": 46.1960178,
+      "lon": 7.8421612
     },
     {
       "name": "Grône",
       "canton": "VS",
-      "npa": "3979"
+      "npa": "3979",
+      "lat": 46.251007,
+      "lon": 7.4582384
     },
     {
       "name": "Gurmels",
       "canton": "FR",
-      "npa": "3212"
+      "npa": "3212",
+      "lat": 46.8928043,
+      "lon": 7.1757732
     },
     {
       "name": "Guttet-Feschel",
       "canton": "VS",
-      "npa": "3956"
+      "npa": "3956",
+      "lat": 46.3507092,
+      "lon": 7.6744165
     },
     {
       "name": "Gy",
       "canton": "GE",
-      "npa": "1251"
+      "npa": "1251",
+      "lat": 46.252665,
+      "lon": 6.2582938
     },
     {
       "name": "Hasle (LU)",
       "canton": "LU",
-      "npa": "6166"
+      "npa": "6166",
+      "lat": 46.9796105,
+      "lon": 8.0526728
     },
     {
       "name": "Haut-Intyamon",
       "canton": "FR",
-      "npa": "1669"
+      "npa": "1669",
+      "lat": 46.5210722,
+      "lon": 7.0602291
     },
     {
       "name": "Haute-Ajoie",
       "canton": "JU",
-      "npa": "2907"
+      "npa": "2907",
+      "lat": 47.3863988,
+      "lon": 6.9833047
     },
     {
       "name": "Haute-Sorne",
       "canton": "JU",
-      "npa": "2854"
+      "npa": "2854",
+      "lat": 47.3244146,
+      "lon": 7.2287686
     },
     {
       "name": "Hautemorges",
       "canton": "VD",
-      "npa": "1110"
+      "npa": "1110",
+      "lat": 46.5653843,
+      "lon": 6.4257802
     },
     {
       "name": "Hauterive (FR)",
       "canton": "FR",
-      "npa": "1725"
+      "npa": "1725",
+      "lat": 46.7566336,
+      "lon": 7.0947394
     },
     {
       "name": "Hauteville",
       "canton": "FR",
-      "npa": "1648"
+      "npa": "1648",
+      "lat": 46.6696479,
+      "lon": 7.1083702
     },
     {
       "name": "Heitenried",
       "canton": "FR",
-      "npa": "1714"
+      "npa": "1714",
+      "lat": 46.8259771,
+      "lon": 7.3027277
     },
     {
       "name": "Henniez",
       "canton": "VD",
-      "npa": "1525"
+      "npa": "1525",
+      "lat": 46.7422549,
+      "lon": 6.8834048
     },
     {
       "name": "Hergiswil bei Willisau",
       "canton": "LU",
-      "npa": "6133"
+      "npa": "6133",
+      "lat": 47.0844337,
+      "lon": 7.9575516
     },
     {
       "name": "Hermance",
       "canton": "GE",
-      "npa": "1248"
+      "npa": "1248",
+      "lat": 46.3021881,
+      "lon": 6.2437346
     },
     {
       "name": "Hermenches",
       "canton": "VD",
-      "npa": "1513"
+      "npa": "1513",
+      "lat": 46.6419061,
+      "lon": 6.7602141
     },
     {
       "name": "Hildisrieden",
       "canton": "LU",
-      "npa": "6024"
+      "npa": "6024",
+      "lat": 47.1513607,
+      "lon": 8.2266792
     },
     {
       "name": "Hitzkirch",
       "canton": "LU",
-      "npa": "6285"
+      "npa": "6285",
+      "lat": 47.2250438,
+      "lon": 8.2632119
     },
     {
       "name": "Hochdorf",
       "canton": "LU",
-      "npa": "6280"
+      "npa": "6280",
+      "lat": 47.1665361,
+      "lon": 8.2899709
     },
     {
       "name": "Hohenrain",
       "canton": "LU",
-      "npa": "6276"
+      "npa": "6276",
+      "lat": 47.1797457,
+      "lon": 8.3156425
     },
     {
       "name": "Horw",
       "canton": "LU",
-      "npa": "6048"
+      "npa": "6048",
+      "lat": 47.0185008,
+      "lon": 8.3107797
     },
     {
       "name": "Hérémence",
       "canton": "VS",
-      "npa": "1987"
+      "npa": "1987",
+      "lat": 46.1807413,
+      "lon": 7.4057866
     },
     {
       "name": "Icogne",
       "canton": "VS",
-      "npa": "1977"
+      "npa": "1977",
+      "lat": 46.2907802,
+      "lon": 7.4391182
     },
     {
       "name": "Inden",
       "canton": "VS",
-      "npa": "3953"
+      "npa": "3953",
+      "lat": 46.3440813,
+      "lon": 7.6169972
     },
     {
       "name": "Inwil",
       "canton": "LU",
-      "npa": "6034"
+      "npa": "6034",
+      "lat": 47.1220031,
+      "lon": 8.3508443
     },
     {
       "name": "Isérables",
       "canton": "VS",
-      "npa": "1914"
+      "npa": "1914",
+      "lat": 46.1621386,
+      "lon": 7.2445214
     },
     {
       "name": "Jaun",
       "canton": "FR",
-      "npa": "1656"
+      "npa": "1656",
+      "lat": 46.6113953,
+      "lon": 7.2761312
     },
     {
       "name": "Jongny",
       "canton": "VD",
-      "npa": "1805"
+      "npa": "1805",
+      "lat": 46.4785042,
+      "lon": 6.8414194
     },
     {
       "name": "Jorat-Menthue",
       "canton": "VD",
-      "npa": "1054"
+      "npa": "1054",
+      "lat": 46.6305367,
+      "lon": 6.7192073
     },
     {
       "name": "Jorat-Mézières",
       "canton": "VD",
-      "npa": "1083"
+      "npa": "1083",
+      "lat": 46.5967734,
+      "lon": 6.7764275
     },
     {
       "name": "Jouxtens-Mézery",
       "canton": "VD",
-      "npa": "1008"
+      "npa": "1008",
+      "lat": 46.5532677,
+      "lon": 6.5980688
     },
     {
       "name": "Juriens",
       "canton": "VD",
-      "npa": "1326"
+      "npa": "1326",
+      "lat": 46.6911431,
+      "lon": 6.4500103
     },
     {
       "name": "Jussy",
       "canton": "GE",
-      "npa": "1254"
+      "npa": "1254",
+      "lat": 46.2367629,
+      "lon": 6.269155
     },
     {
       "name": "Kerzers",
       "canton": "FR",
-      "npa": "3210"
+      "npa": "3210",
+      "lat": 46.9761315,
+      "lon": 7.1972834
     },
     {
       "name": "Kippel",
       "canton": "VS",
-      "npa": "3917"
+      "npa": "3917",
+      "lat": 46.3991936,
+      "lon": 7.7717164
     },
     {
       "name": "Kleinbösingen",
       "canton": "FR",
-      "npa": "3213"
+      "npa": "3213",
+      "lat": 46.8944182,
+      "lon": 7.2041572
     },
     {
       "name": "Knutwil",
       "canton": "LU",
-      "npa": "6213"
+      "npa": "6213",
+      "lat": 47.199397,
+      "lon": 8.070364
     },
     {
       "name": "Kriens",
       "canton": "LU",
-      "npa": "6010"
+      "npa": "6010",
+      "lat": 47.034146,
+      "lon": 8.2807994
     },
     {
       "name": "L'Abbaye",
       "canton": "VD",
-      "npa": "1344"
+      "npa": "1344",
+      "lat": 46.6492716,
+      "lon": 6.3186169
     },
     {
       "name": "L'Abergement",
       "canton": "VD",
-      "npa": "1355"
+      "npa": "1355",
+      "lat": 46.7537886,
+      "lon": 6.4886777
     },
     {
       "name": "L'Isle",
       "canton": "VD",
-      "npa": "1148"
+      "npa": "1148",
+      "lat": 46.6187582,
+      "lon": 6.411704
     },
     {
       "name": "La Baroche",
       "canton": "JU",
-      "npa": "2908"
+      "npa": "2908",
+      "lat": 47.4080508,
+      "lon": 7.2043904
     },
     {
       "name": "La Brillaz",
       "canton": "FR",
-      "npa": "1725"
+      "npa": "1725",
+      "lat": 46.765379,
+      "lon": 7.016702
     },
     {
       "name": "La Brévine",
       "canton": "NE",
-      "npa": "2406"
+      "npa": "2406",
+      "lat": 46.9801928,
+      "lon": 6.6070172
     },
     {
       "name": "La Chaux (Cossonay)",
       "canton": "VD",
-      "npa": "1308"
+      "npa": "1308",
+      "lat": 46.61604,
+      "lon": 6.472555
     },
     {
       "name": "La Chaux-de-Fonds",
       "canton": "NE",
-      "npa": "2300"
+      "npa": "2300",
+      "lat": 47.1031321,
+      "lon": 6.8325778
     },
     {
       "name": "La Chaux-du-Milieu",
       "canton": "NE",
-      "npa": "2405"
+      "npa": "2405",
+      "lat": 47.0135381,
+      "lon": 6.7030562
     },
     {
       "name": "La Côte-aux-Fées",
       "canton": "NE",
-      "npa": "2117"
+      "npa": "2117",
+      "lat": 46.8666659,
+      "lon": 6.4886238
     },
     {
       "name": "La Grande Béroche",
       "canton": "NE",
-      "npa": "2024"
+      "npa": "2024",
+      "lat": 46.9089776,
+      "lon": 6.7578858
     },
     {
       "name": "La Praz",
       "canton": "VD",
-      "npa": "1148"
+      "npa": "1148",
+      "lat": 46.6675257,
+      "lon": 6.4272029
     },
     {
       "name": "La Rippe",
       "canton": "VD",
-      "npa": "1278"
+      "npa": "1278",
+      "lat": 46.3814959,
+      "lon": 6.1516031
     },
     {
       "name": "La Roche",
       "canton": "FR",
-      "npa": "1634"
+      "npa": "1634",
+      "lat": 46.6966582,
+      "lon": 7.1393476
     },
     {
       "name": "La Sagne",
       "canton": "NE",
-      "npa": "2314"
+      "npa": "2314",
+      "lat": 47.0385519,
+      "lon": 6.7984212
     },
     {
       "name": "La Sarraz",
       "canton": "VD",
-      "npa": "1315"
+      "npa": "1315",
+      "lat": 46.6590583,
+      "lon": 6.5124448
     },
     {
       "name": "La Sonnaz",
       "canton": "FR",
-      "npa": "1782"
+      "npa": "1782",
+      "lat": 46.8349258,
+      "lon": 7.1192544
     },
     {
       "name": "La Tour-de-Peilz",
       "canton": "VD",
-      "npa": "1814"
+      "npa": "1814",
+      "lat": 46.4537524,
+      "lon": 6.8569063
     },
     {
       "name": "La Verrerie",
       "canton": "FR",
-      "npa": "1624"
+      "npa": "1624",
+      "lat": 46.5894327,
+      "lon": 6.9213069
     },
     {
       "name": "Laconnex",
       "canton": "GE",
-      "npa": "1287"
+      "npa": "1287",
+      "lat": 46.155596,
+      "lon": 6.0360307
     },
     {
       "name": "Lajoux (JU)",
       "canton": "JU",
-      "npa": "2718"
+      "npa": "2718",
+      "lat": 47.2790114,
+      "lon": 7.1359592
     },
     {
       "name": "Lalden",
       "canton": "VS",
-      "npa": "3931"
+      "npa": "3931",
+      "lat": 46.300193,
+      "lon": 7.900266
     },
     {
       "name": "Lancy",
       "canton": "GE",
-      "npa": "1212"
+      "npa": "1212",
+      "lat": 46.1839156,
+      "lon": 6.1224047
     },
     {
       "name": "Laténa",
       "canton": "NE",
-      "npa": "2400"
+      "npa": "2400",
+      "lat": 47.0265631,
+      "lon": 6.9802265
     },
     {
       "name": "Lausanne",
       "canton": "VD",
-      "npa": "1000"
+      "npa": "1000",
+      "lat": 46.5218269,
+      "lon": 6.6327025
     },
     {
       "name": "Lavey-Morcles",
       "canton": "VD",
-      "npa": "1892"
+      "npa": "1892",
+      "lat": 46.2073771,
+      "lon": 7.0414641
     },
     {
       "name": "Lavigny",
       "canton": "VD",
-      "npa": "1175"
+      "npa": "1175",
+      "lat": 46.5011843,
+      "lon": 6.4045912
     },
     {
       "name": "Lax",
       "canton": "VS",
-      "npa": "3994"
+      "npa": "3994",
+      "lat": 46.3888757,
+      "lon": 8.1195682
     },
     {
       "name": "Le Bémont (JU)",
       "canton": "JU",
-      "npa": "2360"
+      "npa": "2360",
+      "lat": 47.2637024,
+      "lon": 7.0135465
     },
     {
       "name": "Le Cerneux-Péquignot",
       "canton": "NE",
-      "npa": "2414"
+      "npa": "2414",
+      "lat": 47.0166187,
+      "lon": 6.6652883
     },
     {
       "name": "Le Chenit",
       "canton": "VD",
-      "npa": "1347"
+      "npa": "1347",
+      "lat": 46.6046637,
+      "lon": 6.2337695
     },
     {
       "name": "Le Châtelard",
       "canton": "FR",
-      "npa": "1689"
+      "npa": "1689",
+      "lat": 46.6775844,
+      "lon": 6.9779194
     },
     {
       "name": "Le Flon",
       "canton": "FR",
-      "npa": "1699"
+      "npa": "1699",
+      "lat": 46.6038297,
+      "lon": 6.8732314
     },
     {
       "name": "Le Grand-Saconnex",
       "canton": "GE",
-      "npa": "1218"
+      "npa": "1218",
+      "lat": 46.2363321,
+      "lon": 6.126532
     },
     {
       "name": "Le Landeron",
       "canton": "NE",
-      "npa": "2525"
+      "npa": "2525",
+      "lat": 47.0554312,
+      "lon": 7.0702155
     },
     {
       "name": "Le Lieu",
       "canton": "VD",
-      "npa": "1345"
+      "npa": "1345",
+      "lat": 46.6462186,
+      "lon": 6.280313
     },
     {
       "name": "Le Locle",
       "canton": "NE",
-      "npa": "2400"
+      "npa": "2400",
+      "lat": 47.0555907,
+      "lon": 6.745454
     },
     {
       "name": "Le Mont-sur-Lausanne",
       "canton": "VD",
-      "npa": "1052"
+      "npa": "1052",
+      "lat": 46.5530996,
+      "lon": 6.6354534
     },
     {
       "name": "Le Mouret",
       "canton": "FR",
-      "npa": "1724"
+      "npa": "1724",
+      "lat": 46.7487136,
+      "lon": 7.1718165
     },
     {
       "name": "Le Noirmont",
       "canton": "JU",
-      "npa": "2340"
+      "npa": "2340",
+      "lat": 46.4841774,
+      "lon": 6.1157508
     },
     {
       "name": "Le Pâquier (FR)",
       "canton": "FR",
-      "npa": "1661"
+      "npa": "1661",
+      "lat": 46.5950644,
+      "lon": 7.0527454
     },
     {
       "name": "Le Vaud",
       "canton": "VD",
-      "npa": "1261"
+      "npa": "1261",
+      "lat": 46.4774891,
+      "lon": 6.2355007
     },
     {
       "name": "Lens",
       "canton": "VS",
-      "npa": "1978"
+      "npa": "1978",
+      "lat": 46.2798952,
+      "lon": 7.4461626
     },
     {
       "name": "Les Bois",
       "canton": "JU",
-      "npa": "2336"
+      "npa": "2336",
+      "lat": 47.1763121,
+      "lon": 6.9049147
     },
     {
       "name": "Les Breuleux",
       "canton": "JU",
-      "npa": "2345"
+      "npa": "2345",
+      "lat": 47.2115671,
+      "lon": 7.0054836
     },
     {
       "name": "Les Clées",
       "canton": "VD",
-      "npa": "1356"
+      "npa": "1356",
+      "lat": 46.7320659,
+      "lon": 6.4626883
     },
     {
       "name": "Les Enfers",
       "canton": "JU",
-      "npa": "2363"
+      "npa": "2363",
+      "lat": 47.2885745,
+      "lon": 7.047358
     },
     {
       "name": "Les Genevez (JU)",
       "canton": "JU",
-      "npa": "2714"
+      "npa": "2714",
+      "lat": 47.2567802,
+      "lon": 7.1293599
     },
     {
       "name": "Les Montets",
       "canton": "FR",
-      "npa": "1483"
+      "npa": "1483",
+      "lat": 46.8102924,
+      "lon": 6.8499622
     },
     {
       "name": "Les Planchettes",
       "canton": "NE",
-      "npa": "2325"
+      "npa": "2325",
+      "lat": 47.1067134,
+      "lon": 6.7707244
     },
     {
       "name": "Les Ponts-de-Martel",
       "canton": "NE",
-      "npa": "2316"
+      "npa": "2316",
+      "lat": 46.9990848,
+      "lon": 6.7317108
     },
     {
       "name": "Les Verrières",
       "canton": "NE",
-      "npa": "2126"
+      "npa": "2126",
+      "lat": 46.904458,
+      "lon": 6.4820688
     },
     {
       "name": "Leuk",
       "canton": "VS",
-      "npa": "3953"
+      "npa": "3953",
+      "lat": 46.2777564,
+      "lon": 7.6680202
     },
     {
       "name": "Leukerbad",
       "canton": "VS",
-      "npa": "3954"
+      "npa": "3954",
+      "lat": 46.3793158,
+      "lon": 7.6267416
     },
     {
       "name": "Leysin",
       "canton": "VD",
-      "npa": "1854"
+      "npa": "1854",
+      "lat": 46.3438701,
+      "lon": 7.0148403
     },
     {
       "name": "Leytron",
       "canton": "VS",
-      "npa": "1912"
+      "npa": "1912",
+      "lat": 46.1859543,
+      "lon": 7.2068108
     },
     {
       "name": "Liddes",
       "canton": "VS",
-      "npa": "1945"
+      "npa": "1945",
+      "lat": 45.9917015,
+      "lon": 7.1865245
     },
     {
       "name": "Lignerolle",
       "canton": "VD",
-      "npa": "1357"
+      "npa": "1357",
+      "lat": 46.7407875,
+      "lon": 6.4559997
     },
     {
       "name": "Lignières",
       "canton": "NE",
-      "npa": "2523"
+      "npa": "2523",
+      "lat": 47.0828386,
+      "lon": 7.0661591
     },
     {
       "name": "Lonay",
       "canton": "VD",
-      "npa": "1027"
+      "npa": "1027",
+      "lat": 46.5265684,
+      "lon": 6.5206068
     },
     {
       "name": "Longirod",
       "canton": "VD",
-      "npa": "1261"
+      "npa": "1261",
+      "lat": 46.4943826,
+      "lon": 6.2581282
     },
     {
       "name": "Lovatens",
       "canton": "VD",
-      "npa": "1682"
+      "npa": "1682",
+      "lat": 46.6918052,
+      "lon": 6.8641889
     },
     {
       "name": "Lucens",
       "canton": "VD",
-      "npa": "1522"
+      "npa": "1522",
+      "lat": 46.708447,
+      "lon": 6.8389766
     },
     {
       "name": "Luins",
       "canton": "VD",
-      "npa": "1184"
+      "npa": "1184",
+      "lat": 46.442819,
+      "lon": 6.271154
     },
     {
       "name": "Lully (FR)",
       "canton": "FR",
-      "npa": "1470"
+      "npa": "1470",
+      "lat": 46.8339813,
+      "lon": 6.8445369
     },
     {
       "name": "Lully (VD)",
       "canton": "VD",
-      "npa": "1132"
+      "npa": "1132",
+      "lat": 46.5052587,
+      "lon": 6.4647302
     },
     {
       "name": "Lussery-Villars",
       "canton": "VD",
-      "npa": "1307"
+      "npa": "1307",
+      "lat": 46.6309961,
+      "lon": 6.5251994
     },
     {
       "name": "Lussy-sur-Morges",
       "canton": "VD",
-      "npa": "1167"
+      "npa": "1167",
+      "lat": 46.5028627,
+      "lon": 6.4508849
     },
     {
       "name": "Luthern",
       "canton": "LU",
-      "npa": "6156"
+      "npa": "6156",
+      "lat": 47.0589604,
+      "lon": 7.9169068
     },
     {
       "name": "Lutry",
       "canton": "VD",
-      "npa": "1095"
+      "npa": "1095",
+      "lat": 46.5032766,
+      "lon": 6.6867879
     },
     {
       "name": "Luzern",
       "canton": "LU",
-      "npa": "6003"
+      "npa": "6003",
+      "lat": 47.0505452,
+      "lon": 8.3054682
     },
     {
       "name": "Malters",
       "canton": "LU",
-      "npa": "6102"
+      "npa": "6102",
+      "lat": 47.0383996,
+      "lon": 8.1830555
     },
     {
       "name": "Maracon",
       "canton": "VD",
-      "npa": "1613"
+      "npa": "1613",
+      "lat": 46.5500232,
+      "lon": 6.8727444
     },
     {
       "name": "Marchissy",
       "canton": "VD",
-      "npa": "1261"
+      "npa": "1261",
+      "lat": 46.4880255,
+      "lon": 6.2469182
     },
     {
       "name": "Marly",
       "canton": "FR",
-      "npa": "1723"
+      "npa": "1723",
+      "lat": 46.7747743,
+      "lon": 7.1601827
     },
     {
       "name": "Marsens",
       "canton": "FR",
-      "npa": "1633"
+      "npa": "1633",
+      "lat": 46.6556713,
+      "lon": 7.0640919
     },
     {
       "name": "Martigny",
       "canton": "VS",
-      "npa": "1920"
+      "npa": "1920",
+      "lat": 46.103115,
+      "lon": 7.0727354
     },
     {
       "name": "Martigny-Combe",
       "canton": "VS",
-      "npa": "1921"
+      "npa": "1921",
+      "lat": 46.0670887,
+      "lon": 7.0370217
     },
     {
       "name": "Massongex",
       "canton": "VS",
-      "npa": "1869"
+      "npa": "1869",
+      "lat": 46.2427711,
+      "lon": 6.9879674
     },
     {
       "name": "Massonnens",
       "canton": "FR",
-      "npa": "1692"
+      "npa": "1692",
+      "lat": 46.6991888,
+      "lon": 6.975348
     },
     {
       "name": "Mathod",
       "canton": "VD",
-      "npa": "1438"
+      "npa": "1438",
+      "lat": 46.7667908,
+      "lon": 6.5647296
     },
     {
       "name": "Matran",
       "canton": "FR",
-      "npa": "1753"
+      "npa": "1753",
+      "lat": 46.7861706,
+      "lon": 7.0973405
     },
     {
       "name": "Mauborget",
       "canton": "VD",
-      "npa": "1450"
+      "npa": "1450",
+      "lat": 46.8558706,
+      "lon": 6.6146584
     },
     {
       "name": "Mauensee",
       "canton": "LU",
-      "npa": "6216"
+      "npa": "6216",
+      "lat": 47.1684849,
+      "lon": 8.0670726
     },
     {
       "name": "Mauraz",
       "canton": "VD",
-      "npa": "1148"
+      "npa": "1148",
+      "lat": 46.6054096,
+      "lon": 6.4227461
     },
     {
       "name": "Meggen",
       "canton": "LU",
-      "npa": "6045"
+      "npa": "6045",
+      "lat": 47.0470746,
+      "lon": 8.3733992
     },
     {
       "name": "Meierskappel",
       "canton": "LU",
-      "npa": "6344"
+      "npa": "6344",
+      "lat": 47.1239632,
+      "lon": 8.4435423
     },
     {
       "name": "Meinier",
       "canton": "GE",
-      "npa": "1252"
+      "npa": "1252",
+      "lat": 46.2467188,
+      "lon": 6.2333553
     },
     {
       "name": "Menznau",
       "canton": "LU",
-      "npa": "6125"
+      "npa": "6125",
+      "lat": 47.0838106,
+      "lon": 8.040131
     },
     {
       "name": "Mervelier",
       "canton": "JU",
-      "npa": "2827"
+      "npa": "2827",
+      "lat": 47.343821,
+      "lon": 7.4984971
     },
     {
       "name": "Mettembert",
       "canton": "JU",
-      "npa": "2806"
+      "npa": "2806",
+      "lat": 47.3981573,
+      "lon": 7.3220141
     },
     {
       "name": "Mex (VD)",
       "canton": "VD",
-      "npa": "1031"
+      "npa": "1031",
+      "lat": 46.5784364,
+      "lon": 6.5538256
     },
     {
       "name": "Meyriez",
       "canton": "FR",
-      "npa": "3280"
+      "npa": "3280",
+      "lat": 46.9234895,
+      "lon": 7.1067844
     },
     {
       "name": "Meyrin",
       "canton": "GE",
-      "npa": "1217"
+      "npa": "1217",
+      "lat": 46.2283226,
+      "lon": 6.0712016
     },
     {
       "name": "Mies",
       "canton": "VD",
-      "npa": "1295"
+      "npa": "1295",
+      "lat": 46.3060321,
+      "lon": 6.1723029
     },
     {
       "name": "Milvignes",
       "canton": "NE",
-      "npa": "2013"
+      "npa": "2013",
+      "lat": 46.9699851,
+      "lon": 6.8491845
     },
     {
       "name": "Misery-Courtion",
       "canton": "FR",
-      "npa": "1721"
+      "npa": "1721",
+      "lat": 46.8584541,
+      "lon": 7.0843853
     },
     {
       "name": "Missy",
       "canton": "VD",
-      "npa": "1565"
+      "npa": "1565",
+      "lat": 46.8798752,
+      "lon": 6.9698165
     },
     {
       "name": "Moiry",
       "canton": "VD",
-      "npa": "1148"
+      "npa": "1148",
+      "lat": 46.6485773,
+      "lon": 6.4552338
     },
     {
       "name": "Mollens (VD)",
       "canton": "VD",
-      "npa": "1146"
+      "npa": "1146",
+      "lat": 46.577232,
+      "lon": 6.3634849
     },
     {
       "name": "Molondin",
       "canton": "VD",
-      "npa": "1415"
+      "npa": "1415",
+      "lat": 46.7606762,
+      "lon": 6.7492454
     },
     {
       "name": "Mont-Noble",
       "canton": "VS",
-      "npa": "1966"
+      "npa": "1966",
+      "lat": 46.2030142,
+      "lon": 7.4622953
     },
     {
       "name": "Mont-Vully",
       "canton": "FR",
-      "npa": "1786"
+      "npa": "1786",
+      "lat": 46.954815,
+      "lon": 7.0875475
     },
     {
       "name": "Mont-la-Ville",
       "canton": "VD",
-      "npa": "1148"
+      "npa": "1148",
+      "lat": 46.645546,
+      "lon": 6.4077926
     },
     {
       "name": "Mont-sur-Rolle",
       "canton": "VD",
-      "npa": "1185"
+      "npa": "1185",
+      "lat": 46.470957,
+      "lon": 6.3365929
     },
     {
       "name": "Montagny (FR)",
       "canton": "FR",
-      "npa": "1776"
+      "npa": "1776",
+      "lat": 46.8046623,
+      "lon": 6.9864444
     },
     {
       "name": "Montagny-près-Yverdon",
       "canton": "VD",
-      "npa": "1442"
+      "npa": "1442",
+      "lat": 46.7914576,
+      "lon": 6.6117904
     },
     {
       "name": "Montanaire",
       "canton": "VD",
-      "npa": "1407"
+      "npa": "1407",
+      "lat": 46.6941453,
+      "lon": 6.7609465
     },
     {
       "name": "Montcherand",
       "canton": "VD",
-      "npa": "1354"
+      "npa": "1354",
+      "lat": 46.7330803,
+      "lon": 6.5102099
     },
     {
       "name": "Montfaucon",
       "canton": "JU",
-      "npa": "2362"
+      "npa": "2362",
+      "lat": 47.2822194,
+      "lon": 7.0512919
     },
     {
       "name": "Monthey",
       "canton": "VS",
-      "npa": "1870"
+      "npa": "1870",
+      "lat": 46.252844,
+      "lon": 6.9478263
     },
     {
       "name": "Montilliez",
       "canton": "VD",
-      "npa": "1041"
+      "npa": "1041",
+      "lat": 46.6451211,
+      "lon": 6.6835004
     },
     {
       "name": "Montpreveyres",
       "canton": "VD",
-      "npa": "1081"
+      "npa": "1081",
+      "lat": 46.581339,
+      "lon": 6.740799
     },
     {
       "name": "Montreux",
       "canton": "VD",
-      "npa": "1820"
+      "npa": "1820",
+      "lat": 46.4310831,
+      "lon": 6.9129921
     },
     {
       "name": "Montricher",
       "canton": "VD",
-      "npa": "1147"
+      "npa": "1147",
+      "lat": 46.6001762,
+      "lon": 6.375822
     },
     {
       "name": "Morges",
       "canton": "VD",
-      "npa": "1110"
+      "npa": "1110",
+      "lat": 46.5093268,
+      "lon": 6.498317
     },
     {
       "name": "Morlon",
       "canton": "FR",
-      "npa": "1638"
+      "npa": "1638",
+      "lat": 46.6258516,
+      "lon": 7.0853862
     },
     {
       "name": "Morrens (VD)",
       "canton": "VD",
-      "npa": "1054"
+      "npa": "1054",
+      "lat": 46.5904805,
+      "lon": 6.6267885
     },
     {
       "name": "Moudon",
       "canton": "VD",
-      "npa": "1510"
+      "npa": "1510",
+      "lat": 46.6680664,
+      "lon": 6.8003478
     },
     {
       "name": "Movelier",
       "canton": "JU",
-      "npa": "2812"
+      "npa": "2812",
+      "lat": 47.4093561,
+      "lon": 7.3180391
     },
     {
       "name": "Muntelier",
       "canton": "FR",
-      "npa": "3286"
+      "npa": "3286",
+      "lat": 46.9386253,
+      "lon": 7.1305874
     },
     {
       "name": "Muriaux",
       "canton": "JU",
-      "npa": "2338"
+      "npa": "2338",
+      "lat": 47.246007,
+      "lon": 6.9794762
     },
     {
       "name": "Murten",
       "canton": "FR",
-      "npa": "3280"
+      "npa": "3280",
+      "lat": 46.9288643,
+      "lon": 7.1163909
     },
     {
       "name": "Mutrux",
       "canton": "VD",
-      "npa": "1428"
+      "npa": "1428",
+      "lat": 46.8825207,
+      "lon": 6.7261849
     },
     {
       "name": "Ménières",
       "canton": "FR",
-      "npa": "1533"
+      "npa": "1533",
+      "lat": 46.7830908,
+      "lon": 6.8808343
     },
     {
       "name": "Mézières (FR)",
       "canton": "FR",
-      "npa": "1684"
+      "npa": "1684",
+      "lat": 46.678377,
+      "lon": 6.9264097
     },
     {
       "name": "Mörel-Filet",
       "canton": "VS",
-      "npa": "3983"
+      "npa": "3983",
+      "lat": 46.3494652,
+      "lon": 8.049276
     },
     {
       "name": "Naters",
       "canton": "VS",
-      "npa": "3904"
+      "npa": "3904",
+      "lat": 46.3242659,
+      "lon": 7.9884511
     },
     {
       "name": "Nebikon",
       "canton": "LU",
-      "npa": "6244"
+      "npa": "6244",
+      "lat": 47.18965,
+      "lon": 7.973802
     },
     {
       "name": "Nendaz",
       "canton": "VS",
-      "npa": "1997"
+      "npa": "1997",
+      "lat": 46.1867083,
+      "lon": 7.3051008
     },
     {
       "name": "Neuchâtel",
       "canton": "NE",
-      "npa": "2000"
+      "npa": "2000",
+      "lat": 46.9895828,
+      "lon": 6.9292641
     },
     {
       "name": "Neuenkirch",
       "canton": "LU",
-      "npa": "6206"
+      "npa": "6206",
+      "lat": 47.1002397,
+      "lon": 8.2029897
     },
     {
       "name": "Neyruz (FR)",
       "canton": "FR",
-      "npa": "1740"
+      "npa": "1740",
+      "lat": 46.7651393,
+      "lon": 7.0647696
     },
     {
       "name": "Niedergesteln",
       "canton": "VS",
-      "npa": "3942"
+      "npa": "3942",
+      "lat": 46.3133927,
+      "lon": 7.7818042
     },
     {
       "name": "Noble-Contrée",
       "canton": "VS",
-      "npa": "3979"
+      "npa": "3979",
+      "lat": 46.3031568,
+      "lon": 7.5366727
     },
     {
       "name": "Nottwil",
       "canton": "LU",
-      "npa": "6207"
+      "npa": "6207",
+      "lat": 47.1378546,
+      "lon": 8.1318599
     },
     {
       "name": "Novalles",
       "canton": "VD",
-      "npa": "1431"
+      "npa": "1431",
+      "lat": 46.8284542,
+      "lon": 6.5956886
     },
     {
       "name": "Noville",
       "canton": "VD",
-      "npa": "1845"
+      "npa": "1845",
+      "lat": 46.3817112,
+      "lon": 6.8996176
     },
     {
       "name": "Nuvilly",
       "canton": "FR",
-      "npa": "1485"
+      "npa": "1485",
+      "lat": 46.7830428,
+      "lon": 6.830987
     },
     {
       "name": "Nyon",
       "canton": "VD",
-      "npa": "1260"
+      "npa": "1260",
+      "lat": 46.3820585,
+      "lon": 6.2402791
     },
     {
       "name": "Oberems",
       "canton": "VS",
-      "npa": "3948"
+      "npa": "3948",
+      "lat": 46.2816939,
+      "lon": 7.6957835
     },
     {
       "name": "Obergoms",
       "canton": "VS",
-      "npa": "3988"
+      "npa": "3988",
+      "lat": 46.5388107,
+      "lon": 8.3632322
     },
     {
       "name": "Oberkirch",
       "canton": "LU",
-      "npa": "6208"
+      "npa": "6208",
+      "lat": 47.1556654,
+      "lon": 8.1151451
     },
     {
       "name": "Ogens",
       "canton": "VD",
-      "npa": "1045"
+      "npa": "1045",
+      "lat": 46.7111659,
+      "lon": 6.7227737
     },
     {
       "name": "Ollon",
       "canton": "VD",
-      "npa": "1867"
+      "npa": "1867",
+      "lat": 46.2972426,
+      "lon": 6.9950257
     },
     {
       "name": "Onex",
       "canton": "GE",
-      "npa": "1213"
+      "npa": "1213",
+      "lat": 46.1837841,
+      "lon": 6.1007481
     },
     {
       "name": "Onnens (VD)",
       "canton": "VD",
-      "npa": "1425"
+      "npa": "1425",
+      "lat": 46.8391148,
+      "lon": 6.6884927
     },
     {
       "name": "Oppens",
       "canton": "VD",
-      "npa": "1047"
+      "npa": "1047",
+      "lat": 46.714312,
+      "lon": 6.6923429
     },
     {
       "name": "Orbe",
       "canton": "VD",
-      "npa": "1350"
+      "npa": "1350",
+      "lat": 46.724144,
+      "lon": 6.5317943
     },
     {
       "name": "Orges",
       "canton": "VD",
-      "npa": "1430"
+      "npa": "1430",
+      "lat": 46.8082337,
+      "lon": 6.5875293
     },
     {
       "name": "Ormont-Dessous",
       "canton": "VD",
-      "npa": "1862"
+      "npa": "1862",
+      "lat": 46.3744115,
+      "lon": 7.0729789
     },
     {
       "name": "Ormont-Dessus",
       "canton": "VD",
-      "npa": "1865"
+      "npa": "1865",
+      "lat": 46.3425781,
+      "lon": 7.1630703
     },
     {
       "name": "Orny",
       "canton": "VD",
-      "npa": "1317"
+      "npa": "1317",
+      "lat": 46.6676263,
+      "lon": 6.5256309
     },
     {
       "name": "Oron",
       "canton": "VD",
-      "npa": "1610"
+      "npa": "1610",
+      "lat": 46.5558352,
+      "lon": 6.8273628
     },
     {
       "name": "Orsières",
       "canton": "VS",
-      "npa": "1937"
+      "npa": "1937",
+      "lat": 46.0300676,
+      "lon": 7.1453627
     },
     {
       "name": "Orzens",
       "canton": "VD",
-      "npa": "1413"
+      "npa": "1413",
+      "lat": 46.7239217,
+      "lon": 6.6830459
     },
     {
       "name": "Oulens-sous-Echallens",
       "canton": "VD",
-      "npa": "1377"
+      "npa": "1377",
+      "lat": 46.6433334,
+      "lon": 6.5781518
     },
     {
       "name": "Pailly",
       "canton": "VD",
-      "npa": "1416"
+      "npa": "1416",
+      "lat": 46.7013191,
+      "lon": 6.6745
     },
     {
       "name": "Paudex",
       "canton": "VD",
-      "npa": "1094"
+      "npa": "1094",
+      "lat": 46.5056892,
+      "lon": 6.6732336
     },
     {
       "name": "Payerne",
       "canton": "VD",
-      "npa": "1530"
+      "npa": "1530",
+      "lat": 46.8208047,
+      "lon": 6.939126
     },
     {
       "name": "Penthalaz",
       "canton": "VD",
-      "npa": "1305"
+      "npa": "1305",
+      "lat": 46.6113262,
+      "lon": 6.5252453
     },
     {
       "name": "Penthaz",
       "canton": "VD",
-      "npa": "1303"
+      "npa": "1303",
+      "lat": 46.597822,
+      "lon": 6.540398
     },
     {
       "name": "Penthéréaz",
       "canton": "VD",
-      "npa": "1375"
+      "npa": "1375",
+      "lat": 46.6818849,
+      "lon": 6.6035686
     },
     {
       "name": "Perly-Certoux",
       "canton": "GE",
-      "npa": "1258"
+      "npa": "1258",
+      "lat": 46.1573225,
+      "lon": 6.0917899
     },
     {
       "name": "Perroy",
       "canton": "VD",
-      "npa": "1166"
+      "npa": "1166",
+      "lat": 46.4681469,
+      "lon": 6.3642905
     },
     {
       "name": "Pfaffnau",
       "canton": "LU",
-      "npa": "6264"
+      "npa": "6264",
+      "lat": 47.2273716,
+      "lon": 7.8984229
     },
     {
       "name": "Pierrafortscha",
       "canton": "FR",
-      "npa": "1723"
+      "npa": "1723",
+      "lat": 46.7869341,
+      "lon": 7.1855097
     },
     {
       "name": "Plaffeien",
       "canton": "FR",
-      "npa": "1716"
+      "npa": "1716",
+      "lat": 46.741454,
+      "lon": 7.2865098
     },
     {
       "name": "Plan-les-Ouates",
       "canton": "GE",
-      "npa": "1228"
+      "npa": "1228",
+      "lat": 46.1683113,
+      "lon": 6.117887
     },
     {
       "name": "Plasselb",
       "canton": "FR",
-      "npa": "1737"
+      "npa": "1737",
+      "lat": 46.7354779,
+      "lon": 7.2516771
     },
     {
       "name": "Pleigne",
       "canton": "JU",
-      "npa": "2807"
+      "npa": "2807",
+      "lat": 47.4074958,
+      "lon": 7.292424
     },
     {
       "name": "Poliez-Pittet",
       "canton": "VD",
-      "npa": "1041"
+      "npa": "1041",
+      "lat": 46.6277599,
+      "lon": 6.6826495
     },
     {
       "name": "Pompaples",
       "canton": "VD",
-      "npa": "1318"
+      "npa": "1318",
+      "lat": 46.6666443,
+      "lon": 6.5106833
     },
     {
       "name": "Pomy",
       "canton": "VD",
-      "npa": "1405"
+      "npa": "1405",
+      "lat": 46.7609575,
+      "lon": 6.6663747
     },
     {
       "name": "Pont-en-Ogoz",
       "canton": "FR",
-      "npa": "1690"
+      "npa": "1690",
+      "lat": 46.6881639,
+      "lon": 7.0767346
     },
     {
       "name": "Pont-la-Ville",
       "canton": "FR",
-      "npa": "1649"
+      "npa": "1649",
+      "lat": 46.6990292,
+      "lon": 7.1110228
     },
     {
       "name": "Porrentruy",
       "canton": "JU",
-      "npa": "2900"
+      "npa": "2900",
+      "lat": 47.4171297,
+      "lon": 7.0761342
     },
     {
       "name": "Port-Valais",
       "canton": "VS",
-      "npa": "1897"
+      "npa": "1897",
+      "lat": 46.3735887,
+      "lon": 6.8624056
     },
     {
       "name": "Prangins",
       "canton": "VD",
-      "npa": "1197"
+      "npa": "1197",
+      "lat": 46.3947976,
+      "lon": 6.2487871
     },
     {
       "name": "Pregny-Chambésy",
       "canton": "GE",
-      "npa": "1292"
+      "npa": "1292",
+      "lat": 46.2434402,
+      "lon": 6.1465109
     },
     {
       "name": "Premier",
       "canton": "VD",
-      "npa": "1324"
+      "npa": "1324",
+      "lat": 46.7047978,
+      "lon": 6.444282
     },
     {
       "name": "Presinge",
       "canton": "GE",
-      "npa": "1243"
+      "npa": "1243",
+      "lat": 46.2191549,
+      "lon": 6.25636
     },
     {
       "name": "Prez",
       "canton": "FR",
-      "npa": "1746"
+      "npa": "1746",
+      "lat": 46.786265,
+      "lon": 7.0145713
     },
     {
       "name": "Prilly",
       "canton": "VD",
-      "npa": "1008"
+      "npa": "1008",
+      "lat": 46.534566,
+      "lon": 6.6055827
     },
     {
       "name": "Provence",
       "canton": "VD",
-      "npa": "1428"
+      "npa": "1428",
+      "lat": 46.8914636,
+      "lon": 6.7270271
     },
     {
       "name": "Préverenges",
       "canton": "VD",
-      "npa": "1028"
+      "npa": "1028",
+      "lat": 46.5183844,
+      "lon": 6.5267369
     },
     {
       "name": "Prévondavaux",
       "canton": "FR",
-      "npa": "1410"
+      "npa": "1410",
+      "lat": 46.7277349,
+      "lon": 6.7935514
     },
     {
       "name": "Prévonloup",
       "canton": "VD",
-      "npa": "1682"
+      "npa": "1682",
+      "lat": 46.699867,
+      "lon": 6.8820157
     },
     {
       "name": "Puidoux",
       "canton": "VD",
-      "npa": "1070"
+      "npa": "1070",
+      "lat": 46.5008111,
+      "lon": 6.7823914
     },
     {
       "name": "Pully",
       "canton": "VD",
-      "npa": "1009"
+      "npa": "1009",
+      "lat": 46.5098019,
+      "lon": 6.6617476
     },
     {
       "name": "Puplinge",
       "canton": "GE",
-      "npa": "1241"
+      "npa": "1241",
+      "lat": 46.2106389,
+      "lon": 6.231707
     },
     {
       "name": "Rain",
       "canton": "LU",
-      "npa": "6026"
+      "npa": "6026",
+      "lat": 47.1292173,
+      "lon": 8.2564524
     },
     {
       "name": "Rances",
       "canton": "VD",
-      "npa": "1439"
+      "npa": "1439",
+      "lat": 46.7602787,
+      "lon": 6.5300272
     },
     {
       "name": "Randa",
       "canton": "VS",
-      "npa": "3928"
+      "npa": "3928",
+      "lat": 46.1002792,
+      "lon": 7.782412
     },
     {
       "name": "Raron",
       "canton": "VS",
-      "npa": "3942"
+      "npa": "3942",
+      "lat": 46.309934,
+      "lon": 7.799589
     },
     {
       "name": "Rechthalten",
       "canton": "FR",
-      "npa": "1718"
+      "npa": "1718",
+      "lat": 46.7675326,
+      "lon": 7.2400909
     },
     {
       "name": "Reiden",
       "canton": "LU",
-      "npa": "6260"
+      "npa": "6260",
+      "lat": 47.2460194,
+      "lon": 7.9730383
     },
     {
       "name": "Remaufens",
       "canton": "FR",
-      "npa": "1617"
+      "npa": "1617",
+      "lat": 46.5276138,
+      "lon": 6.8796623
     },
     {
       "name": "Renens (VD)",
       "canton": "VD",
-      "npa": "1020"
+      "npa": "1020",
+      "lat": 46.5349093,
+      "lon": 6.5928442
     },
     {
       "name": "Rennaz",
       "canton": "VD",
-      "npa": "1847"
+      "npa": "1847",
+      "lat": 46.3757048,
+      "lon": 6.9190655
     },
     {
       "name": "Riaz",
       "canton": "FR",
-      "npa": "1632"
+      "npa": "1632",
+      "lat": 46.640249,
+      "lon": 7.0616291
     },
     {
       "name": "Rickenbach (LU)",
       "canton": "LU",
-      "npa": "6221"
+      "npa": "6221",
+      "lat": 47.221267,
+      "lon": 8.1535369
     },
     {
       "name": "Riddes",
       "canton": "VS",
-      "npa": "1908"
+      "npa": "1908",
+      "lat": 46.1718974,
+      "lon": 7.2227718
     },
     {
       "name": "Ried bei Kerzers",
       "canton": "FR",
-      "npa": "3216"
+      "npa": "3216",
+      "lat": 46.9555986,
+      "lon": 7.1855758
     },
     {
       "name": "Ried-Brig",
       "canton": "VS",
-      "npa": "3911"
+      "npa": "3911",
+      "lat": 46.3150269,
+      "lon": 8.0166829
     },
     {
       "name": "Riederalp",
       "canton": "VS",
-      "npa": "3987"
+      "npa": "3987",
+      "lat": 46.3782021,
+      "lon": 8.0334815
     },
     {
       "name": "Rivaz",
       "canton": "VD",
-      "npa": "1071"
+      "npa": "1071",
+      "lat": 46.4762772,
+      "lon": 6.7786403
     },
     {
       "name": "Roche (VD)",
       "canton": "VD",
-      "npa": "1852"
+      "npa": "1852",
+      "lat": 46.3610602,
+      "lon": 6.9309298
     },
     {
       "name": "Rochefort",
       "canton": "NE",
-      "npa": "2019"
+      "npa": "2019",
+      "lat": 46.9778631,
+      "lon": 6.8084757
     },
     {
       "name": "Roggliswil",
       "canton": "LU",
-      "npa": "6265"
+      "npa": "6265",
+      "lat": 47.2111654,
+      "lon": 7.8827159
     },
     {
       "name": "Rolle",
       "canton": "VD",
-      "npa": "1180"
+      "npa": "1180",
+      "lat": 46.4601563,
+      "lon": 6.3380469
     },
     {
       "name": "Romainmôtier-Envy",
       "canton": "VD",
-      "npa": "1323"
+      "npa": "1323",
+      "lat": 46.6932583,
+      "lon": 6.4611912
     },
     {
       "name": "Romanel-sur-Lausanne",
       "canton": "VD",
-      "npa": "1032"
+      "npa": "1032",
+      "lat": 46.5621173,
+      "lon": 6.6055577
     },
     {
       "name": "Romanel-sur-Morges",
       "canton": "VD",
-      "npa": "1122"
+      "npa": "1122",
+      "lat": 46.5564288,
+      "lon": 6.5101067
     },
     {
       "name": "Romont (FR)",
       "canton": "FR",
-      "npa": "1680"
+      "npa": "1680",
+      "lat": 46.6938489,
+      "lon": 6.9119557
     },
     {
       "name": "Romoos",
       "canton": "LU",
-      "npa": "6113"
+      "npa": "6113",
+      "lat": 47.0115225,
+      "lon": 8.0282996
     },
     {
       "name": "Root",
       "canton": "LU",
-      "npa": "6037"
+      "npa": "6037",
+      "lat": 47.1153443,
+      "lon": 8.3911091
     },
     {
       "name": "Ropraz",
       "canton": "VD",
-      "npa": "1088"
+      "npa": "1088",
+      "lat": 46.6153223,
+      "lon": 6.7515592
     },
     {
       "name": "Rossemaison",
       "canton": "JU",
-      "npa": "2842"
+      "npa": "2842",
+      "lat": 47.3457776,
+      "lon": 7.3431762
     },
     {
       "name": "Rossenges",
       "canton": "VD",
-      "npa": "1513"
+      "npa": "1513",
+      "lat": 46.6520362,
+      "lon": 6.7765557
     },
     {
       "name": "Rossinière",
       "canton": "VD",
-      "npa": "1658"
+      "npa": "1658",
+      "lat": 46.4675176,
+      "lon": 7.083061
     },
     {
       "name": "Rothenburg",
       "canton": "LU",
-      "npa": "6023"
+      "npa": "6023",
+      "lat": 47.0940041,
+      "lon": 8.2724174
     },
     {
       "name": "Rougemont",
       "canton": "VD",
-      "npa": "1659"
+      "npa": "1659",
+      "lat": 46.4899991,
+      "lon": 7.2106992
     },
     {
       "name": "Rovray",
       "canton": "VD",
-      "npa": "1463"
+      "npa": "1463",
+      "lat": 46.784944,
+      "lon": 6.7644164
     },
     {
       "name": "Rue",
       "canton": "FR",
-      "npa": "1673"
+      "npa": "1673",
+      "lat": 46.6198391,
+      "lon": 6.8215209
     },
     {
       "name": "Rueyres",
       "canton": "VD",
-      "npa": "1046"
+      "npa": "1046",
+      "lat": 46.6937921,
+      "lon": 6.6926541
     },
     {
       "name": "Russin",
       "canton": "GE",
-      "npa": "1281"
+      "npa": "1281",
+      "lat": 46.1876287,
+      "lon": 6.0130297
     },
     {
       "name": "Ruswil",
       "canton": "LU",
-      "npa": "6017"
+      "npa": "6017",
+      "lat": 47.0839416,
+      "lon": 8.126227
     },
     {
       "name": "Römerswil",
       "canton": "LU",
-      "npa": "6027"
+      "npa": "6027",
+      "lat": 47.168923,
+      "lon": 8.2441972
     },
     {
       "name": "Saas-Almagell",
       "canton": "VS",
-      "npa": "3905"
+      "npa": "3905",
+      "lat": 46.0938913,
+      "lon": 7.9582333
     },
     {
       "name": "Saas-Balen",
       "canton": "VS",
-      "npa": "3908"
+      "npa": "3908",
+      "lat": 46.1540205,
+      "lon": 7.9281921
     },
     {
       "name": "Saas-Fee",
       "canton": "VS",
-      "npa": "3906"
+      "npa": "3906",
+      "lat": 46.107342,
+      "lon": 7.9247055
     },
     {
       "name": "Saas-Grund",
       "canton": "VS",
-      "npa": "3910"
+      "npa": "3910",
+      "lat": 46.1278436,
+      "lon": 7.9370051
     },
     {
       "name": "Saignelégier",
       "canton": "JU",
-      "npa": "2350"
+      "npa": "2350",
+      "lat": 47.2557997,
+      "lon": 6.9963585
     },
     {
       "name": "Saillon",
       "canton": "VS",
-      "npa": "1913"
+      "npa": "1913",
+      "lat": 46.1715641,
+      "lon": 7.1849043
     },
     {
       "name": "Saint-Aubin (FR)",
       "canton": "FR",
-      "npa": "1566"
+      "npa": "1566",
+      "lat": 46.8900349,
+      "lon": 6.9802104
     },
     {
       "name": "Saint-Barthélemy (VD)",
       "canton": "VD",
-      "npa": "1040"
+      "npa": "1040",
+      "lat": 46.6355663,
+      "lon": 6.6001447
     },
     {
       "name": "Saint-Brais",
       "canton": "JU",
-      "npa": "2364"
+      "npa": "2364",
+      "lat": 47.3053022,
+      "lon": 7.1125855
     },
     {
       "name": "Saint-Cergue",
       "canton": "VD",
-      "npa": "1264"
+      "npa": "1264",
+      "lat": 46.4460968,
+      "lon": 6.158111
     },
     {
       "name": "Saint-George",
       "canton": "VD",
-      "npa": "1188"
+      "npa": "1188",
+      "lat": 46.5138321,
+      "lon": 6.2602719
     },
     {
       "name": "Saint-Gingolph",
       "canton": "VS",
-      "npa": "1898"
+      "npa": "1898",
+      "lat": 46.3870409,
+      "lon": 6.8250394
     },
     {
       "name": "Saint-Livres",
       "canton": "VD",
-      "npa": "1176"
+      "npa": "1176",
+      "lat": 46.5089259,
+      "lon": 6.3865062
     },
     {
       "name": "Saint-Léonard",
       "canton": "VS",
-      "npa": "1958"
+      "npa": "1958",
+      "lat": 46.2546777,
+      "lon": 7.420378
     },
     {
       "name": "Saint-Martin (FR)",
       "canton": "FR",
-      "npa": "1609"
+      "npa": "1609",
+      "lat": 46.5763293,
+      "lon": 6.8691224
     },
     {
       "name": "Saint-Martin (VS)",
       "canton": "VS",
-      "npa": "1969"
+      "npa": "1969",
+      "lat": 46.1535469,
+      "lon": 7.4688063
     },
     {
       "name": "Saint-Maurice",
       "canton": "VS",
-      "npa": "1890"
+      "npa": "1890",
+      "lat": 46.2197694,
+      "lon": 7.0045193
     },
     {
       "name": "Saint-Oyens",
       "canton": "VD",
-      "npa": "1187"
+      "npa": "1187",
+      "lat": 46.4980293,
+      "lon": 6.3063994
     },
     {
       "name": "Saint-Prex",
       "canton": "VD",
-      "npa": "1162"
+      "npa": "1162",
+      "lat": 46.4809059,
+      "lon": 6.4586004
     },
     {
       "name": "Saint-Saphorin (Lavaux)",
       "canton": "VD",
-      "npa": "1071"
+      "npa": "1071",
+      "lat": 46.4731819,
+      "lon": 6.7959554
     },
     {
       "name": "Saint-Sulpice (VD)",
       "canton": "VD",
-      "npa": "1025"
+      "npa": "1025",
+      "lat": 46.5100832,
+      "lon": 6.5580607
     },
     {
       "name": "Sainte-Croix",
       "canton": "VD",
-      "npa": "1450"
+      "npa": "1450",
+      "lat": 46.822522,
+      "lon": 6.5009286
     },
     {
       "name": "Salgesch",
       "canton": "VS",
-      "npa": "3970"
+      "npa": "3970",
+      "lat": 46.3116136,
+      "lon": 7.5699409
     },
     {
       "name": "Salvan",
       "canton": "VS",
-      "npa": "1922"
+      "npa": "1922",
+      "lat": 46.1219825,
+      "lon": 7.0208326
     },
     {
       "name": "Satigny",
       "canton": "GE",
-      "npa": "1242"
+      "npa": "1242",
+      "lat": 46.2157703,
+      "lon": 6.0330885
     },
     {
       "name": "Saubraz",
       "canton": "VD",
-      "npa": "1189"
+      "npa": "1189",
+      "lat": 46.5145609,
+      "lon": 6.3302084
     },
     {
       "name": "Saulcy",
       "canton": "JU",
-      "npa": "2873"
+      "npa": "2873",
+      "lat": 47.3016132,
+      "lon": 7.1540249
     },
     {
       "name": "Savigny",
       "canton": "VD",
-      "npa": "1073"
+      "npa": "1073",
+      "lat": 46.5384249,
+      "lon": 6.7316194
     },
     {
       "name": "Savièse",
       "canton": "VS",
-      "npa": "1965"
+      "npa": "1965",
+      "lat": 46.2535351,
+      "lon": 7.3477598
     },
     {
       "name": "Saxon",
       "canton": "VS",
-      "npa": "1907"
+      "npa": "1907",
+      "lat": 46.1452873,
+      "lon": 7.1807405
     },
     {
       "name": "Schenkon",
       "canton": "LU",
-      "npa": "6214"
+      "npa": "6214",
+      "lat": 47.1774719,
+      "lon": 8.132378
     },
     {
       "name": "Schlierbach",
       "canton": "LU",
-      "npa": "6231"
+      "npa": "6231",
+      "lat": 47.2241354,
+      "lon": 8.1109581
     },
     {
       "name": "Schmitten (FR)",
       "canton": "FR",
-      "npa": "3185"
+      "npa": "3185",
+      "lat": 46.8560556,
+      "lon": 7.2474014
     },
     {
       "name": "Schongau",
       "canton": "LU",
-      "npa": "6288"
+      "npa": "6288",
+      "lat": 47.2677484,
+      "lon": 8.2661717
     },
     {
       "name": "Schwarzenberg",
       "canton": "LU",
-      "npa": "6103"
+      "npa": "6103",
+      "lat": 47.0145937,
+      "lon": 8.1734674
     },
     {
       "name": "Schötz",
       "canton": "LU",
-      "npa": "6247"
+      "npa": "6247",
+      "lat": 47.1698443,
+      "lon": 7.9884821
     },
     {
       "name": "Schüpfheim",
       "canton": "LU",
-      "npa": "6170"
+      "npa": "6170",
+      "lat": 46.9517174,
+      "lon": 8.017953
     },
     {
       "name": "Sembrancher",
       "canton": "VS",
-      "npa": "1933"
+      "npa": "1933",
+      "lat": 46.0784832,
+      "lon": 7.1517153
     },
     {
       "name": "Sempach",
       "canton": "LU",
-      "npa": "6204"
+      "npa": "6204",
+      "lat": 47.1353737,
+      "lon": 8.1920262
     },
     {
       "name": "Semsales",
       "canton": "FR",
-      "npa": "1623"
+      "npa": "1623",
+      "lat": 46.5740332,
+      "lon": 6.9291121
     },
     {
       "name": "Senarclens",
       "canton": "VD",
-      "npa": "1304"
+      "npa": "1304",
+      "lat": 46.6004691,
+      "lon": 6.4868169
     },
     {
       "name": "Sergey",
       "canton": "VD",
-      "npa": "1355"
+      "npa": "1355",
+      "lat": 46.7505419,
+      "lon": 6.4995735
     },
     {
       "name": "Servion",
       "canton": "VD",
-      "npa": "1077"
+      "npa": "1077",
+      "lat": 46.5767948,
+      "lon": 6.7845039
     },
     {
       "name": "Sierre",
       "canton": "VS",
-      "npa": "3960"
+      "npa": "3960",
+      "lat": 46.2922522,
+      "lon": 7.5323195
     },
     {
       "name": "Signy-Avenex",
       "canton": "VD",
-      "npa": "1274"
+      "npa": "1274",
+      "lat": 46.3907229,
+      "lon": 6.2018023
     },
     {
       "name": "Simplon",
       "canton": "VS",
-      "npa": "3907"
+      "npa": "3907",
+      "lat": 46.1955875,
+      "lon": 8.0563136
     },
     {
       "name": "Sion",
       "canton": "VS",
-      "npa": "1950"
+      "npa": "1950",
+      "lat": 46.2311749,
+      "lon": 7.3588795
     },
     {
       "name": "Siviriez",
       "canton": "FR",
-      "npa": "1678"
+      "npa": "1678",
+      "lat": 46.6576782,
+      "lon": 6.8769946
     },
     {
       "name": "Soral",
       "canton": "GE",
-      "npa": "1286"
+      "npa": "1286",
+      "lat": 46.1443887,
+      "lon": 6.0437516
     },
     {
       "name": "Sorens",
       "canton": "FR",
-      "npa": "1642"
+      "npa": "1642",
+      "lat": 46.6701619,
+      "lon": 7.0612165
     },
     {
       "name": "Soubey",
       "canton": "JU",
-      "npa": "2887"
+      "npa": "2887",
+      "lat": 47.3082434,
+      "lon": 7.0486468
     },
     {
       "name": "Soyhières",
       "canton": "JU",
-      "npa": "2805"
+      "npa": "2805",
+      "lat": 47.390073,
+      "lon": 7.3696855
     },
     {
       "name": "St. Niklaus",
       "canton": "VS",
-      "npa": "3924"
+      "npa": "3924",
+      "lat": 46.177002,
+      "lon": 7.802516
     },
     {
       "name": "St. Silvester",
       "canton": "FR",
-      "npa": "1736"
+      "npa": "1736",
+      "lat": 46.7410614,
+      "lon": 7.2193275
     },
     {
       "name": "St. Ursen",
       "canton": "FR",
-      "npa": "1717"
+      "npa": "1717",
+      "lat": 46.7899498,
+      "lon": 7.2183078
     },
     {
       "name": "Stalden (VS)",
       "canton": "VS",
-      "npa": "3922"
+      "npa": "3922",
+      "lat": 46.2325963,
+      "lon": 7.8704203
     },
     {
       "name": "Staldenried",
       "canton": "VS",
-      "npa": "3933"
+      "npa": "3933",
+      "lat": 46.2296157,
+      "lon": 7.8833886
     },
     {
       "name": "Steg-Hohtenn",
       "canton": "VS",
-      "npa": "3940"
+      "npa": "3940",
+      "lat": 46.3347806,
+      "lon": 7.7681078
     },
     {
       "name": "Suchy",
       "canton": "VD",
-      "npa": "1433"
+      "npa": "1433",
+      "lat": 46.7232325,
+      "lon": 6.5994077
     },
     {
       "name": "Sullens",
       "canton": "VD",
-      "npa": "1036"
+      "npa": "1036",
+      "lat": 46.5931372,
+      "lon": 6.5661454
     },
     {
       "name": "Surpierre",
       "canton": "FR",
-      "npa": "1528"
+      "npa": "1528",
+      "lat": 46.7445749,
+      "lon": 6.8607883
     },
     {
       "name": "Sursee",
       "canton": "LU",
-      "npa": "6210"
+      "npa": "6210",
+      "lat": 47.1725301,
+      "lon": 8.1067781
     },
     {
       "name": "Suscévaz",
       "canton": "VD",
-      "npa": "1433"
+      "npa": "1433",
+      "lat": 46.7642362,
+      "lon": 6.5780348
     },
     {
       "name": "Syens",
       "canton": "VD",
-      "npa": "1510"
+      "npa": "1510",
+      "lat": 46.6456578,
+      "lon": 6.7782652
     },
     {
       "name": "Sâles",
       "canton": "FR",
-      "npa": "1625"
+      "npa": "1625",
+      "lat": 46.6366262,
+      "lon": 6.9743823
     },
     {
       "name": "Sévaz",
       "canton": "FR",
-      "npa": "1541"
+      "npa": "1541",
+      "lat": 46.8382703,
+      "lon": 6.8746273
     },
     {
       "name": "Tafers",
       "canton": "FR",
-      "npa": "1712"
+      "npa": "1712",
+      "lat": 46.8152805,
+      "lon": 7.2167886
     },
     {
       "name": "Tannay",
       "canton": "VD",
-      "npa": "1295"
+      "npa": "1295",
+      "lat": 46.3089604,
+      "lon": 6.1757001
     },
     {
       "name": "Tartegnin",
       "canton": "VD",
-      "npa": "1180"
+      "npa": "1180",
+      "lat": 46.4666552,
+      "lon": 6.3156804
     },
     {
       "name": "Tentlingen",
       "canton": "FR",
-      "npa": "1734"
+      "npa": "1734",
+      "lat": 46.769765,
+      "lon": 7.1983411
     },
     {
       "name": "Termen",
       "canton": "VS",
-      "npa": "3912"
+      "npa": "3912",
+      "lat": 46.3283973,
+      "lon": 8.0227013
     },
     {
       "name": "Thônex",
       "canton": "GE",
-      "npa": "1226"
+      "npa": "1226",
+      "lat": 46.1884304,
+      "lon": 6.1983858
     },
     {
       "name": "Tolochenaz",
       "canton": "VD",
-      "npa": "1131"
+      "npa": "1131",
+      "lat": 46.5047001,
+      "lon": 6.4734539
     },
     {
       "name": "Torny",
       "canton": "FR",
-      "npa": "1748"
+      "npa": "1748",
+      "lat": 46.770835,
+      "lon": 6.9653043
     },
     {
       "name": "Trey",
       "canton": "VD",
-      "npa": "1552"
+      "npa": "1552",
+      "lat": 46.769255,
+      "lon": 6.9251725
     },
     {
       "name": "Treycovagnes",
       "canton": "VD",
-      "npa": "1436"
+      "npa": "1436",
+      "lat": 46.7738784,
+      "lon": 6.6092758
     },
     {
       "name": "Treytorrens (Payerne)",
       "canton": "VD",
-      "npa": "1538"
+      "npa": "1538",
+      "lat": 46.7731198,
+      "lon": 6.8003881
     },
     {
       "name": "Treyvaux",
       "canton": "FR",
-      "npa": "1733"
+      "npa": "1733",
+      "lat": 46.7274425,
+      "lon": 7.1364409
     },
     {
       "name": "Triengen",
       "canton": "LU",
-      "npa": "6234"
+      "npa": "6234",
+      "lat": 47.2351967,
+      "lon": 8.0767478
     },
     {
       "name": "Trient",
       "canton": "VS",
-      "npa": "1929"
+      "npa": "1929",
+      "lat": 46.0559487,
+      "lon": 6.9953742
     },
     {
       "name": "Troinex",
       "canton": "GE",
-      "npa": "1256"
+      "npa": "1256",
+      "lat": 46.1616537,
+      "lon": 6.147819
     },
     {
       "name": "Troistorrents",
       "canton": "VS",
-      "npa": "1872"
+      "npa": "1872",
+      "lat": 46.2285806,
+      "lon": 6.9161978
     },
     {
       "name": "Trélex",
       "canton": "VD",
-      "npa": "1270"
+      "npa": "1270",
+      "lat": 46.414967,
+      "lon": 6.2048987
     },
     {
       "name": "Turtmann-Unterems",
       "canton": "VS",
-      "npa": "3946"
+      "npa": "3946",
+      "lat": 46.1619827,
+      "lon": 7.7140416
     },
     {
       "name": "Täsch",
       "canton": "VS",
-      "npa": "3929"
+      "npa": "3929",
+      "lat": 46.0676751,
+      "lon": 7.7770173
     },
     {
       "name": "Tévenon",
       "canton": "VD",
-      "npa": "1423"
+      "npa": "1423",
+      "lat": 46.8648032,
+      "lon": 6.6382256
     },
     {
       "name": "Törbel",
       "canton": "VS",
-      "npa": "3923"
+      "npa": "3923",
+      "lat": 46.2385196,
+      "lon": 7.851508
     },
     {
       "name": "Udligenswil",
       "canton": "LU",
-      "npa": "6044"
+      "npa": "6044",
+      "lat": 47.091036,
+      "lon": 8.399689
     },
     {
       "name": "Ueberstorf",
       "canton": "FR",
-      "npa": "3182"
+      "npa": "3182",
+      "lat": 46.8650568,
+      "lon": 7.3114056
     },
     {
       "name": "Ufhusen",
       "canton": "LU",
-      "npa": "6153"
+      "npa": "6153",
+      "lat": 47.1166353,
+      "lon": 7.8955614
     },
     {
       "name": "Ulmiz",
       "canton": "FR",
-      "npa": "3214"
+      "npa": "3214",
+      "lat": 46.9321113,
+      "lon": 7.2006542
     },
     {
       "name": "Unterbäch",
       "canton": "VS",
-      "npa": "3944"
+      "npa": "3944",
+      "lat": 46.2609289,
+      "lon": 7.7798653
     },
     {
       "name": "Ursins",
       "canton": "VD",
-      "npa": "1412"
+      "npa": "1412",
+      "lat": 46.734894,
+      "lon": 6.668296
     },
     {
       "name": "Ursy",
       "canton": "FR",
-      "npa": "1670"
+      "npa": "1670",
+      "lat": 46.6350125,
+      "lon": 6.8359644
     },
     {
       "name": "Val Terbi",
       "canton": "JU",
-      "npa": "2824"
+      "npa": "2824",
+      "lat": 47.341103,
+      "lon": 7.4206266
     },
     {
       "name": "Val de Bagnes",
       "canton": "VS",
-      "npa": "1934"
+      "npa": "1934",
+      "lat": 46.0099809,
+      "lon": 7.3070055
     },
     {
       "name": "Val-d'Illiez",
       "canton": "VS",
-      "npa": "1873"
+      "npa": "1873",
+      "lat": 46.204027,
+      "lon": 6.8927881
     },
     {
       "name": "Val-de-Charmey",
       "canton": "FR",
-      "npa": "1637"
+      "npa": "1637",
+      "lat": 46.6183939,
+      "lon": 7.1978371
     },
     {
       "name": "Val-de-Ruz",
       "canton": "NE",
-      "npa": "2052"
+      "npa": "2052",
+      "lat": 47.0567795,
+      "lon": 6.9099064
     },
     {
       "name": "Val-de-Travers",
       "canton": "NE",
-      "npa": "2114"
+      "npa": "2114",
+      "lat": 46.9188206,
+      "lon": 6.5826276
     },
     {
       "name": "Valbroye",
       "canton": "VD",
-      "npa": "1536"
+      "npa": "1536",
+      "lat": 46.724722,
+      "lon": 6.8919595
     },
     {
       "name": "Valeyres-sous-Montagny",
       "canton": "VD",
-      "npa": "1441"
+      "npa": "1441",
+      "lat": 46.7983693,
+      "lon": 6.6105655
     },
     {
       "name": "Valeyres-sous-Rances",
       "canton": "VD",
-      "npa": "1358"
+      "npa": "1358",
+      "lat": 46.7528278,
+      "lon": 6.5249548
     },
     {
       "name": "Valeyres-sous-Ursins",
       "canton": "VD",
-      "npa": "1412"
+      "npa": "1412",
+      "lat": 46.7458204,
+      "lon": 6.655254
     },
     {
       "name": "Vallon",
       "canton": "FR",
-      "npa": "1565"
+      "npa": "1565",
+      "lat": 46.882477,
+      "lon": 6.951657
     },
     {
       "name": "Vallorbe",
       "canton": "VD",
-      "npa": "1337"
+      "npa": "1337",
+      "lat": 46.7120146,
+      "lon": 6.3792318
     },
     {
       "name": "Vandoeuvres",
       "canton": "GE",
-      "npa": "1253"
+      "npa": "1253",
+      "lat": 46.2214083,
+      "lon": 6.2024623
     },
     {
       "name": "Varen",
       "canton": "VS",
-      "npa": "3953"
+      "npa": "3953",
+      "lat": 46.3186626,
+      "lon": 7.6078029
     },
     {
       "name": "Vaulion",
       "canton": "VD",
-      "npa": "1325"
+      "npa": "1325",
+      "lat": 46.6883547,
+      "lon": 6.3894066
     },
     {
       "name": "Vaulruz",
       "canton": "FR",
-      "npa": "1627"
+      "npa": "1627",
+      "lat": 46.6207942,
+      "lon": 6.9882518
     },
     {
       "name": "Vaux-sur-Morges",
       "canton": "VD",
-      "npa": "1126"
+      "npa": "1126",
+      "lat": 46.5353976,
+      "lon": 6.463827
     },
     {
       "name": "Vendlincourt",
       "canton": "JU",
-      "npa": "2943"
+      "npa": "2943",
+      "lat": 47.4512425,
+      "lon": 7.1485023
     },
     {
       "name": "Vernayaz",
       "canton": "VS",
-      "npa": "1904"
+      "npa": "1904",
+      "lat": 46.1365416,
+      "lon": 7.0393423
     },
     {
       "name": "Vernier",
       "canton": "GE",
-      "npa": "1214"
+      "npa": "1214",
+      "lat": 46.2131843,
+      "lon": 6.0815756
     },
     {
       "name": "Versoix",
       "canton": "GE",
-      "npa": "1290"
+      "npa": "1290",
+      "lat": 46.2773064,
+      "lon": 6.168962
     },
     {
       "name": "Vevey",
       "canton": "VD",
-      "npa": "1800"
+      "npa": "1800",
+      "lat": 46.4602978,
+      "lon": 6.8418655
     },
     {
       "name": "Vex",
       "canton": "VS",
-      "npa": "1981"
+      "npa": "1981",
+      "lat": 46.2113825,
+      "lon": 7.3983622
     },
     {
       "name": "Veyrier",
       "canton": "GE",
-      "npa": "1255"
+      "npa": "1255",
+      "lat": 46.1668163,
+      "lon": 6.185681
     },
     {
       "name": "Veysonnaz",
       "canton": "VS",
-      "npa": "1993"
+      "npa": "1993",
+      "lat": 46.1955082,
+      "lon": 7.3363267
     },
     {
       "name": "Veytaux",
       "canton": "VD",
-      "npa": "1820"
+      "npa": "1820",
+      "lat": 46.4215725,
+      "lon": 6.9275648
     },
     {
       "name": "Vich",
       "canton": "VD",
-      "npa": "1267"
+      "npa": "1267",
+      "lat": 46.4294193,
+      "lon": 6.2505497
     },
     {
       "name": "Villars-Epeney",
       "canton": "VD",
-      "npa": "1404"
+      "npa": "1404",
+      "lat": 46.7817278,
+      "lon": 6.6969935
     },
     {
       "name": "Villars-Sainte-Croix",
       "canton": "VD",
-      "npa": "1029"
+      "npa": "1029",
+      "lat": 46.5675877,
+      "lon": 6.5616074
     },
     {
       "name": "Villars-le-Comte",
       "canton": "VD",
-      "npa": "1515"
+      "npa": "1515",
+      "lat": 46.7106452,
+      "lon": 6.7990287
     },
     {
       "name": "Villars-le-Terroir",
       "canton": "VD",
-      "npa": "1040"
+      "npa": "1040",
+      "lat": 46.6569364,
+      "lon": 6.6387429
     },
     {
       "name": "Villars-sous-Yens",
       "canton": "VD",
-      "npa": "1168"
+      "npa": "1168",
+      "lat": 46.5102444,
+      "lon": 6.4286538
     },
     {
       "name": "Villars-sur-Glâne",
       "canton": "FR",
-      "npa": "1752"
+      "npa": "1752",
+      "lat": 46.791321,
+      "lon": 7.1161892
     },
     {
       "name": "Villarsel-sur-Marly",
       "canton": "FR",
-      "npa": "1723"
+      "npa": "1723",
+      "lat": 46.7627211,
+      "lon": 7.1693822
     },
     {
       "name": "Villarzel",
       "canton": "VD",
-      "npa": "1555"
+      "npa": "1555",
+      "lat": 46.7478499,
+      "lon": 6.9118617
     },
     {
       "name": "Villaz",
       "canton": "FR",
-      "npa": "1690"
+      "npa": "1690",
+      "lat": 46.7292556,
+      "lon": 6.9499797
     },
     {
       "name": "Villeneuve (VD)",
       "canton": "VD",
-      "npa": "1844"
+      "npa": "1844",
+      "lat": 46.3965712,
+      "lon": 6.9248129
     },
     {
       "name": "Villorsonnens",
       "canton": "FR",
-      "npa": "1694"
+      "npa": "1694",
+      "lat": 46.7073496,
+      "lon": 6.9960989
     },
     {
       "name": "Vinzel",
       "canton": "VD",
-      "npa": "1184"
+      "npa": "1184",
+      "lat": 46.4476073,
+      "lon": 6.2793859
     },
     {
       "name": "Vionnaz",
       "canton": "VS",
-      "npa": "1895"
+      "npa": "1895",
+      "lat": 46.3112229,
+      "lon": 6.8999588
     },
     {
       "name": "Visp",
       "canton": "VS",
-      "npa": "3930"
+      "npa": "3930",
+      "lat": 46.2913113,
+      "lon": 7.8811918
     },
     {
       "name": "Visperterminen",
       "canton": "VS",
-      "npa": "3932"
+      "npa": "3932",
+      "lat": 46.2589888,
+      "lon": 7.9030118
     },
     {
       "name": "Vitznau",
       "canton": "LU",
-      "npa": "6354"
+      "npa": "6354",
+      "lat": 47.0091184,
+      "lon": 8.4846569
     },
     {
       "name": "Vouvry",
       "canton": "VS",
-      "npa": "1896"
+      "npa": "1896",
+      "lat": 46.3372451,
+      "lon": 6.8887175
     },
     {
       "name": "Vuadens",
       "canton": "FR",
-      "npa": "1628"
+      "npa": "1628",
+      "lat": 46.6174394,
+      "lon": 7.0233135
     },
     {
       "name": "Vuarrens",
       "canton": "VD",
-      "npa": "1418"
+      "npa": "1418",
+      "lat": 46.6863257,
+      "lon": 6.6475677
     },
     {
       "name": "Vucherens",
       "canton": "VD",
-      "npa": "1509"
+      "npa": "1509",
+      "lat": 46.624684,
+      "lon": 6.7769649
     },
     {
       "name": "Vufflens-la-Ville",
       "canton": "VD",
-      "npa": "1302"
+      "npa": "1302",
+      "lat": 46.5783726,
+      "lon": 6.5386727
     },
     {
       "name": "Vufflens-le-Château",
       "canton": "VD",
-      "npa": "1134"
+      "npa": "1134",
+      "lat": 46.5264596,
+      "lon": 6.4690909
     },
     {
       "name": "Vugelles-La Mothe",
       "canton": "VD",
-      "npa": "1431"
+      "npa": "1431",
+      "lat": 46.8239401,
+      "lon": 6.5757152
     },
     {
       "name": "Vuisternens-devant-Romont",
       "canton": "FR",
-      "npa": "1687"
+      "npa": "1687",
+      "lat": 46.653069,
+      "lon": 6.92926
     },
     {
       "name": "Vuiteboeuf",
       "canton": "VD",
-      "npa": "1445"
+      "npa": "1445",
+      "lat": 46.807388,
+      "lon": 6.5493754
     },
     {
       "name": "Vulliens",
       "canton": "VD",
-      "npa": "1085"
+      "npa": "1085",
+      "lat": 46.6212858,
+      "lon": 6.7927903
     },
     {
       "name": "Vullierens",
       "canton": "VD",
-      "npa": "1115"
+      "npa": "1115",
+      "lat": 46.5730401,
+      "lon": 6.4816261
     },
     {
       "name": "Vully-les-Lacs",
       "canton": "VD",
-      "npa": "1585"
+      "npa": "1585",
+      "lat": 46.928004,
+      "lon": 7.0149093
     },
     {
       "name": "Vérossaz",
       "canton": "VS",
-      "npa": "1891"
+      "npa": "1891",
+      "lat": 46.2128879,
+      "lon": 6.98412
     },
     {
       "name": "Vétroz",
       "canton": "VS",
-      "npa": "1963"
+      "npa": "1963",
+      "lat": 46.2253413,
+      "lon": 7.2812893
     },
     {
       "name": "Wauwil",
       "canton": "LU",
-      "npa": "6242"
+      "npa": "6242",
+      "lat": 47.184353,
+      "lon": 8.026173
     },
     {
       "name": "Weggis",
       "canton": "LU",
-      "npa": "6353"
+      "npa": "6353",
+      "lat": 47.0322545,
+      "lon": 8.4346408
     },
     {
       "name": "Werthenstein",
       "canton": "LU",
-      "npa": "6106"
+      "npa": "6106",
+      "lat": 47.0321655,
+      "lon": 8.1222521
     },
     {
       "name": "Wikon",
       "canton": "LU",
-      "npa": "4806"
+      "npa": "4806",
+      "lat": 47.2628109,
+      "lon": 7.9675995
     },
     {
       "name": "Wiler (Lötschen)",
       "canton": "VS",
-      "npa": "3918"
+      "npa": "3918",
+      "lat": 46.4039949,
+      "lon": 7.7836104
     },
     {
       "name": "Willisau",
       "canton": "LU",
-      "npa": "6130"
+      "npa": "6130",
+      "lat": 47.1215184,
+      "lon": 7.99659
     },
     {
       "name": "Wolhusen",
       "canton": "LU",
-      "npa": "6110"
+      "npa": "6110",
+      "lat": 47.0580138,
+      "lon": 8.0725617
     },
     {
       "name": "Wünnewil-Flamatt",
       "canton": "FR",
-      "npa": "3175"
+      "npa": "3175",
+      "lat": 46.8894589,
+      "lon": 7.3110208
     },
     {
       "name": "Yens",
       "canton": "VD",
-      "npa": "1169"
+      "npa": "1169",
+      "lat": 46.518837,
+      "lon": 6.4180806
     },
     {
       "name": "Yverdon-les-Bains",
       "canton": "VD",
-      "npa": "1400"
+      "npa": "1400",
+      "lat": 46.7785711,
+      "lon": 6.6409158
     },
     {
       "name": "Yvonand",
       "canton": "VD",
-      "npa": "1462"
+      "npa": "1462",
+      "lat": 46.7983158,
+      "lon": 6.7445021
     },
     {
       "name": "Yvorne",
       "canton": "VD",
-      "npa": "1853"
+      "npa": "1853",
+      "lat": 46.3317116,
+      "lon": 6.9586852
     },
     {
       "name": "Zell (LU)",
       "canton": "LU",
-      "npa": "6144"
+      "npa": "6144",
+      "lat": 47.1380513,
+      "lon": 7.9227913
     },
     {
       "name": "Zeneggen",
       "canton": "VS",
-      "npa": "3934"
+      "npa": "3934",
+      "lat": 46.2731779,
+      "lon": 7.8656201
     },
     {
       "name": "Zermatt",
       "canton": "VS",
-      "npa": "3920"
+      "npa": "3920",
+      "lat": 46.0212076,
+      "lon": 7.749254
     },
     {
       "name": "Zwischbergen",
       "canton": "VS",
-      "npa": "3901"
+      "npa": "3901",
+      "lat": 46.1621804,
+      "lon": 8.1164859
     }
   ]
 }

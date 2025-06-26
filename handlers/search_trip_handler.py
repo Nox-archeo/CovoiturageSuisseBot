@@ -17,43 +17,6 @@ from utils.swiss_cities import find_locality, format_locality_result, load_local
 # Configuration du logger
 logger = logging.getLogger(__name__)
 
-async def handle_search_results_buttons(update: Update, context: CallbackContext):
-    """Gère les boutons dans les résultats de recherche."""
-    query = update.callback_query
-    await query.answer()
-    
-    if query.data == "search_new":
-        # Recommencer une nouvelle recherche
-        return await start_search_trip(update, context)
-    
-    if query.data == "search_back_to_menu":
-        # Rediriger vers le menu principal
-        # Utiliser une fonction externe de menu_handlers pour revenir au menu principal
-        from .menu_handlers import back_to_menu
-        return await back_to_menu(update, context)
-    
-    if query.data.startswith("search_view_trip:"):
-        trip_id = int(query.data.split(":")[1])
-        await show_trip_details(update, context, trip_id)
-    
-    if query.data.startswith("search_contact_driver:"):
-        trip_id = int(query.data.split(":")[1])
-        await contact_driver_from_search(update, context, trip_id)
-    
-    if query.data == "search_back_results":
-        # Retourner aux résultats précédents
-        last_trip_id = context.user_data.get('last_viewed_trip_id')
-        if last_trip_id:
-            await perform_trip_search(update, context)
-        else:
-            await query.edit_message_text(
-                "⚠️ Impossible de revenir aux résultats précédents.",
-                reply_markup=InlineKeyboardMarkup([[
-                    InlineKeyboardButton("🔍 Nouvelle recherche", callback_data="search_new")
-                ]])
-            )
-    
-    return SEARCH_RESULTS
 (
     SEARCH_USER_TYPE,  # Nouvel état pour choisir si on cherche un conducteur ou un passager
     SEARCH_STARTING,
@@ -441,14 +404,17 @@ async def perform_trip_search(update: Update, context: CallbackContext):
             Trip.departure_city.like(f"%{departure_str}%"),
             Trip.arrival_city.like(f"%{arrival_str}%"),
             Trip.is_published == True,
-            Trip.departure_time >= datetime.now()
+            Trip.departure_time >= datetime.now(),
+            Trip.is_cancelled == False
         ).all()
         
         # Séparation des trajets en deux catégories : conducteur et passager
         driver_trips = []
         passenger_trips = []
-        
         for trip in matching_trips:
+            # Exclure les trajets annulés côté Python (sécurité)
+            if getattr(trip, 'is_cancelled', False):
+                continue
             if hasattr(trip, 'is_request') and trip.is_request:
                 passenger_trips.append(trip)
             else:
@@ -496,16 +462,33 @@ async def perform_trip_search(update: Update, context: CallbackContext):
                     
                     # Affichage des places disponibles en fonction du champ existant
                     places_display = ""
-                    if hasattr(trip, 'available_seats') and trip.available_seats is not None:
-                        places_display = f"💺 *Places*: {trip.available_seats}\n"
-                    else:
-                        places_display = f"💺 *Places*: {trip.seats_available}\n"
+                    try:
+                        if hasattr(trip, 'available_seats') and trip.available_seats is not None:
+                            places_display = f"💺 *Places*: {trip.available_seats}\n"
+                        elif hasattr(trip, 'seats_available') and trip.seats_available is not None:
+                            places_display = f"💺 *Places*: {trip.seats_available}\n"
+                        else:
+                            places_display = "💺 *Places*: Information non disponible\n"
+                    except Exception as e:
+                        logger.error(f"Erreur lors de l'affichage des places pour le trajet {trip.id}: {str(e)}")
+                        places_display = "💺 *Places*: Information non disponible\n"
+                    
+                    # Affichage du prix avec gestion d'erreurs
+                    price_display = ""
+                    try:
+                        if hasattr(trip, 'price_per_seat') and trip.price_per_seat is not None:
+                            price_display = f"💰 *Prix*: {trip.price_per_seat}.-\n\n"
+                        else:
+                            price_display = "💰 *Prix*: Information non disponible\n\n"
+                    except Exception as e:
+                        logger.error(f"Erreur lors de l'affichage du prix pour le trajet {trip.id}: {str(e)}")
+                        price_display = "💰 *Prix*: Information non disponible\n\n"
                     
                     # Ajouter au message
                     message_text += f"🚗 *Trajet {i+1}*: {trip.departure_city} → {trip.arrival_city}\n"
                     message_text += f"📅 *Date*: {display_time}\n"
                     message_text += places_display
-                    message_text += f"💰 *Prix*: {trip.price_per_seat}.-\n\n"
+                    message_text += price_display
                     
                     # Ajouter un bouton pour voir les détails
                     keyboard.append([InlineKeyboardButton(
@@ -622,6 +605,10 @@ async def handle_search_results_buttons(update: Update, context: CallbackContext
         trip_id = int(query.data.split(":")[1])
         await show_trip_details(update, context, trip_id)
     
+    if query.data.startswith("search_book_trip:"):
+        trip_id = int(query.data.split(":")[1])
+        await book_trip(update, context, trip_id)
+    
     if query.data.startswith("search_contact_driver:"):
         trip_id = int(query.data.split(":")[1])
         await contact_driver_from_search(update, context, trip_id)
@@ -658,9 +645,13 @@ async def show_trip_details(update: Update, context: CallbackContext, trip_id):
             )
             return SEARCH_RESULTS
         
-        # Récupérer les informations du conducteur
-        driver = db.query(User).get(trip.driver_id)
-        driver_name = driver.username if driver and driver.username else "Conducteur anonyme"
+        # Récupérer les informations du conducteur - Méthode plus sûre pour éviter l'erreur de colonne
+        try:
+            driver = db.query(User).filter(User.id == trip.driver_id).first()
+            driver_name = driver.username if driver and driver.username else "Conducteur anonyme"
+        except Exception as driver_error:
+            logger.error(f"Erreur lors de la récupération des informations du conducteur: {str(driver_error)}")
+            driver_name = "Conducteur anonyme"
         
         # Formatage de la date
         display_time = trip.departure_time.strftime("%d/%m/%Y à %H:%M")
@@ -700,18 +691,54 @@ async def show_trip_details(update: Update, context: CallbackContext, trip_id):
             ]
         else:
             # C'est une offre de trajet (conducteur)
-            message_text = (
-                f"🚗 *Détails du trajet*\n\n"
-                f"🏁 *Itinéraire*: {trip.departure_city} → {trip.arrival_city}\n"
-                f"📅 *Date*: {display_time}\n"
-                f"👤 *Conducteur*: {driver_name}\n"
-                f"💺 *Places disponibles*: {trip.seats_available}\n"
-                f"💰 *Prix*: {trip.price_per_seat}.- CHF\n\n"
-            )
+            try:
+                # Déterminer le nombre de places disponibles avec gestion d'erreurs améliorée
+                available_seats = 0
+                try:
+                    if hasattr(trip, 'available_seats') and trip.available_seats is not None:
+                        available_seats = trip.available_seats
+                    elif hasattr(trip, 'seats_available') and trip.seats_available is not None:
+                        available_seats = trip.seats_available
+                    else:
+                        logger.warning(f"Ni available_seats ni seats_available disponibles pour le trajet {trip.id}")
+                except Exception as seats_error:
+                    logger.error(f"Erreur lors de l'accès aux places disponibles: {str(seats_error)}")
+                
+                # Déterminer le prix avec gestion d'erreurs
+                price = 0
+                try:
+                    if hasattr(trip, 'price_per_seat') and trip.price_per_seat is not None:
+                        price = trip.price_per_seat
+                    else:
+                        logger.warning(f"price_per_seat non disponible pour le trajet {trip.id}")
+                except Exception as price_error:
+                    logger.error(f"Erreur lors de l'accès au prix: {str(price_error)}")
+                
+                message_text = (
+                    f"🚗 *Détails du trajet*\n\n"
+                    f"🏁 *Itinéraire*: {trip.departure_city} → {trip.arrival_city}\n"
+                    f"📅 *Date*: {display_time}\n"
+                    f"👤 *Conducteur*: {driver_name}\n"
+                    f"💺 *Places disponibles*: {available_seats}\n"
+                    f"💰 *Prix*: {price}.- CHF\n\n"
+                )
+            except Exception as e:
+                logger.error(f"Erreur lors de l'accès aux détails du trajet: {str(e)}")
+                message_text = (
+                    f"🚗 *Détails du trajet*\n\n"
+                    f"🏁 *Itinéraire*: {trip.departure_city} → {trip.arrival_city}\n"
+                    f"📅 *Date*: {display_time}\n"
+                    f"👤 *Conducteur*: {driver_name}\n"
+                )
+                # Ajouter plus d'informations si elles sont disponibles
+                try:
+                    message_text += f"💰 *Prix*: {trip.price_per_seat if trip.price_per_seat is not None else 0}.- CHF\n\n"
+                except:
+                    message_text += "💰 *Prix*: Information non disponible\n\n"
             
-            # Boutons d'action pour une offre de conducteur
+            # Boutons d'action pour une offre de conducteur - Contact uniquement après réservation
             keyboard = [
-                [InlineKeyboardButton("📱 Contacter le conducteur", callback_data=f"search_contact_driver:{trip.id}")],
+                [InlineKeyboardButton("🎟️ Réserver", callback_data=f"search_book_trip:{trip.id}")],
                 [InlineKeyboardButton("🔙 Retour aux résultats", callback_data="search_back_results")],
                 [InlineKeyboardButton("🔍 Nouvelle recherche", callback_data="search_new")]
             ]
@@ -805,6 +832,474 @@ async def contact_driver_from_search(update: Update, context: CallbackContext, t
     
     return SEARCH_RESULTS
 
+async def book_trip(update: Update, context: CallbackContext):
+    """Gère la réservation d'un trajet."""
+    query = update.callback_query
+    await query.answer()
+    
+    try:
+        # Extraire l'ID du trajet depuis les données de callback
+        trip_id = int(query.data.split(':')[1])
+        seats = 1  # Par défaut, réserver 1 place
+        
+        db = get_db()
+        trip = db.query(Trip).get(trip_id)
+        
+        if not trip:
+            await query.edit_message_text(
+                "❌ Trajet introuvable.",
+                reply_markup=InlineKeyboardMarkup([[
+                    InlineKeyboardButton("🔙 Retour aux résultats", callback_data="search_back_results")
+                ]])
+            )
+            return SEARCH_RESULTS
+        
+        # Vérifier si l'utilisateur est le conducteur
+        user_id = update.effective_user.id
+        db_user = db.query(User).filter(User.telegram_id == user_id).first()
+        
+        if not db_user:
+            await query.edit_message_text(
+                "❌ Vous devez d'abord configurer votre profil pour réserver un trajet.",
+                reply_markup=InlineKeyboardMarkup([[
+                    InlineKeyboardButton("🔙 Retour", callback_data=f"search_view_trip:{trip_id}")
+                ]])
+            )
+            return SEARCH_RESULTS
+        
+        if trip.driver_id == db_user.id:
+            await query.edit_message_text(
+                "❌ Vous ne pouvez pas réserver votre propre trajet.",
+                reply_markup=InlineKeyboardMarkup([[
+                    InlineKeyboardButton("🔙 Retour", callback_data=f"search_view_trip:{trip_id}")
+                ]])
+            )
+            return SEARCH_RESULTS
+        
+        # Vérifier la disponibilité des places
+        try:
+            available_seats = 0
+            try:
+                if hasattr(trip, 'available_seats') and trip.available_seats is not None:
+                    available_seats = trip.available_seats
+                elif hasattr(trip, 'seats_available') and trip.seats_available is not None:
+                    available_seats = trip.seats_available
+                else:
+                    available_seats = 0
+                    logger.warning(f"Ni available_seats ni seats_available disponibles pour le trajet {trip.id}")
+            except Exception as e:
+                logger.error(f"Erreur lors de l'accès aux attributs de places disponibles: {str(e)}")
+                available_seats = 0  # Valeur par défaut en cas d'erreur
+            
+            if available_seats < seats:
+                await query.edit_message_text(
+                    f"❌ Il n'y a pas assez de places disponibles. Places restantes : {available_seats}",
+                    reply_markup=InlineKeyboardMarkup([[
+                        InlineKeyboardButton("🔙 Retour", callback_data=f"search_view_trip:{trip_id}")
+                    ]])
+                )
+                return SEARCH_RESULTS
+        except Exception as e:
+            logger.error(f"Erreur lors de la vérification des places disponibles: {str(e)}")
+            await query.edit_message_text(
+                "❌ Impossible de vérifier les places disponibles. Veuillez réessayer.",
+                reply_markup=InlineKeyboardMarkup([[
+                    InlineKeyboardButton("🔙 Retour", callback_data=f"search_view_trip:{trip_id}")
+                ]])
+            )
+            return SEARCH_RESULTS
+        
+        # Vérifier si l'utilisateur a déjà réservé ce trajet
+        existing_booking = db.query(Booking).filter(
+            Booking.trip_id == trip_id,
+            Booking.passenger_id == db_user.id,
+            Booking.status.in_(["pending", "confirmed"])
+        ).first()
+        
+        if existing_booking:
+            # L'utilisateur a déjà une réservation pour ce trajet
+            await query.edit_message_text(
+                f"ℹ️ Vous avez déjà réservé {existing_booking.seats} place(s) pour ce trajet.",
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("➕ Ajouter des places", callback_data=f"book_add_seats:{trip_id}")],
+                    [InlineKeyboardButton("❌ Annuler ma réservation", callback_data=f"book_cancel:{trip_id}")],
+                    [InlineKeyboardButton("🔙 Retour", callback_data=f"search_view_trip:{trip_id}")]
+                ])
+            )
+            return SEARCH_RESULTS
+        
+        # Récupérer les informations du conducteur
+        driver = db.query(User).get(trip.driver_id)
+        
+        # Vérifier que price_per_seat existe et n'est pas None
+        try:
+            price_per_seat = trip.price_per_seat if hasattr(trip, 'price_per_seat') and trip.price_per_seat is not None else 0
+            total_price = price_per_seat * seats
+        except Exception as e:
+            logger.error(f"Erreur lors du calcul du prix: {str(e)}")
+            price_per_seat = 0
+            total_price = 0
+        
+        # Créer un récapitulatif de la réservation
+        message_text = (
+            f"🎟️ *Récapitulatif de votre réservation*\n\n"
+            f"🏁 *Trajet* : {trip.departure_city} → {trip.arrival_city}\n"
+            f"📅 *Date* : {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
+            f"👤 *Conducteur* : {driver.username if driver and driver.username else 'Conducteur anonyme'}\n"
+            f"💺 *Places* : {seats}\n"
+            f"💰 *Prix total* : {total_price}.- CHF\n\n"
+            f"Confirmez-vous cette réservation ?"
+        )
+        
+        # Vérifier si le conducteur a un compte Stripe
+        try:
+            from utils.stripe_utils import check_driver_stripe_account
+            has_stripe_account = await check_driver_stripe_account(driver)
+        except Exception as e:
+            logger.error(f"Erreur lors de la vérification du compte Stripe: {str(e)}")
+            has_stripe_account = False
+        
+        if has_stripe_account:
+            # Le conducteur a un compte Stripe, proposer le paiement
+            keyboard = [
+                [InlineKeyboardButton("💳 Payer avec Stripe", callback_data=f"book_pay_stripe:{trip_id}:{seats}")],
+                [InlineKeyboardButton("🔙 Retour", callback_data=f"search_view_trip:{trip_id}")],
+                [InlineKeyboardButton("❌ Annuler", callback_data="search_back_results")]
+            ]
+        else:
+            # Le conducteur n'a pas de compte Stripe, informer l'utilisateur
+            message_text += "\n\n⚠️ Le conducteur n'a pas encore configuré son compte Stripe. Vous pouvez quand même réserver, mais vous ne pourrez pas payer en ligne pour le moment."
+            keyboard = [
+                [InlineKeyboardButton("✅ Réserver sans paiement", callback_data=f"book_without_payment:{trip_id}:{seats}")],
+                [InlineKeyboardButton("🔙 Retour", callback_data=f"search_view_trip:{trip_id}")],
+                [InlineKeyboardButton("❌ Annuler", callback_data="search_back_results")]
+            ]
+        
+        await query.edit_message_text(
+            message_text,
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode="Markdown"
+        )
+        
+    except Exception as e:
+        logger.error(f"Erreur lors de la réservation: {str(e)}", exc_info=True)
+        await query.edit_message_text(
+            "❌ Une erreur est survenue lors de la réservation.",
+            reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton("🔙 Retour", callback_data=f"search_view_trip:{trip_id}")
+            ]])
+        )
+    
+    return SEARCH_RESULTS
+
+async def pay_with_stripe(update: Update, context: CallbackContext):
+    """Traite le paiement avec Stripe."""
+    query = update.callback_query
+    await query.answer()
+    
+    # Extraire les données du callback
+    parts = query.data.split(":")
+    trip_id = int(parts[1])
+    seats = int(parts[2])
+    
+    try:
+        from utils.stripe_utils import create_checkout_session
+        
+        db = get_db()
+        trip = db.query(Trip).get(trip_id)
+        
+        if not trip:
+            await query.edit_message_text(
+                "❌ Trajet introuvable.",
+                reply_markup=InlineKeyboardMarkup([[
+                    InlineKeyboardButton("🔙 Retour aux résultats", callback_data="search_back_results")
+                ]])
+            )
+            return SEARCH_RESULTS
+        
+        # Obtenir l'utilisateur
+        user_id = update.effective_user.id
+        db_user = db.query(User).filter(User.telegram_id == user_id).first()
+        
+        if not db_user:
+            await query.edit_message_text(
+                "❌ Utilisateur non trouvé.",
+                reply_markup=InlineKeyboardMarkup([[
+                    InlineKeyboardButton("🔙 Retour", callback_data=f"search_view_trip:{trip_id}")
+                ]])
+            )
+            return SEARCH_RESULTS
+        
+        # Créer une session de paiement Stripe
+        checkout_url = await create_checkout_session(trip, db_user, seats)
+        
+        if not checkout_url:
+            await query.edit_message_text(
+                "❌ Erreur lors de la création de la session de paiement.",
+                reply_markup=InlineKeyboardMarkup([[
+                    InlineKeyboardButton("🔙 Retour", callback_data=f"search_view_trip:{trip_id}")
+                ]])
+            )
+            return SEARCH_RESULTS
+        
+        # Créer une réservation en attente de paiement
+        new_booking = Booking(
+            trip_id=trip_id,
+            passenger_id=db_user.id,
+            status="pending_payment",
+            seats=seats,
+            booking_date=datetime.now(),
+            amount=trip.price_per_seat * seats,
+            is_paid=False
+        )
+        
+        db.add(new_booking)
+        db.commit()
+        
+        # Envoyer un message avec le lien de paiement
+        keyboard = [
+            [InlineKeyboardButton("💳 Payer maintenant", url=checkout_url)],
+            [InlineKeyboardButton("🔙 Retour", callback_data=f"search_view_trip:{trip_id}")]
+        ]
+        
+        await query.edit_message_text(
+            "💰 *Paiement avec Stripe*\n\n"
+            "Vous allez être redirigé vers la page de paiement sécurisée Stripe.\n"
+            "Une fois le paiement effectué, votre réservation sera confirmée automatiquement.\n\n"
+            "Cliquez sur le bouton ci-dessous pour procéder au paiement :",
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode="Markdown"
+        )
+        
+    except Exception as e:
+        logger.error(f"Erreur lors du paiement Stripe: {str(e)}", exc_info=True)
+        await query.edit_message_text(
+            "❌ Une erreur est survenue lors de la préparation du paiement.",
+            reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton("🔙 Retour", callback_data=f"search_view_trip:{trip_id}")
+            ]])
+        )
+    
+    return SEARCH_RESULTS
+
+async def book_without_payment(update: Update, context: CallbackContext):
+    """Réserve un trajet sans paiement en ligne."""
+    query = update.callback_query
+    await query.answer()
+    
+    # Extraire les données du callback
+    parts = query.data.split(":")
+    trip_id = int(parts[1])
+    seats = int(parts[2])
+    
+    try:
+        db = get_db()
+        trip = db.query(Trip).get(trip_id)
+        
+        if not trip:
+            await query.edit_message_text(
+                "❌ Trajet introuvable.",
+                reply_markup=InlineKeyboardMarkup([[
+                    InlineKeyboardButton("🔙 Retour aux résultats", callback_data="search_back_results")
+                ]])
+            )
+            return SEARCH_RESULTS
+        
+        # Obtenir l'utilisateur
+        user_id = update.effective_user.id
+        db_user = db.query(User).filter(User.telegram_id == user_id).first()
+        
+        if not db_user:
+            await query.edit_message_text(
+                "❌ Utilisateur non trouvé.",
+                reply_markup=InlineKeyboardMarkup([[
+                    InlineKeyboardButton("🔙 Retour", callback_data=f"search_view_trip:{trip_id}")
+                ]])
+            )
+            return SEARCH_RESULTS
+        
+        try:
+            # Vérifier que le prix par siège est disponible
+            price_per_seat = 0
+            try:
+                if hasattr(trip, 'price_per_seat') and trip.price_per_seat is not None:
+                    price_per_seat = trip.price_per_seat
+            except Exception as e:
+                logger.error(f"Erreur lors de l'accès au prix par siège: {str(e)}")
+            
+            # Créer une réservation sans paiement
+            new_booking = Booking(
+                trip_id=trip_id,
+                passenger_id=db_user.id,
+                status="confirmed",
+                seats=seats,
+                booking_date=datetime.now(),
+                amount=price_per_seat * seats,
+                is_paid=False
+            )
+            
+            db.add(new_booking)
+            
+            # Mettre à jour le nombre de places disponibles avec gestion d'erreurs
+            try:
+                if hasattr(trip, 'available_seats') and trip.available_seats is not None:
+                    trip.available_seats -= seats
+                elif hasattr(trip, 'seats_available') and trip.seats_available is not None:
+                    trip.seats_available -= seats
+                else:
+                    logger.warning(f"Impossible de mettre à jour le nombre de places pour le trajet {trip.id}")
+            except Exception as e:
+                logger.error(f"Erreur lors de la mise à jour des places disponibles: {str(e)}")
+            
+            db.commit()
+        except Exception as e:
+            logger.error(f"Erreur lors de la création de la réservation: {str(e)}", exc_info=True)
+            db.rollback()
+            await query.edit_message_text(
+                "❌ Une erreur est survenue lors de la création de la réservation.",
+                reply_markup=InlineKeyboardMarkup([[
+                    InlineKeyboardButton("🔙 Retour", callback_data=f"search_view_trip:{trip_id}")
+                ]])
+            )
+            return SEARCH_RESULTS
+        
+        # Notification de réservation réussie
+        try:
+            # S'assurer que le prix est disponible pour le message de confirmation
+            final_price = price_per_seat * seats if price_per_seat is not None else 0
+            
+            # Récupérer les informations du conducteur
+            driver = db.query(User).get(trip.driver_id)
+            driver_name = driver.username if driver and driver.username else "Conducteur anonyme"
+            driver_phone = driver.phone if driver and hasattr(driver, 'phone') and driver.phone else "Non renseigné"
+            
+            # Récupérer les informations du passager
+            passenger_name = update.effective_user.username or update.effective_user.first_name or "Passager"
+            passenger_phone = db_user.phone if hasattr(db_user, 'phone') and db_user.phone else "Non renseigné"
+            
+            # Envoyer les informations du conducteur au passager
+            await query.edit_message_text(
+                "✅ *Réservation confirmée !*\n\n"
+                f"Vous avez réservé {seats} place(s) pour le trajet :\n"
+                f"{trip.departure_city} → {trip.arrival_city}\n"
+                f"Date : {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
+                f"Montant à payer au conducteur : {final_price}.- CHF\n\n"
+                f"📱 *Coordonnées du conducteur* :\n"
+                f"Nom : {driver_name}\n"
+                f"Téléphone : {driver_phone}\n\n"
+                "Le conducteur a été notifié de votre réservation.",
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("📱 Contacter le conducteur", callback_data=f"search_contact_driver:{trip_id}")],
+                    [InlineKeyboardButton("🔍 Nouvelle recherche", callback_data="search_new")],
+                    [InlineKeyboardButton("🔙 Menu principal", callback_data="search_back_to_menu")]
+                ]),
+                parse_mode="Markdown"
+            )
+            
+            # Envoyer les informations du passager au conducteur
+            if driver and driver.telegram_id:
+                try:
+                    await context.bot.send_message(
+                        chat_id=driver.telegram_id,
+                        text=f"🎟️ *Nouvelle réservation !*\n\n"
+                             f"Un passager a réservé {seats} place(s) pour votre trajet :\n"
+                             f"{trip.departure_city} → {trip.arrival_city}\n"
+                             f"Date : {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
+                             f"Montant à recevoir : {final_price}.- CHF\n\n"
+                             f"📱 *Coordonnées du passager* :\n"
+                             f"Nom : {passenger_name}\n"
+                             f"Téléphone : {passenger_phone}",
+                        parse_mode="Markdown"
+                    )
+                    logger.info(f"Notification de réservation envoyée au conducteur {driver.telegram_id}")
+                except Exception as notify_error:
+                    logger.error(f"Erreur lors de la notification au conducteur: {str(notify_error)}")
+            
+        except Exception as e:
+            logger.error(f"Erreur lors de l'affichage de la confirmation: {str(e)}", exc_info=True)
+            await query.edit_message_text(
+                "✅ Réservation confirmée ! Vous pouvez contacter le conducteur pour plus de détails.",
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("📱 Contacter le conducteur", callback_data=f"search_contact_driver:{trip_id}")],
+                    [InlineKeyboardButton("🔙 Menu principal", callback_data="search_back_to_menu")]
+                ])
+            )
+        
+    except Exception as e:
+        logger.error(f"Erreur lors de la réservation sans paiement: {str(e)}", exc_info=True)
+        await query.edit_message_text(
+            "❌ Une erreur est survenue lors de la réservation.",
+            reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton("🔙 Retour", callback_data=f"search_view_trip:{trip_id}")
+            ]])
+        )
+    
+    return SEARCH_RESULTS
+
+async def prompt_driver_stripe_onboarding(update: Update, context: CallbackContext):
+    """Invite un conducteur à créer un compte Stripe Connect Express."""
+    query = update.callback_query
+    await query.answer()
+    
+    # Extraire l'ID du conducteur du callback
+    driver_id = int(query.data.split(":")[1])
+    
+    try:
+        from utils.stripe_utils import create_onboarding_link
+        
+        db = get_db()
+        driver = db.query(User).get(driver_id)
+        
+        if not driver:
+            await query.edit_message_text(
+                "❌ Conducteur introuvable.",
+                reply_markup=InlineKeyboardMarkup([[
+                    InlineKeyboardButton("🔙 Menu principal", callback_data="search_back_to_menu")
+                ]])
+            )
+            return ConversationHandler.END
+        
+        # Créer un lien d'onboarding Stripe
+        onboarding_url = await create_onboarding_link(driver)
+        
+        if not onboarding_url:
+            await query.edit_message_text(
+                "❌ Erreur lors de la création du lien d'onboarding Stripe.",
+                reply_markup=InlineKeyboardMarkup([[
+                    InlineKeyboardButton("🔙 Menu principal", callback_data="search_back_to_menu")
+                ]])
+            )
+            return ConversationHandler.END
+        
+        # Envoyer un message avec le lien d'onboarding
+        keyboard = [
+            [InlineKeyboardButton("💳 Configurer Stripe Connect", url=onboarding_url)],
+            [InlineKeyboardButton("🔙 Menu principal", callback_data="search_back_to_menu")]
+        ]
+        
+        await query.edit_message_text(
+            "💰 *Configuration de Stripe Connect*\n\n"
+            "Pour recevoir les paiements de vos passagers, vous devez configurer votre compte Stripe Connect Express.\n\n"
+            "Ce processus ne prend que quelques minutes. Vous pourrez :\n"
+            "- Recevoir des paiements directement sur votre compte bancaire\n"
+            "- Gérer vos revenus facilement\n"
+            "- Bénéficier de la protection contre la fraude\n\n"
+            "Cliquez sur le bouton ci-dessous pour commencer :",
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode="Markdown"
+        )
+        
+    except Exception as e:
+        logger.error(f"Erreur lors de l'onboarding Stripe: {str(e)}", exc_info=True)
+        await query.edit_message_text(
+            "❌ Une erreur est survenue lors de la création du lien d'onboarding.",
+            reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton("🔙 Menu principal", callback_data="search_back_to_menu")
+            ]])
+        )
+    
+    return ConversationHandler.END
+
 # Définition du ConversationHandler pour la recherche de trajet
 search_trip_conv_handler = ConversationHandler(
     entry_points=[
@@ -828,7 +1323,10 @@ search_trip_conv_handler = ConversationHandler(
             MessageHandler(filters.TEXT & ~filters.COMMAND, handle_search_arrival_text)
         ],
         SEARCH_RESULTS: [
-            CallbackQueryHandler(handle_search_results_buttons, pattern='^search_view_trip:|^search_new$|^search_back_to_menu$|^search_contact_driver:|^search_back_results$')
+            CallbackQueryHandler(handle_search_results_buttons, pattern='^search_view_trip:|^search_new$|^search_back_to_menu$|^search_contact_driver:|^search_back_results$'),
+            CallbackQueryHandler(book_trip, pattern='^search_book_trip:'),
+            CallbackQueryHandler(pay_with_stripe, pattern='^book_pay_stripe:'),
+            CallbackQueryHandler(book_without_payment, pattern='^book_without_payment:')
         ]
     },
     fallbacks=[

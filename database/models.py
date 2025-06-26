@@ -23,6 +23,7 @@ class User(Base):
     # Commun - Retrait de subscription_end qui n'est pas utilisé
     stripe_customer_id = Column(String, nullable=True)
     stripe_subscription_id = Column(String, nullable=True)
+    stripe_account_id = Column(String, nullable=True)  # ID du compte Stripe Connect Express pour les conducteurs
     is_admin = Column(Boolean, default=False)
     language = Column(String, default='fr')
     phone = Column(String)
@@ -93,6 +94,7 @@ class Trip(Base):
     available_seats = Column(Integer)  # Places restantes (mise à jour automatique)
     total_distance = Column(Float)  # Distance en km
     estimated_duration = Column(Integer)  # Durée estimée en minutes
+    is_cancelled = Column(Boolean, default=False)  # Annulation du trajet
 
 class Booking(Base):
     __tablename__ = 'bookings'
@@ -101,6 +103,12 @@ class Booking(Base):
     passenger_id = Column(Integer, ForeignKey('users.id'))
     status = Column(String)  # 'pending', 'confirmed', 'completed', 'cancelled'
     payment_id = Column(String)
+    seats = Column(Integer, default=1)  # Nombre de places réservées
+    booking_date = Column(DateTime, default=datetime.utcnow)
+    amount = Column(Float)  # Montant total payé
+    is_paid = Column(Boolean, default=False)  # Indique si le paiement a été effectué
+    stripe_session_id = Column(String)  # ID de la session de paiement Stripe
+    stripe_payment_intent_id = Column(String)  # ID de l'intent de paiement Stripe
     passenger = relationship("User")
     trip = relationship("Trip")
 

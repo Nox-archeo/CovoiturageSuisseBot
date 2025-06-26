@@ -92,6 +92,6 @@ def register(application):
         name="verification_conversation",  # Ajouté pour persistent=True
         persistent=True,
         allow_reentry=True,
-        per_message=False  # Important : évite le warning PTBUserWarning
+        per_message=False  # Modifié pour éviter le warning
     )
     application.add_handler(conv_handler)

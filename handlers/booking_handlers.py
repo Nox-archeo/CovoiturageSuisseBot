@@ -13,8 +13,9 @@ async def book_trip(update: Update, context: CallbackContext):
         return
 
     trip = Trip.query.get(trip_id)
-    if not trip:
-        await update.message.reply_text("Trajet non trouvé.")
+    # Correction : empêcher la réservation d'un trajet annulé
+    if not trip or getattr(trip, 'is_cancelled', False):
+        await update.message.reply_text("Trajet non trouvé ou annulé.")
         return
 
     keyboard = [

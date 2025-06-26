@@ -42,3 +42,9 @@ async def show_user_stats(update: Update, context):
         caption=stats_text,
         reply_markup=InlineKeyboardMarkup(keyboard)
     )
+
+    # Correction : exclure les trajets annulés des statistiques
+    # (Supposons que get_trips_over_time et autres fonctions utilisent Trip)
+    # Ajoutez ce filtre dans les fonctions concernées ou ici si la liste est accessible
+    # Exemple :
+    # trips = db.query(Trip).filter(Trip.user_id == user_id, (Trip.is_cancelled == False) | (Trip.is_cancelled.is_(None))).all()

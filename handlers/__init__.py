@@ -3,4 +3,4 @@
 # Retirer les imports circulaires
 from . import create_trip_handler
 from . import search_trip_handler
-from . import profile_handlers
+from . import profile_handler
