@@ -957,16 +957,12 @@ async def book_trip(update: Update, context: CallbackContext):
             f"Confirmez-vous cette réservation ?"
         )
         
-        # Vérifier si le conducteur a un compte Stripe
-        try:
-            from utils.stripe_utils import check_driver_stripe_account
-            has_stripe_account = await check_driver_stripe_account(driver)
-        except Exception as e:
-            logger.error(f"Erreur lors de la vérification du compte Stripe: {str(e)}")
-            has_stripe_account = False
+        # Vérifier si le conducteur a un compte PayPal (plus de Stripe)
+        # has_stripe_account = False  # Stripe désactivé
+        has_paypal_account = driver.paypal_email is not None
         
-        if has_stripe_account:
-            # Le conducteur a un compte Stripe, proposer le paiement
+        if has_paypal_account:
+            # Le conducteur a un compte PayPal, proposer le paiement
             keyboard = [
                 [InlineKeyboardButton("💳 Payer avec Stripe", callback_data=f"book_pay_stripe:{trip_id}:{seats}")],
                 [InlineKeyboardButton("🔙 Retour", callback_data=f"search_view_trip:{trip_id}")],
@@ -1009,7 +1005,8 @@ async def pay_with_stripe(update: Update, context: CallbackContext):
     seats = int(parts[2])
     
     try:
-        from utils.stripe_utils import create_checkout_session
+        # Anciennement : from utils.stripe_utils import create_checkout_session
+        # Maintenant : on utilise PayPal via les handlers de paiement
         
         db = get_db()
         trip = db.query(Trip).get(trip_id)
