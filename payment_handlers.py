@@ -261,9 +261,26 @@ class PaymentHandlers:
                 
                 # Récupération du conducteur
                 driver = session.query(User).filter(User.telegram_id == user_id).first()
-                if not driver or not hasattr(driver, 'paypal_email') or not driver.paypal_email:
+                if not driver:
                     await update.message.reply_text(
-                        "❌ Vous devez d'abord configurer votre email PayPal avec /definirpaypal"
+                        "❌ Conducteur non trouvé."
+                    )
+                    return
+                
+                # Vérification de l'email PayPal
+                if not hasattr(driver, 'paypal_email') or not driver.paypal_email:
+                    keyboard = [
+                        [InlineKeyboardButton("💳 Configurer PayPal", callback_data="setup_paypal")],
+                        [InlineKeyboardButton("ℹ️ Comment faire ?", callback_data="paypal_help")]
+                    ]
+                    
+                    await update.message.reply_text(
+                        "⚠️ *Email PayPal manquant*\n\n"
+                        "Pour recevoir vos paiements automatiques, vous devez "
+                        "d'abord configurer votre email PayPal.\n\n"
+                        "💡 Utilisez la commande /paypal ou cliquez sur le bouton ci-dessous.",
+                        parse_mode='Markdown',
+                        reply_markup=InlineKeyboardMarkup(keyboard)
                     )
                     return
                 

@@ -53,7 +53,7 @@ class TripConfirmationSystem:
             if not paid_bookings:
                 return  # Pas de réservations payées
             
-            # Message au conducteur
+            # Message au conducteur pour confirmation OBLIGATOIRE
             driver = trip.driver
             if driver and driver.telegram_id:
                 keyboard = [
@@ -61,13 +61,18 @@ class TripConfirmationSystem:
                     [InlineKeyboardButton("❌ Signaler un problème", callback_data=f"report_issue:{trip.id}")]
                 ]
                 
+                total_amount = sum(float(b.total_price) for b in paid_bookings)
+                driver_amount = round(total_amount * 0.88, 2)
+                
                 message = (
-                    f"🚗 *Confirmation de trajet*\n\n"
+                    f"🚗 *Confirmation de trajet REQUISE*\n\n"
                     f"Votre trajet {trip.departure_city} → {trip.arrival_city} "
                     f"du {trip.departure_time.strftime('%d/%m/%Y à %H:%M')} s'est terminé.\n\n"
                     f"👥 {len(paid_bookings)} passager(s) ont payé\n"
-                    f"💰 Montant total: {sum(b.total_price for b in paid_bookings)} CHF\n\n"
-                    f"Veuillez confirmer que le trajet s'est bien déroulé pour recevoir votre paiement."
+                    f"💰 Montant total: {total_amount} CHF\n"
+                    f"💵 Votre part (88%): {driver_amount} CHF\n\n"
+                    f"⚠️ **IMPORTANT** : Vous devez confirmer que le trajet s'est bien déroulé "
+                    f"pour recevoir votre paiement automatiquement."
                 )
                 
                 await self.bot.send_message(
@@ -133,10 +138,22 @@ class TripConfirmationSystem:
             return False
     
     def _has_passenger_confirmations(self, trip_id: int) -> bool:
-        """Vérifie si au moins un passager a confirmé"""
-        # Pour simplifier, on considère qu'un passager qui ne signale pas de problème = confirmation
-        # En pratique, vous pourriez implémenter un système plus sophistiqué
-        return True
+        """Vérifie si au moins un passager a confirmé le trajet"""
+        try:
+            db = get_db()
+            
+            # Vérifier s'il y a des réservations confirmées avec payment_status = 'completed'
+            confirmed_bookings = db.query(Booking).filter(
+                Booking.trip_id == trip_id,
+                Booking.payment_status == 'completed',
+                Booking.status == 'completed'  # Le passager a confirmé via trip_completion_handlers
+            ).count()
+            
+            return confirmed_bookings > 0
+            
+        except Exception as e:
+            logger.error(f"Erreur vérification confirmations passagers: {e}")
+            return False
     
     async def _trigger_driver_payment(self, trip: Trip):
         """Déclenche le paiement au conducteur"""
@@ -157,7 +174,39 @@ class TripConfirmationSystem:
             
             driver = trip.driver
             if not driver or not driver.paypal_email:
-                logger.error(f"Conducteur {trip.driver_id} sans email PayPal")
+                # Email PayPal manquant - Notifier le conducteur
+                if driver and driver.telegram_id:
+                    keyboard = [
+                        [InlineKeyboardButton("💳 Configurer PayPal", callback_data="setup_paypal")],
+                        [InlineKeyboardButton("ℹ️ Plus d'infos", callback_data="paypal_info")]
+                    ]
+                    
+                    await self.bot.send_message(
+                        chat_id=driver.telegram_id,
+                        text=(
+                            "⚠️ *Paiement bloqué - Email PayPal manquant*\n\n"
+                            f"Votre trajet {trip.departure_city} → {trip.arrival_city} "
+                            f"a été confirmé, mais nous ne pouvons pas vous envoyer "
+                            f"votre paiement car aucun email PayPal n'est configuré.\n\n"
+                            f"💰 Montant en attente : {total_amount} CHF\n"
+                            f"💵 Votre part (88%) : {round(total_amount * 0.88, 2)} CHF\n\n"
+                            f"🔧 Configurez votre email PayPal maintenant pour recevoir "
+                            f"votre paiement automatiquement."
+                        ),
+                        parse_mode="Markdown",
+                        reply_markup=InlineKeyboardMarkup(keyboard)
+                    )
+                
+                # Marquer le trajet comme complété mais sans paiement
+                trip.status = 'completed_payment_pending'
+                
+                # Marquer les réservations comme complétées
+                for booking in paid_bookings:
+                    booking.status = 'completed'
+                
+                db.commit()
+                
+                logger.warning(f"Paiement bloqué pour le trajet {trip.id} - Email PayPal manquant pour le conducteur {trip.driver_id}")
                 return
             
             # Calculer le montant total

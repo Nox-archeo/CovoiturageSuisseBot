@@ -100,8 +100,15 @@ class Trip(Base):
     is_cancelled = Column(Boolean, default=False)  # Annulation du trajet
     
     # Champs pour PayPal
-    status = Column(String, default='active')  # 'active', 'completed', 'cancelled'
+    status = Column(String, default='active')  # 'active', 'completed', 'cancelled', 'completed_payment_pending'
     payout_batch_id = Column(String, nullable=True)  # ID du paiement envoyé au conducteur
+    last_paypal_reminder = Column(DateTime, nullable=True)  # Dernière date d'envoi du rappel PayPal
+    
+    # Champs pour la double confirmation
+    confirmed_by_driver = Column(Boolean, default=False)  # Confirmation du conducteur
+    confirmed_by_passengers = Column(Boolean, default=False)  # Confirmation des passagers
+    driver_amount = Column(Float, nullable=True)  # Montant versé au conducteur (88%)
+    commission_amount = Column(Float, nullable=True)  # Commission de la plateforme (12%)
 
 class Booking(Base):
     __tablename__ = 'bookings'
@@ -121,8 +128,8 @@ class Booking(Base):
     paypal_payment_id = Column(String, nullable=True)  # ID du paiement PayPal
     payment_status = Column(String, default='unpaid')  # 'unpaid', 'pending', 'paid', 'cancelled'
     total_price = Column(Float, nullable=True)  # Montant total (amount * seats)
-    passenger = relationship("User")
-    trip = relationship("Trip")
+    passenger = relationship("User", overlaps="bookings")
+    trip = relationship("Trip", overlaps="bookings")
 
 class Message(Base):
     """Pour la messagerie entre utilisateurs"""

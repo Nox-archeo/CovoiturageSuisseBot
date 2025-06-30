@@ -5,6 +5,7 @@ Ce fichier a été modifié pour utiliser l'approche synchrone qui fonctionne co
 """
 import os
 import sys
+import asyncio
 import logging
 from dotenv import load_dotenv
 from telegram.ext import (
@@ -34,8 +35,10 @@ from handlers.vehicle_handler import vehicle_conv_handler
 
 # Import des nouveaux modules de paiement PayPal
 from payment_handlers import get_payment_handlers
+from handlers.paypal_setup_handler import get_paypal_setup_handlers
 from db_utils import init_payment_database
 from paypal_utils import paypal_manager
+from pending_payments import process_all_pending_payments
 
 # Configure logging
 logging.basicConfig(
@@ -137,9 +140,38 @@ def main():
             application.add_handler(callback_handler)
             logger.info(f"✅ CallbackQueryHandler PayPal enregistré")
         
-        logger.info("✅ Tous les handlers de paiement PayPal enregistrés")
+        # Enregistrement des handlers de configuration PayPal
+        logger.info("Enregistrement des handlers de configuration PayPal...")
+        paypal_setup_handlers = get_paypal_setup_handlers()
+        
+        # Ajouter le ConversationHandler de configuration PayPal
+        application.add_handler(paypal_setup_handlers['conversation_handler'])
+        logger.info("✅ ConversationHandler configuration PayPal enregistré")
+        
+        # Ajouter les CommandHandlers de configuration PayPal
+        for cmd_handler in paypal_setup_handlers['command_handlers']:
+            application.add_handler(cmd_handler)
+            logger.info(f"✅ CommandHandler configuration PayPal enregistré")
+        
+        # Ajouter les CallbackQueryHandlers de configuration PayPal
+        for callback_handler in paypal_setup_handlers['callback_handlers']:
+            application.add_handler(callback_handler)
+            logger.info(f"✅ CallbackQueryHandler configuration PayPal enregistré")
+        
+        logger.info("✅ Tous les handlers de paiement et configuration PayPal enregistrés")
         
         application.add_handler(vehicle_conv_handler)
+
+        # Configuration des tâches périodiques
+        job_queue = application.job_queue
+        
+        # Tâche pour traiter les paiements en attente (toutes les heures)
+        job_queue.run_repeating(
+            callback=lambda context: asyncio.create_task(process_all_pending_payments(context.bot)),
+            interval=3600,  # Toutes les heures
+            first=10        # Première exécution après 10 secondes
+        )
+        logger.info("✅ Tâche périodique de traitement des paiements en attente configurée")
 
         # Start polling
         logger.info("Bot started successfully!")

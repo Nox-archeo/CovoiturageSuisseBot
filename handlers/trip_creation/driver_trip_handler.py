@@ -142,15 +142,39 @@ async def handle_become_driver(update: Update, context: CallbackContext):
             db.commit()
             logger.info(f"Utilisateur {user_id} est devenu conducteur")
             
-            await query.edit_message_text(
-                "✅ *Profil conducteur activé!*\n\n"
-                "Vous pouvez maintenant créer des trajets en tant que conducteur.",
-                parse_mode=ParseMode.MARKDOWN
-            )
-            
-            # Continuer avec la création du trajet
-            logger.debug("🔍 DEBUG: Appel start_departure_selection")
-            return await start_departure_selection(update, context)
+            # Vérifier si l'utilisateur a déjà un email PayPal
+            if user.paypal_email:
+                # Email PayPal déjà configuré, continuer avec la création du trajet
+                await query.edit_message_text(
+                    "✅ *Profil conducteur activé!*\n\n"
+                    f"📧 Email PayPal : `{user.paypal_email}`\n\n"
+                    "Vous pouvez maintenant créer des trajets en tant que conducteur.",
+                    parse_mode=ParseMode.MARKDOWN
+                )
+                
+                # Continuer avec la création du trajet
+                logger.debug("🔍 DEBUG: Appel start_departure_selection")
+                return await start_departure_selection(update, context)
+            else:
+                # Pas d'email PayPal, demander la configuration
+                keyboard = [
+                    [InlineKeyboardButton("💳 Configurer PayPal", callback_data="setup_paypal")],
+                    [InlineKeyboardButton("⏭️ Ignorer pour l'instant", callback_data="skip_paypal_setup")]
+                ]
+                
+                await query.edit_message_text(
+                    "✅ *Profil conducteur activé!*\n\n"
+                    "💳 *Configuration PayPal requise*\n\n"
+                    "Pour recevoir vos paiements automatiques (88% du montant), "
+                    "vous devez configurer votre email PayPal.\n\n"
+                    "⚠️ Sans email PayPal, vous ne pourrez pas recevoir de paiements automatiques.",
+                    parse_mode=ParseMode.MARKDOWN,
+                    reply_markup=InlineKeyboardMarkup(keyboard)
+                )
+                
+                # Définir l'état suivant après configuration PayPal
+                context.user_data['next_state_after_paypal'] = "DEPARTURE"
+                return "PAYPAL_SETUP"
         else:
             await query.edit_message_text(
                 "❌ Erreur: Votre profil n'a pas été trouvé."
@@ -163,6 +187,23 @@ async def handle_become_driver(update: Update, context: CallbackContext):
             "❌ Activation du profil conducteur annulée."
         )
         return ConversationHandler.END
+    
+    elif action == "skip_paypal_setup":
+        # Ignorer la configuration PayPal pour l'instant
+        await query.edit_message_text(
+            "⏭️ *Configuration PayPal ignorée*\n\n"
+            "Vous pourrez configurer votre email PayPal plus tard avec /paypal\n\n"
+            "⚠️ Attention : Sans email PayPal configuré, vous ne recevrez "
+            "pas de paiements automatiques pour vos trajets."
+        )
+        
+        # Continuer avec la création du trajet
+        return await start_departure_selection(update, context)
+    
+    elif action == "setup_paypal":
+        # Rediriger vers le handler de configuration PayPal
+        from handlers.paypal_setup_handler import request_paypal_email
+        return await request_paypal_email(update, context)
     
     else:
         # Action non reconnue
