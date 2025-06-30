@@ -1,0 +1,26 @@
+# Python requirements for Render
+# This file specifies the exact versions to avoid compilation issues
+
+# Core bot dependencies
+python-telegram-bot==20.7
+python-dotenv==1.0.0
+sqlalchemy==2.0.25
+
+# PayPal integration
+paypalrestsdk==1.13.1
+
+# Text processing
+unidecode==1.3.6
+
+# Web framework for webhooks
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+
+# Data validation with older stable version
+pydantic==2.4.2
+
+# Location services
+geopy==2.4.0
+
+# Timezone handling
+pytz==2023.3

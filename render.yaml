@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: covoiturage-suisse-bot
+    runtime: python
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: "python start_render.py"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.4
+      - key: PIP_NO_CACHE_DIR
+        value: 1
+      - key: PYTHONUNBUFFERED
+        value: 1
