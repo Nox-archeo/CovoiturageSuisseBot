@@ -404,17 +404,23 @@ async def perform_trip_search(update: Update, context: CallbackContext):
             Trip.departure_city.like(f"%{departure_str}%"),
             Trip.arrival_city.like(f"%{arrival_str}%"),
             Trip.is_published == True,
-            Trip.departure_time >= datetime.now(),
-            Trip.is_cancelled == False
+            Trip.departure_time >= datetime.now()
         ).all()
+        
+        # Filtrer les trajets annulés côté Python pour éviter les erreurs de colonnes manquantes
+        valid_trips = []
+        for trip in matching_trips:
+            # Vérifier l'annulation de manière sécurisée
+            is_cancelled = getattr(trip, 'is_cancelled', False)
+            if not is_cancelled:
+                valid_trips.append(trip)
+        
+        matching_trips = valid_trips
         
         # Séparation des trajets en deux catégories : conducteur et passager
         driver_trips = []
         passenger_trips = []
         for trip in matching_trips:
-            # Exclure les trajets annulés côté Python (sécurité)
-            if getattr(trip, 'is_cancelled', False):
-                continue
             if hasattr(trip, 'is_request') and trip.is_request:
                 passenger_trips.append(trip)
             else:
@@ -548,7 +554,7 @@ async def perform_trip_search(update: Update, context: CallbackContext):
             # Pas de trajets trouvés
             keyboard = [
                 [InlineKeyboardButton("🔍 Nouvelle recherche", callback_data="search_new")],
-                [InlineKeyboardButton("🚗 Créer un trajet", callback_data="main_menu:create_trip")],
+                [InlineKeyboardButton("🚗 Créer un trajet", callback_data="menu:create")],
                 [InlineKeyboardButton("🔙 Menu principal", callback_data="search_back_to_menu")]
             ]
             

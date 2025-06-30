@@ -609,21 +609,53 @@ async def handle_create_price(update: Update, context: CallbackContext, auto=Fal
     arr_display = arr.get('name', arr) if isinstance(arr, dict) else arr
     prix = context.user_data.get('price', 'N/A')
     dist = context.user_data.get('distance_km', 'N/A')
+    
+    # Traduction du rôle en français
+    trip_type = context.user_data.get('trip_type', 'N/A')
+    if trip_type == 'driver':
+        role_fr = "� Conducteur"
+    elif trip_type == 'passenger':
+        role_fr = "🧍 Passager"
+    else:
+        role_fr = trip_type
+    
+    # Formatage de la date/heure
+    datetime_obj = context.user_data.get('datetime_obj')
+    if datetime_obj:
+        date_formatted = datetime_obj.strftime('%d/%m/%Y à %H:%M')
+    else:
+        # Fallback sur l'ancienne clé 'date' si elle existe
+        date_str = context.user_data.get('date', 'N/A')
+        if date_str != 'N/A':
+            if hasattr(date_str, 'strftime'):
+                date_formatted = date_str.strftime('%d/%m/%Y à %H:%M')
+            else:
+                date_formatted = str(date_str)
+        else:
+            date_formatted = 'Non définie'
+    
+    # Options en français
+    options = context.user_data.get('trip_options', {})
+    if options.get('simple'):
+        options_str = "✅ Trajet simple"
+    else:
+        options_str = "📋 Options avancées"
+    
     summary = (
-        "📋 *Résumé du trajet à créer*:\n\n"
-        f"Rôle: {context.user_data.get('trip_type', 'N/A')}\n"
-        f"Options: {context.user_data.get('trip_options', {})}\n"
-        f"De: {dep_display}\n"
-        f"À: {arr_display}\n"
-        f"Date: {context.user_data.get('date', 'N/A')}\n"
-        f"Distance: {dist} km\n"
-        f"Places: {context.user_data.get('seats', 'N/A')}\n"
-        f"Prix (auto): {prix} CHF\n\n"
-        "Confirmez-vous la création de ce trajet?"
+        "🎯 *Résumé de votre trajet*\n\n"
+        f"👤 *Rôle :* {role_fr}\n"
+        f"⚙️ *Type :* {options_str}\n\n"
+        f"🌍 *Départ :* {dep_display}\n"
+        f"🏁 *Arrivée :* {arr_display}\n"
+        f"📅 *Date et heure :* {date_formatted}\n\n"
+        f"📏 *Distance :* {dist} km\n"
+        f"💺 *Places disponibles :* {context.user_data.get('seats', 'N/A')}\n"
+        f"💰 *Prix par place :* {prix} CHF\n\n"
+        "✨ *Confirmez-vous la création de ce trajet ?*"
     )
     keyboard = [
-        [InlineKeyboardButton("✅ Confirmer", callback_data="create_confirm_yes")],
-        [InlineKeyboardButton("❌ Annuler", callback_data="create_trip:cancel_confirm")]
+        [InlineKeyboardButton("✅ Oui, créer ce trajet !", callback_data="create_confirm_yes")],
+        [InlineKeyboardButton("❌ Non, annuler", callback_data="create_trip:cancel_confirm")]
     ]
     if update.message:
         await update.message.reply_text(summary, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode="Markdown")
@@ -1116,26 +1148,31 @@ async def handle_show_my_trips(update: Update, context: CallbackContext):
     """Affiche la liste des trajets de l'utilisateur après création."""
     query = update.callback_query
     await query.answer()
-    # Redirige vers le handler de profil ou de mes trajets (à adapter selon votre logique existante)
-    # Ici, on simule un message simple, à remplacer par l'appel réel si besoin
-    await query.edit_message_text("Voici vos trajets (fonctionnalité à compléter selon votre logique existante).")
-    # Ou appelez le vrai handler: await show_my_trips(update, context)
-    return ConversationHandler.END
+    
+    # Import dynamique pour éviter les imports circulaires
+    from handlers.trip_handlers import list_my_trips
+    
+    # Appel de la vraie fonction de listage des trajets
+    return await list_my_trips(update, context)
 
 async def handle_main_menu(update: Update, context: CallbackContext):
     """Affiche le menu principal après création de trajet."""
     query = update.callback_query
     await query.answer()
-    # Redirige vers le menu principal (à adapter selon votre logique)
-    await query.edit_message_text("Menu principal (fonctionnalité à compléter selon votre logique existante).")
-    # Ou appelez le vrai handler: await show_main_menu(update, context)
-    return ConversationHandler.END
+    
+    # Import dynamique pour éviter les imports circulaires
+    from handlers.menu_handlers import start_command
+    
+    # Appel de la vraie fonction du menu principal
+    return await start_command(update, context)
 
 # ConversationHandler pour la création de trajet
 create_trip_conv_handler = ConversationHandler(
     entry_points=[
         CommandHandler('creer', start_create_trip),
-        CallbackQueryHandler(start_create_trip, pattern='^creer_trajet$')
+        CallbackQueryHandler(start_create_trip, pattern='^creer_trajet$'),
+        CallbackQueryHandler(start_create_trip, pattern='^menu:create$'),
+        CallbackQueryHandler(start_create_trip, pattern='^main_menu:create_trip$')
     ],
     states={
         CREATE_TRIP_TYPE: [
@@ -1215,3 +1252,7 @@ create_trip_conv_handler = ConversationHandler(
 )
 
 publish_trip_handler = CallbackQueryHandler(publish_created_trip, pattern=r"^publish_trip:\d+$")
+
+# Handlers globaux pour les boutons après création de trajet
+main_menu_handler = CallbackQueryHandler(handle_main_menu, pattern=r"^main_menu:start$")
+my_trips_handler = CallbackQueryHandler(handle_show_my_trips, pattern=r"^main_menu:my_trips$")

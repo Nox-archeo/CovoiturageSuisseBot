@@ -191,40 +191,121 @@ async def search_trip(update: Update, context: CallbackContext):
     return ENTERING_DEPARTURE
 
 async def list_my_trips(update: Update, context: CallbackContext):
-    query = update.callback_query
-    user_id = update.effective_user.id
-    db = get_db()
-    blocks = []
-    driver_trips = db.query(Trip).join(User, Trip.driver_id == User.id).filter(User.telegram_id == user_id, Trip.is_cancelled == False).order_by(Trip.departure_time.asc()).all()
-    if driver_trips:
-        blocks.append("🚗 *Mes trajets à venir :*\n")
-        for trip in driver_trips:
-            # Exclure les trajets annulés de l'affichage normal (sécurité)
-            if getattr(trip, 'is_cancelled', False):
+    """
+    Fonction unifiée pour afficher les trajets de l'utilisateur.
+    Utilisée par tous les boutons "Mes trajets" du bot pour une expérience cohérente.
+    """
+    try:
+        # Gérer l'update (peut venir d'un callback ou d'un message)
+        if hasattr(update, 'callback_query') and update.callback_query:
+            query = update.callback_query
+            await query.answer()
+        else:
+            query = None
+            
+        user_id = update.effective_user.id
+        db = get_db()
+        
+        # Trouver l'utilisateur
+        user = db.query(User).filter(User.telegram_id == user_id).first()
+        if not user:
+            logger.error(f"Utilisateur non trouvé pour telegram_id={user_id}")
+            error_msg = "⚠️ Utilisateur non trouvé. Veuillez utiliser /start."
+            keyboard = [[InlineKeyboardButton("🏠 Menu principal", callback_data="main_menu:start")]]
+            
+            if query:
+                await query.edit_message_text(error_msg, reply_markup=InlineKeyboardMarkup(keyboard))
+            else:
+                await update.message.reply_text(error_msg, reply_markup=InlineKeyboardMarkup(keyboard))
+            return
+
+        # Récupérer tous les trajets à venir non annulés du conducteur
+        trips = db.query(Trip).filter(
+            Trip.driver_id == user.id,
+            Trip.is_published == True,
+            Trip.departure_time > datetime.now(),
+            Trip.is_cancelled == False
+        ).order_by(Trip.departure_time).all()
+        
+        logger.info(f"[MES TRAJETS] {len(trips)} trajets trouvés pour user_id={user_id}")
+        
+        active_blocks = []
+        for trip in trips:
+            try:
+                # Vérification supplémentaire pour exclure les trajets annulés
+                if getattr(trip, 'is_cancelled', False):
+                    continue
+                    
+                departure_date = trip.departure_time.strftime("%d/%m/%Y à %H:%M") if trip.departure_time else "?"
+                
+                # Compter les réservations actives
+                booking_count = db.query(Booking).filter(
+                    Booking.trip_id == trip.id, 
+                    Booking.status.in_(["pending", "confirmed"])
+                ).count()
+                
+                trip_str = (
+                    f"• {trip.departure_city} → {trip.arrival_city}\n"
+                    f"  📅 {departure_date}\n"
+                    f"  💰 {trip.price_per_seat:.2f} CHF/place\n"
+                    f"  💺 {booking_count}/{trip.seats_available} réservations"
+                )
+                
+                # Boutons d'action
+                row_btns = []
+                if booking_count == 0:
+                    row_btns.append(InlineKeyboardButton("✏️ Modifier", callback_data=f"trip:edit:{trip.id}"))
+                row_btns.append(InlineKeyboardButton("❌ Annuler", callback_data=f"trip:cancel:{trip.id}"))
+                
+                active_blocks.append({'text': trip_str, 'buttons': row_btns})
+                
+            except Exception as e:
+                logger.error(f"[MES TRAJETS] Erreur sur le trajet {getattr(trip, 'id', '?')}: {e}")
                 continue
-            trip_str = (
-                f"• {trip.departure_city} → {trip.arrival_city}\n"
-                f"  📅 {trip.departure_time.strftime('%d/%m/%Y %H:%M')}\n"
-                f"  💰 {trip.price_per_seat:.2f} CHF/place"
+
+        # Construction du message
+        if not active_blocks:
+            message = "🚗 *Mes trajets à venir*\n\nAucun trajet prévu pour le moment."
+            keyboard = [
+                [InlineKeyboardButton("➕ Créer un trajet", callback_data="menu:create")],
+                [InlineKeyboardButton("🏠 Menu principal", callback_data="main_menu:start")]
+            ]
+        else:
+            message = "🚗 *Mes trajets à venir*"
+            keyboard = []
+            
+            for block in active_blocks:
+                message += f"\n\n{block['text']}"
+                if block['buttons']:
+                    keyboard.append(block['buttons'])
+            
+            # Boutons de navigation
+            keyboard.append([InlineKeyboardButton("➕ Créer un trajet", callback_data="menu:create")])
+            keyboard.append([InlineKeyboardButton("🏠 Menu principal", callback_data="main_menu:start")])
+
+        # Affichage du message
+        if query:
+            await query.edit_message_text(
+                text=message,
+                reply_markup=InlineKeyboardMarkup(keyboard),
+                parse_mode="Markdown"
             )
-            row_btns = []
-            booking_count = db.query(Booking).filter(Booking.trip_id == trip.id, Booking.status.in_(["pending", "confirmed"])) .count()
-            if booking_count == 0:
-                row_btns.append(InlineKeyboardButton("✏️ Modifier", callback_data=f"trip:edit:{trip.id}"))
-            row_btns.append(InlineKeyboardButton("❌ Annuler", callback_data=f"trip:cancel:{trip.id}"))
-            blocks.append({'text': trip_str, 'buttons': row_btns})
-    else:
-        blocks.append("Aucun trajet à venir.")
-    # Affichage
-    text = "\n\n".join([b['text'] if isinstance(b, dict) else b for b in blocks])
-    reply_markup_rows = [b['buttons'] for b in blocks if isinstance(b, dict) and b['buttons']]
-    reply_markup_rows.append([InlineKeyboardButton("➕ Créer un trajet", callback_data="menu:create")])
-    reply_markup_rows.append([InlineKeyboardButton("⬅️ Retour au profil", callback_data="profile:back_to_profile")])
-    await query.edit_message_text(
-        text=text,
-        reply_markup=InlineKeyboardMarkup(reply_markup_rows),
-        parse_mode="Markdown"
-    )
+        else:
+            await update.message.reply_text(
+                text=message,
+                reply_markup=InlineKeyboardMarkup(keyboard),
+                parse_mode="Markdown"
+            )
+            
+    except Exception as e:
+        logger.error(f"Erreur dans list_my_trips: {str(e)}")
+        error_msg = "⚠️ Erreur lors de l'affichage de vos trajets."
+        keyboard = [[InlineKeyboardButton("🏠 Menu principal", callback_data="main_menu:start")]]
+        
+        if hasattr(update, 'callback_query') and update.callback_query:
+            await update.callback_query.edit_message_text(error_msg, reply_markup=InlineKeyboardMarkup(keyboard))
+        else:
+            await update.message.reply_text(error_msg, reply_markup=InlineKeyboardMarkup(keyboard))
 
 async def list_my_trips_menu(update: Update, context: CallbackContext):
     """Shows options for viewing user's trips."""

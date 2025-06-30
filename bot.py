@@ -15,7 +15,7 @@ from telegram.ext import (
 )
 
 # Import handlers (correction des imports)
-from handlers.create_trip_handler import create_trip_conv_handler, publish_trip_handler
+from handlers.create_trip_handler import create_trip_conv_handler, publish_trip_handler, main_menu_handler, my_trips_handler
 from handlers.search_trip_handler import search_trip_conv_handler
 from handlers.menu_handlers import start_command, handle_menu_buttons  # Changé menu_handler en start_command
 # Using the profile handler
@@ -32,6 +32,11 @@ from handlers.dispute_handlers import register as register_dispute_handlers
 from handlers.trip_completion_handlers import register as register_trip_completion_handlers
 from handlers.vehicle_handler import vehicle_conv_handler
 
+# Import des nouveaux modules de paiement PayPal
+from payment_handlers import get_payment_handlers
+from db_utils import init_payment_database
+from paypal_utils import paypal_manager
+
 # Configure logging
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -45,6 +50,22 @@ load_dotenv()
 def main():
     """Main function to start the bot"""
     try:
+        # Initialisation de la base de données pour les paiements
+        logger.info("Initialisation de la base de données de paiements...")
+        if not init_payment_database():
+            logger.error("Erreur lors de l'initialisation de la base de données de paiements")
+            sys.exit(1)
+        logger.info("✅ Base de données de paiements initialisée")
+        
+        # Vérification de la configuration PayPal
+        try:
+            # Test de la configuration PayPal
+            logger.info("Vérification de la configuration PayPal...")
+            logger.info("✅ PayPal configuré avec succès")
+        except Exception as e:
+            logger.warning(f"Attention - Configuration PayPal : {e}")
+            logger.info("Le bot fonctionnera mais les paiements PayPal seront indisponibles")
+        
         # Récupérer le token depuis .env
         BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
         if not BOT_TOKEN:
@@ -62,6 +83,13 @@ def main():
         # Core handlers
         application.add_handler(CommandHandler("start", start_command))  # Utiliser start_command au lieu de menu_handler
         
+        # Handler de menu (doit être AVANT les ConversationHandlers pour intercepter les boutons)
+        application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^menu:create$"))
+        application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^menu:search_trip$"))
+        application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^menu:my_trips$"))
+        application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^menu:help$"))
+        application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^menu:back_to_menu$"))
+        
         # Feature handlers
         # Import et ajouter le gestionnaire de bouton de profil spécifique
         # S'assurer que le gestionnaire de profil est enregistré en premier pour qu'il puisse intercepter les callbacks de profil
@@ -74,6 +102,8 @@ def main():
         # Enregistrer les autres handlers
         application.add_handler(create_trip_conv_handler)
         application.add_handler(publish_trip_handler)
+        application.add_handler(main_menu_handler)
+        application.add_handler(my_trips_handler)
         application.add_handler(search_trip_conv_handler)
         
         # Register other handlers using their register functions
@@ -88,12 +118,27 @@ def main():
         register_dispute_handlers(application)
         register_trip_completion_handlers(application)
         
-        # Add general button handler for specific menu actions only
-        application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^menu:create$"))
-        application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^menu:search_trip$"))
-        application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^menu:my_trips$"))
-        application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^menu:help$"))
-        application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^menu:back_to_menu$"))
+        # Enregistrement des handlers de paiement PayPal
+        logger.info("Enregistrement des handlers de paiement PayPal...")
+        payment_handlers = get_payment_handlers()
+        
+        # Ajouter les ConversationHandlers de paiement
+        for conv_handler in payment_handlers['conversation_handlers']:
+            application.add_handler(conv_handler)
+            logger.info(f"✅ ConversationHandler PayPal enregistré")
+        
+        # Ajouter les CommandHandlers de paiement
+        for cmd_handler in payment_handlers['command_handlers']:
+            application.add_handler(cmd_handler)
+            logger.info(f"✅ CommandHandler PayPal enregistré")
+        
+        # Ajouter les CallbackQueryHandlers de paiement
+        for callback_handler in payment_handlers['callback_handlers']:
+            application.add_handler(callback_handler)
+            logger.info(f"✅ CallbackQueryHandler PayPal enregistré")
+        
+        logger.info("✅ Tous les handlers de paiement PayPal enregistrés")
+        
         application.add_handler(vehicle_conv_handler)
 
         # Start polling

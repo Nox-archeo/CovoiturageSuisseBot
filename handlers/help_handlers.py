@@ -8,22 +8,31 @@ logger = logging.getLogger(__name__)
 async def actual_help_message_function(update: Update, context: CallbackContext):
     """Envoie le message d'aide."""
     help_text = (
-        "🆘 Aide CovoiturageSuisse\n\n"
-        "Commandes principales:\n"
-        "/creer - Proposer un nouveau trajet.\n"
-        "/chercher - Chercher un trajet.\n"
-        "/mes_trajets - Voir vos trajets.\n"
-        "/profil - Gérer votre profil.\n"
-        "/start - Afficher le menu principal.\n"
-        "/cancel - Annuler l'opération en cours.\n\n"
-        "Pour plus d'aide, contactez-nous via les options du menu d'aide."
+        "🆘 *Aide CovoiturageSuisse*\n\n"
+        "*Commandes principales:*\n"
+        "/creer - Proposer un nouveau trajet\n"
+        "/chercher - Chercher un trajet\n"
+        "/mes_trajets - Voir vos trajets\n"
+        "/profil - Gérer votre profil\n"
+        "/start - Afficher le menu principal\n"
+        "/cancel - Annuler l'opération en cours\n\n"
+        "*💳 Commandes de paiement PayPal:*\n"
+        "/definirpaypal - Configurer votre email PayPal\n"
+        "/payer <id_trajet> - Payer un trajet\n"
+        "/confirmer <id_trajet> - Confirmer un trajet (conducteur)\n"
+        "/statut_paiement - Vérifier vos paiements\n\n"
+        "*ℹ️ Comment ça marche:*\n"
+        "1. Les passagers paient via PayPal\n"
+        "2. 88% va au conducteur, 12% à la plateforme\n"
+        "3. Le conducteur confirme le trajet pour recevoir le paiement\n\n"
+        "Pour plus d'aide, contactez-nous via les options du menu."
     )
     if update.message:
-        await update.message.reply_text(help_text)
+        await update.message.reply_text(help_text, parse_mode='Markdown')
     elif update.callback_query: # Si appelé depuis un bouton
         query = update.callback_query
         await query.answer()
-        await query.edit_message_text(help_text)
+        await query.edit_message_text(help_text, parse_mode='Markdown')
 
 # Renommez cette fonction si votre fonction d'aide principale a un autre nom
 async def help_guide(update: Update, context: CallbackContext):

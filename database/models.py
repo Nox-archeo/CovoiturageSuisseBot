@@ -48,6 +48,9 @@ class User(Base):
 
     # Ajout du champ pour le nom complet
     full_name = Column(String)
+    
+    # Champ PayPal
+    paypal_email = Column(String, nullable=True)  # Email PayPal pour recevoir les paiements
 
     def __init__(self, **kwargs):
         # S'assurer que les champs requis ont des valeurs par défaut
@@ -95,6 +98,10 @@ class Trip(Base):
     total_distance = Column(Float)  # Distance en km
     estimated_duration = Column(Integer)  # Durée estimée en minutes
     is_cancelled = Column(Boolean, default=False)  # Annulation du trajet
+    
+    # Champs pour PayPal
+    status = Column(String, default='active')  # 'active', 'completed', 'cancelled'
+    payout_batch_id = Column(String, nullable=True)  # ID du paiement envoyé au conducteur
 
 class Booking(Base):
     __tablename__ = 'bookings'
@@ -109,6 +116,11 @@ class Booking(Base):
     is_paid = Column(Boolean, default=False)  # Indique si le paiement a été effectué
     stripe_session_id = Column(String)  # ID de la session de paiement Stripe
     stripe_payment_intent_id = Column(String)  # ID de l'intent de paiement Stripe
+    
+    # Champs PayPal
+    paypal_payment_id = Column(String, nullable=True)  # ID du paiement PayPal
+    payment_status = Column(String, default='unpaid')  # 'unpaid', 'pending', 'paid', 'cancelled'
+    total_price = Column(Float, nullable=True)  # Montant total (amount * seats)
     passenger = relationship("User")
     trip = relationship("Trip")
 

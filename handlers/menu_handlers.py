@@ -101,8 +101,9 @@ async def handle_menu_buttons(update: Update, context: CallbackContext):
 
     logger.info(f"Menu button clicked: {action}")
 
-    if action == "create_trip" or action == "creer_trajet":
+    if action == "create" or action == "create_trip" or action == "creer_trajet":
         # This should call the entry point of the create_trip_conv_handler
+        logger.info("Redirecting to create trip flow")
         return await enter_create_trip_flow(update, context)
     
     elif action == "search_trip" or action == "rechercher":

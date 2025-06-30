@@ -346,7 +346,9 @@ async def handle_profile_action(update: Update, context: CallbackContext):
         if action == "back_to_profile":
             return await back_to_profile(update, context)
         if action == "my_trips":
-            return await show_my_trips(update, context)
+            # Utiliser la fonction unifiée des trajets
+            from handlers.trip_handlers import list_my_trips
+            return await list_my_trips(update, context)
         elif action == "my_bookings":
             return await show_my_bookings(update, context)
         elif action == "my_earnings":
