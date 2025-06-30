@@ -2,6 +2,11 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CommandHandler, CallbackContext, CallbackQueryHandler, ConversationHandler
 from database.models import Booking, Trip, User
 from datetime import datetime
+from paypal_utils import create_trip_payment
+from database import get_db
+import logging
+
+logger = logging.getLogger(__name__)
 
 CONFIRM_BOOKING = range(1)
 
@@ -71,6 +76,223 @@ async def process_payment(update, context):
         "Votre réservation a été créée. Procédez au paiement pour la confirmer.",
         reply_markup=InlineKeyboardMarkup(keyboard)
     )
+
+async def confirm_booking_with_payment(update: Update, context: CallbackContext):
+    """Confirme la réservation et déclenche automatiquement le paiement PayPal"""
+    query = update.callback_query
+    await query.answer()
+    
+    trip_id = int(query.data.split('_')[-1])
+    user_id = update.effective_user.id
+    
+    try:
+        db = get_db()
+        
+        # Vérifier que le trajet existe et n'est pas annulé
+        trip = db.query(Trip).filter(Trip.id == trip_id).first()
+        if not trip or getattr(trip, 'is_cancelled', False):
+            await query.edit_message_text("❌ Trajet non trouvé ou annulé.")
+            return
+        
+        # Vérifier les places disponibles
+        if trip.available_seats <= 0:
+            await query.edit_message_text("❌ Plus de places disponibles pour ce trajet.")
+            return
+        
+        # Vérifier si l'utilisateur existe
+        user = db.query(User).filter(User.telegram_id == user_id).first()
+        if not user:
+            await query.edit_message_text("❌ Utilisateur non trouvé. Utilisez /start d'abord.")
+            return
+        
+        # Vérifier si une réservation existe déjà
+        existing_booking = db.query(Booking).filter(
+            Booking.trip_id == trip_id,
+            Booking.passenger_id == user.id,
+            Booking.status.in_(['confirmed', 'pending'])
+        ).first()
+        
+        if existing_booking:
+            await query.edit_message_text("❌ Vous avez déjà une réservation pour ce trajet.")
+            return
+        
+        # Créer la réservation
+        booking = Booking(
+            trip_id=trip_id,
+            passenger_id=user.id,
+            status='pending',
+            total_price=trip.price_per_seat,
+            booking_date=datetime.utcnow(),
+            payment_status='pending'
+        )
+        
+        db.add(booking)
+        db.commit()
+        db.refresh(booking)
+        
+        # Créer automatiquement le paiement PayPal
+        trip_description = f"{trip.departure_city} → {trip.arrival_city}"
+        success, payment_id, approval_url = create_trip_payment(
+            amount=float(trip.price_per_seat),
+            trip_description=trip_description,
+            booking_id=booking.id  # Pour le suivi
+        )
+        
+        if success and payment_id and approval_url:
+            # Sauvegarder l'ID de paiement PayPal
+            booking.paypal_payment_id = payment_id
+            db.commit()
+            
+            # Créer le clavier avec le lien de paiement
+            keyboard = [
+                [InlineKeyboardButton("💳 Payer maintenant avec PayPal", url=approval_url)],
+                [InlineKeyboardButton("❌ Annuler la réservation", callback_data=f"cancel_booking_{booking.id}")]
+            ]
+            
+            await query.edit_message_text(
+                f"✅ *Réservation créée !*\n\n"
+                f"🚗 **Détails du trajet :**\n"
+                f"📍 De : {trip.departure_city}\n"
+                f"📍 À : {trip.arrival_city}\n"
+                f"📅 Date : {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
+                f"💰 Prix : {trip.price_per_seat} CHF\n"
+                f"👤 Conducteur : {trip.driver.first_name if trip.driver else 'Inconnu'}\n\n"
+                f"💳 **Paiement requis**\n"
+                f"Cliquez sur le bouton ci-dessous pour payer avec PayPal.\n"
+                f"Votre place sera confirmée après le paiement.",
+                parse_mode="Markdown",
+                reply_markup=InlineKeyboardMarkup(keyboard)
+            )
+            
+            # Notifier le conducteur de la nouvelle réservation
+            if trip.driver and trip.driver.telegram_id:
+                try:
+                    await context.bot.send_message(
+                        chat_id=trip.driver.telegram_id,
+                        text=(
+                            f"🎉 **Nouvelle réservation !**\n\n"
+                            f"Un passager a réservé votre trajet :\n"
+                            f"📍 {trip.departure_city} → {trip.arrival_city}\n"
+                            f"📅 {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
+                            f"👤 Passager : {user.first_name or 'Nom non défini'}\n\n"
+                            f"⏳ En attente du paiement PayPal..."
+                        ),
+                        parse_mode="Markdown"
+                    )
+                except Exception as e:
+                    logger.error(f"Erreur notification conducteur: {e}")
+            
+            logger.info(f"Réservation créée avec paiement PayPal: booking_id={booking.id}, payment_id={payment_id}")
+            
+        else:
+            # Erreur lors de la création du paiement PayPal
+            db.delete(booking)
+            db.commit()
+            
+            await query.edit_message_text(
+                "❌ Erreur lors de la création du paiement PayPal.\n"
+                "Veuillez réessayer plus tard ou contacter le support."
+            )
+            
+    except Exception as e:
+        logger.error(f"Erreur lors de la réservation avec paiement: {e}")
+        await query.edit_message_text(
+            "❌ Erreur lors de la réservation. Veuillez réessayer plus tard."
+        )
+
+async def cancel_booking_callback(update: Update, context: CallbackContext):
+    """Annule une réservation en attente"""
+    query = update.callback_query
+    await query.answer()
+    
+    if query.data == "cancel_booking":
+        await query.edit_message_text("❌ Réservation annulée.")
+        return
+    
+    # Format: cancel_booking_{booking_id}
+    booking_id = int(query.data.split('_')[-1])
+    user_id = update.effective_user.id
+    
+    try:
+        db = get_db()
+        
+        # Trouver la réservation
+        user = db.query(User).filter(User.telegram_id == user_id).first()
+        booking = db.query(Booking).filter(
+            Booking.id == booking_id,
+            Booking.passenger_id == user.id,
+            Booking.status == 'pending'
+        ).first()
+        
+        if not booking:
+            await query.edit_message_text("❌ Réservation non trouvée ou déjà traitée.")
+            return
+        
+        # Annuler la réservation
+        booking.status = 'cancelled'
+        booking.payment_status = 'cancelled'
+        db.commit()
+        
+        await query.edit_message_text(
+            "❌ **Réservation annulée**\n\n"
+            "Votre réservation a été annulée avec succès.\n"
+            "Si vous aviez commencé un paiement PayPal, il sera automatiquement annulé.",
+            parse_mode="Markdown"
+        )
+        
+        logger.info(f"Réservation {booking_id} annulée par l'utilisateur {user_id}")
+        
+    except Exception as e:
+        logger.error(f"Erreur lors de l'annulation de réservation: {e}")
+        await query.edit_message_text("❌ Erreur lors de l'annulation. Veuillez réessayer.")
+
+async def check_booking_status(update: Update, context: CallbackContext):
+    """Commande pour vérifier le statut des réservations"""
+    user_id = update.effective_user.id
+    
+    try:
+        db = get_db()
+        user = db.query(User).filter(User.telegram_id == user_id).first()
+        
+        if not user:
+            await update.message.reply_text("❌ Utilisateur non trouvé. Utilisez /start d'abord.")
+            return
+        
+        # Récupérer les réservations actives
+        bookings = db.query(Booking).filter(
+            Booking.passenger_id == user.id,
+            Booking.status.in_(['pending', 'confirmed'])
+        ).order_by(Booking.booking_date.desc()).limit(5).all()
+        
+        if not bookings:
+            await update.message.reply_text(
+                "📋 **Mes réservations**\n\n"
+                "Vous n'avez aucune réservation active.",
+                parse_mode="Markdown"
+            )
+            return
+        
+        message = "📋 **Mes réservations actives**\n\n"
+        
+        for booking in bookings:
+            trip = booking.trip
+            status_emoji = "⏳" if booking.status == 'pending' else "✅"
+            payment_status = "💳 Paiement en attente" if booking.payment_status == 'pending' else "✅ Payé"
+            
+            message += (
+                f"{status_emoji} **Réservation #{booking.id}**\n"
+                f"📍 {trip.departure_city} → {trip.arrival_city}\n"
+                f"📅 {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
+                f"💰 {booking.total_price} CHF\n"
+                f"📊 Statut: {booking.status.title()}\n"
+                f"💳 {payment_status}\n\n"
+            )
+        
+        await update.message.reply_text(message, parse_mode="Markdown")
+        
+    except Exception as e:
+        logger.error(f"Erreur vérification statut réservations: {e}")
+        await update.message.reply_text("❌ Erreur lors de la vérification. Veuillez réessayer.")
 
 def register(application):
     """Enregistre les handlers de réservation"""
