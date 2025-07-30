@@ -14,11 +14,11 @@ from fastapi.responses import JSONResponse
 import uvicorn
 
 from telegram import Update, Bot, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Application, ContextTypes
+from telegram.ext import Application, ContextTypes, CommandHandler, CallbackQueryHandler
 from dotenv import load_dotenv
 
 # Import des handlers
-from handlers.create_trip_handler import create_trip_conv_handler, publish_trip_handler, main_menu_handler, my_trips_handler
+from handlers.create_trip_handler import create_trip_conv_handler, creer_command_handler, publish_trip_handler, main_menu_handler, my_trips_handler
 from handlers.search_trip_handler import search_trip_conv_handler
 from handlers.menu_handlers import start_command, handle_menu_buttons
 from handlers.profile_handler import profile_button_handler, profile_conv_handler
@@ -94,8 +94,11 @@ async def register_all_handlers(application):
     # Handlers principaux
     application.add_handler(CommandHandler("start", start_command))
     
+    # Ajouter le ConversationHandler pour la commande /creer
+    application.add_handler(creer_command_handler)
+    
     # Handler de menu (priorité haute)
-    application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^menu:create$"))
+    # REMOVED: menu:create est géré par create_trip_conv_handler
     application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^menu:search_trip$"))
     application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^menu:my_trips$"))
     application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^menu:help$"))
@@ -195,10 +198,11 @@ async def process_paypal_webhook(event_type: str, data: dict):
         logger.error(f"Erreur traitement webhook PayPal: {e}")
 
 async def handle_payment_completed(data: dict):
-    """Gère un paiement PayPal complété"""
+    """Gère un paiement PayPal complété avec remboursements automatiques"""
     try:
         # Extraire les informations du paiement
         resource = data.get('resource', {})
+        payment_id = resource.get('id')  # ID du paiement PayPal
         custom_id = resource.get('custom_id')  # ID de la réservation
         amount = float(resource.get('amount', {}).get('value', 0))
         
@@ -208,16 +212,39 @@ async def handle_payment_completed(data: dict):
         
         db = get_db()
         
-        # Trouver la réservation
-        booking = db.query(Booking).filter(Booking.id == int(custom_id)).first()
+        # Trouver la réservation via paypal_payment_id
+        booking = None
+        if payment_id:
+            booking = db.query(Booking).filter(Booking.paypal_payment_id == payment_id).first()
+        
+        # Fallback: utiliser custom_id
+        if not booking and custom_id:
+            booking = db.query(Booking).filter(Booking.id == int(custom_id)).first()
+        
         if not booking:
-            logger.error(f"Réservation {custom_id} non trouvée")
+            logger.error(f"Réservation non trouvée pour payment_id={payment_id}, custom_id={custom_id}")
             return
         
         # Marquer le paiement comme complété
         booking.payment_status = 'completed'
+        booking.status = 'confirmed'
         booking.paid_at = datetime.utcnow()
         db.commit()
+        
+        logger.info(f"Paiement complété pour la réservation {booking.id}, trajet {booking.trip_id}")
+        
+        # NOUVEAU: Déclencher les remboursements automatiques
+        try:
+            from paypal_webhook_handler import handle_payment_completion
+            success = await handle_payment_completion(payment_id, telegram_app.bot)
+            
+            if success:
+                logger.info(f"Remboursements automatiques traités pour le trajet {booking.trip_id}")
+            else:
+                logger.warning(f"Erreur lors des remboursements automatiques pour le trajet {booking.trip_id}")
+                
+        except Exception as refund_error:
+            logger.error(f"Erreur lors du traitement des remboursements automatiques: {refund_error}")
         
         # Notifier le passager
         passenger = booking.passenger
@@ -226,7 +253,10 @@ async def handle_payment_completed(data: dict):
                 f"✅ *Paiement confirmé !*\n\n"
                 f"Votre réservation pour le trajet {booking.trip.departure_city} → {booking.trip.arrival_city} "
                 f"le {booking.trip.departure_time.strftime('%d/%m/%Y à %H:%M')} est confirmée.\n\n"
-                f"Montant payé: {amount} CHF"
+                f"💰 Montant payé: {booking.total_price:.2f} CHF\n\n"
+                f"ℹ️ *Nouveau système de prix:*\n"
+                f"Si d'autres passagers s'ajoutent, vous serez automatiquement remboursé "
+                f"de la différence via PayPal pour équilibrer les coûts."
             )
             await telegram_app.bot.send_message(
                 chat_id=passenger.telegram_id,
@@ -237,11 +267,22 @@ async def handle_payment_completed(data: dict):
         # Notifier le conducteur
         driver = booking.trip.driver
         if driver and driver.telegram_id:
+            # Compter le nombre total de passagers payants
+            total_paid_passengers = db.query(Booking).filter(
+                Booking.trip_id == booking.trip_id,
+                Booking.payment_status == 'completed'
+            ).count()
+            
             message = (
                 f"💰 *Nouveau passager confirmé !*\n\n"
                 f"Un passager a payé pour votre trajet {booking.trip.departure_city} → {booking.trip.arrival_city} "
                 f"le {booking.trip.departure_time.strftime('%d/%m/%Y à %H:%M')}.\n\n"
-                f"Passager: {passenger.first_name if passenger else 'Inconnu'}"
+                f"👤 Passager: {passenger.first_name if passenger else 'Inconnu'}\n"
+                f"👥 Total passagers payants: {total_paid_passengers}\n"
+                f"💰 Prix payé: {booking.total_price:.2f} CHF\n\n"
+                f"ℹ️ *Système automatique:*\n"
+                f"Les prix sont automatiquement ajustés et les remboursements "
+                f"effectués via PayPal selon le nombre de passagers."
             )
             await telegram_app.bot.send_message(
                 chat_id=driver.telegram_id,

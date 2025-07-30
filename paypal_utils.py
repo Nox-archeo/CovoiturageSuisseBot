@@ -199,6 +199,55 @@ class PayPalManager:
             logger.error(f"Exception lors de l'envoi du paiement au conducteur : {e}")
             return False, None
     
+    def refund_payment(self, payment_id: str, refund_amount: float, currency: str = "CHF") -> Tuple[bool, Optional[str]]:
+        """
+        Effectue un remboursement partiel via PayPal
+        
+        Args:
+            payment_id: ID du paiement original
+            refund_amount: Montant à rembourser
+            currency: Devise
+            
+        Returns:
+            Tuple[success, refund_id]
+        """
+        try:
+            # Récupérer le paiement original
+            payment = paypalrestsdk.Payment.find(payment_id)
+            if not payment:
+                logger.error(f"Paiement {payment_id} non trouvé")
+                return False, None
+            
+            # Créer le remboursement
+            refund = paypalrestsdk.Refund({
+                "amount": {
+                    "total": str(refund_amount),
+                    "currency": currency
+                },
+                "reason": "Ajustement automatique du prix suite à l'ajout d'un passager"
+            })
+            
+            # Effectuer le remboursement sur la première transaction de capture
+            if payment.transactions and len(payment.transactions) > 0:
+                transaction = payment.transactions[0]
+                if transaction.related_resources and len(transaction.related_resources) > 0:
+                    capture = transaction.related_resources[0].capture
+                    if capture:
+                        success = refund.create(capture.id)
+                        if success:
+                            logger.info(f"Remboursement de {refund_amount} {currency} créé: {refund.id}")
+                            return True, refund.id
+                        else:
+                            logger.error(f"Erreur lors de la création du remboursement: {refund.error}")
+                            return False, None
+            
+            logger.error(f"Impossible de trouver une capture pour le paiement {payment_id}")
+            return False, None
+                            
+        except Exception as e:
+            logger.error(f"Erreur lors du remboursement PayPal: {e}")
+            return False, None
+    
     def get_payment_details(self, payment_id: str) -> Optional[Dict]:
         """
         Récupère les détails d'un paiement
@@ -304,6 +353,34 @@ def pay_driver(driver_email: str, trip_amount: float) -> Tuple[bool, Optional[st
         amount=trip_amount,
         note="Paiement pour votre voyage de covoiturage"
     )
+
+
+def create_paypal_payment(amount: float, description: str, user_id: int = None, 
+                         trip_id: int = None, proposal_id: int = None) -> Optional[str]:
+    """
+    Crée un paiement PayPal et retourne l'URL d'approbation
+    
+    Args:
+        amount: Montant du paiement
+        description: Description du paiement
+        user_id: ID de l'utilisateur (optionnel)
+        trip_id: ID du trajet (optionnel)
+        proposal_id: ID de la proposition (optionnel)
+        
+    Returns:
+        URL d'approbation PayPal ou None en cas d'erreur
+    """
+    try:
+        success, payment_id, approval_url = create_trip_payment(amount, description)
+        if success and approval_url:
+            logger.info(f"Paiement PayPal créé: {payment_id} pour {amount} CHF")
+            return approval_url
+        else:
+            logger.error(f"Échec de création du paiement PayPal pour {amount} CHF")
+            return None
+    except Exception as e:
+        logger.error(f"Erreur lors de la création du paiement PayPal: {e}")
+        return None
 
 
 if __name__ == "__main__":

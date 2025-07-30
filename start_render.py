@@ -2,6 +2,7 @@
 """
 Script de démarrage pour Render avec webhook automatisé
 Ce script démarre le bot en mode webhook avec FastAPI pour les paiements PayPal
+Version avec protection JobQueue améliorée
 """
 
 import os
@@ -11,6 +12,10 @@ from dotenv import load_dotenv
 
 # Charger les variables d'environnement
 load_dotenv()
+
+# Marquer explicitement l'environnement Render pour désactiver JobQueue
+os.environ['RENDER'] = 'true'
+os.environ['RENDER_SERVICE_ID'] = os.getenv('RENDER_SERVICE_ID', 'render-service')
 
 # Configuration du logging
 logging.basicConfig(

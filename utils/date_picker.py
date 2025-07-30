@@ -40,6 +40,60 @@ MONTHS_FR = [
     "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
 ]
 
+def create_date_buttons():
+    """Crée des boutons pour la sélection rapide de dates."""
+    today = datetime.now().date()
+    keyboard = []
+    
+    # Dates rapides : Aujourd'hui, Demain, Ce week-end
+    keyboard.append([
+        InlineKeyboardButton("🗓️ Aujourd'hui", callback_data=f"quick_date:{today.strftime('%Y-%m-%d')}"),
+        InlineKeyboardButton("📅 Demain", callback_data=f"quick_date:{(today + timedelta(days=1)).strftime('%Y-%m-%d')}")
+    ])
+    
+    # Prochains jours
+    next_dates = []
+    for i in range(2, 5):  # Jour +2, +3, +4
+        date_option = today + timedelta(days=i)
+        day_name = DAYS_FR[date_option.weekday()]
+        date_text = f"{day_name} {date_option.day}/{date_option.month}"
+        next_dates.append(InlineKeyboardButton(
+            date_text, 
+            callback_data=f"quick_date:{date_option.strftime('%Y-%m-%d')}"
+        ))
+    
+    # Ajouter par paires
+    for i in range(0, len(next_dates), 2):
+        row = next_dates[i:i+2]
+        keyboard.append(row)
+    
+    # Bouton calendrier complet
+    keyboard.append([InlineKeyboardButton("📆 Calendrier complet", callback_data="show_calendar")])
+    
+    return InlineKeyboardMarkup(keyboard)
+
+def format_date_display(date_obj):
+    """Formate une date pour l'affichage."""
+    if isinstance(date_obj, str):
+        # Si c'est une chaîne, essayer de la parser
+        try:
+            date_obj = datetime.strptime(date_obj, '%Y-%m-%d').date()
+        except:
+            return date_obj
+    
+    if hasattr(date_obj, 'date'):
+        date_obj = date_obj.date()
+    
+    today = datetime.now().date()
+    
+    if date_obj == today:
+        return "Aujourd'hui"
+    elif date_obj == today + timedelta(days=1):
+        return "Demain"
+    else:
+        day_name = DAYS_FR[date_obj.weekday()]
+        return f"{day_name} {date_obj.day}/{date_obj.month}/{date_obj.year}"
+
 def get_calendar_keyboard(year, month):
     """Génère un clavier de calendrier interactif pour le mois spécifié"""
     keyboard = []
@@ -268,7 +322,7 @@ async def handle_time_selection(update: Update, context: CallbackContext):
             reply_markup=InlineKeyboardMarkup(keyboard),
             parse_mode="Markdown"
         )
-        return "CONFIRM_DATETIME"
+        return "EDIT_CONFIRM_DATETIME"
     
     # Cas imprévu
     logger.error(f"Format de données non reconnu: {query.data}")
@@ -312,7 +366,15 @@ async def handle_minute_selection(update: Update, context: CallbackContext):
     
     # Créer l'objet datetime complet
     selected_datetime = selected_date.replace(hour=hour, minute=minute)
-    context.user_data['selected_datetime'] = selected_datetime
+    
+    # Vérifier si on sélectionne une date de retour
+    selecting_return = context.user_data.get('selecting_return', False)
+    if selecting_return:
+        context.user_data['return_selected_datetime'] = selected_datetime
+        logger.debug(f"[DATE_PICKER] Date de RETOUR stockée: {selected_datetime}")
+    else:
+        context.user_data['selected_datetime'] = selected_datetime
+        logger.debug(f"[DATE_PICKER] Date d'ALLER stockée: {selected_datetime}")
     
     # Formater pour l'affichage
     formatted_date = selected_datetime.strftime('%d %B %Y à %H:%M')
@@ -331,7 +393,7 @@ async def handle_minute_selection(update: Update, context: CallbackContext):
         reply_markup=InlineKeyboardMarkup(keyboard),
         parse_mode="Markdown"
     )
-    return "CONFIRM_DATETIME"
+    return "EDIT_CONFIRM_DATETIME"
 
 async def handle_datetime_action(update: Update, context: CallbackContext, next_state=None):
     """Gère les actions après la sélection de date/heure"""
@@ -343,7 +405,15 @@ async def handle_datetime_action(update: Update, context: CallbackContext, next_
     _, action = query.data.split(':')
     
     if action == 'confirm':
-        selected_datetime = context.user_data.get('selected_datetime')
+        # Récupérer la date appropriée selon le contexte
+        selecting_return = context.user_data.get('selecting_return', False)
+        if selecting_return:
+            selected_datetime = context.user_data.get('return_selected_datetime')
+            logger.debug(f"[DATE_PICKER] Confirmation date RETOUR: {selected_datetime}")
+        else:
+            selected_datetime = context.user_data.get('selected_datetime')
+            logger.debug(f"[DATE_PICKER] Confirmation date ALLER: {selected_datetime}")
+            
         if not selected_datetime:
             logger.error("Date/heure non trouvée dans le contexte")
             await query.edit_message_text("❌ Erreur: Date/heure non définie.")
@@ -497,4 +567,4 @@ async def handle_flex_time_selection(update: Update, context: CallbackContext):
         parse_mode="Markdown"
     )
     
-    return "CONFIRM_DATETIME"
+    return "EDIT_CONFIRM_DATETIME"

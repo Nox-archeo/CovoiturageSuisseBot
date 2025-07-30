@@ -22,7 +22,7 @@ from utils.message_utils import safe_edit_message_text
 logger = logging.getLogger(__name__)
 
 # États de la conversation
-PROFILE_MAIN, EDIT_PROFILE, TYPING_NAME, TYPING_AGE, TYPING_PHONE, TYPING_DESCRIPTION = range(6)
+PROFILE_MAIN, EDIT_PROFILE, TYPING_NAME, TYPING_AGE, TYPING_PHONE, TYPING_DESCRIPTION, PAYPAL_MENU, TYPING_PAYPAL, DELETE_CONFIRM = range(9)
 
 async def profile_handler(update: Update, context: CallbackContext):
     """
@@ -129,10 +129,12 @@ async def show_profile_dashboard(update: Update, context: CallbackContext, user=
         username = f"@{user.username}" if hasattr(user, 'username') and user.username else ""
         name = user.full_name if hasattr(user, 'full_name') and user.full_name else "Sans nom"
         age = f", {user.age} ans" if hasattr(user, 'age') and user.age else ""
+        paypal_display = user.paypal_email if hasattr(user, 'paypal_email') and user.paypal_email else "Non configuré"
         
         profile_text = (
             f"👤 *PROFIL UTILISATEUR* ({name}{age})\n\n"
             f"📱 Téléphone : {phone_display}\n"
+            f"💳 PayPal : {paypal_display}\n"
             f"📌 Type : {user_type_str}\n"
             f"⭐ Note moyenne : {stats['rating']:.1f} / 5\n"
             f"🚗 Mes trajets : {stats['trips_count']} trajets à venir\n"
@@ -151,10 +153,38 @@ async def show_profile_dashboard(update: Update, context: CallbackContext, user=
                 InlineKeyboardButton("✏️ Modifier mon profil", callback_data="profile:edit")
             ],
             [
-                InlineKeyboardButton("📤 Inviter un ami", callback_data="profile:invite"),
-                InlineKeyboardButton("🏠 Menu principal", callback_data="menu:back_to_menu")
+                InlineKeyboardButton("💳 PayPal", callback_data="profile:paypal"),
+                InlineKeyboardButton("📤 Inviter un ami", callback_data="profile:invite")
             ]
         ]
+        
+        # Ajouter les boutons de switch de profil selon les capacités de l'utilisateur
+        if user.is_driver and user.paypal_email:
+            # L'utilisateur peut être conducteur et passager
+            keyboard.append([
+                InlineKeyboardButton("🚗 Mode Conducteur", callback_data="switch_profile:driver"),
+                InlineKeyboardButton("🎒 Mode Passager", callback_data="switch_profile:passenger")
+            ])
+        elif user.paypal_email:
+            # L'utilisateur a PayPal mais n'est pas encore conducteur actif
+            keyboard.append([
+                InlineKeyboardButton("🚗 Devenir conducteur", callback_data="menu:become_driver"),
+                InlineKeyboardButton("🎒 Mode Passager", callback_data="switch_profile:passenger")
+            ])
+        else:
+            # L'utilisateur n'a pas encore configuré PayPal
+            keyboard.append([
+                InlineKeyboardButton("💳 Configurer PayPal", callback_data="setup_paypal"),
+                InlineKeyboardButton("❓ Pourquoi PayPal ?", callback_data="why_paypal_required")
+            ])
+        
+        # Ajouter les boutons du bas
+        keyboard.extend([
+            [
+                InlineKeyboardButton("🗑️ Supprimer profil", callback_data="profile:delete"),
+                InlineKeyboardButton("🏠 Menu principal", callback_data="menu:back_to_menu")
+            ]
+        ])
         
         reply_markup = InlineKeyboardMarkup(keyboard)
         
@@ -335,6 +365,10 @@ async def handle_profile_action(update: Update, context: CallbackContext):
     try:
         query = update.callback_query
         await query.answer()
+        
+        logger.info(f"🔥 handle_profile_action appelé avec callback_data: {query.data}")
+        logger.info(f"🔥 Conversation state: {context.user_data.get('conversation_state', 'UNKNOWN')}")
+        
         if not query.data or ':' not in query.data:
             await query.edit_message_text(
                 "⚠️ Erreur: Format de données invalide. Veuillez retourner au menu principal.",
@@ -342,14 +376,14 @@ async def handle_profile_action(update: Update, context: CallbackContext):
             )
             return PROFILE_MAIN
         action = query.data.split(':')[1]
-        logger.info(f"Action de profil sélectionnée: {action}")
+        logger.info(f"🔥 Action de profil sélectionnée: {action}")
         if action == "back_to_profile":
             return await back_to_profile(update, context)
         if action == "my_trips":
-            # Utiliser la fonction unifiée des trajets
-            from handlers.trip_handlers import list_my_trips
-            return await list_my_trips(update, context)
+            # Rester dans le contexte du profil, ne pas appeler trip_handlers
+            return await show_my_trips_from_profile(update, context)
         elif action == "my_bookings":
+            logger.info(f"🔥 Appel de show_my_bookings")
             return await show_my_bookings(update, context)
         elif action == "my_earnings":
             return await show_my_earnings(update, context)
@@ -395,9 +429,9 @@ async def show_my_trips(update: Update, context: CallbackContext):
                 reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🏠 Menu principal", callback_data="menu:back_to_menu")]])
             )
             return PROFILE_MAIN
-        # Récupérer tous les trajets à venir publiés du conducteur, sans filtrer sur is_cancelled côté SQL
+        # Récupérer tous les trajets à venir publiés créés par l'utilisateur, sans filtrer sur is_cancelled côté SQL
         trips = db.query(Trip).filter(
-            Trip.driver_id == user.id,
+            Trip.creator_id == user.id,
             Trip.is_published == True,
             Trip.departure_time > datetime.now(),
             Trip.is_cancelled == False
@@ -953,6 +987,289 @@ async def back_to_profile(update: Update, context: CallbackContext):
     await show_profile_dashboard(update, context)
     return PROFILE_MAIN
 
+async def show_my_trips_from_profile(update: Update, context: CallbackContext):
+    """
+    Affiche les trajets de l'utilisateur depuis le profil sans terminer la conversation
+    """
+    query = update.callback_query
+    if query:
+        await query.answer()
+    
+    user_id = update.effective_user.id
+    db = get_db()
+    user = db.query(User).filter(User.telegram_id == user_id).first()
+    
+    if not user:
+        message = (
+            "❌ *Profil requis*\n\n"
+            "Vous devez créer un profil avant de pouvoir voir vos trajets."
+        )
+        keyboard = [
+            [InlineKeyboardButton("👤 Retour au profil", callback_data="profile:back_to_profile")]
+        ]
+        
+        if query:
+            await query.edit_message_text(
+                message,
+                reply_markup=InlineKeyboardMarkup(keyboard),
+                parse_mode="Markdown"
+            )
+        return PROFILE_MAIN
+    
+    # Déterminer le profil actuel de l'utilisateur
+    has_driver_profile = user.is_driver and user.paypal_email
+    has_passenger_profile = True  # Tous les utilisateurs peuvent être passagers
+    
+    # Si l'utilisateur n'a qu'un profil passager, rediriger directement vers la gestion des trajets passagers
+    if has_passenger_profile and not has_driver_profile:
+        message = (
+            "🎒 *Mes demandes de trajet*\n\n"
+            "Vous consultez vos demandes en tant que passager."
+        )
+        keyboard = [
+            [InlineKeyboardButton("📋 Voir mes demandes", callback_data="passenger_trip_management")],
+            [InlineKeyboardButton("👤 Retour au profil", callback_data="profile:back_to_profile")]
+        ]
+        
+    # Si l'utilisateur n'a qu'un profil conducteur, rediriger vers les trajets conducteur
+    elif has_driver_profile and not has_passenger_profile:
+        message = (
+            "🚗 *Mes trajets (Conducteur)*\n\n"
+            "Vous consultez vos trajets en tant que conducteur."
+        )
+        keyboard = [
+            [InlineKeyboardButton("📋 Voir mes trajets", callback_data="trips:show_driver")],
+            [InlineKeyboardButton("👤 Retour au profil", callback_data="profile:back_to_profile")]
+        ]
+    
+    # Si l'utilisateur a les deux profils, afficher le menu de choix
+    else:
+        message = (
+            "📋 *Mes trajets*\n\n"
+            "Que souhaitez-vous consulter ?"
+        )
+        keyboard = [
+            [InlineKeyboardButton("🚗 Mes trajets (Conducteur)", callback_data="trips:show_driver")],
+            [InlineKeyboardButton("🎒 Mes demandes (Passager)", callback_data="passenger_trip_management")],
+            [InlineKeyboardButton("👤 Retour au profil", callback_data="profile:back_to_profile")]
+        ]
+    
+    if query:
+        await query.edit_message_text(
+            message,
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode="Markdown"
+        )
+    
+    return PROFILE_MAIN
+
+async def show_my_trips_from_profile(update: Update, context: CallbackContext):
+    """
+    Affiche les trajets de l'utilisateur depuis le profil sans terminer la conversation
+    """
+    query = update.callback_query
+    if query:
+        await query.answer()
+    
+    user_id = update.effective_user.id
+    db = get_db()
+    user = db.query(User).filter(User.telegram_id == user_id).first()
+    
+    if not user:
+        message = (
+            "❌ *Profil requis*\n\n"
+            "Vous devez créer un profil avant de pouvoir voir vos trajets."
+        )
+        keyboard = [
+            [InlineKeyboardButton("👤 Retour au profil", callback_data="profile:back_to_profile")]
+        ]
+        
+        if query:
+            await query.edit_message_text(
+                message,
+                reply_markup=InlineKeyboardMarkup(keyboard),
+                parse_mode="Markdown"
+            )
+        return PROFILE_MAIN
+    
+    # Déterminer le profil actuel de l'utilisateur
+    has_driver_profile = user.is_driver and user.paypal_email
+    has_passenger_profile = True  # Tous les utilisateurs peuvent être passagers
+    
+    # Si l'utilisateur n'a qu'un profil passager, rediriger directement vers la gestion des trajets passagers
+    if has_passenger_profile and not has_driver_profile:
+        message = (
+            "🎒 *Mes demandes de trajet*\n\n"
+            "Vous consultez vos demandes en tant que passager."
+        )
+        keyboard = [
+            [InlineKeyboardButton("📋 Voir mes demandes", callback_data="passenger_trip_management")],
+            [InlineKeyboardButton("👤 Retour au profil", callback_data="profile:back_to_profile")]
+        ]
+        
+    # Si l'utilisateur n'a qu'un profil conducteur, rediriger vers les trajets conducteur
+    elif has_driver_profile and not has_passenger_profile:
+        message = (
+            "🚗 *Mes trajets (Conducteur)*\n\n"
+            "Vous consultez vos trajets en tant que conducteur."
+        )
+        keyboard = [
+            [InlineKeyboardButton("📋 Voir mes trajets", callback_data="trips:show_driver")],
+            [InlineKeyboardButton("👤 Retour au profil", callback_data="profile:back_to_profile")]
+        ]
+    
+    # Si l'utilisateur a les deux profils, afficher le menu de choix
+    else:
+        message = (
+            "📋 *Mes trajets*\n\n"
+            "Que souhaitez-vous consulter ?"
+        )
+        keyboard = [
+            [InlineKeyboardButton("🚗 Mes trajets (Conducteur)", callback_data="trips:show_driver")],
+            [InlineKeyboardButton("🎒 Mes demandes (Passager)", callback_data="passenger_trip_management")],
+            [InlineKeyboardButton("👤 Retour au profil", callback_data="profile:back_to_profile")]
+        ]
+    
+    if query:
+        await query.edit_message_text(
+            message,
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode="Markdown"
+        )
+    
+    return PROFILE_MAIN
+
+async def handle_trip_callbacks_from_profile(update: Update, context: CallbackContext):
+    """
+    Gère les callbacks de trajets depuis le profil avec les bons boutons de retour
+    """
+    query = update.callback_query
+    if query:
+        await query.answer()
+    
+    try:
+        if query.data == "trips:show_driver":
+            # Afficher le menu des trajets conducteur avec retour au profil
+            message = (
+                "🚗 *Mes trajets (Conducteur)*\n\n"
+                "Que souhaitez-vous consulter ?"
+            )
+            
+            keyboard = [
+                [InlineKeyboardButton("📅 À venir", callback_data="trips:show_driver_upcoming")],
+                [InlineKeyboardButton("🕓 Passés", callback_data="trips:show_driver_past")],
+                [InlineKeyboardButton("👤 Retour au profil", callback_data="profile:back_to_profile")]
+            ]
+            
+            await query.edit_message_text(
+                message,
+                reply_markup=InlineKeyboardMarkup(keyboard),
+                parse_mode="Markdown"
+            )
+            return PROFILE_MAIN
+            
+        elif query.data == "passenger_trip_management":
+            # Afficher le menu des trajets passager avec retour au profil
+            message = (
+                "🎒 *Mes demandes de trajet*\n\n"
+                "Consultez vos demandes de trajets et réservations."
+            )
+            
+            keyboard = [
+                [InlineKeyboardButton("📋 Voir mes demandes", callback_data="passenger:view_requests")],
+                [InlineKeyboardButton("🔖 Mes réservations", callback_data="passenger:view_bookings")],
+                [InlineKeyboardButton("👤 Retour au profil", callback_data="profile:back_to_profile")]
+            ]
+            
+            await query.edit_message_text(
+                message,
+                reply_markup=InlineKeyboardMarkup(keyboard),
+                parse_mode="Markdown"
+            )
+            return PROFILE_MAIN
+            
+    except Exception as e:
+        logger.error(f"Erreur dans handle_trip_callbacks_from_profile: {e}")
+        await query.edit_message_text(
+            "❌ Une erreur est survenue.\n\n"
+            "Retournez au profil et réessayez.",
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("👤 Retour au profil", callback_data="profile:back_to_profile")]
+            ])
+        )
+        return PROFILE_MAIN
+
+async def handle_trip_sub_callbacks_from_profile(update: Update, context: CallbackContext):
+    """
+    Gère les sous-callbacks de trajets depuis le profil (trajets à venir/passés, etc.)
+    """
+    query = update.callback_query
+    if query:
+        await query.answer()
+    
+    try:
+        if query.data.startswith("trips:show_driver_"):
+            # Appeler la fonction de trip_handlers mais modifier le message pour avoir le bon bouton de retour
+            from handlers.trip_handlers import handle_show_trips_by_time
+            
+            # Sauvegarder le callback original et le remplacer temporairement
+            original_data = query.data
+            
+            # Appeler la fonction
+            await handle_show_trips_by_time(update, context)
+            
+            # Modifier le message pour ajouter le bouton retour au profil
+            # On va récupérer le message actuel et juste changer les boutons
+            current_message = query.message
+            if current_message and current_message.reply_markup:
+                keyboard = []
+                # Garder tous les boutons existants sauf le dernier (retour)
+                for row in current_message.reply_markup.inline_keyboard[:-1]:
+                    keyboard.append(row)
+                
+                # Ajouter les boutons de navigation avec retour au profil
+                keyboard.extend([
+                    [InlineKeyboardButton("🔙 Retour aux trajets", callback_data="trips:show_driver")],
+                    [InlineKeyboardButton("👤 Retour au profil", callback_data="profile:back_to_profile")]
+                ])
+                
+                try:
+                    await query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(keyboard))
+                except Exception as e:
+                    logger.error(f"Erreur lors de la modification des boutons: {e}")
+            
+            return PROFILE_MAIN
+            
+        elif query.data.startswith("passenger:view_"):
+            # Pour les demandes/réservations passager, afficher un message simple avec retour
+            if "requests" in query.data:
+                message = "🎒 *Mes demandes de trajet*\n\n📋 Vos demandes de trajets apparaîtront ici."
+            else:
+                message = "🔖 *Mes réservations*\n\n📋 Vos réservations apparaîtront ici."
+            
+            keyboard = [
+                [InlineKeyboardButton("🔙 Retour aux trajets", callback_data="passenger_trip_management")],
+                [InlineKeyboardButton("👤 Retour au profil", callback_data="profile:back_to_profile")]
+            ]
+            
+            await query.edit_message_text(
+                message,
+                reply_markup=InlineKeyboardMarkup(keyboard),
+                parse_mode="Markdown"
+            )
+            return PROFILE_MAIN
+            
+    except Exception as e:
+        logger.error(f"Erreur dans handle_trip_sub_callbacks_from_profile: {e}")
+        await query.edit_message_text(
+            "❌ Une erreur est survenue.\n\n"
+            "Retournez au profil et réessayez.",
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("👤 Retour au profil", callback_data="profile:back_to_profile")]
+            ])
+        )
+        return PROFILE_MAIN
+
 async def back_to_edit(update: Update, context: CallbackContext):
     """
     Retourne au menu d'édition du profil
@@ -1041,6 +1358,252 @@ async def cancel_profile(update: Update, context: CallbackContext):
             pass
         return ConversationHandler.END
 
+# ===== NOUVELLES FONCTIONS PAYPAL ET SUPPRESSION =====
+
+async def show_paypal_menu(update: Update, context: CallbackContext):
+    """Afficher le menu de gestion PayPal"""
+    query = update.callback_query
+    await query.answer()
+    
+    user_id = update.effective_user.id
+    db = get_db()
+    
+    try:
+        user = db.query(User).filter(User.telegram_id == user_id).first()
+        if not user:
+            await query.edit_message_text("❌ Profil non trouvé")
+            return ConversationHandler.END
+        
+        # Afficher l'email PayPal actuel s'il existe
+        current_email = user.paypal_email if user.paypal_email else "Non configuré"
+        
+        text = f"""💳 **GESTION PAYPAL**
+
+📧 **Email PayPal actuel :** {current_email}
+
+ℹ️ L'email PayPal est utilisé pour recevoir les paiements des passagers de vos trajets.
+
+Que souhaitez-vous faire ?"""
+        
+        keyboard = [
+            [InlineKeyboardButton("✏️ Modifier email PayPal", callback_data="profile:edit_paypal")],
+            [InlineKeyboardButton("🗑️ Supprimer email PayPal", callback_data="profile:remove_paypal")],
+            [InlineKeyboardButton("⬅️ Retour au profil", callback_data="profile:back_to_profile")]
+        ]
+        
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        
+        await query.edit_message_text(
+            text=text,
+            reply_markup=reply_markup,
+            parse_mode=ParseMode.MARKDOWN
+        )
+        
+        return PAYPAL_MENU
+        
+    except Exception as e:
+        logger.error(f"Erreur show_paypal_menu: {e}")
+        await query.edit_message_text("❌ Erreur lors de l'affichage du menu PayPal")
+        return ConversationHandler.END
+    finally:
+        db.close()
+
+async def start_edit_paypal(update: Update, context: CallbackContext):
+    """Commencer l'édition de l'email PayPal"""
+    query = update.callback_query
+    await query.answer()
+    
+    text = """✏️ **MODIFIER EMAIL PAYPAL**
+
+Veuillez entrer votre nouvelle adresse email PayPal :
+
+⚠️ **Important :** Assurez-vous que l'email est correct car c'est là que vous recevrez vos paiements.
+
+Exemple : `votre.email@exemple.com`"""
+    
+    keyboard = [[InlineKeyboardButton("❌ Annuler", callback_data="profile:paypal")]]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    
+    await query.edit_message_text(
+        text=text,
+        reply_markup=reply_markup,
+        parse_mode=ParseMode.MARKDOWN
+    )
+    
+    return TYPING_PAYPAL
+
+async def save_paypal_email(update: Update, context: CallbackContext):
+    """Sauvegarder le nouvel email PayPal"""
+    user_id = update.effective_user.id
+    new_email = update.message.text.strip()
+    
+    # Validation basique de l'email
+    email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    if not re.match(email_pattern, new_email):
+        keyboard = [[InlineKeyboardButton("❌ Annuler", callback_data="profile:paypal")]]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        
+        await update.message.reply_text(
+            "❌ **Email invalide**\n\nVeuillez entrer une adresse email valide.\n\nExemple : votre.email@exemple.com",
+            reply_markup=reply_markup,
+            parse_mode=ParseMode.MARKDOWN
+        )
+        return TYPING_PAYPAL
+    
+    db = get_db()
+    
+    try:
+        user = db.query(User).filter(User.telegram_id == user_id).first()
+        if not user:
+            await update.message.reply_text("❌ Profil non trouvé")
+            return ConversationHandler.END
+        
+        user.paypal_email = new_email
+        db.commit()
+        
+        await update.message.reply_text(
+            f"✅ **Email PayPal mis à jour !**\n\nNouveau email : `{new_email}`",
+            parse_mode=ParseMode.MARKDOWN
+        )
+        
+        # Retourner au menu PayPal
+        return await show_paypal_menu(update, context)
+        
+    except Exception as e:
+        logger.error(f"Erreur save_paypal_email: {e}")
+        await update.message.reply_text("❌ Erreur lors de la sauvegarde")
+        return ConversationHandler.END
+    finally:
+        db.close()
+
+async def remove_paypal_email(update: Update, context: CallbackContext):
+    """Supprimer l'email PayPal"""
+    query = update.callback_query
+    await query.answer()
+    
+    user_id = update.effective_user.id
+    db = get_db()
+    
+    try:
+        user = db.query(User).filter(User.telegram_id == user_id).first()
+        if not user:
+            await query.edit_message_text("❌ Profil non trouvé")
+            return ConversationHandler.END
+        
+        user.paypal_email = None
+        db.commit()
+        
+        await query.edit_message_text(
+            "✅ **Email PayPal supprimé**\n\nVous pouvez en ajouter un nouveau à tout moment.",
+            parse_mode=ParseMode.MARKDOWN
+        )
+        
+        # Retourner au menu PayPal après 2 secondes
+        import asyncio
+        await asyncio.sleep(2)
+        return await show_paypal_menu(update, context)
+        
+    except Exception as e:
+        logger.error(f"Erreur remove_paypal_email: {e}")
+        await query.edit_message_text("❌ Erreur lors de la suppression")
+        return ConversationHandler.END
+    finally:
+        db.close()
+
+async def show_delete_confirmation(update: Update, context: CallbackContext):
+    """Afficher la confirmation de suppression du profil"""
+    query = update.callback_query
+    await query.answer()
+    
+    text = """⚠️ **SUPPRIMER VOTRE PROFIL**
+
+🚨 **ATTENTION : Cette action est DÉFINITIVE !**
+
+En supprimant votre profil :
+• ❌ Tous vos trajets seront annulés
+• ❌ Vos réservations seront annulées  
+• ❌ Votre historique sera perdu
+• ❌ Vous devrez recréer un profil pour utiliser l'app
+
+**Êtes-vous absolument sûr(e) de vouloir supprimer votre profil ?**"""
+    
+    keyboard = [
+        [
+            InlineKeyboardButton("🗑️ OUI, SUPPRIMER", callback_data="profile:confirm_delete"),
+            InlineKeyboardButton("❌ Annuler", callback_data="profile:back_to_profile")
+        ]
+    ]
+    
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    
+    await query.edit_message_text(
+        text=text,
+        reply_markup=reply_markup,
+        parse_mode=ParseMode.MARKDOWN
+    )
+    
+    return DELETE_CONFIRM
+
+async def confirm_delete_profile(update: Update, context: CallbackContext):
+    """Supprimer définitivement le profil"""
+    query = update.callback_query
+    await query.answer()
+    
+    user_id = update.effective_user.id
+    db = get_db()
+    
+    try:
+        user = db.query(User).filter(User.telegram_id == user_id).first()
+        if not user:
+            await query.edit_message_text("❌ Profil non trouvé")
+            return ConversationHandler.END
+        
+        # Annuler tous les trajets actifs
+        active_trips = db.query(Trip).filter(
+            Trip.driver_id == user.id,
+            Trip.is_cancelled == False
+        ).all()
+        
+        for trip in active_trips:
+            trip.is_cancelled = True
+        
+        # Annuler toutes les réservations actives
+        active_bookings = db.query(Booking).filter(
+            Booking.passenger_id == user.id,
+            Booking.status.in_(["pending", "confirmed"])
+        ).all()
+        
+        for booking in active_bookings:
+            booking.status = "cancelled"
+        
+        # Supprimer le profil utilisateur
+        db.delete(user)
+        db.commit()
+        
+        text = """✅ **PROFIL SUPPRIMÉ**
+
+Votre profil a été supprimé avec succès.
+
+Pour utiliser à nouveau CovoiturageSuisse, vous devrez créer un nouveau profil.
+
+Merci d'avoir utilisé notre service ! 👋"""
+        
+        await query.edit_message_text(
+            text=text,
+            parse_mode=ParseMode.MARKDOWN
+        )
+        
+        return ConversationHandler.END
+        
+    except Exception as e:
+        logger.error(f"Erreur confirm_delete_profile: {e}")
+        await query.edit_message_text("❌ Erreur lors de la suppression du profil")
+        return ConversationHandler.END
+    finally:
+        db.close()
+
+# ===== FIN NOUVELLES FONCTIONS =====
+
 # Création du ConversationHandler pour la gestion du profil
 profile_conv_handler = ConversationHandler(
     entry_points=[
@@ -1049,39 +1612,140 @@ profile_conv_handler = ConversationHandler(
         CallbackQueryHandler(profile_handler, pattern="^profil$"),
         CallbackQueryHandler(profile_handler, pattern="^menu:profile$"),
         CallbackQueryHandler(profile_handler, pattern="menu:profile"),
+        # AJOUTER TOUS LES CALLBACKS DE PROFIL COMME POINTS D'ENTRÉE !
+        CallbackQueryHandler(handle_profile_action, pattern="^profile:(my_trips|my_bookings|my_earnings|edit|invite)$"),
+        CallbackQueryHandler(show_paypal_menu, pattern="^profile:paypal$"),
+        CallbackQueryHandler(show_delete_confirmation, pattern="^profile:delete$"),
         # NE PAS inclure .*profile.* ici !
     ],
     states={
         PROFILE_MAIN: [
             CallbackQueryHandler(handle_profile_action, pattern="^profile:(my_trips|my_bookings|my_earnings|edit|invite)$"),
+            CallbackQueryHandler(show_paypal_menu, pattern="^profile:paypal$"),
+            CallbackQueryHandler(show_delete_confirmation, pattern="^profile:delete$"),
             CallbackQueryHandler(back_to_profile, pattern="^profile:back_to_profile$"),
-            CallbackQueryHandler(cancel_profile, pattern="^menu:back_to_menu$")
+            CallbackQueryHandler(cancel_profile, pattern="^menu:back_to_menu$"),
+            # Ajouter les handlers pour les trajets
+            CallbackQueryHandler(handle_trip_callbacks_from_profile, pattern="^trips:show_driver$"),
+            CallbackQueryHandler(handle_trip_callbacks_from_profile, pattern="^passenger_trip_management$"),
+            # Ajouter les handlers pour les sous-menus de trajets
+            CallbackQueryHandler(handle_trip_sub_callbacks_from_profile, pattern="^trips:show_driver_(upcoming|past)$"),
+            CallbackQueryHandler(handle_trip_sub_callbacks_from_profile, pattern="^passenger:(view_requests|view_bookings)$")
         ],
         EDIT_PROFILE: [
             CallbackQueryHandler(handle_edit_action, pattern="^edit:(name|age|phone|description|vehicle)$"),
             CallbackQueryHandler(back_to_profile, pattern="^profile:back_to_profile$"),
-            CallbackQueryHandler(back_to_edit, pattern="^profile:back_to_edit$")
+            CallbackQueryHandler(back_to_edit, pattern="^profile:back_to_edit$"),
+            # AJOUTER TOUS LES CALLBACKS DU PROFIL DANS CET ÉTAT
+            CallbackQueryHandler(handle_profile_action, pattern="^profile:(my_trips|my_bookings|my_earnings|edit|invite)$"),
+            CallbackQueryHandler(show_paypal_menu, pattern="^profile:paypal$"),
+            CallbackQueryHandler(show_delete_confirmation, pattern="^profile:delete$"),
+            CallbackQueryHandler(cancel_profile, pattern="^menu:back_to_menu$"),
+            CallbackQueryHandler(handle_trip_callbacks_from_profile, pattern="^trips:show_driver$"),
+            CallbackQueryHandler(handle_trip_callbacks_from_profile, pattern="^passenger_trip_management$"),
+            CallbackQueryHandler(handle_trip_sub_callbacks_from_profile, pattern="^trips:show_driver_(upcoming|past)$"),
+            CallbackQueryHandler(handle_trip_sub_callbacks_from_profile, pattern="^passenger:(view_requests|view_bookings)$")
+        ],
+        PAYPAL_MENU: [
+            CallbackQueryHandler(start_edit_paypal, pattern="^profile:edit_paypal$"),
+            CallbackQueryHandler(remove_paypal_email, pattern="^profile:remove_paypal$"),
+            CallbackQueryHandler(back_to_profile, pattern="^profile:back_to_profile$"),
+            # AJOUTER TOUS LES CALLBACKS DU PROFIL DANS CET ÉTAT
+            CallbackQueryHandler(handle_profile_action, pattern="^profile:(my_trips|my_bookings|my_earnings|edit|invite)$"),
+            CallbackQueryHandler(show_delete_confirmation, pattern="^profile:delete$"),
+            CallbackQueryHandler(cancel_profile, pattern="^menu:back_to_menu$"),
+            CallbackQueryHandler(handle_trip_callbacks_from_profile, pattern="^trips:show_driver$"),
+            CallbackQueryHandler(handle_trip_callbacks_from_profile, pattern="^passenger_trip_management$"),
+            CallbackQueryHandler(handle_trip_sub_callbacks_from_profile, pattern="^trips:show_driver_(upcoming|past)$"),
+            CallbackQueryHandler(handle_trip_sub_callbacks_from_profile, pattern="^passenger:(view_requests|view_bookings)$")
+        ],
+        TYPING_PAYPAL: [
+            MessageHandler(filters.TEXT & ~filters.COMMAND, save_paypal_email),
+            CallbackQueryHandler(show_paypal_menu, pattern="^profile:paypal$"),
+            CommandHandler("cancel", cancel_profile),
+            # AJOUTER TOUS LES CALLBACKS DU PROFIL DANS CET ÉTAT
+            CallbackQueryHandler(handle_profile_action, pattern="^profile:(my_trips|my_bookings|my_earnings|edit|invite)$"),
+            CallbackQueryHandler(show_delete_confirmation, pattern="^profile:delete$"),
+            CallbackQueryHandler(back_to_profile, pattern="^profile:back_to_profile$"),
+            CallbackQueryHandler(cancel_profile, pattern="^menu:back_to_menu$"),
+            CallbackQueryHandler(handle_trip_callbacks_from_profile, pattern="^trips:show_driver$"),
+            CallbackQueryHandler(handle_trip_callbacks_from_profile, pattern="^passenger_trip_management$"),
+            CallbackQueryHandler(handle_trip_sub_callbacks_from_profile, pattern="^trips:show_driver_(upcoming|past)$"),
+            CallbackQueryHandler(handle_trip_sub_callbacks_from_profile, pattern="^passenger:(view_requests|view_bookings)$")
+        ],
+        DELETE_CONFIRM: [
+            CallbackQueryHandler(confirm_delete_profile, pattern="^profile:confirm_delete$"),
+            CallbackQueryHandler(back_to_profile, pattern="^profile:back_to_profile$"),
+            # AJOUTER TOUS LES CALLBACKS DU PROFIL DANS CET ÉTAT
+            CallbackQueryHandler(handle_profile_action, pattern="^profile:(my_trips|my_bookings|my_earnings|edit|invite)$"),
+            CallbackQueryHandler(show_paypal_menu, pattern="^profile:paypal$"),
+            CallbackQueryHandler(cancel_profile, pattern="^menu:back_to_menu$"),
+            CallbackQueryHandler(handle_trip_callbacks_from_profile, pattern="^trips:show_driver$"),
+            CallbackQueryHandler(handle_trip_callbacks_from_profile, pattern="^passenger_trip_management$"),
+            CallbackQueryHandler(handle_trip_sub_callbacks_from_profile, pattern="^trips:show_driver_(upcoming|past)$"),
+            CallbackQueryHandler(handle_trip_sub_callbacks_from_profile, pattern="^passenger:(view_requests|view_bookings)$")
         ],
         TYPING_NAME: [
             MessageHandler(filters.TEXT & ~filters.COMMAND, handle_name_input),
-            CommandHandler("cancel", cancel_profile)
+            CommandHandler("cancel", cancel_profile),
+            # AJOUTER TOUS LES CALLBACKS DU PROFIL DANS CET ÉTAT
+            CallbackQueryHandler(handle_profile_action, pattern="^profile:(my_trips|my_bookings|my_earnings|edit|invite)$"),
+            CallbackQueryHandler(show_paypal_menu, pattern="^profile:paypal$"),
+            CallbackQueryHandler(show_delete_confirmation, pattern="^profile:delete$"),
+            CallbackQueryHandler(back_to_profile, pattern="^profile:back_to_profile$"),
+            CallbackQueryHandler(cancel_profile, pattern="^menu:back_to_menu$"),
+            CallbackQueryHandler(handle_trip_callbacks_from_profile, pattern="^trips:show_driver$"),
+            CallbackQueryHandler(handle_trip_callbacks_from_profile, pattern="^passenger_trip_management$"),
+            CallbackQueryHandler(handle_trip_sub_callbacks_from_profile, pattern="^trips:show_driver_(upcoming|past)$"),
+            CallbackQueryHandler(handle_trip_sub_callbacks_from_profile, pattern="^passenger:(view_requests|view_bookings)$")
         ],
         TYPING_AGE: [
             MessageHandler(filters.TEXT & ~filters.COMMAND, handle_age_input),
-            CommandHandler("cancel", cancel_profile)
+            CommandHandler("cancel", cancel_profile),
+            # AJOUTER TOUS LES CALLBACKS DU PROFIL DANS CET ÉTAT
+            CallbackQueryHandler(handle_profile_action, pattern="^profile:(my_trips|my_bookings|my_earnings|edit|invite)$"),
+            CallbackQueryHandler(show_paypal_menu, pattern="^profile:paypal$"),
+            CallbackQueryHandler(show_delete_confirmation, pattern="^profile:delete$"),
+            CallbackQueryHandler(back_to_profile, pattern="^profile:back_to_profile$"),
+            CallbackQueryHandler(cancel_profile, pattern="^menu:back_to_menu$"),
+            CallbackQueryHandler(handle_trip_callbacks_from_profile, pattern="^trips:show_driver$"),
+            CallbackQueryHandler(handle_trip_callbacks_from_profile, pattern="^passenger_trip_management$"),
+            CallbackQueryHandler(handle_trip_sub_callbacks_from_profile, pattern="^trips:show_driver_(upcoming|past)$"),
+            CallbackQueryHandler(handle_trip_sub_callbacks_from_profile, pattern="^passenger:(view_requests|view_bookings)$")
         ],
         TYPING_PHONE: [
             MessageHandler(filters.TEXT & ~filters.COMMAND, handle_phone_input),
-            CommandHandler("cancel", cancel_profile)
+            CommandHandler("cancel", cancel_profile),
+            # AJOUTER TOUS LES CALLBACKS DU PROFIL DANS CET ÉTAT
+            CallbackQueryHandler(handle_profile_action, pattern="^profile:(my_trips|my_bookings|my_earnings|edit|invite)$"),
+            CallbackQueryHandler(show_paypal_menu, pattern="^profile:paypal$"),
+            CallbackQueryHandler(show_delete_confirmation, pattern="^profile:delete$"),
+            CallbackQueryHandler(back_to_profile, pattern="^profile:back_to_profile$"),
+            CallbackQueryHandler(cancel_profile, pattern="^menu:back_to_menu$"),
+            CallbackQueryHandler(handle_trip_callbacks_from_profile, pattern="^trips:show_driver$"),
+            CallbackQueryHandler(handle_trip_callbacks_from_profile, pattern="^passenger_trip_management$"),
+            CallbackQueryHandler(handle_trip_sub_callbacks_from_profile, pattern="^trips:show_driver_(upcoming|past)$"),
+            CallbackQueryHandler(handle_trip_sub_callbacks_from_profile, pattern="^passenger:(view_requests|view_bookings)$")
         ],
         TYPING_DESCRIPTION: [
             MessageHandler(filters.TEXT & ~filters.COMMAND, handle_description_input),
-            CommandHandler("cancel", cancel_profile)
+            CommandHandler("cancel", cancel_profile),
+            # AJOUTER TOUS LES CALLBACKS DU PROFIL DANS CET ÉTAT
+            CallbackQueryHandler(handle_profile_action, pattern="^profile:(my_trips|my_bookings|my_earnings|edit|invite)$"),
+            CallbackQueryHandler(show_paypal_menu, pattern="^profile:paypal$"),
+            CallbackQueryHandler(show_delete_confirmation, pattern="^profile:delete$"),
+            CallbackQueryHandler(back_to_profile, pattern="^profile:back_to_profile$"),
+            CallbackQueryHandler(cancel_profile, pattern="^menu:back_to_menu$"),
+            CallbackQueryHandler(handle_trip_callbacks_from_profile, pattern="^trips:show_driver$"),
+            CallbackQueryHandler(handle_trip_callbacks_from_profile, pattern="^passenger_trip_management$"),
+            CallbackQueryHandler(handle_trip_sub_callbacks_from_profile, pattern="^trips:show_driver_(upcoming|past)$"),
+            CallbackQueryHandler(handle_trip_sub_callbacks_from_profile, pattern="^passenger:(view_requests|view_bookings)$")
         ]
     },
     fallbacks=[
         CommandHandler("cancel", cancel_profile),
-        CallbackQueryHandler(cancel_profile, pattern="^cancel$")
+        CallbackQueryHandler(cancel_profile, pattern="^cancel$"),
+        CallbackQueryHandler(back_to_profile, pattern="^profile:back_to_profile$")  # Permettre retour au profil depuis partout
     ],
     name="profile_conversation",
     persistent=True,
@@ -1152,6 +1816,22 @@ async def handle_cancel_trip_callback(update: Update, context: CallbackContext):
         db.commit()
         logger.info(f"[CANCEL] Trajet id={trip_id} annulé avec succès")
 
+        # NOUVEAU: Déclencher les remboursements automatiques
+        try:
+            from cancellation_refund_manager import handle_trip_cancellation_refunds
+            refunds_success = await handle_trip_cancellation_refunds(trip_id, context.bot)
+            
+            if refunds_success:
+                logger.info(f"[CANCEL] Remboursements automatiques traités avec succès pour le trajet {trip_id}")
+                success_message = "Trajet annulé avec succès. Tous les passagers ont été automatiquement remboursés via PayPal."
+            else:
+                logger.warning(f"[CANCEL] Certains remboursements ont échoué pour le trajet {trip_id}")
+                success_message = "Trajet annulé. Les remboursements sont en cours de traitement."
+                
+        except Exception as refund_error:
+            logger.error(f"[CANCEL] Erreur lors des remboursements automatiques: {refund_error}")
+            success_message = "Trajet annulé. Les remboursements seront traités manuellement."
+
         # Notifier les passagers (exemple, à adapter selon ta logique)
         try:
             bookings = db.query(Booking).filter(Booking.trip_id == trip.id, Booking.status == "confirmed").all()
@@ -1161,7 +1841,7 @@ async def handle_cancel_trip_callback(update: Update, context: CallbackContext):
         except Exception as e:
             logger.error(f"[CANCEL] Erreur lors de la notification des passagers pour Trip id={trip_id} : {e}")
 
-        await query.answer("Trajet annulé avec succès.", show_alert=True)
+        await query.answer(success_message, show_alert=True)
         # Rafraîchir la liste des trajets
         await show_my_trips(update, context)
         return PROFILE_MAIN

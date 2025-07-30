@@ -1,0 +1,417 @@
+/Users/margaux/CovoiturageSuisse/handlers/create_trip_handler.py:2594: PTBUserWarning: If 'per_message=False', 'CallbackQueryHandler' will not be tracked for every message. Read this FAQ entry to learn more about the per_* settings: https://github.com/python-telegram-bot/python-telegram-bot/wiki/Frequently-Asked-Questions#what-do-the-per_-settings-in-conversationhandler-do.
+  create_trip_conv_handler = ConversationHandler(
+/Users/margaux/CovoiturageSuisse/handlers/search_trip_handler.py:1333: PTBUserWarning: If 'per_message=False', 'CallbackQueryHandler' will not be tracked for every message. Read this FAQ entry to learn more about the per_* settings: https://github.com/python-telegram-bot/python-telegram-bot/wiki/Frequently-Asked-Questions#what-do-the-per_-settings-in-conversationhandler-do.
+  search_trip_conv_handler = ConversationHandler(
+/Users/margaux/CovoiturageSuisse/handlers/profile_handler.py:1608: PTBUserWarning: If 'per_message=False', 'CallbackQueryHandler' will not be tracked for every message. Read this FAQ entry to learn more about the per_* settings: https://github.com/python-telegram-bot/python-telegram-bot/wiki/Frequently-Asked-Questions#what-do-the-per_-settings-in-conversationhandler-do.
+  profile_conv_handler = ConversationHandler(
+/Users/margaux/CovoiturageSuisse/handlers/menu_handlers.py:1046: PTBUserWarning: If 'per_message=False', 'CallbackQueryHandler' will not be tracked for every message. Read this FAQ entry to learn more about the per_* settings: https://github.com/python-telegram-bot/python-telegram-bot/wiki/Frequently-Asked-Questions#what-do-the-per_-settings-in-conversationhandler-do.
+  profile_creation_handler = ConversationHandler(
+INFO:paypal_utils:PayPal configuré en mode sandbox
+/Users/margaux/CovoiturageSuisse/handlers/vehicle_handler.py:285: PTBUserWarning: If 'per_message=False', 'CallbackQueryHandler' will not be tracked for every message. Read this FAQ entry to learn more about the per_* settings: https://github.com/python-telegram-bot/python-telegram-bot/wiki/Frequently-Asked-Questions#what-do-the-per_-settings-in-conversationhandler-do.
+  vehicle_conv_handler = ConversationHandler(
+/Users/margaux/CovoiturageSuisse/handlers/driver_proposal_handler.py:466: PTBUserWarning: If 'per_message=False', 'CallbackQueryHandler' will not be tracked for every message. Read this FAQ entry to learn more about the per_* settings: https://github.com/python-telegram-bot/python-telegram-bot/wiki/Frequently-Asked-Questions#what-do-the-per_-settings-in-conversationhandler-do.
+  driver_proposal_conv_handler = ConversationHandler(
+/Users/margaux/CovoiturageSuisse/handlers/search_passengers.py:639: PTBUserWarning: If 'per_message=False', 'CallbackQueryHandler' will not be tracked for every message. Read this FAQ entry to learn more about the per_* settings: https://github.com/python-telegram-bot/python-telegram-bot/wiki/Frequently-Asked-Questions#what-do-the-per_-settings-in-conversationhandler-do.
+  search_passengers_handler = ConversationHandler(
+/Users/margaux/CovoiturageSuisse/handlers/paypal_setup_handler.py:289: PTBUserWarning: If 'per_message=False', 'CallbackQueryHandler' will not be tracked for every message. Read this FAQ entry to learn more about the per_* settings: https://github.com/python-telegram-bot/python-telegram-bot/wiki/Frequently-Asked-Questions#what-do-the-per_-settings-in-conversationhandler-do.
+  paypal_setup_conv_handler = ConversationHandler(
+INFO:db_utils:Base de données : /Users/margaux/CovoiturageSuisse/database/covoiturage.db
+INFO:db_utils:Taux de commission : 12.0%
+INFO:__main__:Initialisation de la base de données de paiements...
+INFO:db_utils:✅ Base de données initialisée avec succès
+INFO:__main__:✅ Base de données de paiements initialisée
+INFO:__main__:Vérification de la configuration PayPal...
+INFO:__main__:✅ PayPal configuré avec succès
+INFO:__main__:Registering handlers...
+INFO:__main__:✅ TOUS les CommandHandlers du menu hamburger sont maintenant enregistrés
+INFO:__main__:✅ Handlers de propositions de conducteurs enregistrés
+INFO:handlers.menu_search_shortcuts:🔧 Enregistrement des handlers de recherche du menu
+INFO:handlers.menu_search_shortcuts:✅ Handlers de recherche du menu enregistrés
+INFO:handlers.menu_search_shortcuts:   - Callback: search_passengers → Recherche de passagers
+INFO:handlers.menu_search_shortcuts:   - Callback: search_drivers → Recherche de conducteurs
+INFO:handlers.search_passengers:Enregistrement du handler de recherche de passagers
+INFO:handlers.search_passengers:✅ Handler de recherche de passagers enregistré
+INFO:__main__:✅ Handler de recherche de passagers enregistré
+INFO:__main__:✅ Handlers de switch de profil enregistrés
+INFO:handlers.trip_handlers:Enregistrement des handlers trip_handlers
+/Users/margaux/CovoiturageSuisse/handlers/trip_handlers.py:2233: PTBUserWarning: If 'per_message=False', 'CallbackQueryHandler' will not be tracked for every message. Read this FAQ entry to learn more about the per_* settings: https://github.com/python-telegram-bot/python-telegram-bot/wiki/Frequently-Asked-Questions#what-do-the-per_-settings-in-conversationhandler-do.
+  edit_conv_handler = ConversationHandler(
+/Users/margaux/CovoiturageSuisse/handlers/trip_handlers.py:2249: PTBUserWarning: If 'per_message=False', 'CallbackQueryHandler' will not be tracked for every message. Read this FAQ entry to learn more about the per_* settings: https://github.com/python-telegram-bot/python-telegram-bot/wiki/Frequently-Asked-Questions#what-do-the-per_-settings-in-conversationhandler-do.
+  edit_location_conv_handler = ConversationHandler(
+/Users/margaux/CovoiturageSuisse/handlers/trip_handlers.py:2274: PTBUserWarning: If 'per_message=False', 'CallbackQueryHandler' will not be tracked for every message. Read this FAQ entry to learn more about the per_* settings: https://github.com/python-telegram-bot/python-telegram-bot/wiki/Frequently-Asked-Questions#what-do-the-per_-settings-in-conversationhandler-do.
+  edit_datetime_conv_handler = ConversationHandler(
+INFO:handlers.trip_handlers:Handlers trip_handlers enregistrés avec succès
+/Users/margaux/CovoiturageSuisse/handlers/verification_handlers.py:82: PTBUserWarning: If 'per_message=False', 'CallbackQueryHandler' will not be tracked for every message. Read this FAQ entry to learn more about the per_* settings: https://github.com/python-telegram-bot/python-telegram-bot/wiki/Frequently-Asked-Questions#what-do-the-per_-settings-in-conversationhandler-do.
+  conv_handler = ConversationHandler(
+/Users/margaux/CovoiturageSuisse/handlers/contact_handlers.py:222: PTBUserWarning: If 'per_message=False', 'CallbackQueryHandler' will not be tracked for every message. Read this FAQ entry to learn more about the per_* settings: https://github.com/python-telegram-bot/python-telegram-bot/wiki/Frequently-Asked-Questions#what-do-the-per_-settings-in-conversationhandler-do.
+  contact_conv_handler = ConversationHandler(
+INFO:handlers.contact_handlers:Contact handlers registered.
+/Users/margaux/CovoiturageSuisse/handlers/dispute_handlers.py:142: PTBUserWarning: If 'per_message=False', 'CallbackQueryHandler' will not be tracked for every message. Read this FAQ entry to learn more about the per_* settings: https://github.com/python-telegram-bot/python-telegram-bot/wiki/Frequently-Asked-Questions#what-do-the-per_-settings-in-conversationhandler-do.
+  conv_handler = ConversationHandler(
+INFO:handlers.dispute_handlers:Handlers de litige enregistrés.
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:handlers.trip_completion_handlers:Job quotidien pour la vérification des trajets terminés configuré
+INFO:handlers.trip_completion_handlers:Handlers de gestion de fin de trajet enregistrés.
+INFO:__main__:Enregistrement des handlers de paiement PayPal...
+INFO:__main__:✅ ConversationHandler PayPal enregistré
+INFO:__main__:✅ CommandHandler PayPal enregistré
+INFO:__main__:✅ CommandHandler PayPal enregistré
+INFO:__main__:✅ CommandHandler PayPal enregistré
+INFO:__main__:✅ CallbackQueryHandler PayPal enregistré
+INFO:__main__:Enregistrement des handlers de configuration PayPal...
+INFO:__main__:✅ ConversationHandler configuration PayPal enregistré
+INFO:__main__:✅ CommandHandler configuration PayPal enregistré
+INFO:__main__:✅ CallbackQueryHandler configuration PayPal enregistré
+INFO:__main__:✅ Tous les handlers de paiement et configuration PayPal enregistrés
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:__main__:✅ Tâche périodique de traitement des paiements en attente configurée
+INFO:__main__:✅ Handler de debug ajouté pour capturer les callbacks non traités
+INFO:__main__:Bot started successfully!
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getMe "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/deleteWebhook "HTTP/1.1 200 OK"
+INFO:apscheduler.scheduler:Added job "check_completed_trips" to job store "default"
+INFO:apscheduler.scheduler:Added job "payment_callback" to job store "default"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:telegram.ext.Application:Application started
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/answerCallbackQuery "HTTP/1.1 200 OK"
+INFO:handlers.driver_proposal_handler:🔥 Vue rapide appelée - Affichage des dernières demandes de passagers
+INFO:handlers.driver_proposal_handler:🔥 Nombre de demandes trouvées: 2
+INFO:handlers.driver_proposal_handler:🔥 Envoi du message avec les demandes de passagers
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/editMessageText "HTTP/1.1 400 Bad Request"
+ERROR:handlers.driver_proposal_handler:🔥 Erreur dans show_quick_passenger_trips: Message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/editMessageText "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/answerCallbackQuery "HTTP/1.1 200 OK"
+ERROR:telegram.ext.Application:No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_application.py", line 1234, in process_update
+    await coroutine
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_conversationhandler.py", line 857, in handle_update
+    new_state: object = await handler.handle_update(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_basehandler.py", line 157, in handle_update
+    return await self.callback(update, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/handlers/driver_proposal_handler.py", line 193, in start_service_proposal
+    creator_name = trip.creator.first_name if trip.creator else "Utilisateur"
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'User' object has no attribute 'first_name'
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/sendMessage "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/answerCallbackQuery "HTTP/1.1 200 OK"
+INFO:handlers.driver_proposal_handler:🔥 Vue rapide appelée - Affichage des dernières demandes de passagers
+INFO:handlers.driver_proposal_handler:🔥 Nombre de demandes trouvées: 2
+INFO:handlers.driver_proposal_handler:🔥 Envoi du message avec les demandes de passagers
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/editMessageText "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/answerCallbackQuery "HTTP/1.1 200 OK"
+ERROR:telegram.ext.Application:No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_application.py", line 1234, in process_update
+    await coroutine
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_conversationhandler.py", line 857, in handle_update
+    new_state: object = await handler.handle_update(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_basehandler.py", line 157, in handle_update
+    return await self.callback(update, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/handlers/driver_proposal_handler.py", line 193, in start_service_proposal
+    creator_name = trip.creator.first_name if trip.creator else "Utilisateur"
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'User' object has no attribute 'first_name'
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/answerCallbackQuery "HTTP/1.1 200 OK"
+ERROR:telegram.ext.Application:No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_application.py", line 1234, in process_update
+    await coroutine
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_conversationhandler.py", line 857, in handle_update
+    new_state: object = await handler.handle_update(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_basehandler.py", line 157, in handle_update
+    return await self.callback(update, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/handlers/driver_proposal_handler.py", line 193, in start_service_proposal
+    creator_name = trip.creator.first_name if trip.creator else "Utilisateur"
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'User' object has no attribute 'first_name'
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/answerCallbackQuery "HTTP/1.1 200 OK"
+ERROR:telegram.ext.Application:No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_application.py", line 1234, in process_update
+    await coroutine
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_conversationhandler.py", line 857, in handle_update
+    new_state: object = await handler.handle_update(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_basehandler.py", line 157, in handle_update
+    return await self.callback(update, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/handlers/driver_proposal_handler.py", line 193, in start_service_proposal
+    creator_name = trip.creator.first_name if trip.creator else "Utilisateur"
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'User' object has no attribute 'first_name'
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/answerCallbackQuery "HTTP/1.1 200 OK"
+ERROR:telegram.ext.Application:No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_application.py", line 1234, in process_update
+    await coroutine
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_conversationhandler.py", line 857, in handle_update
+    new_state: object = await handler.handle_update(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_basehandler.py", line 157, in handle_update
+    return await self.callback(update, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/handlers/driver_proposal_handler.py", line 193, in start_service_proposal
+    creator_name = trip.creator.first_name if trip.creator else "Utilisateur"
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'User' object has no attribute 'first_name'
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/answerCallbackQuery "HTTP/1.1 200 OK"
+ERROR:telegram.ext.Application:No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_application.py", line 1234, in process_update
+    await coroutine
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_conversationhandler.py", line 857, in handle_update
+    new_state: object = await handler.handle_update(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_basehandler.py", line 157, in handle_update
+    return await self.callback(update, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/handlers/driver_proposal_handler.py", line 193, in start_service_proposal
+    creator_name = trip.creator.first_name if trip.creator else "Utilisateur"
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'User' object has no attribute 'first_name'
+INFO:apscheduler.executors.default:Running job "payment_callback (trigger: interval[1:00:00], next run at: 2025-07-29 19:41:33 UTC)" (scheduled at 2025-07-29 18:41:33.690087+00:00)
+INFO:__main__:Traitement périodique des paiements en attente
+ERROR:telegram.ext.Application:No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_jobqueue.py", line 940, in _run
+    await self.callback(context)
+TypeError: object NoneType can't be used in 'await' expression
+INFO:apscheduler.executors.default:Job "payment_callback (trigger: interval[1:00:00], next run at: 2025-07-29 19:41:33 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/answerCallbackQuery "HTTP/1.1 200 OK"
+INFO:handlers.driver_proposal_handler:🔥 Vue rapide appelée - Affichage des dernières demandes de passagers
+INFO:handlers.driver_proposal_handler:🔥 Nombre de demandes trouvées: 2
+INFO:handlers.driver_proposal_handler:🔥 Envoi du message avec les demandes de passagers
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/editMessageText "HTTP/1.1 400 Bad Request"
+ERROR:handlers.driver_proposal_handler:🔥 Erreur dans show_quick_passenger_trips: Message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/editMessageText "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/sendMessage "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/sendMessage "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/sendMessage "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/sendMessage "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/answerCallbackQuery "HTTP/1.1 200 OK"
+INFO:handlers.driver_proposal_handler:🔥 Vue rapide appelée - Affichage des dernières demandes de passagers
+INFO:handlers.driver_proposal_handler:🔥 Nombre de demandes trouvées: 2
+INFO:handlers.driver_proposal_handler:🔥 Envoi du message avec les demandes de passagers
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/editMessageText "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/answerCallbackQuery "HTTP/1.1 200 OK"
+ERROR:telegram.ext.Application:No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_application.py", line 1234, in process_update
+    await coroutine
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_conversationhandler.py", line 857, in handle_update
+    new_state: object = await handler.handle_update(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_basehandler.py", line 157, in handle_update
+    return await self.callback(update, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/handlers/driver_proposal_handler.py", line 193, in start_service_proposal
+    creator_name = trip.creator.first_name if trip.creator else "Utilisateur"
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'User' object has no attribute 'first_name'
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/answerCallbackQuery "HTTP/1.1 200 OK"
+ERROR:telegram.ext.Application:No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_application.py", line 1234, in process_update
+    await coroutine
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_conversationhandler.py", line 857, in handle_update
+    new_state: object = await handler.handle_update(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_basehandler.py", line 157, in handle_update
+    return await self.callback(update, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/handlers/driver_proposal_handler.py", line 193, in start_service_proposal
+    creator_name = trip.creator.first_name if trip.creator else "Utilisateur"
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'User' object has no attribute 'first_name'
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/answerCallbackQuery "HTTP/1.1 200 OK"
+ERROR:telegram.ext.Application:No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_application.py", line 1234, in process_update
+    await coroutine
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_conversationhandler.py", line 857, in handle_update
+    new_state: object = await handler.handle_update(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_basehandler.py", line 157, in handle_update
+    return await self.callback(update, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/handlers/driver_proposal_handler.py", line 193, in start_service_proposal
+    creator_name = trip.creator.first_name if trip.creator else "Utilisateur"
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'User' object has no attribute 'first_name'
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/answerCallbackQuery "HTTP/1.1 200 OK"
+ERROR:telegram.ext.Application:No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_application.py", line 1234, in process_update
+    await coroutine
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_conversationhandler.py", line 857, in handle_update
+    new_state: object = await handler.handle_update(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_basehandler.py", line 157, in handle_update
+    return await self.callback(update, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/handlers/driver_proposal_handler.py", line 193, in start_service_proposal
+    creator_name = trip.creator.first_name if trip.creator else "Utilisateur"
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'User' object has no attribute 'first_name'
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/answerCallbackQuery "HTTP/1.1 200 OK"
+ERROR:telegram.ext.Application:No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_application.py", line 1234, in process_update
+    await coroutine
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_conversationhandler.py", line 857, in handle_update
+    new_state: object = await handler.handle_update(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_basehandler.py", line 157, in handle_update
+    return await self.callback(update, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/handlers/driver_proposal_handler.py", line 193, in start_service_proposal
+    creator_name = trip.creator.first_name if trip.creator else "Utilisateur"
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'User' object has no attribute 'first_name'
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/answerCallbackQuery "HTTP/1.1 200 OK"
+ERROR:telegram.ext.Application:No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_application.py", line 1234, in process_update
+    await coroutine
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_conversationhandler.py", line 857, in handle_update
+    new_state: object = await handler.handle_update(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_basehandler.py", line 157, in handle_update
+    return await self.callback(update, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/handlers/driver_proposal_handler.py", line 193, in start_service_proposal
+    creator_name = trip.creator.first_name if trip.creator else "Utilisateur"
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'User' object has no attribute 'first_name'
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/answerCallbackQuery "HTTP/1.1 200 OK"
+ERROR:telegram.ext.Application:No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_application.py", line 1234, in process_update
+    await coroutine
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_conversationhandler.py", line 857, in handle_update
+    new_state: object = await handler.handle_update(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_basehandler.py", line 157, in handle_update
+    return await self.callback(update, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/handlers/driver_proposal_handler.py", line 193, in start_service_proposal
+    creator_name = trip.creator.first_name if trip.creator else "Utilisateur"
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'User' object has no attribute 'first_name'
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/answerCallbackQuery "HTTP/1.1 200 OK"
+ERROR:telegram.ext.Application:No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_application.py", line 1234, in process_update
+    await coroutine
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_conversationhandler.py", line 857, in handle_update
+    new_state: object = await handler.handle_update(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_basehandler.py", line 157, in handle_update
+    return await self.callback(update, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/handlers/driver_proposal_handler.py", line 193, in start_service_proposal
+    creator_name = trip.creator.first_name if trip.creator else "Utilisateur"
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'User' object has no attribute 'first_name'
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/answerCallbackQuery "HTTP/1.1 200 OK"
+ERROR:telegram.ext.Application:No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_application.py", line 1234, in process_update
+    await coroutine
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_conversationhandler.py", line 857, in handle_update
+    new_state: object = await handler.handle_update(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_basehandler.py", line 157, in handle_update
+    return await self.callback(update, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/handlers/driver_proposal_handler.py", line 193, in start_service_proposal
+    creator_name = trip.creator.first_name if trip.creator else "Utilisateur"
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'User' object has no attribute 'first_name'
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/answerCallbackQuery "HTTP/1.1 200 OK"
+ERROR:telegram.ext.Application:No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_application.py", line 1234, in process_update
+    await coroutine
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_conversationhandler.py", line 857, in handle_update
+    new_state: object = await handler.handle_update(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/venv/lib/python3.11/site-packages/telegram/ext/_basehandler.py", line 157, in handle_update
+    return await self.callback(update, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/margaux/CovoiturageSuisse/handlers/driver_proposal_handler.py", line 193, in start_service_proposal
+    creator_name = trip.creator.first_name if trip.creator else "Utilisateur"
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'User' object has no attribute 'first_name'
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8098409872:AAF13pnFuMIPz5srC2Qxs9eMo0P4QHrGZv0/getUpdates "HTTP/1.1 200 OK"

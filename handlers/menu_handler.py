@@ -10,19 +10,24 @@ async def handle_button(update: Update, context: CallbackContext):
         keyboard = [
             [
                 InlineKeyboardButton("🔍 Rechercher", callback_data="rechercher"),
-                InlineKeyboardButton("➕ Créer", callback_data="creer_trajet")
+                InlineKeyboardButton("➕ Créer", callback_data="menu:create")
             ],
             [
-                InlineKeyboardButton("👤 Mon Profil", callback_data="profil"),
+                InlineKeyboardButton("� Demandes passagers", callback_data="view_passenger_trips"),
                 InlineKeyboardButton("🗂️ Mes Trajets", callback_data="mes_trajets")
+            ],
+            [
+                InlineKeyboardButton("👤 Mon Profil", callback_data="profil")
             ]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
         await query.edit_message_text(
             "🏠 Menu Principal\n\n"
-            "Que souhaitez-vous faire ?",
-            reply_markup=reply_markup
+            "Que souhaitez-vous faire ?\n\n"
+            "🆕 **Nouveau:** Consultez les demandes de passagers pour proposer vos services de conducteur !",
+            reply_markup=reply_markup,
+            parse_mode="Markdown"
         )
 
 menu_handler = CallbackQueryHandler(handle_button, pattern="^menu_principal$")

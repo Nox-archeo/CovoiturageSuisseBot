@@ -48,6 +48,7 @@ class User(Base):
 
     # Ajout du champ pour le nom complet
     full_name = Column(String)
+    age = Column(Integer, nullable=True)
     
     # Champ PayPal
     paypal_email = Column(String, nullable=True)  # Email PayPal pour recevoir les paiements
@@ -72,8 +73,11 @@ class Trip(Base):
     seats_available = Column(Integer)
     price_per_seat = Column(Float)
     additional_info = Column(String)
-    driver = relationship("User")
-    bookings = relationship("Booking")
+    driver = relationship("User", foreign_keys=[driver_id])
+    bookings = relationship("Booking", back_populates="trip")
+    
+    # CORRECTION CRITIQUE: Ajout du prix total du trajet
+    total_trip_price = Column(Float, nullable=True)  # Prix total théorique du trajet
     
     # Nouvelles colonnes
     smoking = Column(String, default="no_smoking")
@@ -90,13 +94,18 @@ class Trip(Base):
 
     # Ajout de fonctionnalités essentielles
     recurring = Column(Boolean, default=False)  # Trajet régulier
+    group_id = Column(String, nullable=True)  # ID de groupe pour trajets réguliers/aller-retour
     return_trip_id = Column(Integer, ForeignKey('trips.id'), nullable=True)  # Pour les allers-retours
     booking_deadline = Column(DateTime)  # Délai de réservation
     meeting_point = Column(String)  # Point de rendez-vous précis
     car_description = Column(String)  # Description du véhicule
-    available_seats = Column(Integer)  # Places restantes (mise à jour automatique)
     total_distance = Column(Float)  # Distance en km
     estimated_duration = Column(Integer)  # Durée estimée en minutes
+    
+    # NOUVELLE FONCTIONNALITÉ: Support rôle conducteur/passager
+    trip_role = Column(String, default="driver")  # "driver" ou "passenger"
+    creator_id = Column(Integer, ForeignKey('users.id'))  # Créateur du trajet (peut être différent du conducteur)
+    creator = relationship("User", foreign_keys=[creator_id])  # Relation vers le créateur
     is_cancelled = Column(Boolean, default=False)  # Annulation du trajet
     
     # Champs pour PayPal
@@ -116,8 +125,10 @@ class Booking(Base):
     trip_id = Column(Integer, ForeignKey('trips.id'))
     passenger_id = Column(Integer, ForeignKey('users.id'))
     status = Column(String)  # 'pending', 'confirmed', 'completed', 'cancelled'
+    booking_status = Column(String, default='pending')  # 'pending', 'confirmed', 'pending_payment', 'completed', 'cancelled'
     payment_id = Column(String)
     seats = Column(Integer, default=1)  # Nombre de places réservées
+    seats_booked = Column(Integer, default=1)  # Alias pour compatibilité
     booking_date = Column(DateTime, default=datetime.utcnow)
     amount = Column(Float)  # Montant total payé
     is_paid = Column(Boolean, default=False)  # Indique si le paiement a été effectué
@@ -126,10 +137,40 @@ class Booking(Base):
     
     # Champs PayPal
     paypal_payment_id = Column(String, nullable=True)  # ID du paiement PayPal
-    payment_status = Column(String, default='unpaid')  # 'unpaid', 'pending', 'paid', 'cancelled'
-    total_price = Column(Float, nullable=True)  # Montant total (amount * seats)
-    passenger = relationship("User", overlaps="bookings")
-    trip = relationship("Trip", overlaps="bookings")
+    payment_status = Column(String, default='unpaid')  # 'unpaid', 'pending', 'completed', 'cancelled'
+    total_price = Column(Float, nullable=True)  # Montant total (calculé dynamiquement)
+    
+    # CORRECTION CRITIQUE: Champs pour les remboursements automatiques
+    refund_id = Column(String, nullable=True)  # ID du remboursement PayPal
+    refund_amount = Column(Float, nullable=True)  # Montant remboursé
+    refund_date = Column(DateTime, nullable=True)  # Date du remboursement
+    original_price = Column(Float, nullable=True)  # Prix original payé
+    
+    passenger = relationship("User", foreign_keys=[passenger_id])
+    trip = relationship("Trip", foreign_keys=[trip_id], back_populates="bookings")
+
+class DriverProposal(Base):
+    """Modèle pour les propositions de conducteurs aux trajets de passagers"""
+    __tablename__ = 'driver_proposals'
+    id = Column(Integer, primary_key=True)
+    trip_id = Column(Integer, ForeignKey('trips.id'))  # Trajet du passager
+    driver_id = Column(Integer, ForeignKey('users.id'))  # Conducteur qui propose
+    status = Column(String, default='pending')  # 'pending', 'accepted', 'rejected', 'cancelled'
+    proposal_date = Column(DateTime, default=datetime.utcnow)
+    accepted_at = Column(DateTime, nullable=True)  # Date d'acceptation
+    rejected_at = Column(DateTime, nullable=True)  # Date de refus
+    message = Column(String)  # Message du conducteur
+    proposed_price = Column(Float)  # Prix proposé par le conducteur
+    car_info = Column(String)  # Infos sur le véhicule
+    pickup_point = Column(String)  # Point de ramassage proposé
+    
+    # Relations
+    trip = relationship("Trip")
+    driver = relationship("User", foreign_keys=[driver_id])
+    
+    # Champs pour le suivi du paiement (réutilise la logique existante)
+    payment_id = Column(String, nullable=True)
+    payment_status = Column(String, default='unpaid')  # 'unpaid', 'pending', 'paid', 'completed'
 
 class Message(Base):
     """Pour la messagerie entre utilisateurs"""

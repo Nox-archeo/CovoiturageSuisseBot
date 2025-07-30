@@ -13,6 +13,7 @@ from telegram.ext import (
 from database.models import Trip, User, Booking
 from database import get_db
 from utils.swiss_cities import find_locality, format_locality_result, load_localities as load_all_localities
+from utils.swiss_pricing import round_to_nearest_0_05, format_swiss_price
 
 # Configuration du logger
 logger = logging.getLogger(__name__)
@@ -51,6 +52,38 @@ POPULAR_CITIES = load_cities_list()
 
 async def start_search_trip(update: Update, context: CallbackContext):
     """Lance le processus de recherche de trajet."""
+    # Vérifier si l'utilisateur a un profil
+    user_id = update.effective_user.id
+    db = get_db()
+    user = db.query(User).filter(User.telegram_id == user_id).first()
+    
+    if not user:
+        # Utilisateur sans profil - rediriger vers la création
+        keyboard = [
+            [InlineKeyboardButton("✅ Créer mon profil", callback_data="menu:create_profile")],
+            [InlineKeyboardButton("🔙 Retour", callback_data="menu:back_to_main")]
+        ]
+        
+        text = (
+            "❌ *Profil requis*\n\n"
+            "Vous devez créer un profil avant de pouvoir rechercher un trajet."
+        )
+        
+        if update.callback_query:
+            await update.callback_query.answer()
+            await update.callback_query.edit_message_text(
+                text,
+                reply_markup=InlineKeyboardMarkup(keyboard),
+                parse_mode="Markdown"
+            )
+        else:
+            await update.message.reply_text(
+                text,
+                reply_markup=InlineKeyboardMarkup(keyboard),
+                parse_mode="Markdown"
+            )
+        return ConversationHandler.END
+    
     # Nettoyer les données précédentes
     context.user_data.clear()
     context.user_data['mode'] = 'search'
@@ -421,7 +454,9 @@ async def perform_trip_search(update: Update, context: CallbackContext):
         driver_trips = []
         passenger_trips = []
         for trip in matching_trips:
-            if hasattr(trip, 'is_request') and trip.is_request:
+            # Utiliser trip_role pour distinguer les types de trajets
+            trip_role = getattr(trip, 'trip_role', 'driver')  # Par défaut 'driver' pour compatibilité
+            if trip_role == 'passenger':
                 passenger_trips.append(trip)
             else:
                 driver_trips.append(trip)
@@ -479,11 +514,12 @@ async def perform_trip_search(update: Update, context: CallbackContext):
                         logger.error(f"Erreur lors de l'affichage des places pour le trajet {trip.id}: {str(e)}")
                         places_display = "💺 *Places*: Information non disponible\n"
                     
-                    # Affichage du prix avec gestion d'erreurs
+                    # Affichage du prix avec gestion d'erreurs et arrondi suisse
                     price_display = ""
                     try:
                         if hasattr(trip, 'price_per_seat') and trip.price_per_seat is not None:
-                            price_display = f"💰 *Prix*: {trip.price_per_seat}.-\n\n"
+                            rounded_price = round_to_nearest_0_05(trip.price_per_seat)
+                            price_display = f"💰 *Prix*: {format_swiss_price(rounded_price)} CHF\n\n"
                         else:
                             price_display = "💰 *Prix*: Information non disponible\n\n"
                     except Exception as e:
@@ -726,7 +762,7 @@ async def show_trip_details(update: Update, context: CallbackContext, trip_id):
                     f"📅 *Date*: {display_time}\n"
                     f"👤 *Conducteur*: {driver_name}\n"
                     f"💺 *Places disponibles*: {available_seats}\n"
-                    f"💰 *Prix*: {price}.- CHF\n\n"
+                    f"💰 *Prix*: {format_swiss_price(round_to_nearest_0_05(price))} CHF\n\n"
                 )
             except Exception as e:
                 logger.error(f"Erreur lors de l'accès aux détails du trajet: {str(e)}")
@@ -736,9 +772,11 @@ async def show_trip_details(update: Update, context: CallbackContext, trip_id):
                     f"📅 *Date*: {display_time}\n"
                     f"👤 *Conducteur*: {driver_name}\n"
                 )
-                # Ajouter plus d'informations si elles sont disponibles
+                # Ajouter plus d'informations si elles sont disponibles avec arrondi suisse
                 try:
-                    message_text += f"💰 *Prix*: {trip.price_per_seat if trip.price_per_seat is not None else 0}.- CHF\n\n"
+                    price_value = trip.price_per_seat if trip.price_per_seat is not None else 0
+                    rounded_price = round_to_nearest_0_05(price_value)
+                    message_text += f"💰 *Prix*: {format_swiss_price(rounded_price)} CHF\n\n"
                 except:
                     message_text += "💰 *Prix*: Information non disponible\n\n"
             
@@ -937,13 +975,17 @@ async def book_trip(update: Update, context: CallbackContext):
         # Récupérer les informations du conducteur
         driver = db.query(User).get(trip.driver_id)
         
-        # Vérifier que price_per_seat existe et n'est pas None
+        # Vérifier que price_per_seat existe et n'est pas None avec arrondi suisse
         try:
             price_per_seat = trip.price_per_seat if hasattr(trip, 'price_per_seat') and trip.price_per_seat is not None else 0
-            total_price = price_per_seat * seats
+            # Arrondir le prix par siège puis calculer le total
+            rounded_price_per_seat = round_to_nearest_0_05(price_per_seat)
+            total_price = rounded_price_per_seat * seats
+            # Arrondir à nouveau le prix total (au cas où il y ait des centimes non-suisses)
+            total_price = round_to_nearest_0_05(total_price)
         except Exception as e:
             logger.error(f"Erreur lors du calcul du prix: {str(e)}")
-            price_per_seat = 0
+            rounded_price_per_seat = 0
             total_price = 0
         
         # Créer un récapitulatif de la réservation
@@ -953,24 +995,26 @@ async def book_trip(update: Update, context: CallbackContext):
             f"📅 *Date* : {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
             f"👤 *Conducteur* : {driver.username if driver and driver.username else 'Conducteur anonyme'}\n"
             f"💺 *Places* : {seats}\n"
-            f"💰 *Prix total* : {total_price}.- CHF\n\n"
+            f"💰 *Prix actuel par place* : {format_swiss_price(rounded_price_per_seat)} CHF\n"
+            f"💳 *Total à payer* : {format_swiss_price(total_price)} CHF\n\n"
+            f"💡 *Le prix par place diminuera si d'autres passagers rejoignent le trajet.*\n"
+            f"Vous serez automatiquement remboursé de la différence.\n\n"
             f"Confirmez-vous cette réservation ?"
         )
         
-        # Vérifier si le conducteur a un compte PayPal (plus de Stripe)
-        # has_stripe_account = False  # Stripe désactivé
+        # Vérifier si le conducteur a un compte PayPal
         has_paypal_account = driver.paypal_email is not None
         
         if has_paypal_account:
             # Le conducteur a un compte PayPal, proposer le paiement
             keyboard = [
-                [InlineKeyboardButton("💳 Payer avec Stripe", callback_data=f"book_pay_stripe:{trip_id}:{seats}")],
+                [InlineKeyboardButton("💳 Payer avec PayPal", callback_data=f"book_pay_paypal:{trip_id}:{seats}")],
                 [InlineKeyboardButton("🔙 Retour", callback_data=f"search_view_trip:{trip_id}")],
                 [InlineKeyboardButton("❌ Annuler", callback_data="search_back_results")]
             ]
         else:
-            # Le conducteur n'a pas de compte Stripe, informer l'utilisateur
-            message_text += "\n\n⚠️ Le conducteur n'a pas encore configuré son compte Stripe. Vous pouvez quand même réserver, mais vous ne pourrez pas payer en ligne pour le moment."
+            # Le conducteur n'a pas de compte PayPal, informer l'utilisateur
+            message_text += "\n\n⚠️ Le conducteur n'a pas encore configuré son compte PayPal. Vous pouvez quand même réserver, mais vous ne pourrez pas payer en ligne pour le moment."
             keyboard = [
                 [InlineKeyboardButton("✅ Réserver sans paiement", callback_data=f"book_without_payment:{trip_id}:{seats}")],
                 [InlineKeyboardButton("🔙 Retour", callback_data=f"search_view_trip:{trip_id}")],
@@ -994,8 +1038,8 @@ async def book_trip(update: Update, context: CallbackContext):
     
     return SEARCH_RESULTS
 
-async def pay_with_stripe(update: Update, context: CallbackContext):
-    """Traite le paiement avec Stripe."""
+async def pay_with_paypal(update: Update, context: CallbackContext):
+    """Traite le paiement avec PayPal."""
     query = update.callback_query
     await query.answer()
     
@@ -1005,8 +1049,7 @@ async def pay_with_stripe(update: Update, context: CallbackContext):
     seats = int(parts[2])
     
     try:
-        # Anciennement : from utils.stripe_utils import create_checkout_session
-        # Maintenant : on utilise PayPal via les handlers de paiement
+        # Utiliser PayPal via les handlers de paiement
         
         db = get_db()
         trip = db.query(Trip).get(trip_id)
@@ -1033,49 +1076,45 @@ async def pay_with_stripe(update: Update, context: CallbackContext):
             )
             return SEARCH_RESULTS
         
-        # Créer une session de paiement Stripe
-        checkout_url = await create_checkout_session(trip, db_user, seats)
-        
-        if not checkout_url:
-            await query.edit_message_text(
-                "❌ Erreur lors de la création de la session de paiement.",
-                reply_markup=InlineKeyboardMarkup([[
-                    InlineKeyboardButton("🔙 Retour", callback_data=f"search_view_trip:{trip_id}")
-                ]])
-            )
-            return SEARCH_RESULTS
-        
         # Créer une réservation en attente de paiement
+        from database.models import Booking
+        from datetime import datetime
+        
         new_booking = Booking(
             trip_id=trip_id,
             passenger_id=db_user.id,
             status="pending_payment",
             seats=seats,
             booking_date=datetime.now(),
-            amount=trip.price_per_seat * seats,
+            amount=round_to_nearest_0_05(trip.price_per_seat * seats),
             is_paid=False
         )
         
         db.add(new_booking)
         db.commit()
         
-        # Envoyer un message avec le lien de paiement
+        # Rediriger vers le système de paiement PayPal existant
+        context.user_data['pending_booking_id'] = new_booking.id
+        context.user_data['trip_id'] = trip_id
+        context.user_data['seats'] = seats
+        
+        # Utiliser le système PayPal existant
         keyboard = [
-            [InlineKeyboardButton("💳 Payer maintenant", url=checkout_url)],
+            [InlineKeyboardButton("💳 Procéder au paiement PayPal", callback_data=f"pay_trip:{trip_id}")],
             [InlineKeyboardButton("🔙 Retour", callback_data=f"search_view_trip:{trip_id}")]
         ]
         
         await query.edit_message_text(
-            "💰 *Paiement avec Stripe*\n\n"
-            "Vous allez être redirigé vers la page de paiement sécurisée Stripe.\n"
-            "Une fois le paiement effectué, votre réservation sera confirmée automatiquement.\n\n"
-            "Cliquez sur le bouton ci-dessous pour procéder au paiement :",
+            "💰 *Paiement avec PayPal*\n\n"
+            "Votre réservation a été créée. Cliquez sur le bouton ci-dessous "
+            "pour procéder au paiement via PayPal.\n\n"
+            "Une fois le paiement effectué, votre réservation sera confirmée automatiquement.",
             reply_markup=InlineKeyboardMarkup(keyboard),
             parse_mode="Markdown"
         )
         
     except Exception as e:
-        logger.error(f"Erreur lors du paiement Stripe: {str(e)}", exc_info=True)
+        logger.error(f"Erreur lors du paiement PayPal: {str(e)}", exc_info=True)
         await query.edit_message_text(
             "❌ Une erreur est survenue lors de la préparation du paiement.",
             reply_markup=InlineKeyboardMarkup([[
@@ -1130,14 +1169,15 @@ async def book_without_payment(update: Update, context: CallbackContext):
             except Exception as e:
                 logger.error(f"Erreur lors de l'accès au prix par siège: {str(e)}")
             
-            # Créer une réservation sans paiement
+            # Créer une réservation sans paiement avec arrondi suisse
+            rounded_amount = round_to_nearest_0_05(price_per_seat * seats)
             new_booking = Booking(
                 trip_id=trip_id,
                 passenger_id=db_user.id,
                 status="confirmed",
                 seats=seats,
                 booking_date=datetime.now(),
-                amount=price_per_seat * seats,
+                amount=rounded_amount,
                 is_paid=False
             )
             
@@ -1239,8 +1279,8 @@ async def book_without_payment(update: Update, context: CallbackContext):
     
     return SEARCH_RESULTS
 
-async def prompt_driver_stripe_onboarding(update: Update, context: CallbackContext):
-    """Invite un conducteur à créer un compte Stripe Connect Express."""
+async def prompt_driver_paypal_setup(update: Update, context: CallbackContext):
+    """Invite un conducteur à configurer son compte PayPal."""
     query = update.callback_query
     await query.answer()
     
@@ -1248,8 +1288,6 @@ async def prompt_driver_stripe_onboarding(update: Update, context: CallbackConte
     driver_id = int(query.data.split(":")[1])
     
     try:
-        from utils.stripe_utils import create_onboarding_link
-        
         db = get_db()
         driver = db.query(User).get(driver_id)
         
@@ -1262,40 +1300,28 @@ async def prompt_driver_stripe_onboarding(update: Update, context: CallbackConte
             )
             return ConversationHandler.END
         
-        # Créer un lien d'onboarding Stripe
-        onboarding_url = await create_onboarding_link(driver)
-        
-        if not onboarding_url:
-            await query.edit_message_text(
-                "❌ Erreur lors de la création du lien d'onboarding Stripe.",
-                reply_markup=InlineKeyboardMarkup([[
-                    InlineKeyboardButton("🔙 Menu principal", callback_data="search_back_to_menu")
-                ]])
-            )
-            return ConversationHandler.END
-        
-        # Envoyer un message avec le lien d'onboarding
+        # Rediriger vers la configuration PayPal
         keyboard = [
-            [InlineKeyboardButton("💳 Configurer Stripe Connect", url=onboarding_url)],
+            [InlineKeyboardButton("� Configurer PayPal", callback_data="setup_paypal")],
             [InlineKeyboardButton("🔙 Menu principal", callback_data="search_back_to_menu")]
         ]
         
         await query.edit_message_text(
-            "💰 *Configuration de Stripe Connect*\n\n"
-            "Pour recevoir les paiements de vos passagers, vous devez configurer votre compte Stripe Connect Express.\n\n"
-            "Ce processus ne prend que quelques minutes. Vous pourrez :\n"
-            "- Recevoir des paiements directement sur votre compte bancaire\n"
+            "💰 *Configuration PayPal*\n\n"
+            "Pour recevoir les paiements de vos passagers, vous devez configurer votre email PayPal.\n\n"
+            "Une fois configuré, vous pourrez :\n"
+            "- Recevoir des paiements directement sur votre compte PayPal\n"
             "- Gérer vos revenus facilement\n"
-            "- Bénéficier de la protection contre la fraude\n\n"
+            "- Bénéficier de la sécurité PayPal\n\n"
             "Cliquez sur le bouton ci-dessous pour commencer :",
             reply_markup=InlineKeyboardMarkup(keyboard),
             parse_mode="Markdown"
         )
         
     except Exception as e:
-        logger.error(f"Erreur lors de l'onboarding Stripe: {str(e)}", exc_info=True)
+        logger.error(f"Erreur lors de la configuration PayPal: {str(e)}", exc_info=True)
         await query.edit_message_text(
-            "❌ Une erreur est survenue lors de la création du lien d'onboarding.",
+            "❌ Une erreur est survenue lors de la configuration PayPal.",
             reply_markup=InlineKeyboardMarkup([[
                 InlineKeyboardButton("🔙 Menu principal", callback_data="search_back_to_menu")
             ]])
@@ -1307,6 +1333,7 @@ async def prompt_driver_stripe_onboarding(update: Update, context: CallbackConte
 search_trip_conv_handler = ConversationHandler(
     entry_points=[
         CommandHandler('chercher', start_search_trip),
+        CommandHandler('chercher_trajet', start_search_trip),  # Ajout pour le menu hamburger
         CallbackQueryHandler(start_search_trip, pattern='^search_trip$'),
         CallbackQueryHandler(start_search_trip, pattern='^search_new$')
     ],
@@ -1328,7 +1355,7 @@ search_trip_conv_handler = ConversationHandler(
         SEARCH_RESULTS: [
             CallbackQueryHandler(handle_search_results_buttons, pattern='^search_view_trip:|^search_new$|^search_back_to_menu$|^search_contact_driver:|^search_back_results$'),
             CallbackQueryHandler(book_trip, pattern='^search_book_trip:'),
-            CallbackQueryHandler(pay_with_stripe, pattern='^book_pay_stripe:'),
+            CallbackQueryHandler(pay_with_paypal, pattern='^book_pay_paypal:'),
             CallbackQueryHandler(book_without_payment, pattern='^book_without_payment:')
         ]
     },

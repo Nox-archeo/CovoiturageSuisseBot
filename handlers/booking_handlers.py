@@ -116,12 +116,39 @@ async def confirm_booking_with_payment(update: Update, context: CallbackContext)
             await query.edit_message_text("❌ Vous avez déjà une réservation pour ce trajet.")
             return
         
+        # CORRECTION CRITIQUE: Calculer le prix dynamique basé sur le nombre de passagers
+        from utils.swiss_pricing import calculate_price_per_passenger, round_to_nearest_0_05_up
+        
+        # Compter les passagers qui ont déjà payé
+        existing_paid_passengers = db.query(Booking).filter(
+            Booking.trip_id == trip_id,
+            Booking.payment_status.in_(['completed', 'paid'])
+        ).count()
+        
+        # Le nouveau passager sera le (existing_paid_passengers + 1)ème
+        new_passenger_count = existing_paid_passengers + 1
+        
+        # Récupérer le prix total du trajet
+        # Si le trajet a été créé avec l'ancienne logique, utiliser price_per_seat * seats_available
+        total_trip_price = getattr(trip, 'total_trip_price', None)
+        if not total_trip_price:
+            # Fallback: Recalculer le prix total depuis la distance ou utiliser l'ancien système
+            if hasattr(trip, 'total_distance') and trip.total_distance:
+                from handlers.trip_handlers import compute_price_auto
+                total_trip_price, _ = compute_price_auto(trip.departure_city, trip.arrival_city)
+            else:
+                # Estimation basée sur le prix par place et le nombre de places
+                total_trip_price = trip.price_per_seat * trip.seats_available
+        
+        # Calculer le prix par passager avec arrondi suisse
+        price_per_passenger = calculate_price_per_passenger(total_trip_price, new_passenger_count)
+        
         # Créer la réservation
         booking = Booking(
             trip_id=trip_id,
             passenger_id=user.id,
             status='pending',
-            total_price=trip.price_per_seat,
+            total_price=price_per_passenger,  # Prix dynamique calculé
             booking_date=datetime.utcnow(),
             payment_status='pending'
         )
@@ -133,7 +160,7 @@ async def confirm_booking_with_payment(update: Update, context: CallbackContext)
         # Créer automatiquement le paiement PayPal
         trip_description = f"{trip.departure_city} → {trip.arrival_city}"
         success, payment_id, approval_url = create_trip_payment(
-            amount=float(trip.price_per_seat),
+            amount=float(price_per_passenger),  # Utiliser le prix dynamique
             trip_description=trip_description,
             booking_id=booking.id  # Pour le suivi
         )
@@ -155,9 +182,10 @@ async def confirm_booking_with_payment(update: Update, context: CallbackContext)
                 f"📍 De : {trip.departure_city}\n"
                 f"📍 À : {trip.arrival_city}\n"
                 f"📅 Date : {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
-                f"💰 Prix : {trip.price_per_seat} CHF\n"
-                f"👤 Conducteur : {trip.driver.first_name if trip.driver else 'Inconnu'}\n\n"
+                f"💰 Prix : {price_per_passenger:.2f} CHF par place\n"
+                f"👤 Conducteur : {trip.driver.full_name if trip.driver else 'Inconnu'}\n\n"
                 f"💳 **Paiement requis**\n"
+                f"💡 *Prix calculé pour {new_passenger_count} passager(s)*\n"
                 f"Cliquez sur le bouton ci-dessous pour payer avec PayPal.\n"
                 f"Votre place sera confirmée après le paiement.",
                 parse_mode="Markdown",
@@ -174,7 +202,7 @@ async def confirm_booking_with_payment(update: Update, context: CallbackContext)
                             f"Un passager a réservé votre trajet :\n"
                             f"📍 {trip.departure_city} → {trip.arrival_city}\n"
                             f"📅 {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
-                            f"👤 Passager : {user.first_name or 'Nom non défini'}\n\n"
+                            f"👤 Passager : {user.full_name or 'Nom non défini'}\n\n"
                             f"⏳ En attente du paiement PayPal..."
                         ),
                         parse_mode="Markdown"

@@ -138,14 +138,37 @@ async def handle_become_passenger(update: Update, context: CallbackContext):
             db.commit()
             logger.info(f"Utilisateur {user_id} est devenu passager")
             
-            await query.edit_message_text(
-                "✅ *Profil passager activé!*\n\n"
-                "Vous pouvez maintenant créer des demandes de trajet.",
-                parse_mode=ParseMode.MARKDOWN
-            )
-            
-            # Continuer avec la création de la demande
-            return await start_departure_selection(update, context)
+            # NOUVEAU: Vérifier PayPal pour passagers aussi
+            if user.paypal_email:
+                await query.edit_message_text(
+                    "✅ *Profil passager activé!*\n\n"
+                    f"📧 PayPal configuré : `{user.paypal_email}`\n\n"
+                    "Vous pouvez maintenant créer des demandes de trajet.",
+                    parse_mode=ParseMode.MARKDOWN
+                )
+                return await start_departure_selection(update, context)
+            else:
+                # Demander la configuration PayPal pour les passagers
+                keyboard = [
+                    [InlineKeyboardButton("💳 Configurer PayPal", callback_data="setup_paypal")],
+                    [InlineKeyboardButton("❓ Pourquoi PayPal ?", callback_data="why_paypal_passenger")]
+                ]
+                
+                await query.edit_message_text(
+                    "✅ *Profil passager activé!*\n\n"
+                    "💳 *Configuration PayPal requise*\n\n"
+                    "Pour garantir la sécurité des transactions et permettre "
+                    "les remboursements automatiques en cas d'annulation, "
+                    "vous devez configurer votre email PayPal.\n\n"
+                    "⚠️ Sans PayPal, vous ne pourrez pas recevoir de remboursements "
+                    "automatiques ni utiliser la protection acheteur.",
+                    parse_mode=ParseMode.MARKDOWN,
+                    reply_markup=InlineKeyboardMarkup(keyboard)
+                )
+                
+                # Définir l'état suivant après configuration PayPal
+                context.user_data['next_state_after_paypal'] = "DEPARTURE"
+                return "PAYPAL_SETUP"
         else:
             await query.edit_message_text(
                 "❌ Erreur: Votre profil n'a pas été trouvé."
@@ -156,6 +179,33 @@ async def handle_become_passenger(update: Update, context: CallbackContext):
         # Annuler l'activation
         await query.edit_message_text(
             "❌ Activation du profil passager annulée."
+        )
+        return ConversationHandler.END
+    
+    elif action == "why_paypal_passenger":
+        # Expliquer pourquoi PayPal est nécessaire pour les passagers
+        keyboard = [
+            [InlineKeyboardButton("💳 Configurer PayPal", callback_data="setup_paypal")],
+            [InlineKeyboardButton("🔙 Retour", callback_data="become_passenger")]
+        ]
+        
+        await query.edit_message_text(
+            "💡 *Pourquoi PayPal pour les passagers ?*\n\n"
+            "**🔒 Sécurité des transactions :**\n"
+            "• Protection acheteur PayPal\n"
+            "• Transactions sécurisées\n"
+            "• Historique des paiements\n\n"
+            "**💰 Remboursements automatiques :**\n"
+            "• En cas d'annulation du conducteur\n"
+            "• En cas de non-présentation\n"
+            "• Remboursement immédiat garanti\n\n"
+            "**⚡ Simplicité :**\n"
+            "• Pas besoin de gérer l'argent liquide\n"
+            "• Paiements en un clic\n"
+            "• Reçus automatiques\n\n"
+            "🎯 **Résultat :** Expérience de covoiturage 100% sécurisée !",
+            parse_mode=ParseMode.MARKDOWN,
+            reply_markup=InlineKeyboardMarkup(keyboard)
         )
         return ConversationHandler.END
     
@@ -202,10 +252,10 @@ async def after_datetime_selection(update: Update, context: CallbackContext):
     keyboard = []
     # Créer des boutons pour 1 à 4 passagers
     for i in range(1, 5):
-        keyboard.append([InlineKeyboardButton(f"{i} {('personne' if i == 1 else 'personnes')}", callback_data=f"passengers:{i}")])
+        keyboard.append([InlineKeyboardButton(f"{i} {('place' if i == 1 else 'places')}", callback_data=f"passengers:{i}")])
     
     await query.edit_message_text(
-        "👥 Combien de personnes voyagent avec vous?",
+        "🎫 Combien de places souhaitez-vous réserver?",
         reply_markup=InlineKeyboardMarkup(keyboard)
     )
     
@@ -294,16 +344,17 @@ async def save_trip_request(update: Update, context: CallbackContext):
         )
         return ConversationHandler.END
     
-    # Créer la nouvelle demande de trajet (utiliser la même table Trip avec un flag)
+    # Créer la nouvelle demande de trajet (utiliser la même table Trip avec trip_role="passenger")
     try:
         new_request = Trip(
-            passenger_id=user.id,  # Utiliser passenger_id au lieu de driver_id
+            creator_id=user.id,  # Utilisateur qui crée la demande
+            trip_role="passenger",  # Indiquer qu'il s'agit d'une demande passager
             departure_city=trip_data.get('departure'),
             arrival_city=trip_data.get('arrival'),
             departure_time=trip_data.get('selected_datetime'),
-            seats_needed=trip_data.get('passengers', 1),  # Nombre de passagers nécessaires
-            is_request=True,  # Flag pour indiquer qu'il s'agit d'une demande
+            seats_available=trip_data.get('passengers', 1),  # Nombre de places recherchées
             additional_info=trip_data.get('needs'),
+            is_published=True,  # Publier la demande pour la rendre visible
             
             # Préférences
             preferences = trip_data.get('trip_preferences', {})

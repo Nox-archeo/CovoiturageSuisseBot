@@ -1,0 +1,8260 @@
+{
+  "metadata": {
+    "created": "2025-07-23",
+    "purpose": "Communes suisses manquantes identifiées par analyse",
+    "total_missing": 1633
+  },
+  "missing_by_canton": {
+    "raw_data = \"\"\"GDEKT": [
+      {
+        "name": "GDENAME",
+        "commune_code": "GDENR",
+        "district_code": "GDEBZNR"
+      }
+    ],
+    "ZH": [
+      {
+        "name": "Aeugst am Albis",
+        "commune_code": "1",
+        "district_code": "101"
+      },
+      {
+        "name": "Affoltern am Albis",
+        "commune_code": "2",
+        "district_code": "101"
+      },
+      {
+        "name": "Bonstetten",
+        "commune_code": "3",
+        "district_code": "101"
+      },
+      {
+        "name": "Hausen am Albis",
+        "commune_code": "4",
+        "district_code": "101"
+      },
+      {
+        "name": "Hedingen",
+        "commune_code": "5",
+        "district_code": "101"
+      },
+      {
+        "name": "Kappel am Albis",
+        "commune_code": "6",
+        "district_code": "101"
+      },
+      {
+        "name": "Knonau",
+        "commune_code": "7",
+        "district_code": "101"
+      },
+      {
+        "name": "Maschwanden",
+        "commune_code": "8",
+        "district_code": "101"
+      },
+      {
+        "name": "Mettmenstetten",
+        "commune_code": "9",
+        "district_code": "101"
+      },
+      {
+        "name": "Obfelden",
+        "commune_code": "10",
+        "district_code": "101"
+      },
+      {
+        "name": "Ottenbach",
+        "commune_code": "11",
+        "district_code": "101"
+      },
+      {
+        "name": "Rifferswil",
+        "commune_code": "12",
+        "district_code": "101"
+      },
+      {
+        "name": "Stallikon",
+        "commune_code": "13",
+        "district_code": "101"
+      },
+      {
+        "name": "Wettswil am Albis",
+        "commune_code": "14",
+        "district_code": "101"
+      },
+      {
+        "name": "Adlikon",
+        "commune_code": "21",
+        "district_code": "102"
+      },
+      {
+        "name": "Benken (ZH)",
+        "commune_code": "22",
+        "district_code": "102"
+      },
+      {
+        "name": "Berg am Irchel",
+        "commune_code": "23",
+        "district_code": "102"
+      },
+      {
+        "name": "Buch am Irchel",
+        "commune_code": "24",
+        "district_code": "102"
+      },
+      {
+        "name": "Dachsen",
+        "commune_code": "25",
+        "district_code": "102"
+      },
+      {
+        "name": "Dorf",
+        "commune_code": "26",
+        "district_code": "102"
+      },
+      {
+        "name": "Feuerthalen",
+        "commune_code": "27",
+        "district_code": "102"
+      },
+      {
+        "name": "Flaach",
+        "commune_code": "28",
+        "district_code": "102"
+      },
+      {
+        "name": "Flurlingen",
+        "commune_code": "29",
+        "district_code": "102"
+      },
+      {
+        "name": "Andelfingen",
+        "commune_code": "30",
+        "district_code": "102"
+      },
+      {
+        "name": "Henggart",
+        "commune_code": "31",
+        "district_code": "102"
+      },
+      {
+        "name": "Humlikon",
+        "commune_code": "32",
+        "district_code": "102"
+      },
+      {
+        "name": "Kleinandelfingen",
+        "commune_code": "33",
+        "district_code": "102"
+      },
+      {
+        "name": "Laufen-Uhwiesen",
+        "commune_code": "34",
+        "district_code": "102"
+      },
+      {
+        "name": "Marthalen",
+        "commune_code": "35",
+        "district_code": "102"
+      },
+      {
+        "name": "Oberstammheim",
+        "commune_code": "36",
+        "district_code": "102"
+      },
+      {
+        "name": "Ossingen",
+        "commune_code": "37",
+        "district_code": "102"
+      },
+      {
+        "name": "Rheinau",
+        "commune_code": "38",
+        "district_code": "102"
+      },
+      {
+        "name": "Thalheim an der Thur",
+        "commune_code": "39",
+        "district_code": "102"
+      },
+      {
+        "name": "Trüllikon",
+        "commune_code": "40",
+        "district_code": "102"
+      },
+      {
+        "name": "Truttikon",
+        "commune_code": "41",
+        "district_code": "102"
+      },
+      {
+        "name": "Unterstammheim",
+        "commune_code": "42",
+        "district_code": "102"
+      },
+      {
+        "name": "Volken",
+        "commune_code": "43",
+        "district_code": "102"
+      },
+      {
+        "name": "Waltalingen",
+        "commune_code": "44",
+        "district_code": "102"
+      },
+      {
+        "name": "Bachenbülach",
+        "commune_code": "51",
+        "district_code": "103"
+      },
+      {
+        "name": "Bassersdorf",
+        "commune_code": "52",
+        "district_code": "103"
+      },
+      {
+        "name": "Bülach",
+        "commune_code": "53",
+        "district_code": "103"
+      },
+      {
+        "name": "Dietlikon",
+        "commune_code": "54",
+        "district_code": "103"
+      },
+      {
+        "name": "Eglisau",
+        "commune_code": "55",
+        "district_code": "103"
+      },
+      {
+        "name": "Embrach",
+        "commune_code": "56",
+        "district_code": "103"
+      },
+      {
+        "name": "Freienstein-Teufen",
+        "commune_code": "57",
+        "district_code": "103"
+      },
+      {
+        "name": "Glattfelden",
+        "commune_code": "58",
+        "district_code": "103"
+      },
+      {
+        "name": "Hochfelden",
+        "commune_code": "59",
+        "district_code": "103"
+      },
+      {
+        "name": "Höri",
+        "commune_code": "60",
+        "district_code": "103"
+      },
+      {
+        "name": "Hüntwangen",
+        "commune_code": "61",
+        "district_code": "103"
+      },
+      {
+        "name": "Kloten",
+        "commune_code": "62",
+        "district_code": "103"
+      },
+      {
+        "name": "Lufingen",
+        "commune_code": "63",
+        "district_code": "103"
+      },
+      {
+        "name": "Nürensdorf",
+        "commune_code": "64",
+        "district_code": "103"
+      },
+      {
+        "name": "Oberembrach",
+        "commune_code": "65",
+        "district_code": "103"
+      },
+      {
+        "name": "Opfikon",
+        "commune_code": "66",
+        "district_code": "103"
+      },
+      {
+        "name": "Rafz",
+        "commune_code": "67",
+        "district_code": "103"
+      },
+      {
+        "name": "Rorbas",
+        "commune_code": "68",
+        "district_code": "103"
+      },
+      {
+        "name": "Wallisellen",
+        "commune_code": "69",
+        "district_code": "103"
+      },
+      {
+        "name": "Wasterkingen",
+        "commune_code": "70",
+        "district_code": "103"
+      },
+      {
+        "name": "Wil (ZH)",
+        "commune_code": "71",
+        "district_code": "103"
+      },
+      {
+        "name": "Winkel",
+        "commune_code": "72",
+        "district_code": "103"
+      },
+      {
+        "name": "Bachs",
+        "commune_code": "81",
+        "district_code": "104"
+      },
+      {
+        "name": "Boppelsen",
+        "commune_code": "82",
+        "district_code": "104"
+      },
+      {
+        "name": "Buchs (ZH)",
+        "commune_code": "83",
+        "district_code": "104"
+      },
+      {
+        "name": "Dällikon",
+        "commune_code": "84",
+        "district_code": "104"
+      },
+      {
+        "name": "Dänikon",
+        "commune_code": "85",
+        "district_code": "104"
+      },
+      {
+        "name": "Dielsdorf",
+        "commune_code": "86",
+        "district_code": "104"
+      },
+      {
+        "name": "Hüttikon",
+        "commune_code": "87",
+        "district_code": "104"
+      },
+      {
+        "name": "Neerach",
+        "commune_code": "88",
+        "district_code": "104"
+      },
+      {
+        "name": "Niederglatt",
+        "commune_code": "89",
+        "district_code": "104"
+      },
+      {
+        "name": "Niederhasli",
+        "commune_code": "90",
+        "district_code": "104"
+      },
+      {
+        "name": "Niederweningen",
+        "commune_code": "91",
+        "district_code": "104"
+      },
+      {
+        "name": "Oberglatt",
+        "commune_code": "92",
+        "district_code": "104"
+      },
+      {
+        "name": "Oberweningen",
+        "commune_code": "93",
+        "district_code": "104"
+      },
+      {
+        "name": "Otelfingen",
+        "commune_code": "94",
+        "district_code": "104"
+      },
+      {
+        "name": "Regensberg",
+        "commune_code": "95",
+        "district_code": "104"
+      },
+      {
+        "name": "Regensdorf",
+        "commune_code": "96",
+        "district_code": "104"
+      },
+      {
+        "name": "Rümlang",
+        "commune_code": "97",
+        "district_code": "104"
+      },
+      {
+        "name": "Schleinikon",
+        "commune_code": "98",
+        "district_code": "104"
+      },
+      {
+        "name": "Schöfflisdorf",
+        "commune_code": "99",
+        "district_code": "104"
+      },
+      {
+        "name": "Stadel",
+        "commune_code": "100",
+        "district_code": "104"
+      },
+      {
+        "name": "Steinmaur",
+        "commune_code": "101",
+        "district_code": "104"
+      },
+      {
+        "name": "Weiach",
+        "commune_code": "102",
+        "district_code": "104"
+      },
+      {
+        "name": "Bäretswil",
+        "commune_code": "111",
+        "district_code": "105"
+      },
+      {
+        "name": "Bubikon",
+        "commune_code": "112",
+        "district_code": "105"
+      },
+      {
+        "name": "Dürnten",
+        "commune_code": "113",
+        "district_code": "105"
+      },
+      {
+        "name": "Fischenthal",
+        "commune_code": "114",
+        "district_code": "105"
+      },
+      {
+        "name": "Gossau (ZH)",
+        "commune_code": "115",
+        "district_code": "105"
+      },
+      {
+        "name": "Grüningen",
+        "commune_code": "116",
+        "district_code": "105"
+      },
+      {
+        "name": "Hinwil",
+        "commune_code": "117",
+        "district_code": "105"
+      },
+      {
+        "name": "Rüti (ZH)",
+        "commune_code": "118",
+        "district_code": "105"
+      },
+      {
+        "name": "Seegräben",
+        "commune_code": "119",
+        "district_code": "105"
+      },
+      {
+        "name": "Wald (ZH)",
+        "commune_code": "120",
+        "district_code": "105"
+      },
+      {
+        "name": "Wetzikon (ZH)",
+        "commune_code": "121",
+        "district_code": "105"
+      },
+      {
+        "name": "Adliswil",
+        "commune_code": "131",
+        "district_code": "106"
+      },
+      {
+        "name": "Hirzel",
+        "commune_code": "132",
+        "district_code": "106"
+      },
+      {
+        "name": "Horgen",
+        "commune_code": "133",
+        "district_code": "106"
+      },
+      {
+        "name": "Hütten",
+        "commune_code": "134",
+        "district_code": "106"
+      },
+      {
+        "name": "Kilchberg (ZH)",
+        "commune_code": "135",
+        "district_code": "106"
+      },
+      {
+        "name": "Langnau am Albis",
+        "commune_code": "136",
+        "district_code": "106"
+      },
+      {
+        "name": "Oberrieden",
+        "commune_code": "137",
+        "district_code": "106"
+      },
+      {
+        "name": "Richterswil",
+        "commune_code": "138",
+        "district_code": "106"
+      },
+      {
+        "name": "Rüschlikon",
+        "commune_code": "139",
+        "district_code": "106"
+      },
+      {
+        "name": "Schönenberg (ZH)",
+        "commune_code": "140",
+        "district_code": "106"
+      },
+      {
+        "name": "Thalwil",
+        "commune_code": "141",
+        "district_code": "106"
+      },
+      {
+        "name": "Wädenswil",
+        "commune_code": "142",
+        "district_code": "106"
+      },
+      {
+        "name": "Erlenbach (ZH)",
+        "commune_code": "151",
+        "district_code": "107"
+      },
+      {
+        "name": "Herrliberg",
+        "commune_code": "152",
+        "district_code": "107"
+      },
+      {
+        "name": "Hombrechtikon",
+        "commune_code": "153",
+        "district_code": "107"
+      },
+      {
+        "name": "Küsnacht (ZH)",
+        "commune_code": "154",
+        "district_code": "107"
+      },
+      {
+        "name": "Männedorf",
+        "commune_code": "155",
+        "district_code": "107"
+      },
+      {
+        "name": "Meilen",
+        "commune_code": "156",
+        "district_code": "107"
+      },
+      {
+        "name": "Oetwil am See",
+        "commune_code": "157",
+        "district_code": "107"
+      },
+      {
+        "name": "Stäfa",
+        "commune_code": "158",
+        "district_code": "107"
+      },
+      {
+        "name": "Uetikon am See",
+        "commune_code": "159",
+        "district_code": "107"
+      },
+      {
+        "name": "Zumikon",
+        "commune_code": "160",
+        "district_code": "107"
+      },
+      {
+        "name": "Zollikon",
+        "commune_code": "161",
+        "district_code": "107"
+      },
+      {
+        "name": "Bauma",
+        "commune_code": "171",
+        "district_code": "108"
+      },
+      {
+        "name": "Fehraltorf",
+        "commune_code": "172",
+        "district_code": "108"
+      },
+      {
+        "name": "Hittnau",
+        "commune_code": "173",
+        "district_code": "108"
+      },
+      {
+        "name": "Illnau-Effretikon",
+        "commune_code": "174",
+        "district_code": "108"
+      },
+      {
+        "name": "Kyburg",
+        "commune_code": "175",
+        "district_code": "108"
+      },
+      {
+        "name": "Lindau",
+        "commune_code": "176",
+        "district_code": "108"
+      },
+      {
+        "name": "Pfäffikon",
+        "commune_code": "177",
+        "district_code": "108"
+      },
+      {
+        "name": "Russikon",
+        "commune_code": "178",
+        "district_code": "108"
+      },
+      {
+        "name": "Sternenberg",
+        "commune_code": "179",
+        "district_code": "108"
+      },
+      {
+        "name": "Weisslingen",
+        "commune_code": "180",
+        "district_code": "108"
+      },
+      {
+        "name": "Wila",
+        "commune_code": "181",
+        "district_code": "108"
+      },
+      {
+        "name": "Wildberg",
+        "commune_code": "182",
+        "district_code": "108"
+      },
+      {
+        "name": "Dübendorf",
+        "commune_code": "191",
+        "district_code": "109"
+      },
+      {
+        "name": "Egg",
+        "commune_code": "192",
+        "district_code": "109"
+      },
+      {
+        "name": "Fällanden",
+        "commune_code": "193",
+        "district_code": "109"
+      },
+      {
+        "name": "Greifensee",
+        "commune_code": "194",
+        "district_code": "109"
+      },
+      {
+        "name": "Maur",
+        "commune_code": "195",
+        "district_code": "109"
+      },
+      {
+        "name": "Mönchaltorf",
+        "commune_code": "196",
+        "district_code": "109"
+      },
+      {
+        "name": "Schwerzenbach",
+        "commune_code": "197",
+        "district_code": "109"
+      },
+      {
+        "name": "Uster",
+        "commune_code": "198",
+        "district_code": "109"
+      },
+      {
+        "name": "Volketswil",
+        "commune_code": "199",
+        "district_code": "109"
+      },
+      {
+        "name": "Wangen-Brüttisellen",
+        "commune_code": "200",
+        "district_code": "109"
+      },
+      {
+        "name": "Altikon",
+        "commune_code": "211",
+        "district_code": "110"
+      },
+      {
+        "name": "Brütten",
+        "commune_code": "213",
+        "district_code": "110"
+      },
+      {
+        "name": "Dägerlen",
+        "commune_code": "214",
+        "district_code": "110"
+      },
+      {
+        "name": "Dättlikon",
+        "commune_code": "215",
+        "district_code": "110"
+      },
+      {
+        "name": "Dinhard",
+        "commune_code": "216",
+        "district_code": "110"
+      },
+      {
+        "name": "Elgg",
+        "commune_code": "217",
+        "district_code": "110"
+      },
+      {
+        "name": "Ellikon an der Thur",
+        "commune_code": "218",
+        "district_code": "110"
+      },
+      {
+        "name": "Elsau",
+        "commune_code": "219",
+        "district_code": "110"
+      },
+      {
+        "name": "Hagenbuch",
+        "commune_code": "220",
+        "district_code": "110"
+      },
+      {
+        "name": "Hettlingen",
+        "commune_code": "221",
+        "district_code": "110"
+      },
+      {
+        "name": "Hofstetten (ZH)",
+        "commune_code": "222",
+        "district_code": "110"
+      },
+      {
+        "name": "Neftenbach",
+        "commune_code": "223",
+        "district_code": "110"
+      },
+      {
+        "name": "Pfungen",
+        "commune_code": "224",
+        "district_code": "110"
+      },
+      {
+        "name": "Rickenbach (ZH)",
+        "commune_code": "225",
+        "district_code": "110"
+      },
+      {
+        "name": "Schlatt (ZH)",
+        "commune_code": "226",
+        "district_code": "110"
+      },
+      {
+        "name": "Seuzach",
+        "commune_code": "227",
+        "district_code": "110"
+      },
+      {
+        "name": "Turbenthal",
+        "commune_code": "228",
+        "district_code": "110"
+      },
+      {
+        "name": "Winterthur",
+        "commune_code": "230",
+        "district_code": "110"
+      },
+      {
+        "name": "Zell (ZH)",
+        "commune_code": "231",
+        "district_code": "110"
+      },
+      {
+        "name": "Aesch (ZH)",
+        "commune_code": "241",
+        "district_code": "111"
+      },
+      {
+        "name": "Birmensdorf (ZH)",
+        "commune_code": "242",
+        "district_code": "111"
+      },
+      {
+        "name": "Dietikon",
+        "commune_code": "243",
+        "district_code": "111"
+      },
+      {
+        "name": "Geroldswil",
+        "commune_code": "244",
+        "district_code": "111"
+      },
+      {
+        "name": "Oberengstringen",
+        "commune_code": "245",
+        "district_code": "111"
+      },
+      {
+        "name": "Oetwil an der Limmat",
+        "commune_code": "246",
+        "district_code": "111"
+      },
+      {
+        "name": "Schlieren",
+        "commune_code": "247",
+        "district_code": "111"
+      },
+      {
+        "name": "Uitikon",
+        "commune_code": "248",
+        "district_code": "111"
+      },
+      {
+        "name": "Unterengstringen",
+        "commune_code": "249",
+        "district_code": "111"
+      },
+      {
+        "name": "Urdorf",
+        "commune_code": "250",
+        "district_code": "111"
+      },
+      {
+        "name": "Weiningen (ZH)",
+        "commune_code": "251",
+        "district_code": "111"
+      },
+      {
+        "name": "Zürich",
+        "commune_code": "261",
+        "district_code": "112"
+      },
+      {
+        "name": "Wiesendangen",
+        "commune_code": "298",
+        "district_code": "110"
+      }
+    ],
+    "BE": [
+      {
+        "name": "Aarberg",
+        "commune_code": "301",
+        "district_code": "243"
+      },
+      {
+        "name": "Bargen (BE)",
+        "commune_code": "302",
+        "district_code": "243"
+      },
+      {
+        "name": "Grossaffoltern",
+        "commune_code": "303",
+        "district_code": "243"
+      },
+      {
+        "name": "Kallnach",
+        "commune_code": "304",
+        "district_code": "243"
+      },
+      {
+        "name": "Kappelen",
+        "commune_code": "305",
+        "district_code": "243"
+      },
+      {
+        "name": "Lyss",
+        "commune_code": "306",
+        "district_code": "243"
+      },
+      {
+        "name": "Meikirch",
+        "commune_code": "307",
+        "district_code": "246"
+      },
+      {
+        "name": "Radelfingen",
+        "commune_code": "309",
+        "district_code": "243"
+      },
+      {
+        "name": "Rapperswil (BE)",
+        "commune_code": "310",
+        "district_code": "243"
+      },
+      {
+        "name": "Schüpfen",
+        "commune_code": "311",
+        "district_code": "243"
+      },
+      {
+        "name": "Seedorf (BE)",
+        "commune_code": "312",
+        "district_code": "243"
+      },
+      {
+        "name": "Aarwangen",
+        "commune_code": "321",
+        "district_code": "244"
+      },
+      {
+        "name": "Auswil",
+        "commune_code": "322",
+        "district_code": "244"
+      },
+      {
+        "name": "Bannwil",
+        "commune_code": "323",
+        "district_code": "244"
+      },
+      {
+        "name": "Bleienbach",
+        "commune_code": "324",
+        "district_code": "244"
+      },
+      {
+        "name": "Busswil bei Melchnau",
+        "commune_code": "325",
+        "district_code": "244"
+      },
+      {
+        "name": "Gondiswil",
+        "commune_code": "326",
+        "district_code": "244"
+      },
+      {
+        "name": "Langenthal",
+        "commune_code": "329",
+        "district_code": "244"
+      },
+      {
+        "name": "Lotzwil",
+        "commune_code": "331",
+        "district_code": "244"
+      },
+      {
+        "name": "Madiswil",
+        "commune_code": "332",
+        "district_code": "244"
+      },
+      {
+        "name": "Melchnau",
+        "commune_code": "333",
+        "district_code": "244"
+      },
+      {
+        "name": "Obersteckholz",
+        "commune_code": "334",
+        "district_code": "244"
+      },
+      {
+        "name": "Oeschenbach",
+        "commune_code": "335",
+        "district_code": "244"
+      },
+      {
+        "name": "Reisiswil",
+        "commune_code": "336",
+        "district_code": "244"
+      },
+      {
+        "name": "Roggwil (BE)",
+        "commune_code": "337",
+        "district_code": "244"
+      },
+      {
+        "name": "Rohrbach",
+        "commune_code": "338",
+        "district_code": "244"
+      },
+      {
+        "name": "Rohrbachgraben",
+        "commune_code": "339",
+        "district_code": "244"
+      },
+      {
+        "name": "Rütschelen",
+        "commune_code": "340",
+        "district_code": "244"
+      },
+      {
+        "name": "Schwarzhäusern",
+        "commune_code": "341",
+        "district_code": "244"
+      },
+      {
+        "name": "Thunstetten",
+        "commune_code": "342",
+        "district_code": "244"
+      },
+      {
+        "name": "Ursenbach",
+        "commune_code": "344",
+        "district_code": "244"
+      },
+      {
+        "name": "Wynau",
+        "commune_code": "345",
+        "district_code": "244"
+      },
+      {
+        "name": "Bern",
+        "commune_code": "351",
+        "district_code": "246"
+      },
+      {
+        "name": "Bolligen",
+        "commune_code": "352",
+        "district_code": "246"
+      },
+      {
+        "name": "Bremgarten bei Bern",
+        "commune_code": "353",
+        "district_code": "246"
+      },
+      {
+        "name": "Kirchlindach",
+        "commune_code": "354",
+        "district_code": "246"
+      },
+      {
+        "name": "Köniz",
+        "commune_code": "355",
+        "district_code": "246"
+      },
+      {
+        "name": "Muri bei Bern",
+        "commune_code": "356",
+        "district_code": "246"
+      },
+      {
+        "name": "Oberbalm",
+        "commune_code": "357",
+        "district_code": "246"
+      },
+      {
+        "name": "Stettlen",
+        "commune_code": "358",
+        "district_code": "246"
+      },
+      {
+        "name": "Vechigen",
+        "commune_code": "359",
+        "district_code": "246"
+      },
+      {
+        "name": "Wohlen bei Bern",
+        "commune_code": "360",
+        "district_code": "246"
+      },
+      {
+        "name": "Zollikofen",
+        "commune_code": "361",
+        "district_code": "246"
+      },
+      {
+        "name": "Ittigen",
+        "commune_code": "362",
+        "district_code": "246"
+      },
+      {
+        "name": "Ostermundigen",
+        "commune_code": "363",
+        "district_code": "246"
+      },
+      {
+        "name": "Biel/Bienne",
+        "commune_code": "371",
+        "district_code": "242"
+      },
+      {
+        "name": "Evilard",
+        "commune_code": "372",
+        "district_code": "242"
+      },
+      {
+        "name": "Arch",
+        "commune_code": "381",
+        "district_code": "243"
+      },
+      {
+        "name": "Büetigen",
+        "commune_code": "382",
+        "district_code": "243"
+      },
+      {
+        "name": "Büren an der Aare",
+        "commune_code": "383",
+        "district_code": "243"
+      },
+      {
+        "name": "Diessbach bei Büren",
+        "commune_code": "385",
+        "district_code": "243"
+      },
+      {
+        "name": "Dotzigen",
+        "commune_code": "386",
+        "district_code": "243"
+      },
+      {
+        "name": "Lengnau (BE)",
+        "commune_code": "387",
+        "district_code": "242"
+      },
+      {
+        "name": "Leuzigen",
+        "commune_code": "388",
+        "district_code": "243"
+      },
+      {
+        "name": "Meienried",
+        "commune_code": "389",
+        "district_code": "243"
+      },
+      {
+        "name": "Meinisberg",
+        "commune_code": "390",
+        "district_code": "242"
+      },
+      {
+        "name": "Oberwil bei Büren",
+        "commune_code": "391",
+        "district_code": "243"
+      },
+      {
+        "name": "Pieterlen",
+        "commune_code": "392",
+        "district_code": "242"
+      },
+      {
+        "name": "Rüti bei Büren",
+        "commune_code": "393",
+        "district_code": "243"
+      },
+      {
+        "name": "Wengi",
+        "commune_code": "394",
+        "district_code": "243"
+      },
+      {
+        "name": "Aefligen",
+        "commune_code": "401",
+        "district_code": "245"
+      },
+      {
+        "name": "Alchenstorf",
+        "commune_code": "402",
+        "district_code": "245"
+      },
+      {
+        "name": "Bäriswil",
+        "commune_code": "403",
+        "district_code": "246"
+      },
+      {
+        "name": "Burgdorf",
+        "commune_code": "404",
+        "district_code": "245"
+      },
+      {
+        "name": "Ersigen",
+        "commune_code": "405",
+        "district_code": "245"
+      },
+      {
+        "name": "Hasle bei Burgdorf",
+        "commune_code": "406",
+        "district_code": "245"
+      },
+      {
+        "name": "Heimiswil",
+        "commune_code": "407",
+        "district_code": "245"
+      },
+      {
+        "name": "Hellsau",
+        "commune_code": "408",
+        "district_code": "245"
+      },
+      {
+        "name": "Hindelbank",
+        "commune_code": "409",
+        "district_code": "245"
+      },
+      {
+        "name": "Höchstetten",
+        "commune_code": "410",
+        "district_code": "245"
+      },
+      {
+        "name": "Kernenried",
+        "commune_code": "411",
+        "district_code": "245"
+      },
+      {
+        "name": "Kirchberg (BE)",
+        "commune_code": "412",
+        "district_code": "245"
+      },
+      {
+        "name": "Koppigen",
+        "commune_code": "413",
+        "district_code": "245"
+      },
+      {
+        "name": "Krauchthal",
+        "commune_code": "414",
+        "district_code": "245"
+      },
+      {
+        "name": "Lyssach",
+        "commune_code": "415",
+        "district_code": "245"
+      },
+      {
+        "name": "Mötschwil",
+        "commune_code": "416",
+        "district_code": "245"
+      },
+      {
+        "name": "Niederösch",
+        "commune_code": "417",
+        "district_code": "245"
+      },
+      {
+        "name": "Oberburg",
+        "commune_code": "418",
+        "district_code": "245"
+      },
+      {
+        "name": "Oberösch",
+        "commune_code": "419",
+        "district_code": "245"
+      },
+      {
+        "name": "Rüdtligen-Alchenflüh",
+        "commune_code": "420",
+        "district_code": "245"
+      },
+      {
+        "name": "Rumendingen",
+        "commune_code": "421",
+        "district_code": "245"
+      },
+      {
+        "name": "Rüti bei Lyssach",
+        "commune_code": "422",
+        "district_code": "245"
+      },
+      {
+        "name": "Willadingen",
+        "commune_code": "423",
+        "district_code": "245"
+      },
+      {
+        "name": "Wynigen",
+        "commune_code": "424",
+        "district_code": "245"
+      },
+      {
+        "name": "Corgémont",
+        "commune_code": "431",
+        "district_code": "241"
+      },
+      {
+        "name": "Cormoret",
+        "commune_code": "432",
+        "district_code": "241"
+      },
+      {
+        "name": "Cortébert",
+        "commune_code": "433",
+        "district_code": "241"
+      },
+      {
+        "name": "Courtelary",
+        "commune_code": "434",
+        "district_code": "241"
+      },
+      {
+        "name": "La Ferrière",
+        "commune_code": "435",
+        "district_code": "241"
+      },
+      {
+        "name": "La Heutte",
+        "commune_code": "436",
+        "district_code": "241"
+      },
+      {
+        "name": "Mont-Tramelan",
+        "commune_code": "437",
+        "district_code": "241"
+      },
+      {
+        "name": "Orvin",
+        "commune_code": "438",
+        "district_code": "241"
+      },
+      {
+        "name": "Péry",
+        "commune_code": "439",
+        "district_code": "241"
+      },
+      {
+        "name": "Renan (BE)",
+        "commune_code": "441",
+        "district_code": "241"
+      },
+      {
+        "name": "Romont (BE)",
+        "commune_code": "442",
+        "district_code": "241"
+      },
+      {
+        "name": "Saint-Imier",
+        "commune_code": "443",
+        "district_code": "241"
+      },
+      {
+        "name": "Sonceboz-Sombeval",
+        "commune_code": "444",
+        "district_code": "241"
+      },
+      {
+        "name": "Sonvilier",
+        "commune_code": "445",
+        "district_code": "241"
+      },
+      {
+        "name": "Tramelan",
+        "commune_code": "446",
+        "district_code": "241"
+      },
+      {
+        "name": "Villeret",
+        "commune_code": "448",
+        "district_code": "241"
+      },
+      {
+        "name": "Sauge",
+        "commune_code": "449",
+        "district_code": "241"
+      },
+      {
+        "name": "Brüttelen",
+        "commune_code": "491",
+        "district_code": "243"
+      },
+      {
+        "name": "Erlach",
+        "commune_code": "492",
+        "district_code": "243"
+      },
+      {
+        "name": "Finsterhennen",
+        "commune_code": "493",
+        "district_code": "243"
+      },
+      {
+        "name": "Gals",
+        "commune_code": "494",
+        "district_code": "243"
+      },
+      {
+        "name": "Gampelen",
+        "commune_code": "495",
+        "district_code": "243"
+      },
+      {
+        "name": "Ins",
+        "commune_code": "496",
+        "district_code": "243"
+      },
+      {
+        "name": "Lüscherz",
+        "commune_code": "497",
+        "district_code": "243"
+      },
+      {
+        "name": "Müntschemier",
+        "commune_code": "498",
+        "district_code": "243"
+      },
+      {
+        "name": "Siselen",
+        "commune_code": "499",
+        "district_code": "243"
+      },
+      {
+        "name": "Treiten",
+        "commune_code": "500",
+        "district_code": "243"
+      },
+      {
+        "name": "Tschugg",
+        "commune_code": "501",
+        "district_code": "243"
+      },
+      {
+        "name": "Vinelz",
+        "commune_code": "502",
+        "district_code": "243"
+      },
+      {
+        "name": "Bangerten",
+        "commune_code": "532",
+        "district_code": "243"
+      },
+      {
+        "name": "Bätterkinden",
+        "commune_code": "533",
+        "district_code": "245"
+      },
+      {
+        "name": "Deisswil bei Münchenbuchsee",
+        "commune_code": "535",
+        "district_code": "246"
+      },
+      {
+        "name": "Diemerswil",
+        "commune_code": "536",
+        "district_code": "246"
+      },
+      {
+        "name": "Fraubrunnen",
+        "commune_code": "538",
+        "district_code": "246"
+      },
+      {
+        "name": "Jegenstorf",
+        "commune_code": "540",
+        "district_code": "246"
+      },
+      {
+        "name": "Iffwil",
+        "commune_code": "541",
+        "district_code": "246"
+      },
+      {
+        "name": "Mattstetten",
+        "commune_code": "543",
+        "district_code": "246"
+      },
+      {
+        "name": "Moosseedorf",
+        "commune_code": "544",
+        "district_code": "246"
+      },
+      {
+        "name": "Münchenbuchsee",
+        "commune_code": "546",
+        "district_code": "246"
+      },
+      {
+        "name": "Urtenen-Schönbühl",
+        "commune_code": "551",
+        "district_code": "246"
+      },
+      {
+        "name": "Utzenstorf",
+        "commune_code": "552",
+        "district_code": "245"
+      },
+      {
+        "name": "Wiggiswil",
+        "commune_code": "553",
+        "district_code": "246"
+      },
+      {
+        "name": "Wiler bei Utzenstorf",
+        "commune_code": "554",
+        "district_code": "245"
+      },
+      {
+        "name": "Zielebach",
+        "commune_code": "556",
+        "district_code": "245"
+      },
+      {
+        "name": "Zuzwil (BE)",
+        "commune_code": "557",
+        "district_code": "246"
+      },
+      {
+        "name": "Adelboden",
+        "commune_code": "561",
+        "district_code": "249"
+      },
+      {
+        "name": "Aeschi bei Spiez",
+        "commune_code": "562",
+        "district_code": "249"
+      },
+      {
+        "name": "Frutigen",
+        "commune_code": "563",
+        "district_code": "249"
+      },
+      {
+        "name": "Kandergrund",
+        "commune_code": "564",
+        "district_code": "249"
+      },
+      {
+        "name": "Kandersteg",
+        "commune_code": "565",
+        "district_code": "249"
+      },
+      {
+        "name": "Krattigen",
+        "commune_code": "566",
+        "district_code": "249"
+      },
+      {
+        "name": "Reichenbach im Kandertal",
+        "commune_code": "567",
+        "district_code": "249"
+      },
+      {
+        "name": "Beatenberg",
+        "commune_code": "571",
+        "district_code": "250"
+      },
+      {
+        "name": "Bönigen",
+        "commune_code": "572",
+        "district_code": "250"
+      },
+      {
+        "name": "Brienz (BE)",
+        "commune_code": "573",
+        "district_code": "250"
+      },
+      {
+        "name": "Brienzwiler",
+        "commune_code": "574",
+        "district_code": "250"
+      },
+      {
+        "name": "Därligen",
+        "commune_code": "575",
+        "district_code": "250"
+      },
+      {
+        "name": "Grindelwald",
+        "commune_code": "576",
+        "district_code": "250"
+      },
+      {
+        "name": "Gsteigwiler",
+        "commune_code": "577",
+        "district_code": "250"
+      },
+      {
+        "name": "Gündlischwand",
+        "commune_code": "578",
+        "district_code": "250"
+      },
+      {
+        "name": "Habkern",
+        "commune_code": "579",
+        "district_code": "250"
+      },
+      {
+        "name": "Hofstetten bei Brienz",
+        "commune_code": "580",
+        "district_code": "250"
+      },
+      {
+        "name": "Interlaken",
+        "commune_code": "581",
+        "district_code": "250"
+      },
+      {
+        "name": "Iseltwald",
+        "commune_code": "582",
+        "district_code": "250"
+      },
+      {
+        "name": "Lauterbrunnen",
+        "commune_code": "584",
+        "district_code": "250"
+      },
+      {
+        "name": "Leissigen",
+        "commune_code": "585",
+        "district_code": "250"
+      },
+      {
+        "name": "Lütschental",
+        "commune_code": "586",
+        "district_code": "250"
+      },
+      {
+        "name": "Matten bei Interlaken",
+        "commune_code": "587",
+        "district_code": "250"
+      },
+      {
+        "name": "Niederried bei Interlaken",
+        "commune_code": "588",
+        "district_code": "250"
+      },
+      {
+        "name": "Oberried am Brienzersee",
+        "commune_code": "589",
+        "district_code": "250"
+      },
+      {
+        "name": "Ringgenberg (BE)",
+        "commune_code": "590",
+        "district_code": "250"
+      },
+      {
+        "name": "Saxeten",
+        "commune_code": "591",
+        "district_code": "250"
+      },
+      {
+        "name": "Schwanden bei Brienz",
+        "commune_code": "592",
+        "district_code": "250"
+      },
+      {
+        "name": "Unterseen",
+        "commune_code": "593",
+        "district_code": "250"
+      },
+      {
+        "name": "Wilderswil",
+        "commune_code": "594",
+        "district_code": "250"
+      },
+      {
+        "name": "Arni (BE)",
+        "commune_code": "602",
+        "district_code": "246"
+      },
+      {
+        "name": "Biglen",
+        "commune_code": "603",
+        "district_code": "246"
+      },
+      {
+        "name": "Bowil",
+        "commune_code": "605",
+        "district_code": "246"
+      },
+      {
+        "name": "Brenzikofen",
+        "commune_code": "606",
+        "district_code": "246"
+      },
+      {
+        "name": "Freimettigen",
+        "commune_code": "607",
+        "district_code": "246"
+      },
+      {
+        "name": "Grosshöchstetten",
+        "commune_code": "608",
+        "district_code": "246"
+      },
+      {
+        "name": "Häutligen",
+        "commune_code": "609",
+        "district_code": "246"
+      },
+      {
+        "name": "Herbligen",
+        "commune_code": "610",
+        "district_code": "246"
+      },
+      {
+        "name": "Kiesen",
+        "commune_code": "611",
+        "district_code": "246"
+      },
+      {
+        "name": "Konolfingen",
+        "commune_code": "612",
+        "district_code": "246"
+      },
+      {
+        "name": "Landiswil",
+        "commune_code": "613",
+        "district_code": "246"
+      },
+      {
+        "name": "Linden",
+        "commune_code": "614",
+        "district_code": "246"
+      },
+      {
+        "name": "Mirchel",
+        "commune_code": "615",
+        "district_code": "246"
+      },
+      {
+        "name": "Münsingen",
+        "commune_code": "616",
+        "district_code": "246"
+      },
+      {
+        "name": "Niederhünigen",
+        "commune_code": "617",
+        "district_code": "246"
+      },
+      {
+        "name": "Oberdiessbach",
+        "commune_code": "619",
+        "district_code": "246"
+      },
+      {
+        "name": "Oberthal",
+        "commune_code": "620",
+        "district_code": "246"
+      },
+      {
+        "name": "Oppligen",
+        "commune_code": "622",
+        "district_code": "246"
+      },
+      {
+        "name": "Rubigen",
+        "commune_code": "623",
+        "district_code": "246"
+      },
+      {
+        "name": "Schlosswil",
+        "commune_code": "624",
+        "district_code": "246"
+      },
+      {
+        "name": "Tägertschi",
+        "commune_code": "625",
+        "district_code": "246"
+      },
+      {
+        "name": "Walkringen",
+        "commune_code": "626",
+        "district_code": "246"
+      },
+      {
+        "name": "Worb",
+        "commune_code": "627",
+        "district_code": "246"
+      },
+      {
+        "name": "Zäziwil",
+        "commune_code": "628",
+        "district_code": "246"
+      },
+      {
+        "name": "Oberhünigen",
+        "commune_code": "629",
+        "district_code": "246"
+      },
+      {
+        "name": "Allmendingen",
+        "commune_code": "630",
+        "district_code": "246"
+      },
+      {
+        "name": "Wichtrach",
+        "commune_code": "632",
+        "district_code": "246"
+      },
+      {
+        "name": "Clavaleyres",
+        "commune_code": "661",
+        "district_code": "246"
+      },
+      {
+        "name": "Ferenbalm",
+        "commune_code": "662",
+        "district_code": "246"
+      },
+      {
+        "name": "Frauenkappelen",
+        "commune_code": "663",
+        "district_code": "246"
+      },
+      {
+        "name": "Golaten",
+        "commune_code": "664",
+        "district_code": "246"
+      },
+      {
+        "name": "Gurbrü",
+        "commune_code": "665",
+        "district_code": "246"
+      },
+      {
+        "name": "Kriechenwil",
+        "commune_code": "666",
+        "district_code": "246"
+      },
+      {
+        "name": "Laupen",
+        "commune_code": "667",
+        "district_code": "246"
+      },
+      {
+        "name": "Mühleberg",
+        "commune_code": "668",
+        "district_code": "246"
+      },
+      {
+        "name": "Münchenwiler",
+        "commune_code": "669",
+        "district_code": "246"
+      },
+      {
+        "name": "Neuenegg",
+        "commune_code": "670",
+        "district_code": "246"
+      },
+      {
+        "name": "Wileroltigen",
+        "commune_code": "671",
+        "district_code": "246"
+      },
+      {
+        "name": "Belprahon",
+        "commune_code": "681",
+        "district_code": "241"
+      },
+      {
+        "name": "Bévilard",
+        "commune_code": "682",
+        "district_code": "241"
+      },
+      {
+        "name": "Champoz",
+        "commune_code": "683",
+        "district_code": "241"
+      },
+      {
+        "name": "Châtelat",
+        "commune_code": "684",
+        "district_code": "241"
+      },
+      {
+        "name": "Corcelles (BE)",
+        "commune_code": "687",
+        "district_code": "241"
+      },
+      {
+        "name": "Court",
+        "commune_code": "690",
+        "district_code": "241"
+      },
+      {
+        "name": "Crémines",
+        "commune_code": "691",
+        "district_code": "241"
+      },
+      {
+        "name": "Eschert",
+        "commune_code": "692",
+        "district_code": "241"
+      },
+      {
+        "name": "Grandval",
+        "commune_code": "694",
+        "district_code": "241"
+      },
+      {
+        "name": "Loveresse",
+        "commune_code": "696",
+        "district_code": "241"
+      },
+      {
+        "name": "Malleray",
+        "commune_code": "697",
+        "district_code": "241"
+      },
+      {
+        "name": "Monible",
+        "commune_code": "699",
+        "district_code": "241"
+      },
+      {
+        "name": "Moutier",
+        "commune_code": "700",
+        "district_code": "241"
+      },
+      {
+        "name": "Perrefitte",
+        "commune_code": "701",
+        "district_code": "241"
+      },
+      {
+        "name": "Pontenet",
+        "commune_code": "702",
+        "district_code": "241"
+      },
+      {
+        "name": "Reconvilier",
+        "commune_code": "703",
+        "district_code": "241"
+      },
+      {
+        "name": "Roches (BE)",
+        "commune_code": "704",
+        "district_code": "241"
+      },
+      {
+        "name": "Saicourt",
+        "commune_code": "706",
+        "district_code": "241"
+      },
+      {
+        "name": "Saules (BE)",
+        "commune_code": "707",
+        "district_code": "241"
+      },
+      {
+        "name": "Schelten",
+        "commune_code": "708",
+        "district_code": "241"
+      },
+      {
+        "name": "Seehof",
+        "commune_code": "709",
+        "district_code": "241"
+      },
+      {
+        "name": "Sornetan",
+        "commune_code": "710",
+        "district_code": "241"
+      },
+      {
+        "name": "Sorvilier",
+        "commune_code": "711",
+        "district_code": "241"
+      },
+      {
+        "name": "Souboz",
+        "commune_code": "712",
+        "district_code": "241"
+      },
+      {
+        "name": "Tavannes",
+        "commune_code": "713",
+        "district_code": "241"
+      },
+      {
+        "name": "Rebévelier",
+        "commune_code": "715",
+        "district_code": "241"
+      },
+      {
+        "name": "La Neuveville",
+        "commune_code": "723",
+        "district_code": "241"
+      },
+      {
+        "name": "Nods",
+        "commune_code": "724",
+        "district_code": "241"
+      },
+      {
+        "name": "Plateau de Diesse",
+        "commune_code": "726",
+        "district_code": "241"
+      },
+      {
+        "name": "Aegerten",
+        "commune_code": "731",
+        "district_code": "242"
+      },
+      {
+        "name": "Bellmund",
+        "commune_code": "732",
+        "district_code": "242"
+      },
+      {
+        "name": "Brügg",
+        "commune_code": "733",
+        "district_code": "242"
+      },
+      {
+        "name": "Bühl",
+        "commune_code": "734",
+        "district_code": "243"
+      },
+      {
+        "name": "Epsach",
+        "commune_code": "735",
+        "district_code": "243"
+      },
+      {
+        "name": "Hagneck",
+        "commune_code": "736",
+        "district_code": "243"
+      },
+      {
+        "name": "Hermrigen",
+        "commune_code": "737",
+        "district_code": "243"
+      },
+      {
+        "name": "Jens",
+        "commune_code": "738",
+        "district_code": "243"
+      },
+      {
+        "name": "Ipsach",
+        "commune_code": "739",
+        "district_code": "242"
+      },
+      {
+        "name": "Ligerz",
+        "commune_code": "740",
+        "district_code": "242"
+      },
+      {
+        "name": "Merzligen",
+        "commune_code": "741",
+        "district_code": "243"
+      },
+      {
+        "name": "Mörigen",
+        "commune_code": "742",
+        "district_code": "242"
+      },
+      {
+        "name": "Nidau",
+        "commune_code": "743",
+        "district_code": "242"
+      },
+      {
+        "name": "Orpund",
+        "commune_code": "744",
+        "district_code": "242"
+      },
+      {
+        "name": "Port",
+        "commune_code": "745",
+        "district_code": "242"
+      },
+      {
+        "name": "Safnern",
+        "commune_code": "746",
+        "district_code": "242"
+      },
+      {
+        "name": "Scheuren",
+        "commune_code": "747",
+        "district_code": "242"
+      },
+      {
+        "name": "Schwadernau",
+        "commune_code": "748",
+        "district_code": "242"
+      },
+      {
+        "name": "Studen (BE)",
+        "commune_code": "749",
+        "district_code": "243"
+      },
+      {
+        "name": "Sutz-Lattrigen",
+        "commune_code": "750",
+        "district_code": "242"
+      },
+      {
+        "name": "Täuffelen",
+        "commune_code": "751",
+        "district_code": "243"
+      },
+      {
+        "name": "Walperswil",
+        "commune_code": "754",
+        "district_code": "243"
+      },
+      {
+        "name": "Worben",
+        "commune_code": "755",
+        "district_code": "243"
+      },
+      {
+        "name": "Twann-Tüscherz",
+        "commune_code": "756",
+        "district_code": "242"
+      },
+      {
+        "name": "Därstetten",
+        "commune_code": "761",
+        "district_code": "249"
+      },
+      {
+        "name": "Diemtigen",
+        "commune_code": "762",
+        "district_code": "249"
+      },
+      {
+        "name": "Erlenbach im Simmental",
+        "commune_code": "763",
+        "district_code": "249"
+      },
+      {
+        "name": "Oberwil im Simmental",
+        "commune_code": "766",
+        "district_code": "249"
+      },
+      {
+        "name": "Reutigen",
+        "commune_code": "767",
+        "district_code": "247"
+      },
+      {
+        "name": "Spiez",
+        "commune_code": "768",
+        "district_code": "249"
+      },
+      {
+        "name": "Wimmis",
+        "commune_code": "769",
+        "district_code": "249"
+      },
+      {
+        "name": "Stocken-Höfen",
+        "commune_code": "770",
+        "district_code": "247"
+      },
+      {
+        "name": "Guttannen",
+        "commune_code": "782",
+        "district_code": "250"
+      },
+      {
+        "name": "Hasliberg",
+        "commune_code": "783",
+        "district_code": "250"
+      },
+      {
+        "name": "Innertkirchen",
+        "commune_code": "784",
+        "district_code": "250"
+      },
+      {
+        "name": "Meiringen",
+        "commune_code": "785",
+        "district_code": "250"
+      },
+      {
+        "name": "Schattenhalb",
+        "commune_code": "786",
+        "district_code": "250"
+      },
+      {
+        "name": "Boltigen",
+        "commune_code": "791",
+        "district_code": "248"
+      },
+      {
+        "name": "Lenk",
+        "commune_code": "792",
+        "district_code": "248"
+      },
+      {
+        "name": "St. Stephan",
+        "commune_code": "793",
+        "district_code": "248"
+      },
+      {
+        "name": "Zweisimmen",
+        "commune_code": "794",
+        "district_code": "248"
+      },
+      {
+        "name": "Gsteig",
+        "commune_code": "841",
+        "district_code": "248"
+      },
+      {
+        "name": "Lauenen",
+        "commune_code": "842",
+        "district_code": "248"
+      },
+      {
+        "name": "Saanen",
+        "commune_code": "843",
+        "district_code": "248"
+      },
+      {
+        "name": "Guggisberg",
+        "commune_code": "852",
+        "district_code": "246"
+      },
+      {
+        "name": "Rüschegg",
+        "commune_code": "853",
+        "district_code": "246"
+      },
+      {
+        "name": "Schwarzenburg",
+        "commune_code": "855",
+        "district_code": "246"
+      },
+      {
+        "name": "Belp",
+        "commune_code": "861",
+        "district_code": "246"
+      },
+      {
+        "name": "Burgistein",
+        "commune_code": "863",
+        "district_code": "247"
+      },
+      {
+        "name": "Gelterfingen",
+        "commune_code": "865",
+        "district_code": "246"
+      },
+      {
+        "name": "Gerzensee",
+        "commune_code": "866",
+        "district_code": "246"
+      },
+      {
+        "name": "Gurzelen",
+        "commune_code": "867",
+        "district_code": "247"
+      },
+      {
+        "name": "Jaberg",
+        "commune_code": "868",
+        "district_code": "246"
+      },
+      {
+        "name": "Kaufdorf",
+        "commune_code": "869",
+        "district_code": "246"
+      },
+      {
+        "name": "Kehrsatz",
+        "commune_code": "870",
+        "district_code": "246"
+      },
+      {
+        "name": "Kirchdorf (BE)",
+        "commune_code": "872",
+        "district_code": "246"
+      },
+      {
+        "name": "Kirchenthurnen",
+        "commune_code": "873",
+        "district_code": "246"
+      },
+      {
+        "name": "Lohnstorf",
+        "commune_code": "874",
+        "district_code": "246"
+      },
+      {
+        "name": "Mühledorf (BE)",
+        "commune_code": "875",
+        "district_code": "246"
+      },
+      {
+        "name": "Mühlethurnen",
+        "commune_code": "876",
+        "district_code": "246"
+      },
+      {
+        "name": "Niedermuhlern",
+        "commune_code": "877",
+        "district_code": "246"
+      },
+      {
+        "name": "Noflen",
+        "commune_code": "878",
+        "district_code": "246"
+      },
+      {
+        "name": "Riggisberg",
+        "commune_code": "879",
+        "district_code": "246"
+      },
+      {
+        "name": "Rüeggisberg",
+        "commune_code": "880",
+        "district_code": "246"
+      },
+      {
+        "name": "Rümligen",
+        "commune_code": "881",
+        "district_code": "246"
+      },
+      {
+        "name": "Seftigen",
+        "commune_code": "883",
+        "district_code": "247"
+      },
+      {
+        "name": "Toffen",
+        "commune_code": "884",
+        "district_code": "246"
+      },
+      {
+        "name": "Uttigen",
+        "commune_code": "885",
+        "district_code": "247"
+      },
+      {
+        "name": "Wattenwil",
+        "commune_code": "886",
+        "district_code": "247"
+      },
+      {
+        "name": "Wald (BE)",
+        "commune_code": "888",
+        "district_code": "246"
+      },
+      {
+        "name": "Eggiwil",
+        "commune_code": "901",
+        "district_code": "245"
+      },
+      {
+        "name": "Langnau im Emmental",
+        "commune_code": "902",
+        "district_code": "245"
+      },
+      {
+        "name": "Lauperswil",
+        "commune_code": "903",
+        "district_code": "245"
+      },
+      {
+        "name": "Röthenbach im Emmental",
+        "commune_code": "904",
+        "district_code": "245"
+      },
+      {
+        "name": "Rüderswil",
+        "commune_code": "905",
+        "district_code": "245"
+      },
+      {
+        "name": "Schangnau",
+        "commune_code": "906",
+        "district_code": "245"
+      },
+      {
+        "name": "Signau",
+        "commune_code": "907",
+        "district_code": "245"
+      },
+      {
+        "name": "Trub",
+        "commune_code": "908",
+        "district_code": "245"
+      },
+      {
+        "name": "Trubschachen",
+        "commune_code": "909",
+        "district_code": "245"
+      },
+      {
+        "name": "Amsoldingen",
+        "commune_code": "921",
+        "district_code": "247"
+      },
+      {
+        "name": "Blumenstein",
+        "commune_code": "922",
+        "district_code": "247"
+      },
+      {
+        "name": "Buchholterberg",
+        "commune_code": "923",
+        "district_code": "247"
+      },
+      {
+        "name": "Eriz",
+        "commune_code": "924",
+        "district_code": "247"
+      },
+      {
+        "name": "Fahrni",
+        "commune_code": "925",
+        "district_code": "247"
+      },
+      {
+        "name": "Heiligenschwendi",
+        "commune_code": "927",
+        "district_code": "247"
+      },
+      {
+        "name": "Heimberg",
+        "commune_code": "928",
+        "district_code": "247"
+      },
+      {
+        "name": "Hilterfingen",
+        "commune_code": "929",
+        "district_code": "247"
+      },
+      {
+        "name": "Homberg",
+        "commune_code": "931",
+        "district_code": "247"
+      },
+      {
+        "name": "Horrenbach-Buchen",
+        "commune_code": "932",
+        "district_code": "247"
+      },
+      {
+        "name": "Oberhofen am Thunersee",
+        "commune_code": "934",
+        "district_code": "247"
+      },
+      {
+        "name": "Oberlangenegg",
+        "commune_code": "935",
+        "district_code": "247"
+      },
+      {
+        "name": "Pohlern",
+        "commune_code": "936",
+        "district_code": "247"
+      },
+      {
+        "name": "Schwendibach",
+        "commune_code": "937",
+        "district_code": "247"
+      },
+      {
+        "name": "Sigriswil",
+        "commune_code": "938",
+        "district_code": "247"
+      },
+      {
+        "name": "Steffisburg",
+        "commune_code": "939",
+        "district_code": "247"
+      },
+      {
+        "name": "Teuffenthal (BE)",
+        "commune_code": "940",
+        "district_code": "247"
+      },
+      {
+        "name": "Thierachern",
+        "commune_code": "941",
+        "district_code": "247"
+      },
+      {
+        "name": "Thun",
+        "commune_code": "942",
+        "district_code": "247"
+      },
+      {
+        "name": "Uebeschi",
+        "commune_code": "943",
+        "district_code": "247"
+      },
+      {
+        "name": "Uetendorf",
+        "commune_code": "944",
+        "district_code": "247"
+      },
+      {
+        "name": "Unterlangenegg",
+        "commune_code": "945",
+        "district_code": "247"
+      },
+      {
+        "name": "Wachseldorn",
+        "commune_code": "946",
+        "district_code": "247"
+      },
+      {
+        "name": "Zwieselberg",
+        "commune_code": "947",
+        "district_code": "247"
+      },
+      {
+        "name": "Forst-Längenbühl",
+        "commune_code": "948",
+        "district_code": "247"
+      },
+      {
+        "name": "Affoltern im Emmental",
+        "commune_code": "951",
+        "district_code": "245"
+      },
+      {
+        "name": "Dürrenroth",
+        "commune_code": "952",
+        "district_code": "245"
+      },
+      {
+        "name": "Eriswil",
+        "commune_code": "953",
+        "district_code": "244"
+      },
+      {
+        "name": "Huttwil",
+        "commune_code": "954",
+        "district_code": "244"
+      },
+      {
+        "name": "Lützelflüh",
+        "commune_code": "955",
+        "district_code": "245"
+      },
+      {
+        "name": "Rüegsau",
+        "commune_code": "956",
+        "district_code": "245"
+      },
+      {
+        "name": "Sumiswald",
+        "commune_code": "957",
+        "district_code": "245"
+      },
+      {
+        "name": "Trachselwald",
+        "commune_code": "958",
+        "district_code": "245"
+      },
+      {
+        "name": "Walterswil (BE)",
+        "commune_code": "959",
+        "district_code": "244"
+      },
+      {
+        "name": "Wyssachen",
+        "commune_code": "960",
+        "district_code": "244"
+      },
+      {
+        "name": "Attiswil",
+        "commune_code": "971",
+        "district_code": "244"
+      },
+      {
+        "name": "Berken",
+        "commune_code": "972",
+        "district_code": "244"
+      },
+      {
+        "name": "Bettenhausen",
+        "commune_code": "973",
+        "district_code": "244"
+      },
+      {
+        "name": "Farnern",
+        "commune_code": "975",
+        "district_code": "244"
+      },
+      {
+        "name": "Graben",
+        "commune_code": "976",
+        "district_code": "244"
+      },
+      {
+        "name": "Heimenhausen",
+        "commune_code": "977",
+        "district_code": "244"
+      },
+      {
+        "name": "Hermiswil",
+        "commune_code": "978",
+        "district_code": "244"
+      },
+      {
+        "name": "Herzogenbuchsee",
+        "commune_code": "979",
+        "district_code": "244"
+      },
+      {
+        "name": "Inkwil",
+        "commune_code": "980",
+        "district_code": "244"
+      },
+      {
+        "name": "Niederbipp",
+        "commune_code": "981",
+        "district_code": "244"
+      },
+      {
+        "name": "Niederönz",
+        "commune_code": "982",
+        "district_code": "244"
+      },
+      {
+        "name": "Oberbipp",
+        "commune_code": "983",
+        "district_code": "244"
+      },
+      {
+        "name": "Ochlenberg",
+        "commune_code": "985",
+        "district_code": "244"
+      },
+      {
+        "name": "Rumisberg",
+        "commune_code": "987",
+        "district_code": "244"
+      },
+      {
+        "name": "Seeberg",
+        "commune_code": "988",
+        "district_code": "244"
+      },
+      {
+        "name": "Thörigen",
+        "commune_code": "989",
+        "district_code": "244"
+      },
+      {
+        "name": "Walliswil bei Niederbipp",
+        "commune_code": "990",
+        "district_code": "244"
+      },
+      {
+        "name": "Walliswil bei Wangen",
+        "commune_code": "991",
+        "district_code": "244"
+      },
+      {
+        "name": "Wangen an der Aare",
+        "commune_code": "992",
+        "district_code": "244"
+      },
+      {
+        "name": "Wangenried",
+        "commune_code": "993",
+        "district_code": "244"
+      },
+      {
+        "name": "Wiedlisbach",
+        "commune_code": "995",
+        "district_code": "244"
+      },
+      {
+        "name": "Wolfisberg",
+        "commune_code": "996",
+        "district_code": "244"
+      }
+    ],
+    "LU": [
+      {
+        "name": "Altwis",
+        "commune_code": "1022",
+        "district_code": "313"
+      },
+      {
+        "name": "Honau",
+        "commune_code": "1057",
+        "district_code": "312"
+      },
+      {
+        "name": "Ebersecken",
+        "commune_code": "1126",
+        "district_code": "315"
+      },
+      {
+        "name": "Gettnau",
+        "commune_code": "1130",
+        "district_code": "315"
+      }
+    ],
+    "UR": [
+      {
+        "name": "Altdorf (UR)",
+        "commune_code": "1201",
+        "district_code": "400"
+      },
+      {
+        "name": "Andermatt",
+        "commune_code": "1202",
+        "district_code": "400"
+      },
+      {
+        "name": "Attinghausen",
+        "commune_code": "1203",
+        "district_code": "400"
+      },
+      {
+        "name": "Bauen",
+        "commune_code": "1204",
+        "district_code": "400"
+      },
+      {
+        "name": "Bürglen (UR)",
+        "commune_code": "1205",
+        "district_code": "400"
+      },
+      {
+        "name": "Erstfeld",
+        "commune_code": "1206",
+        "district_code": "400"
+      },
+      {
+        "name": "Flüelen",
+        "commune_code": "1207",
+        "district_code": "400"
+      },
+      {
+        "name": "Göschenen",
+        "commune_code": "1208",
+        "district_code": "400"
+      },
+      {
+        "name": "Gurtnellen",
+        "commune_code": "1209",
+        "district_code": "400"
+      },
+      {
+        "name": "Hospental",
+        "commune_code": "1210",
+        "district_code": "400"
+      },
+      {
+        "name": "Isenthal",
+        "commune_code": "1211",
+        "district_code": "400"
+      },
+      {
+        "name": "Realp",
+        "commune_code": "1212",
+        "district_code": "400"
+      },
+      {
+        "name": "Schattdorf",
+        "commune_code": "1213",
+        "district_code": "400"
+      },
+      {
+        "name": "Seedorf (UR)",
+        "commune_code": "1214",
+        "district_code": "400"
+      },
+      {
+        "name": "Seelisberg",
+        "commune_code": "1215",
+        "district_code": "400"
+      },
+      {
+        "name": "Silenen",
+        "commune_code": "1216",
+        "district_code": "400"
+      },
+      {
+        "name": "Sisikon",
+        "commune_code": "1217",
+        "district_code": "400"
+      },
+      {
+        "name": "Spiringen",
+        "commune_code": "1218",
+        "district_code": "400"
+      },
+      {
+        "name": "Unterschächen",
+        "commune_code": "1219",
+        "district_code": "400"
+      },
+      {
+        "name": "Wassen",
+        "commune_code": "1220",
+        "district_code": "400"
+      }
+    ],
+    "SZ": [
+      {
+        "name": "Einsiedeln",
+        "commune_code": "1301",
+        "district_code": "501"
+      },
+      {
+        "name": "Gersau",
+        "commune_code": "1311",
+        "district_code": "502"
+      },
+      {
+        "name": "Feusisberg",
+        "commune_code": "1321",
+        "district_code": "503"
+      },
+      {
+        "name": "Freienbach",
+        "commune_code": "1322",
+        "district_code": "503"
+      },
+      {
+        "name": "Wollerau",
+        "commune_code": "1323",
+        "district_code": "503"
+      },
+      {
+        "name": "Küssnacht (SZ)",
+        "commune_code": "1331",
+        "district_code": "504"
+      },
+      {
+        "name": "Altendorf",
+        "commune_code": "1341",
+        "district_code": "505"
+      },
+      {
+        "name": "Galgenen",
+        "commune_code": "1342",
+        "district_code": "505"
+      },
+      {
+        "name": "Innerthal",
+        "commune_code": "1343",
+        "district_code": "505"
+      },
+      {
+        "name": "Lachen",
+        "commune_code": "1344",
+        "district_code": "505"
+      },
+      {
+        "name": "Reichenburg",
+        "commune_code": "1345",
+        "district_code": "505"
+      },
+      {
+        "name": "Schübelbach",
+        "commune_code": "1346",
+        "district_code": "505"
+      },
+      {
+        "name": "Tuggen",
+        "commune_code": "1347",
+        "district_code": "505"
+      },
+      {
+        "name": "Vorderthal",
+        "commune_code": "1348",
+        "district_code": "505"
+      },
+      {
+        "name": "Wangen (SZ)",
+        "commune_code": "1349",
+        "district_code": "505"
+      },
+      {
+        "name": "Alpthal",
+        "commune_code": "1361",
+        "district_code": "506"
+      },
+      {
+        "name": "Arth",
+        "commune_code": "1362",
+        "district_code": "506"
+      },
+      {
+        "name": "Illgau",
+        "commune_code": "1363",
+        "district_code": "506"
+      },
+      {
+        "name": "Ingenbohl",
+        "commune_code": "1364",
+        "district_code": "506"
+      },
+      {
+        "name": "Lauerz",
+        "commune_code": "1365",
+        "district_code": "506"
+      },
+      {
+        "name": "Morschach",
+        "commune_code": "1366",
+        "district_code": "506"
+      },
+      {
+        "name": "Muotathal",
+        "commune_code": "1367",
+        "district_code": "506"
+      },
+      {
+        "name": "Oberiberg",
+        "commune_code": "1368",
+        "district_code": "506"
+      },
+      {
+        "name": "Riemenstalden",
+        "commune_code": "1369",
+        "district_code": "506"
+      },
+      {
+        "name": "Rothenthurm",
+        "commune_code": "1370",
+        "district_code": "506"
+      },
+      {
+        "name": "Sattel",
+        "commune_code": "1371",
+        "district_code": "506"
+      },
+      {
+        "name": "Schwyz",
+        "commune_code": "1372",
+        "district_code": "506"
+      },
+      {
+        "name": "Steinen",
+        "commune_code": "1373",
+        "district_code": "506"
+      },
+      {
+        "name": "Steinerberg",
+        "commune_code": "1374",
+        "district_code": "506"
+      },
+      {
+        "name": "Unteriberg",
+        "commune_code": "1375",
+        "district_code": "506"
+      }
+    ],
+    "OW": [
+      {
+        "name": "Alpnach",
+        "commune_code": "1401",
+        "district_code": "600"
+      },
+      {
+        "name": "Engelberg",
+        "commune_code": "1402",
+        "district_code": "600"
+      },
+      {
+        "name": "Giswil",
+        "commune_code": "1403",
+        "district_code": "600"
+      },
+      {
+        "name": "Kerns",
+        "commune_code": "1404",
+        "district_code": "600"
+      },
+      {
+        "name": "Lungern",
+        "commune_code": "1405",
+        "district_code": "600"
+      },
+      {
+        "name": "Sachseln",
+        "commune_code": "1406",
+        "district_code": "600"
+      },
+      {
+        "name": "Sarnen",
+        "commune_code": "1407",
+        "district_code": "600"
+      }
+    ],
+    "NW": [
+      {
+        "name": "Beckenried",
+        "commune_code": "1501",
+        "district_code": "700"
+      },
+      {
+        "name": "Buochs",
+        "commune_code": "1502",
+        "district_code": "700"
+      },
+      {
+        "name": "Dallenwil",
+        "commune_code": "1503",
+        "district_code": "700"
+      },
+      {
+        "name": "Emmetten",
+        "commune_code": "1504",
+        "district_code": "700"
+      },
+      {
+        "name": "Ennetbürgen",
+        "commune_code": "1505",
+        "district_code": "700"
+      },
+      {
+        "name": "Ennetmoos",
+        "commune_code": "1506",
+        "district_code": "700"
+      },
+      {
+        "name": "Hergiswil (NW)",
+        "commune_code": "1507",
+        "district_code": "700"
+      },
+      {
+        "name": "Oberdorf (NW)",
+        "commune_code": "1508",
+        "district_code": "700"
+      },
+      {
+        "name": "Stans",
+        "commune_code": "1509",
+        "district_code": "700"
+      },
+      {
+        "name": "Stansstad",
+        "commune_code": "1510",
+        "district_code": "700"
+      },
+      {
+        "name": "Wolfenschiessen",
+        "commune_code": "1511",
+        "district_code": "700"
+      }
+    ],
+    "GL": [
+      {
+        "name": "Glarus Nord",
+        "commune_code": "1630",
+        "district_code": "800"
+      },
+      {
+        "name": "Glarus Süd",
+        "commune_code": "1631",
+        "district_code": "800"
+      },
+      {
+        "name": "Glarus",
+        "commune_code": "1632",
+        "district_code": "800"
+      }
+    ],
+    "ZG": [
+      {
+        "name": "Baar",
+        "commune_code": "1701",
+        "district_code": "900"
+      },
+      {
+        "name": "Cham",
+        "commune_code": "1702",
+        "district_code": "900"
+      },
+      {
+        "name": "Hünenberg",
+        "commune_code": "1703",
+        "district_code": "900"
+      },
+      {
+        "name": "Menzingen",
+        "commune_code": "1704",
+        "district_code": "900"
+      },
+      {
+        "name": "Neuheim",
+        "commune_code": "1705",
+        "district_code": "900"
+      },
+      {
+        "name": "Oberägeri",
+        "commune_code": "1706",
+        "district_code": "900"
+      },
+      {
+        "name": "Risch",
+        "commune_code": "1707",
+        "district_code": "900"
+      },
+      {
+        "name": "Steinhausen",
+        "commune_code": "1708",
+        "district_code": "900"
+      },
+      {
+        "name": "Unterägeri",
+        "commune_code": "1709",
+        "district_code": "900"
+      },
+      {
+        "name": "Walchwil",
+        "commune_code": "1710",
+        "district_code": "900"
+      },
+      {
+        "name": "Zug",
+        "commune_code": "1711",
+        "district_code": "900"
+      }
+    ],
+    "FR": [
+      {
+        "name": "Bussy (FR)",
+        "commune_code": "2004",
+        "district_code": "1001"
+      },
+      {
+        "name": "Châbles",
+        "commune_code": "2005",
+        "district_code": "1001"
+      },
+      {
+        "name": "Cheiry",
+        "commune_code": "2009",
+        "district_code": "1001"
+      },
+      {
+        "name": "Cheyres",
+        "commune_code": "2010",
+        "district_code": "1001"
+      },
+      {
+        "name": "Domdidier",
+        "commune_code": "2013",
+        "district_code": "1001"
+      },
+      {
+        "name": "Dompierre (FR)",
+        "commune_code": "2014",
+        "district_code": "1001"
+      },
+      {
+        "name": "Estavayer-le-Lac",
+        "commune_code": "2015",
+        "district_code": "1001"
+      },
+      {
+        "name": "Léchelles",
+        "commune_code": "2024",
+        "district_code": "1001"
+      },
+      {
+        "name": "Morens (FR)",
+        "commune_code": "2033",
+        "district_code": "1001"
+      },
+      {
+        "name": "Murist",
+        "commune_code": "2034",
+        "district_code": "1001"
+      },
+      {
+        "name": "Rueyres-les-Prés",
+        "commune_code": "2039",
+        "district_code": "1001"
+      },
+      {
+        "name": "Russy",
+        "commune_code": "2040",
+        "district_code": "1001"
+      },
+      {
+        "name": "Villeneuve (FR)",
+        "commune_code": "2047",
+        "district_code": "1001"
+      },
+      {
+        "name": "Vuissens",
+        "commune_code": "2049",
+        "district_code": "1001"
+      },
+      {
+        "name": "Vernay",
+        "commune_code": "2052",
+        "district_code": "1001"
+      },
+      {
+        "name": "Auboranges",
+        "commune_code": "2061",
+        "district_code": "1002"
+      },
+      {
+        "name": "Chapelle (Glâne)",
+        "commune_code": "2066",
+        "district_code": "1002"
+      },
+      {
+        "name": "Ecublens (FR)",
+        "commune_code": "2072",
+        "district_code": "1002"
+      },
+      {
+        "name": "Montet (Glâne)",
+        "commune_code": "2089",
+        "district_code": "1002"
+      },
+      {
+        "name": "Villaz-Saint-Pierre",
+        "commune_code": "2111",
+        "district_code": "1002"
+      },
+      {
+        "name": "La Folliaz",
+        "commune_code": "2116",
+        "district_code": "1002"
+      },
+      {
+        "name": "Arconciel",
+        "commune_code": "2171",
+        "district_code": "1004"
+      },
+      {
+        "name": "Autafond",
+        "commune_code": "2172",
+        "district_code": "1004"
+      },
+      {
+        "name": "Chésopelloz",
+        "commune_code": "2179",
+        "district_code": "1004"
+      },
+      {
+        "name": "Corpataux-Magnedens",
+        "commune_code": "2184",
+        "district_code": "1004"
+      },
+      {
+        "name": "Corserey",
+        "commune_code": "2185",
+        "district_code": "1004"
+      },
+      {
+        "name": "Ependes (FR)",
+        "commune_code": "2189",
+        "district_code": "1004"
+      },
+      {
+        "name": "Farvagny",
+        "commune_code": "2192",
+        "district_code": "1004"
+      },
+      {
+        "name": "Grolley",
+        "commune_code": "2200",
+        "district_code": "1004"
+      },
+      {
+        "name": "Noréaz",
+        "commune_code": "2213",
+        "district_code": "1004"
+      },
+      {
+        "name": "Ponthaux",
+        "commune_code": "2217",
+        "district_code": "1004"
+      },
+      {
+        "name": "Prez-vers-Noréaz",
+        "commune_code": "2221",
+        "district_code": "1004"
+      },
+      {
+        "name": "Rossens (FR)",
+        "commune_code": "2222",
+        "district_code": "1004"
+      },
+      {
+        "name": "Le Glèbe",
+        "commune_code": "2223",
+        "district_code": "1004"
+      },
+      {
+        "name": "Senèdes",
+        "commune_code": "2225",
+        "district_code": "1004"
+      },
+      {
+        "name": "Vuisternens-en-Ogoz",
+        "commune_code": "2231",
+        "district_code": "1004"
+      },
+      {
+        "name": "Barberêche",
+        "commune_code": "2243",
+        "district_code": "1005"
+      },
+      {
+        "name": "Courlevon",
+        "commune_code": "2251",
+        "district_code": "1005"
+      },
+      {
+        "name": "Galmiz",
+        "commune_code": "2259",
+        "district_code": "1005"
+      },
+      {
+        "name": "Gempenach",
+        "commune_code": "2260",
+        "district_code": "1005"
+      },
+      {
+        "name": "Jeuss",
+        "commune_code": "2264",
+        "district_code": "1005"
+      },
+      {
+        "name": "Lurtigen",
+        "commune_code": "2270",
+        "district_code": "1005"
+      },
+      {
+        "name": "Salvenach",
+        "commune_code": "2277",
+        "district_code": "1005"
+      },
+      {
+        "name": "Villarepos",
+        "commune_code": "2279",
+        "district_code": "1005"
+      },
+      {
+        "name": "Bas-Vully",
+        "commune_code": "2280",
+        "district_code": "1005"
+      },
+      {
+        "name": "Haut-Vully",
+        "commune_code": "2281",
+        "district_code": "1005"
+      },
+      {
+        "name": "Wallenried",
+        "commune_code": "2283",
+        "district_code": "1005"
+      },
+      {
+        "name": "Alterswil",
+        "commune_code": "2291",
+        "district_code": "1006"
+      },
+      {
+        "name": "Oberschrot",
+        "commune_code": "2298",
+        "district_code": "1006"
+      },
+      {
+        "name": "St. Antoni",
+        "commune_code": "2302",
+        "district_code": "1006"
+      },
+      {
+        "name": "Zumholz",
+        "commune_code": "2310",
+        "district_code": "1006"
+      }
+    ],
+    "SO": [
+      {
+        "name": "Egerkingen",
+        "commune_code": "2401",
+        "district_code": "1101"
+      },
+      {
+        "name": "Härkingen",
+        "commune_code": "2402",
+        "district_code": "1101"
+      },
+      {
+        "name": "Kestenholz",
+        "commune_code": "2403",
+        "district_code": "1101"
+      },
+      {
+        "name": "Neuendorf",
+        "commune_code": "2404",
+        "district_code": "1101"
+      },
+      {
+        "name": "Niederbuchsiten",
+        "commune_code": "2405",
+        "district_code": "1101"
+      },
+      {
+        "name": "Oberbuchsiten",
+        "commune_code": "2406",
+        "district_code": "1101"
+      },
+      {
+        "name": "Oensingen",
+        "commune_code": "2407",
+        "district_code": "1101"
+      },
+      {
+        "name": "Wolfwil",
+        "commune_code": "2408",
+        "district_code": "1101"
+      },
+      {
+        "name": "Aedermannsdorf",
+        "commune_code": "2421",
+        "district_code": "1102"
+      },
+      {
+        "name": "Balsthal",
+        "commune_code": "2422",
+        "district_code": "1102"
+      },
+      {
+        "name": "Gänsbrunnen",
+        "commune_code": "2423",
+        "district_code": "1102"
+      },
+      {
+        "name": "Herbetswil",
+        "commune_code": "2424",
+        "district_code": "1102"
+      },
+      {
+        "name": "Holderbank (SO)",
+        "commune_code": "2425",
+        "district_code": "1102"
+      },
+      {
+        "name": "Laupersdorf",
+        "commune_code": "2426",
+        "district_code": "1102"
+      },
+      {
+        "name": "Matzendorf",
+        "commune_code": "2427",
+        "district_code": "1102"
+      },
+      {
+        "name": "Mümliswil-Ramiswil",
+        "commune_code": "2428",
+        "district_code": "1102"
+      },
+      {
+        "name": "Welschenrohr",
+        "commune_code": "2429",
+        "district_code": "1102"
+      },
+      {
+        "name": "Biezwil",
+        "commune_code": "2445",
+        "district_code": "1103"
+      },
+      {
+        "name": "Lüterkofen-Ichertswil",
+        "commune_code": "2455",
+        "district_code": "1103"
+      },
+      {
+        "name": "Lüterswil-Gächliwil",
+        "commune_code": "2456",
+        "district_code": "1103"
+      },
+      {
+        "name": "Messen",
+        "commune_code": "2457",
+        "district_code": "1103"
+      },
+      {
+        "name": "Schnottwil",
+        "commune_code": "2461",
+        "district_code": "1103"
+      },
+      {
+        "name": "Unterramsern",
+        "commune_code": "2463",
+        "district_code": "1103"
+      },
+      {
+        "name": "Lüsslingen-Nennigkofen",
+        "commune_code": "2464",
+        "district_code": "1103"
+      },
+      {
+        "name": "Buchegg",
+        "commune_code": "2465",
+        "district_code": "1103"
+      },
+      {
+        "name": "Bättwil",
+        "commune_code": "2471",
+        "district_code": "1104"
+      },
+      {
+        "name": "Büren (SO)",
+        "commune_code": "2472",
+        "district_code": "1104"
+      },
+      {
+        "name": "Dornach",
+        "commune_code": "2473",
+        "district_code": "1104"
+      },
+      {
+        "name": "Gempen",
+        "commune_code": "2474",
+        "district_code": "1104"
+      },
+      {
+        "name": "Hochwald",
+        "commune_code": "2475",
+        "district_code": "1104"
+      },
+      {
+        "name": "Hofstetten-Flüh",
+        "commune_code": "2476",
+        "district_code": "1104"
+      },
+      {
+        "name": "Metzerlen-Mariastein",
+        "commune_code": "2477",
+        "district_code": "1104"
+      },
+      {
+        "name": "Nuglar-St. Pantaleon",
+        "commune_code": "2478",
+        "district_code": "1104"
+      },
+      {
+        "name": "Rodersdorf",
+        "commune_code": "2479",
+        "district_code": "1104"
+      },
+      {
+        "name": "Seewen",
+        "commune_code": "2480",
+        "district_code": "1104"
+      },
+      {
+        "name": "Witterswil",
+        "commune_code": "2481",
+        "district_code": "1104"
+      },
+      {
+        "name": "Hauenstein-Ifenthal",
+        "commune_code": "2491",
+        "district_code": "1105"
+      },
+      {
+        "name": "Kienberg",
+        "commune_code": "2492",
+        "district_code": "1105"
+      },
+      {
+        "name": "Lostorf",
+        "commune_code": "2493",
+        "district_code": "1105"
+      },
+      {
+        "name": "Niedergösgen",
+        "commune_code": "2495",
+        "district_code": "1105"
+      },
+      {
+        "name": "Obergösgen",
+        "commune_code": "2497",
+        "district_code": "1105"
+      },
+      {
+        "name": "Rohr (SO)",
+        "commune_code": "2498",
+        "district_code": "1105"
+      },
+      {
+        "name": "Stüsslingen",
+        "commune_code": "2499",
+        "district_code": "1105"
+      },
+      {
+        "name": "Trimbach",
+        "commune_code": "2500",
+        "district_code": "1105"
+      },
+      {
+        "name": "Winznau",
+        "commune_code": "2501",
+        "district_code": "1105"
+      },
+      {
+        "name": "Wisen (SO)",
+        "commune_code": "2502",
+        "district_code": "1105"
+      },
+      {
+        "name": "Erlinsbach (SO)",
+        "commune_code": "2503",
+        "district_code": "1105"
+      },
+      {
+        "name": "Aeschi (SO)",
+        "commune_code": "2511",
+        "district_code": "1106"
+      },
+      {
+        "name": "Biberist",
+        "commune_code": "2513",
+        "district_code": "1106"
+      },
+      {
+        "name": "Bolken",
+        "commune_code": "2514",
+        "district_code": "1106"
+      },
+      {
+        "name": "Deitingen",
+        "commune_code": "2516",
+        "district_code": "1106"
+      },
+      {
+        "name": "Derendingen",
+        "commune_code": "2517",
+        "district_code": "1106"
+      },
+      {
+        "name": "Etziken",
+        "commune_code": "2518",
+        "district_code": "1106"
+      },
+      {
+        "name": "Gerlafingen",
+        "commune_code": "2519",
+        "district_code": "1106"
+      },
+      {
+        "name": "Halten",
+        "commune_code": "2520",
+        "district_code": "1106"
+      },
+      {
+        "name": "Horriwil",
+        "commune_code": "2523",
+        "district_code": "1106"
+      },
+      {
+        "name": "Hüniken",
+        "commune_code": "2524",
+        "district_code": "1106"
+      },
+      {
+        "name": "Kriegstetten",
+        "commune_code": "2525",
+        "district_code": "1106"
+      },
+      {
+        "name": "Lohn-Ammannsegg",
+        "commune_code": "2526",
+        "district_code": "1106"
+      },
+      {
+        "name": "Luterbach",
+        "commune_code": "2527",
+        "district_code": "1106"
+      },
+      {
+        "name": "Obergerlafingen",
+        "commune_code": "2528",
+        "district_code": "1106"
+      },
+      {
+        "name": "Oekingen",
+        "commune_code": "2529",
+        "district_code": "1106"
+      },
+      {
+        "name": "Recherswil",
+        "commune_code": "2530",
+        "district_code": "1106"
+      },
+      {
+        "name": "Subingen",
+        "commune_code": "2532",
+        "district_code": "1106"
+      },
+      {
+        "name": "Zuchwil",
+        "commune_code": "2534",
+        "district_code": "1106"
+      },
+      {
+        "name": "Drei Höfe",
+        "commune_code": "2535",
+        "district_code": "1106"
+      },
+      {
+        "name": "Balm bei Günsberg",
+        "commune_code": "2541",
+        "district_code": "1107"
+      },
+      {
+        "name": "Bellach",
+        "commune_code": "2542",
+        "district_code": "1107"
+      },
+      {
+        "name": "Bettlach",
+        "commune_code": "2543",
+        "district_code": "1107"
+      },
+      {
+        "name": "Feldbrunnen-St. Niklaus",
+        "commune_code": "2544",
+        "district_code": "1107"
+      },
+      {
+        "name": "Flumenthal",
+        "commune_code": "2545",
+        "district_code": "1107"
+      },
+      {
+        "name": "Grenchen",
+        "commune_code": "2546",
+        "district_code": "1107"
+      },
+      {
+        "name": "Günsberg",
+        "commune_code": "2547",
+        "district_code": "1107"
+      },
+      {
+        "name": "Hubersdorf",
+        "commune_code": "2548",
+        "district_code": "1107"
+      },
+      {
+        "name": "Kammersrohr",
+        "commune_code": "2549",
+        "district_code": "1107"
+      },
+      {
+        "name": "Langendorf",
+        "commune_code": "2550",
+        "district_code": "1107"
+      },
+      {
+        "name": "Lommiswil",
+        "commune_code": "2551",
+        "district_code": "1107"
+      },
+      {
+        "name": "Oberdorf (SO)",
+        "commune_code": "2553",
+        "district_code": "1107"
+      },
+      {
+        "name": "Riedholz",
+        "commune_code": "2554",
+        "district_code": "1107"
+      },
+      {
+        "name": "Rüttenen",
+        "commune_code": "2555",
+        "district_code": "1107"
+      },
+      {
+        "name": "Selzach",
+        "commune_code": "2556",
+        "district_code": "1107"
+      },
+      {
+        "name": "Boningen",
+        "commune_code": "2571",
+        "district_code": "1108"
+      },
+      {
+        "name": "Däniken",
+        "commune_code": "2572",
+        "district_code": "1108"
+      },
+      {
+        "name": "Dulliken",
+        "commune_code": "2573",
+        "district_code": "1108"
+      },
+      {
+        "name": "Eppenberg-Wöschnau",
+        "commune_code": "2574",
+        "district_code": "1108"
+      },
+      {
+        "name": "Fulenbach",
+        "commune_code": "2575",
+        "district_code": "1108"
+      },
+      {
+        "name": "Gretzenbach",
+        "commune_code": "2576",
+        "district_code": "1108"
+      },
+      {
+        "name": "Gunzgen",
+        "commune_code": "2578",
+        "district_code": "1108"
+      },
+      {
+        "name": "Hägendorf",
+        "commune_code": "2579",
+        "district_code": "1108"
+      },
+      {
+        "name": "Kappel (SO)",
+        "commune_code": "2580",
+        "district_code": "1108"
+      },
+      {
+        "name": "Olten",
+        "commune_code": "2581",
+        "district_code": "1108"
+      },
+      {
+        "name": "Rickenbach (SO)",
+        "commune_code": "2582",
+        "district_code": "1108"
+      },
+      {
+        "name": "Schönenwerd",
+        "commune_code": "2583",
+        "district_code": "1108"
+      },
+      {
+        "name": "Starrkirch-Wil",
+        "commune_code": "2584",
+        "district_code": "1108"
+      },
+      {
+        "name": "Walterswil (SO)",
+        "commune_code": "2585",
+        "district_code": "1108"
+      },
+      {
+        "name": "Wangen bei Olten",
+        "commune_code": "2586",
+        "district_code": "1108"
+      },
+      {
+        "name": "Solothurn",
+        "commune_code": "2601",
+        "district_code": "1109"
+      },
+      {
+        "name": "Bärschwil",
+        "commune_code": "2611",
+        "district_code": "1110"
+      },
+      {
+        "name": "Beinwil (SO)",
+        "commune_code": "2612",
+        "district_code": "1110"
+      },
+      {
+        "name": "Breitenbach",
+        "commune_code": "2613",
+        "district_code": "1110"
+      },
+      {
+        "name": "Büsserach",
+        "commune_code": "2614",
+        "district_code": "1110"
+      },
+      {
+        "name": "Erschwil",
+        "commune_code": "2615",
+        "district_code": "1110"
+      },
+      {
+        "name": "Fehren",
+        "commune_code": "2616",
+        "district_code": "1110"
+      },
+      {
+        "name": "Grindel",
+        "commune_code": "2617",
+        "district_code": "1110"
+      },
+      {
+        "name": "Himmelried",
+        "commune_code": "2618",
+        "district_code": "1110"
+      },
+      {
+        "name": "Kleinlützel",
+        "commune_code": "2619",
+        "district_code": "1110"
+      },
+      {
+        "name": "Meltingen",
+        "commune_code": "2620",
+        "district_code": "1110"
+      },
+      {
+        "name": "Nunningen",
+        "commune_code": "2621",
+        "district_code": "1110"
+      },
+      {
+        "name": "Zullwil",
+        "commune_code": "2622",
+        "district_code": "1110"
+      }
+    ],
+    "BS": [
+      {
+        "name": "Basel",
+        "commune_code": "2701",
+        "district_code": "1200"
+      },
+      {
+        "name": "Bettingen",
+        "commune_code": "2702",
+        "district_code": "1200"
+      },
+      {
+        "name": "Riehen",
+        "commune_code": "2703",
+        "district_code": "1200"
+      }
+    ],
+    "BL": [
+      {
+        "name": "Aesch (BL)",
+        "commune_code": "2761",
+        "district_code": "1301"
+      },
+      {
+        "name": "Allschwil",
+        "commune_code": "2762",
+        "district_code": "1301"
+      },
+      {
+        "name": "Arlesheim",
+        "commune_code": "2763",
+        "district_code": "1301"
+      },
+      {
+        "name": "Biel-Benken",
+        "commune_code": "2764",
+        "district_code": "1301"
+      },
+      {
+        "name": "Binningen",
+        "commune_code": "2765",
+        "district_code": "1301"
+      },
+      {
+        "name": "Birsfelden",
+        "commune_code": "2766",
+        "district_code": "1301"
+      },
+      {
+        "name": "Bottmingen",
+        "commune_code": "2767",
+        "district_code": "1301"
+      },
+      {
+        "name": "Ettingen",
+        "commune_code": "2768",
+        "district_code": "1301"
+      },
+      {
+        "name": "Münchenstein",
+        "commune_code": "2769",
+        "district_code": "1301"
+      },
+      {
+        "name": "Muttenz",
+        "commune_code": "2770",
+        "district_code": "1301"
+      },
+      {
+        "name": "Oberwil (BL)",
+        "commune_code": "2771",
+        "district_code": "1301"
+      },
+      {
+        "name": "Pfeffingen",
+        "commune_code": "2772",
+        "district_code": "1301"
+      },
+      {
+        "name": "Reinach (BL)",
+        "commune_code": "2773",
+        "district_code": "1301"
+      },
+      {
+        "name": "Schönenbuch",
+        "commune_code": "2774",
+        "district_code": "1301"
+      },
+      {
+        "name": "Therwil",
+        "commune_code": "2775",
+        "district_code": "1301"
+      },
+      {
+        "name": "Blauen",
+        "commune_code": "2781",
+        "district_code": "1302"
+      },
+      {
+        "name": "Brislach",
+        "commune_code": "2782",
+        "district_code": "1302"
+      },
+      {
+        "name": "Burg im Leimental",
+        "commune_code": "2783",
+        "district_code": "1302"
+      },
+      {
+        "name": "Dittingen",
+        "commune_code": "2784",
+        "district_code": "1302"
+      },
+      {
+        "name": "Duggingen",
+        "commune_code": "2785",
+        "district_code": "1302"
+      },
+      {
+        "name": "Grellingen",
+        "commune_code": "2786",
+        "district_code": "1302"
+      },
+      {
+        "name": "Laufen",
+        "commune_code": "2787",
+        "district_code": "1302"
+      },
+      {
+        "name": "Liesberg",
+        "commune_code": "2788",
+        "district_code": "1302"
+      },
+      {
+        "name": "Nenzlingen",
+        "commune_code": "2789",
+        "district_code": "1302"
+      },
+      {
+        "name": "Roggenburg",
+        "commune_code": "2790",
+        "district_code": "1302"
+      },
+      {
+        "name": "Röschenz",
+        "commune_code": "2791",
+        "district_code": "1302"
+      },
+      {
+        "name": "Wahlen",
+        "commune_code": "2792",
+        "district_code": "1302"
+      },
+      {
+        "name": "Zwingen",
+        "commune_code": "2793",
+        "district_code": "1302"
+      },
+      {
+        "name": "Arisdorf",
+        "commune_code": "2821",
+        "district_code": "1303"
+      },
+      {
+        "name": "Augst",
+        "commune_code": "2822",
+        "district_code": "1303"
+      },
+      {
+        "name": "Bubendorf",
+        "commune_code": "2823",
+        "district_code": "1303"
+      },
+      {
+        "name": "Frenkendorf",
+        "commune_code": "2824",
+        "district_code": "1303"
+      },
+      {
+        "name": "Füllinsdorf",
+        "commune_code": "2825",
+        "district_code": "1303"
+      },
+      {
+        "name": "Giebenach",
+        "commune_code": "2826",
+        "district_code": "1303"
+      },
+      {
+        "name": "Hersberg",
+        "commune_code": "2827",
+        "district_code": "1303"
+      },
+      {
+        "name": "Lausen",
+        "commune_code": "2828",
+        "district_code": "1303"
+      },
+      {
+        "name": "Liestal",
+        "commune_code": "2829",
+        "district_code": "1303"
+      },
+      {
+        "name": "Lupsingen",
+        "commune_code": "2830",
+        "district_code": "1303"
+      },
+      {
+        "name": "Pratteln",
+        "commune_code": "2831",
+        "district_code": "1303"
+      },
+      {
+        "name": "Ramlinsburg",
+        "commune_code": "2832",
+        "district_code": "1303"
+      },
+      {
+        "name": "Seltisberg",
+        "commune_code": "2833",
+        "district_code": "1303"
+      },
+      {
+        "name": "Ziefen",
+        "commune_code": "2834",
+        "district_code": "1303"
+      },
+      {
+        "name": "Anwil",
+        "commune_code": "2841",
+        "district_code": "1304"
+      },
+      {
+        "name": "Böckten",
+        "commune_code": "2842",
+        "district_code": "1304"
+      },
+      {
+        "name": "Buckten",
+        "commune_code": "2843",
+        "district_code": "1304"
+      },
+      {
+        "name": "Buus",
+        "commune_code": "2844",
+        "district_code": "1304"
+      },
+      {
+        "name": "Diepflingen",
+        "commune_code": "2845",
+        "district_code": "1304"
+      },
+      {
+        "name": "Gelterkinden",
+        "commune_code": "2846",
+        "district_code": "1304"
+      },
+      {
+        "name": "Häfelfingen",
+        "commune_code": "2847",
+        "district_code": "1304"
+      },
+      {
+        "name": "Hemmiken",
+        "commune_code": "2848",
+        "district_code": "1304"
+      },
+      {
+        "name": "Itingen",
+        "commune_code": "2849",
+        "district_code": "1304"
+      },
+      {
+        "name": "Känerkinden",
+        "commune_code": "2850",
+        "district_code": "1304"
+      },
+      {
+        "name": "Kilchberg (BL)",
+        "commune_code": "2851",
+        "district_code": "1304"
+      },
+      {
+        "name": "Läufelfingen",
+        "commune_code": "2852",
+        "district_code": "1304"
+      },
+      {
+        "name": "Maisprach",
+        "commune_code": "2853",
+        "district_code": "1304"
+      },
+      {
+        "name": "Nusshof",
+        "commune_code": "2854",
+        "district_code": "1304"
+      },
+      {
+        "name": "Oltingen",
+        "commune_code": "2855",
+        "district_code": "1304"
+      },
+      {
+        "name": "Ormalingen",
+        "commune_code": "2856",
+        "district_code": "1304"
+      },
+      {
+        "name": "Rickenbach (BL)",
+        "commune_code": "2857",
+        "district_code": "1304"
+      },
+      {
+        "name": "Rothenfluh",
+        "commune_code": "2858",
+        "district_code": "1304"
+      },
+      {
+        "name": "Rümlingen",
+        "commune_code": "2859",
+        "district_code": "1304"
+      },
+      {
+        "name": "Rünenberg",
+        "commune_code": "2860",
+        "district_code": "1304"
+      },
+      {
+        "name": "Sissach",
+        "commune_code": "2861",
+        "district_code": "1304"
+      },
+      {
+        "name": "Tecknau",
+        "commune_code": "2862",
+        "district_code": "1304"
+      },
+      {
+        "name": "Tenniken",
+        "commune_code": "2863",
+        "district_code": "1304"
+      },
+      {
+        "name": "Thürnen",
+        "commune_code": "2864",
+        "district_code": "1304"
+      },
+      {
+        "name": "Wenslingen",
+        "commune_code": "2865",
+        "district_code": "1304"
+      },
+      {
+        "name": "Wintersingen",
+        "commune_code": "2866",
+        "district_code": "1304"
+      },
+      {
+        "name": "Wittinsburg",
+        "commune_code": "2867",
+        "district_code": "1304"
+      },
+      {
+        "name": "Zeglingen",
+        "commune_code": "2868",
+        "district_code": "1304"
+      },
+      {
+        "name": "Zunzgen",
+        "commune_code": "2869",
+        "district_code": "1304"
+      },
+      {
+        "name": "Arboldswil",
+        "commune_code": "2881",
+        "district_code": "1305"
+      },
+      {
+        "name": "Bennwil",
+        "commune_code": "2882",
+        "district_code": "1305"
+      },
+      {
+        "name": "Bretzwil",
+        "commune_code": "2883",
+        "district_code": "1305"
+      },
+      {
+        "name": "Diegten",
+        "commune_code": "2884",
+        "district_code": "1305"
+      },
+      {
+        "name": "Eptingen",
+        "commune_code": "2885",
+        "district_code": "1305"
+      },
+      {
+        "name": "Hölstein",
+        "commune_code": "2886",
+        "district_code": "1305"
+      },
+      {
+        "name": "Lampenberg",
+        "commune_code": "2887",
+        "district_code": "1305"
+      },
+      {
+        "name": "Langenbruck",
+        "commune_code": "2888",
+        "district_code": "1305"
+      },
+      {
+        "name": "Lauwil",
+        "commune_code": "2889",
+        "district_code": "1305"
+      },
+      {
+        "name": "Liedertswil",
+        "commune_code": "2890",
+        "district_code": "1305"
+      },
+      {
+        "name": "Niederdorf",
+        "commune_code": "2891",
+        "district_code": "1305"
+      },
+      {
+        "name": "Oberdorf (BL)",
+        "commune_code": "2892",
+        "district_code": "1305"
+      },
+      {
+        "name": "Reigoldswil",
+        "commune_code": "2893",
+        "district_code": "1305"
+      },
+      {
+        "name": "Titterten",
+        "commune_code": "2894",
+        "district_code": "1305"
+      },
+      {
+        "name": "Waldenburg",
+        "commune_code": "2895",
+        "district_code": "1305"
+      }
+    ],
+    "SH": [
+      {
+        "name": "Gächlingen",
+        "commune_code": "2901",
+        "district_code": "1401"
+      },
+      {
+        "name": "Löhningen",
+        "commune_code": "2903",
+        "district_code": "1401"
+      },
+      {
+        "name": "Neunkirch",
+        "commune_code": "2904",
+        "district_code": "1401"
+      },
+      {
+        "name": "Büttenhardt",
+        "commune_code": "2914",
+        "district_code": "1402"
+      },
+      {
+        "name": "Dörflingen",
+        "commune_code": "2915",
+        "district_code": "1402"
+      },
+      {
+        "name": "Lohn (SH)",
+        "commune_code": "2917",
+        "district_code": "1402"
+      },
+      {
+        "name": "Stetten (SH)",
+        "commune_code": "2919",
+        "district_code": "1402"
+      },
+      {
+        "name": "Thayngen",
+        "commune_code": "2920",
+        "district_code": "1402"
+      },
+      {
+        "name": "Bargen (SH)",
+        "commune_code": "2931",
+        "district_code": "1403"
+      },
+      {
+        "name": "Beringen",
+        "commune_code": "2932",
+        "district_code": "1403"
+      },
+      {
+        "name": "Buchberg",
+        "commune_code": "2933",
+        "district_code": "1403"
+      },
+      {
+        "name": "Merishausen",
+        "commune_code": "2936",
+        "district_code": "1403"
+      },
+      {
+        "name": "Neuhausen am Rheinfall",
+        "commune_code": "2937",
+        "district_code": "1403"
+      },
+      {
+        "name": "Rüdlingen",
+        "commune_code": "2938",
+        "district_code": "1403"
+      },
+      {
+        "name": "Schaffhausen",
+        "commune_code": "2939",
+        "district_code": "1403"
+      },
+      {
+        "name": "Beggingen",
+        "commune_code": "2951",
+        "district_code": "1404"
+      },
+      {
+        "name": "Schleitheim",
+        "commune_code": "2952",
+        "district_code": "1404"
+      },
+      {
+        "name": "Siblingen",
+        "commune_code": "2953",
+        "district_code": "1404"
+      },
+      {
+        "name": "Buch (SH)",
+        "commune_code": "2961",
+        "district_code": "1405"
+      },
+      {
+        "name": "Hemishofen",
+        "commune_code": "2962",
+        "district_code": "1405"
+      },
+      {
+        "name": "Ramsen",
+        "commune_code": "2963",
+        "district_code": "1405"
+      },
+      {
+        "name": "Stein am Rhein",
+        "commune_code": "2964",
+        "district_code": "1405"
+      },
+      {
+        "name": "Hallau",
+        "commune_code": "2971",
+        "district_code": "1406"
+      },
+      {
+        "name": "Oberhallau",
+        "commune_code": "2972",
+        "district_code": "1406"
+      },
+      {
+        "name": "Trasadingen",
+        "commune_code": "2973",
+        "district_code": "1406"
+      },
+      {
+        "name": "Wilchingen",
+        "commune_code": "2974",
+        "district_code": "1406"
+      }
+    ],
+    "AR": [
+      {
+        "name": "Herisau",
+        "commune_code": "3001",
+        "district_code": "1501"
+      },
+      {
+        "name": "Hundwil",
+        "commune_code": "3002",
+        "district_code": "1501"
+      },
+      {
+        "name": "Schönengrund",
+        "commune_code": "3003",
+        "district_code": "1501"
+      },
+      {
+        "name": "Schwellbrunn",
+        "commune_code": "3004",
+        "district_code": "1501"
+      },
+      {
+        "name": "Stein (AR)",
+        "commune_code": "3005",
+        "district_code": "1501"
+      },
+      {
+        "name": "Urnäsch",
+        "commune_code": "3006",
+        "district_code": "1501"
+      },
+      {
+        "name": "Waldstatt",
+        "commune_code": "3007",
+        "district_code": "1501"
+      },
+      {
+        "name": "Bühler",
+        "commune_code": "3021",
+        "district_code": "1502"
+      },
+      {
+        "name": "Gais",
+        "commune_code": "3022",
+        "district_code": "1502"
+      },
+      {
+        "name": "Speicher",
+        "commune_code": "3023",
+        "district_code": "1502"
+      },
+      {
+        "name": "Teufen (AR)",
+        "commune_code": "3024",
+        "district_code": "1502"
+      },
+      {
+        "name": "Trogen",
+        "commune_code": "3025",
+        "district_code": "1502"
+      },
+      {
+        "name": "Grub (AR)",
+        "commune_code": "3031",
+        "district_code": "1503"
+      },
+      {
+        "name": "Heiden",
+        "commune_code": "3032",
+        "district_code": "1503"
+      },
+      {
+        "name": "Lutzenberg",
+        "commune_code": "3033",
+        "district_code": "1503"
+      },
+      {
+        "name": "Rehetobel",
+        "commune_code": "3034",
+        "district_code": "1503"
+      },
+      {
+        "name": "Reute (AR)",
+        "commune_code": "3035",
+        "district_code": "1503"
+      },
+      {
+        "name": "Wald (AR)",
+        "commune_code": "3036",
+        "district_code": "1503"
+      },
+      {
+        "name": "Walzenhausen",
+        "commune_code": "3037",
+        "district_code": "1503"
+      },
+      {
+        "name": "Wolfhalden",
+        "commune_code": "3038",
+        "district_code": "1503"
+      }
+    ],
+    "AI": [
+      {
+        "name": "Appenzell",
+        "commune_code": "3101",
+        "district_code": "1600"
+      },
+      {
+        "name": "Gonten",
+        "commune_code": "3102",
+        "district_code": "1600"
+      },
+      {
+        "name": "Rüte",
+        "commune_code": "3103",
+        "district_code": "1600"
+      },
+      {
+        "name": "Schlatt-Haslen",
+        "commune_code": "3104",
+        "district_code": "1600"
+      },
+      {
+        "name": "Schwende",
+        "commune_code": "3105",
+        "district_code": "1600"
+      },
+      {
+        "name": "Oberegg",
+        "commune_code": "3111",
+        "district_code": "1600"
+      }
+    ],
+    "SG": [
+      {
+        "name": "Häggenschwil",
+        "commune_code": "3201",
+        "district_code": "1721"
+      },
+      {
+        "name": "Muolen",
+        "commune_code": "3202",
+        "district_code": "1721"
+      },
+      {
+        "name": "St. Gallen",
+        "commune_code": "3203",
+        "district_code": "1721"
+      },
+      {
+        "name": "Wittenbach",
+        "commune_code": "3204",
+        "district_code": "1721"
+      },
+      {
+        "name": "Berg (SG)",
+        "commune_code": "3211",
+        "district_code": "1722"
+      },
+      {
+        "name": "Eggersriet",
+        "commune_code": "3212",
+        "district_code": "1721"
+      },
+      {
+        "name": "Goldach",
+        "commune_code": "3213",
+        "district_code": "1722"
+      },
+      {
+        "name": "Mörschwil",
+        "commune_code": "3214",
+        "district_code": "1722"
+      },
+      {
+        "name": "Rorschach",
+        "commune_code": "3215",
+        "district_code": "1722"
+      },
+      {
+        "name": "Rorschacherberg",
+        "commune_code": "3216",
+        "district_code": "1722"
+      },
+      {
+        "name": "Steinach",
+        "commune_code": "3217",
+        "district_code": "1722"
+      },
+      {
+        "name": "Tübach",
+        "commune_code": "3218",
+        "district_code": "1722"
+      },
+      {
+        "name": "Untereggen",
+        "commune_code": "3219",
+        "district_code": "1722"
+      },
+      {
+        "name": "Au (SG)",
+        "commune_code": "3231",
+        "district_code": "1723"
+      },
+      {
+        "name": "Balgach",
+        "commune_code": "3232",
+        "district_code": "1723"
+      },
+      {
+        "name": "Berneck",
+        "commune_code": "3233",
+        "district_code": "1723"
+      },
+      {
+        "name": "Diepoldsau",
+        "commune_code": "3234",
+        "district_code": "1723"
+      },
+      {
+        "name": "Rheineck",
+        "commune_code": "3235",
+        "district_code": "1723"
+      },
+      {
+        "name": "St. Margrethen",
+        "commune_code": "3236",
+        "district_code": "1723"
+      },
+      {
+        "name": "Thal",
+        "commune_code": "3237",
+        "district_code": "1722"
+      },
+      {
+        "name": "Widnau",
+        "commune_code": "3238",
+        "district_code": "1723"
+      },
+      {
+        "name": "Altstätten",
+        "commune_code": "3251",
+        "district_code": "1723"
+      },
+      {
+        "name": "Eichberg",
+        "commune_code": "3252",
+        "district_code": "1723"
+      },
+      {
+        "name": "Marbach (SG)",
+        "commune_code": "3253",
+        "district_code": "1723"
+      },
+      {
+        "name": "Oberriet (SG)",
+        "commune_code": "3254",
+        "district_code": "1723"
+      },
+      {
+        "name": "Rebstein",
+        "commune_code": "3255",
+        "district_code": "1723"
+      },
+      {
+        "name": "Rüthi (SG)",
+        "commune_code": "3256",
+        "district_code": "1723"
+      },
+      {
+        "name": "Buchs (SG)",
+        "commune_code": "3271",
+        "district_code": "1724"
+      },
+      {
+        "name": "Gams",
+        "commune_code": "3272",
+        "district_code": "1724"
+      },
+      {
+        "name": "Grabs",
+        "commune_code": "3273",
+        "district_code": "1724"
+      },
+      {
+        "name": "Sennwald",
+        "commune_code": "3274",
+        "district_code": "1724"
+      },
+      {
+        "name": "Sevelen",
+        "commune_code": "3275",
+        "district_code": "1724"
+      },
+      {
+        "name": "Wartau",
+        "commune_code": "3276",
+        "district_code": "1724"
+      },
+      {
+        "name": "Bad Ragaz",
+        "commune_code": "3291",
+        "district_code": "1725"
+      },
+      {
+        "name": "Flums",
+        "commune_code": "3292",
+        "district_code": "1725"
+      },
+      {
+        "name": "Mels",
+        "commune_code": "3293",
+        "district_code": "1725"
+      },
+      {
+        "name": "Pfäfers",
+        "commune_code": "3294",
+        "district_code": "1725"
+      },
+      {
+        "name": "Quarten",
+        "commune_code": "3295",
+        "district_code": "1725"
+      },
+      {
+        "name": "Sargans",
+        "commune_code": "3296",
+        "district_code": "1725"
+      },
+      {
+        "name": "Vilters-Wangs",
+        "commune_code": "3297",
+        "district_code": "1725"
+      },
+      {
+        "name": "Walenstadt",
+        "commune_code": "3298",
+        "district_code": "1725"
+      },
+      {
+        "name": "Amden",
+        "commune_code": "3311",
+        "district_code": "1726"
+      },
+      {
+        "name": "Benken (SG)",
+        "commune_code": "3312",
+        "district_code": "1726"
+      },
+      {
+        "name": "Kaltbrunn",
+        "commune_code": "3313",
+        "district_code": "1726"
+      },
+      {
+        "name": "Schänis",
+        "commune_code": "3315",
+        "district_code": "1726"
+      },
+      {
+        "name": "Weesen",
+        "commune_code": "3316",
+        "district_code": "1726"
+      },
+      {
+        "name": "Schmerikon",
+        "commune_code": "3338",
+        "district_code": "1726"
+      },
+      {
+        "name": "Uznach",
+        "commune_code": "3339",
+        "district_code": "1726"
+      },
+      {
+        "name": "Rapperswil-Jona",
+        "commune_code": "3340",
+        "district_code": "1726"
+      },
+      {
+        "name": "Gommiswald",
+        "commune_code": "3341",
+        "district_code": "1726"
+      },
+      {
+        "name": "Eschenbach (SG)",
+        "commune_code": "3342",
+        "district_code": "1726"
+      },
+      {
+        "name": "Ebnat-Kappel",
+        "commune_code": "3352",
+        "district_code": "1727"
+      },
+      {
+        "name": "Wildhaus-Alt St. Johann",
+        "commune_code": "3359",
+        "district_code": "1727"
+      },
+      {
+        "name": "Nesslau",
+        "commune_code": "3360",
+        "district_code": "1727"
+      },
+      {
+        "name": "Hemberg",
+        "commune_code": "3372",
+        "district_code": "1727"
+      },
+      {
+        "name": "Lichtensteig",
+        "commune_code": "3374",
+        "district_code": "1727"
+      },
+      {
+        "name": "Oberhelfenschwil",
+        "commune_code": "3375",
+        "district_code": "1727"
+      },
+      {
+        "name": "Neckertal",
+        "commune_code": "3378",
+        "district_code": "1727"
+      },
+      {
+        "name": "Wattwil",
+        "commune_code": "3379",
+        "district_code": "1727"
+      },
+      {
+        "name": "Kirchberg (SG)",
+        "commune_code": "3392",
+        "district_code": "1727"
+      },
+      {
+        "name": "Lütisburg",
+        "commune_code": "3393",
+        "district_code": "1727"
+      },
+      {
+        "name": "Mosnang",
+        "commune_code": "3394",
+        "district_code": "1727"
+      },
+      {
+        "name": "Bütschwil-Ganterschwil",
+        "commune_code": "3395",
+        "district_code": "1727"
+      },
+      {
+        "name": "Degersheim",
+        "commune_code": "3401",
+        "district_code": "1728"
+      },
+      {
+        "name": "Flawil",
+        "commune_code": "3402",
+        "district_code": "1728"
+      },
+      {
+        "name": "Jonschwil",
+        "commune_code": "3405",
+        "district_code": "1728"
+      },
+      {
+        "name": "Oberuzwil",
+        "commune_code": "3407",
+        "district_code": "1728"
+      },
+      {
+        "name": "Uzwil",
+        "commune_code": "3408",
+        "district_code": "1728"
+      },
+      {
+        "name": "Niederbüren",
+        "commune_code": "3422",
+        "district_code": "1728"
+      },
+      {
+        "name": "Niederhelfenschwil",
+        "commune_code": "3423",
+        "district_code": "1728"
+      },
+      {
+        "name": "Oberbüren",
+        "commune_code": "3424",
+        "district_code": "1728"
+      },
+      {
+        "name": "Zuzwil (SG)",
+        "commune_code": "3426",
+        "district_code": "1728"
+      },
+      {
+        "name": "Wil (SG)",
+        "commune_code": "3427",
+        "district_code": "1728"
+      },
+      {
+        "name": "Andwil (SG)",
+        "commune_code": "3441",
+        "district_code": "1721"
+      },
+      {
+        "name": "Gaiserwald",
+        "commune_code": "3442",
+        "district_code": "1721"
+      },
+      {
+        "name": "Gossau (SG)",
+        "commune_code": "3443",
+        "district_code": "1721"
+      },
+      {
+        "name": "Waldkirch",
+        "commune_code": "3444",
+        "district_code": "1721"
+      }
+    ],
+    "GR": [
+      {
+        "name": "Alvaschein",
+        "commune_code": "3501",
+        "district_code": "1821"
+      },
+      {
+        "name": "Mon",
+        "commune_code": "3502",
+        "district_code": "1821"
+      },
+      {
+        "name": "Mutten",
+        "commune_code": "3503",
+        "district_code": "1821"
+      },
+      {
+        "name": "Stierva",
+        "commune_code": "3504",
+        "district_code": "1821"
+      },
+      {
+        "name": "Tiefencastel",
+        "commune_code": "3505",
+        "district_code": "1821"
+      },
+      {
+        "name": "Vaz/Obervaz",
+        "commune_code": "3506",
+        "district_code": "1821"
+      },
+      {
+        "name": "Alvaneu",
+        "commune_code": "3511",
+        "district_code": "1821"
+      },
+      {
+        "name": "Brienz/Brinzauls",
+        "commune_code": "3512",
+        "district_code": "1821"
+      },
+      {
+        "name": "Lantsch/Lenz",
+        "commune_code": "3513",
+        "district_code": "1821"
+      },
+      {
+        "name": "Schmitten (GR)",
+        "commune_code": "3514",
+        "district_code": "1821"
+      },
+      {
+        "name": "Surava",
+        "commune_code": "3515",
+        "district_code": "1821"
+      },
+      {
+        "name": "Bergün/Bravuogn",
+        "commune_code": "3521",
+        "district_code": "1821"
+      },
+      {
+        "name": "Filisur",
+        "commune_code": "3522",
+        "district_code": "1821"
+      },
+      {
+        "name": "Bivio",
+        "commune_code": "3531",
+        "district_code": "1821"
+      },
+      {
+        "name": "Cunter",
+        "commune_code": "3532",
+        "district_code": "1821"
+      },
+      {
+        "name": "Marmorera",
+        "commune_code": "3533",
+        "district_code": "1821"
+      },
+      {
+        "name": "Mulegns",
+        "commune_code": "3534",
+        "district_code": "1821"
+      },
+      {
+        "name": "Riom-Parsonz",
+        "commune_code": "3536",
+        "district_code": "1821"
+      },
+      {
+        "name": "Salouf",
+        "commune_code": "3538",
+        "district_code": "1821"
+      },
+      {
+        "name": "Savognin",
+        "commune_code": "3539",
+        "district_code": "1821"
+      },
+      {
+        "name": "Sur",
+        "commune_code": "3540",
+        "district_code": "1821"
+      },
+      {
+        "name": "Tinizong-Rona",
+        "commune_code": "3541",
+        "district_code": "1821"
+      },
+      {
+        "name": "Brusio",
+        "commune_code": "3551",
+        "district_code": "1822"
+      },
+      {
+        "name": "Poschiavo",
+        "commune_code": "3561",
+        "district_code": "1822"
+      },
+      {
+        "name": "Falera",
+        "commune_code": "3572",
+        "district_code": "1831"
+      },
+      {
+        "name": "Laax",
+        "commune_code": "3575",
+        "district_code": "1831"
+      },
+      {
+        "name": "Sagogn",
+        "commune_code": "3581",
+        "district_code": "1831"
+      },
+      {
+        "name": "Schluein",
+        "commune_code": "3582",
+        "district_code": "1831"
+      },
+      {
+        "name": "St. Martin",
+        "commune_code": "3598",
+        "district_code": "1831"
+      },
+      {
+        "name": "Vals",
+        "commune_code": "3603",
+        "district_code": "1831"
+      },
+      {
+        "name": "Andiast",
+        "commune_code": "3611",
+        "district_code": "1831"
+      },
+      {
+        "name": "Obersaxen",
+        "commune_code": "3612",
+        "district_code": "1831"
+      },
+      {
+        "name": "Waltensburg/Vuorz",
+        "commune_code": "3616",
+        "district_code": "1831"
+      },
+      {
+        "name": "Mundaun",
+        "commune_code": "3617",
+        "district_code": "1831"
+      },
+      {
+        "name": "Lumnezia",
+        "commune_code": "3618",
+        "district_code": "1831"
+      },
+      {
+        "name": "Ilanz/Glion",
+        "commune_code": "3619",
+        "district_code": "1831"
+      },
+      {
+        "name": "Almens",
+        "commune_code": "3631",
+        "district_code": "1823"
+      },
+      {
+        "name": "Fürstenau",
+        "commune_code": "3633",
+        "district_code": "1823"
+      },
+      {
+        "name": "Paspels",
+        "commune_code": "3634",
+        "district_code": "1823"
+      },
+      {
+        "name": "Pratval",
+        "commune_code": "3635",
+        "district_code": "1823"
+      },
+      {
+        "name": "Rodels",
+        "commune_code": "3636",
+        "district_code": "1823"
+      },
+      {
+        "name": "Rothenbrunnen",
+        "commune_code": "3637",
+        "district_code": "1823"
+      },
+      {
+        "name": "Scharans",
+        "commune_code": "3638",
+        "district_code": "1823"
+      },
+      {
+        "name": "Sils im Domleschg",
+        "commune_code": "3640",
+        "district_code": "1823"
+      },
+      {
+        "name": "Cazis",
+        "commune_code": "3661",
+        "district_code": "1823"
+      },
+      {
+        "name": "Flerden",
+        "commune_code": "3662",
+        "district_code": "1823"
+      },
+      {
+        "name": "Masein",
+        "commune_code": "3663",
+        "district_code": "1823"
+      },
+      {
+        "name": "Thusis",
+        "commune_code": "3668",
+        "district_code": "1823"
+      },
+      {
+        "name": "Tschappina",
+        "commune_code": "3669",
+        "district_code": "1823"
+      },
+      {
+        "name": "Urmein",
+        "commune_code": "3670",
+        "district_code": "1823"
+      },
+      {
+        "name": "Tomils",
+        "commune_code": "3671",
+        "district_code": "1823"
+      },
+      {
+        "name": "Safiental",
+        "commune_code": "3672",
+        "district_code": "1831"
+      },
+      {
+        "name": "Avers",
+        "commune_code": "3681",
+        "district_code": "1823"
+      },
+      {
+        "name": "Hinterrhein",
+        "commune_code": "3691",
+        "district_code": "1823"
+      },
+      {
+        "name": "Nufenen",
+        "commune_code": "3693",
+        "district_code": "1823"
+      },
+      {
+        "name": "Splügen",
+        "commune_code": "3694",
+        "district_code": "1823"
+      },
+      {
+        "name": "Sufers",
+        "commune_code": "3695",
+        "district_code": "1823"
+      },
+      {
+        "name": "Andeer",
+        "commune_code": "3701",
+        "district_code": "1823"
+      },
+      {
+        "name": "Casti-Wergenstein",
+        "commune_code": "3703",
+        "district_code": "1823"
+      },
+      {
+        "name": "Donat",
+        "commune_code": "3705",
+        "district_code": "1823"
+      },
+      {
+        "name": "Lohn (GR)",
+        "commune_code": "3707",
+        "district_code": "1823"
+      },
+      {
+        "name": "Mathon",
+        "commune_code": "3708",
+        "district_code": "1823"
+      },
+      {
+        "name": "Rongellen",
+        "commune_code": "3711",
+        "district_code": "1823"
+      },
+      {
+        "name": "Zillis-Reischen",
+        "commune_code": "3712",
+        "district_code": "1823"
+      },
+      {
+        "name": "Ferrera",
+        "commune_code": "3713",
+        "district_code": "1823"
+      },
+      {
+        "name": "Bonaduz",
+        "commune_code": "3721",
+        "district_code": "1824"
+      },
+      {
+        "name": "Domat/Ems",
+        "commune_code": "3722",
+        "district_code": "1824"
+      },
+      {
+        "name": "Rhäzüns",
+        "commune_code": "3723",
+        "district_code": "1824"
+      },
+      {
+        "name": "Felsberg",
+        "commune_code": "3731",
+        "district_code": "1824"
+      },
+      {
+        "name": "Flims",
+        "commune_code": "3732",
+        "district_code": "1824"
+      },
+      {
+        "name": "Tamins",
+        "commune_code": "3733",
+        "district_code": "1824"
+      },
+      {
+        "name": "Trin",
+        "commune_code": "3734",
+        "district_code": "1824"
+      },
+      {
+        "name": "Ardez",
+        "commune_code": "3741",
+        "district_code": "1825"
+      },
+      {
+        "name": "Guarda",
+        "commune_code": "3742",
+        "district_code": "1825"
+      },
+      {
+        "name": "Lavin",
+        "commune_code": "3743",
+        "district_code": "1825"
+      },
+      {
+        "name": "Susch",
+        "commune_code": "3744",
+        "district_code": "1825"
+      },
+      {
+        "name": "Tarasp",
+        "commune_code": "3745",
+        "district_code": "1825"
+      },
+      {
+        "name": "Zernez",
+        "commune_code": "3746",
+        "district_code": "1825"
+      },
+      {
+        "name": "Samnaun",
+        "commune_code": "3752",
+        "district_code": "1825"
+      },
+      {
+        "name": "Ftan",
+        "commune_code": "3761",
+        "district_code": "1825"
+      },
+      {
+        "name": "Scuol",
+        "commune_code": "3762",
+        "district_code": "1825"
+      },
+      {
+        "name": "Sent",
+        "commune_code": "3763",
+        "district_code": "1825"
+      },
+      {
+        "name": "Valsot",
+        "commune_code": "3764",
+        "district_code": "1825"
+      },
+      {
+        "name": "Bever",
+        "commune_code": "3781",
+        "district_code": "1827"
+      },
+      {
+        "name": "Celerina/Schlarigna",
+        "commune_code": "3782",
+        "district_code": "1827"
+      },
+      {
+        "name": "Madulain",
+        "commune_code": "3783",
+        "district_code": "1827"
+      },
+      {
+        "name": "Pontresina",
+        "commune_code": "3784",
+        "district_code": "1827"
+      },
+      {
+        "name": "La Punt-Chamues-ch",
+        "commune_code": "3785",
+        "district_code": "1827"
+      },
+      {
+        "name": "Samedan",
+        "commune_code": "3786",
+        "district_code": "1827"
+      },
+      {
+        "name": "St. Moritz",
+        "commune_code": "3787",
+        "district_code": "1827"
+      },
+      {
+        "name": "S-chanf",
+        "commune_code": "3788",
+        "district_code": "1827"
+      },
+      {
+        "name": "Sils im Engadin/Segl",
+        "commune_code": "3789",
+        "district_code": "1827"
+      },
+      {
+        "name": "Silvaplana",
+        "commune_code": "3790",
+        "district_code": "1827"
+      },
+      {
+        "name": "Zuoz",
+        "commune_code": "3791",
+        "district_code": "1827"
+      },
+      {
+        "name": "Bregaglia",
+        "commune_code": "3792",
+        "district_code": "1827"
+      },
+      {
+        "name": "Arvigo",
+        "commune_code": "3801",
+        "district_code": "1828"
+      },
+      {
+        "name": "Braggio",
+        "commune_code": "3803",
+        "district_code": "1828"
+      },
+      {
+        "name": "Buseno",
+        "commune_code": "3804",
+        "district_code": "1828"
+      },
+      {
+        "name": "Castaneda",
+        "commune_code": "3805",
+        "district_code": "1828"
+      },
+      {
+        "name": "Cauco",
+        "commune_code": "3806",
+        "district_code": "1828"
+      },
+      {
+        "name": "Rossa",
+        "commune_code": "3808",
+        "district_code": "1828"
+      },
+      {
+        "name": "Santa Maria in Calanca",
+        "commune_code": "3810",
+        "district_code": "1828"
+      },
+      {
+        "name": "Selma",
+        "commune_code": "3811",
+        "district_code": "1828"
+      },
+      {
+        "name": "Lostallo",
+        "commune_code": "3821",
+        "district_code": "1828"
+      },
+      {
+        "name": "Mesocco",
+        "commune_code": "3822",
+        "district_code": "1828"
+      },
+      {
+        "name": "Soazza",
+        "commune_code": "3823",
+        "district_code": "1828"
+      },
+      {
+        "name": "Cama",
+        "commune_code": "3831",
+        "district_code": "1828"
+      },
+      {
+        "name": "Grono",
+        "commune_code": "3832",
+        "district_code": "1828"
+      },
+      {
+        "name": "Leggia",
+        "commune_code": "3833",
+        "district_code": "1828"
+      },
+      {
+        "name": "Roveredo (GR)",
+        "commune_code": "3834",
+        "district_code": "1828"
+      },
+      {
+        "name": "San Vittore",
+        "commune_code": "3835",
+        "district_code": "1828"
+      },
+      {
+        "name": "Verdabbio",
+        "commune_code": "3836",
+        "district_code": "1828"
+      },
+      {
+        "name": "Val Müstair",
+        "commune_code": "3847",
+        "district_code": "1825"
+      },
+      {
+        "name": "Davos",
+        "commune_code": "3851",
+        "district_code": "1830"
+      },
+      {
+        "name": "Fideris",
+        "commune_code": "3861",
+        "district_code": "1830"
+      },
+      {
+        "name": "Furna",
+        "commune_code": "3862",
+        "district_code": "1830"
+      },
+      {
+        "name": "Jenaz",
+        "commune_code": "3863",
+        "district_code": "1830"
+      },
+      {
+        "name": "Klosters-Serneus",
+        "commune_code": "3871",
+        "district_code": "1830"
+      },
+      {
+        "name": "Conters im Prättigau",
+        "commune_code": "3881",
+        "district_code": "1830"
+      },
+      {
+        "name": "Küblis",
+        "commune_code": "3882",
+        "district_code": "1830"
+      },
+      {
+        "name": "Saas",
+        "commune_code": "3883",
+        "district_code": "1830"
+      },
+      {
+        "name": "Luzein",
+        "commune_code": "3891",
+        "district_code": "1830"
+      },
+      {
+        "name": "St. Antönien",
+        "commune_code": "3893",
+        "district_code": "1830"
+      },
+      {
+        "name": "Chur",
+        "commune_code": "3901",
+        "district_code": "1829"
+      },
+      {
+        "name": "Churwalden",
+        "commune_code": "3911",
+        "district_code": "1829"
+      },
+      {
+        "name": "Arosa",
+        "commune_code": "3921",
+        "district_code": "1829"
+      },
+      {
+        "name": "Maladers",
+        "commune_code": "3926",
+        "district_code": "1829"
+      },
+      {
+        "name": "Tschiertschen-Praden",
+        "commune_code": "3932",
+        "district_code": "1829"
+      },
+      {
+        "name": "Haldenstein",
+        "commune_code": "3941",
+        "district_code": "1826"
+      },
+      {
+        "name": "Trimmis",
+        "commune_code": "3945",
+        "district_code": "1826"
+      },
+      {
+        "name": "Untervaz",
+        "commune_code": "3946",
+        "district_code": "1826"
+      },
+      {
+        "name": "Zizers",
+        "commune_code": "3947",
+        "district_code": "1826"
+      },
+      {
+        "name": "Fläsch",
+        "commune_code": "3951",
+        "district_code": "1826"
+      },
+      {
+        "name": "Jenins",
+        "commune_code": "3952",
+        "district_code": "1826"
+      },
+      {
+        "name": "Maienfeld",
+        "commune_code": "3953",
+        "district_code": "1826"
+      },
+      {
+        "name": "Malans",
+        "commune_code": "3954",
+        "district_code": "1826"
+      },
+      {
+        "name": "Landquart",
+        "commune_code": "3955",
+        "district_code": "1826"
+      },
+      {
+        "name": "Grüsch",
+        "commune_code": "3961",
+        "district_code": "1830"
+      },
+      {
+        "name": "Schiers",
+        "commune_code": "3962",
+        "district_code": "1830"
+      },
+      {
+        "name": "Seewis im Prättigau",
+        "commune_code": "3972",
+        "district_code": "1830"
+      },
+      {
+        "name": "Breil/Brigels",
+        "commune_code": "3981",
+        "district_code": "1831"
+      },
+      {
+        "name": "Disentis/Mustér",
+        "commune_code": "3982",
+        "district_code": "1831"
+      },
+      {
+        "name": "Medel (Lucmagn)",
+        "commune_code": "3983",
+        "district_code": "1831"
+      },
+      {
+        "name": "Sumvitg",
+        "commune_code": "3985",
+        "district_code": "1831"
+      },
+      {
+        "name": "Tujetsch",
+        "commune_code": "3986",
+        "district_code": "1831"
+      },
+      {
+        "name": "Trun",
+        "commune_code": "3987",
+        "district_code": "1831"
+      }
+    ],
+    "AG": [
+      {
+        "name": "Aarau",
+        "commune_code": "4001",
+        "district_code": "1901"
+      },
+      {
+        "name": "Biberstein",
+        "commune_code": "4002",
+        "district_code": "1901"
+      },
+      {
+        "name": "Buchs (AG)",
+        "commune_code": "4003",
+        "district_code": "1901"
+      },
+      {
+        "name": "Densbüren",
+        "commune_code": "4004",
+        "district_code": "1901"
+      },
+      {
+        "name": "Erlinsbach (AG)",
+        "commune_code": "4005",
+        "district_code": "1901"
+      },
+      {
+        "name": "Gränichen",
+        "commune_code": "4006",
+        "district_code": "1901"
+      },
+      {
+        "name": "Hirschthal",
+        "commune_code": "4007",
+        "district_code": "1901"
+      },
+      {
+        "name": "Küttigen",
+        "commune_code": "4008",
+        "district_code": "1901"
+      },
+      {
+        "name": "Muhen",
+        "commune_code": "4009",
+        "district_code": "1901"
+      },
+      {
+        "name": "Oberentfelden",
+        "commune_code": "4010",
+        "district_code": "1901"
+      },
+      {
+        "name": "Suhr",
+        "commune_code": "4012",
+        "district_code": "1901"
+      },
+      {
+        "name": "Unterentfelden",
+        "commune_code": "4013",
+        "district_code": "1901"
+      },
+      {
+        "name": "Baden",
+        "commune_code": "4021",
+        "district_code": "1902"
+      },
+      {
+        "name": "Bellikon",
+        "commune_code": "4022",
+        "district_code": "1902"
+      },
+      {
+        "name": "Bergdietikon",
+        "commune_code": "4023",
+        "district_code": "1902"
+      },
+      {
+        "name": "Birmenstorf (AG)",
+        "commune_code": "4024",
+        "district_code": "1902"
+      },
+      {
+        "name": "Ennetbaden",
+        "commune_code": "4026",
+        "district_code": "1902"
+      },
+      {
+        "name": "Fislisbach",
+        "commune_code": "4027",
+        "district_code": "1902"
+      },
+      {
+        "name": "Freienwil",
+        "commune_code": "4028",
+        "district_code": "1902"
+      },
+      {
+        "name": "Gebenstorf",
+        "commune_code": "4029",
+        "district_code": "1902"
+      },
+      {
+        "name": "Killwangen",
+        "commune_code": "4030",
+        "district_code": "1902"
+      },
+      {
+        "name": "Künten",
+        "commune_code": "4031",
+        "district_code": "1902"
+      },
+      {
+        "name": "Mägenwil",
+        "commune_code": "4032",
+        "district_code": "1902"
+      },
+      {
+        "name": "Mellingen",
+        "commune_code": "4033",
+        "district_code": "1902"
+      },
+      {
+        "name": "Neuenhof",
+        "commune_code": "4034",
+        "district_code": "1902"
+      },
+      {
+        "name": "Niederrohrdorf",
+        "commune_code": "4035",
+        "district_code": "1902"
+      },
+      {
+        "name": "Oberrohrdorf",
+        "commune_code": "4037",
+        "district_code": "1902"
+      },
+      {
+        "name": "Obersiggenthal",
+        "commune_code": "4038",
+        "district_code": "1902"
+      },
+      {
+        "name": "Remetschwil",
+        "commune_code": "4039",
+        "district_code": "1902"
+      },
+      {
+        "name": "Spreitenbach",
+        "commune_code": "4040",
+        "district_code": "1902"
+      },
+      {
+        "name": "Stetten (AG)",
+        "commune_code": "4041",
+        "district_code": "1902"
+      },
+      {
+        "name": "Turgi",
+        "commune_code": "4042",
+        "district_code": "1902"
+      },
+      {
+        "name": "Untersiggenthal",
+        "commune_code": "4044",
+        "district_code": "1902"
+      },
+      {
+        "name": "Wettingen",
+        "commune_code": "4045",
+        "district_code": "1902"
+      },
+      {
+        "name": "Wohlenschwil",
+        "commune_code": "4046",
+        "district_code": "1902"
+      },
+      {
+        "name": "Würenlingen",
+        "commune_code": "4047",
+        "district_code": "1902"
+      },
+      {
+        "name": "Würenlos",
+        "commune_code": "4048",
+        "district_code": "1902"
+      },
+      {
+        "name": "Ehrendingen",
+        "commune_code": "4049",
+        "district_code": "1902"
+      },
+      {
+        "name": "Arni (AG)",
+        "commune_code": "4061",
+        "district_code": "1903"
+      },
+      {
+        "name": "Berikon",
+        "commune_code": "4062",
+        "district_code": "1903"
+      },
+      {
+        "name": "Bremgarten (AG)",
+        "commune_code": "4063",
+        "district_code": "1903"
+      },
+      {
+        "name": "Büttikon",
+        "commune_code": "4064",
+        "district_code": "1903"
+      },
+      {
+        "name": "Dottikon",
+        "commune_code": "4065",
+        "district_code": "1903"
+      },
+      {
+        "name": "Eggenwil",
+        "commune_code": "4066",
+        "district_code": "1903"
+      },
+      {
+        "name": "Fischbach-Göslikon",
+        "commune_code": "4067",
+        "district_code": "1903"
+      },
+      {
+        "name": "Hägglingen",
+        "commune_code": "4068",
+        "district_code": "1903"
+      },
+      {
+        "name": "Jonen",
+        "commune_code": "4071",
+        "district_code": "1903"
+      },
+      {
+        "name": "Niederwil (AG)",
+        "commune_code": "4072",
+        "district_code": "1903"
+      },
+      {
+        "name": "Oberlunkhofen",
+        "commune_code": "4073",
+        "district_code": "1903"
+      },
+      {
+        "name": "Oberwil-Lieli",
+        "commune_code": "4074",
+        "district_code": "1903"
+      },
+      {
+        "name": "Rudolfstetten-Friedlisberg",
+        "commune_code": "4075",
+        "district_code": "1903"
+      },
+      {
+        "name": "Sarmenstorf",
+        "commune_code": "4076",
+        "district_code": "1903"
+      },
+      {
+        "name": "Tägerig",
+        "commune_code": "4077",
+        "district_code": "1903"
+      },
+      {
+        "name": "Uezwil",
+        "commune_code": "4078",
+        "district_code": "1903"
+      },
+      {
+        "name": "Unterlunkhofen",
+        "commune_code": "4079",
+        "district_code": "1903"
+      },
+      {
+        "name": "Villmergen",
+        "commune_code": "4080",
+        "district_code": "1903"
+      },
+      {
+        "name": "Widen",
+        "commune_code": "4081",
+        "district_code": "1903"
+      },
+      {
+        "name": "Wohlen (AG)",
+        "commune_code": "4082",
+        "district_code": "1903"
+      },
+      {
+        "name": "Zufikon",
+        "commune_code": "4083",
+        "district_code": "1903"
+      },
+      {
+        "name": "Islisberg",
+        "commune_code": "4084",
+        "district_code": "1903"
+      },
+      {
+        "name": "Auenstein",
+        "commune_code": "4091",
+        "district_code": "1904"
+      },
+      {
+        "name": "Birr",
+        "commune_code": "4092",
+        "district_code": "1904"
+      },
+      {
+        "name": "Birrhard",
+        "commune_code": "4093",
+        "district_code": "1904"
+      },
+      {
+        "name": "Bözen",
+        "commune_code": "4094",
+        "district_code": "1904"
+      },
+      {
+        "name": "Brugg",
+        "commune_code": "4095",
+        "district_code": "1904"
+      },
+      {
+        "name": "Effingen",
+        "commune_code": "4096",
+        "district_code": "1904"
+      },
+      {
+        "name": "Elfingen",
+        "commune_code": "4097",
+        "district_code": "1904"
+      },
+      {
+        "name": "Habsburg",
+        "commune_code": "4099",
+        "district_code": "1904"
+      },
+      {
+        "name": "Hausen (AG)",
+        "commune_code": "4100",
+        "district_code": "1904"
+      },
+      {
+        "name": "Lupfig",
+        "commune_code": "4104",
+        "district_code": "1904"
+      },
+      {
+        "name": "Mandach",
+        "commune_code": "4105",
+        "district_code": "1904"
+      },
+      {
+        "name": "Mönthal",
+        "commune_code": "4106",
+        "district_code": "1904"
+      },
+      {
+        "name": "Mülligen",
+        "commune_code": "4107",
+        "district_code": "1904"
+      },
+      {
+        "name": "Remigen",
+        "commune_code": "4110",
+        "district_code": "1904"
+      },
+      {
+        "name": "Riniken",
+        "commune_code": "4111",
+        "district_code": "1904"
+      },
+      {
+        "name": "Rüfenach",
+        "commune_code": "4112",
+        "district_code": "1904"
+      },
+      {
+        "name": "Scherz",
+        "commune_code": "4113",
+        "district_code": "1904"
+      },
+      {
+        "name": "Schinznach-Bad",
+        "commune_code": "4114",
+        "district_code": "1904"
+      },
+      {
+        "name": "Thalheim (AG)",
+        "commune_code": "4117",
+        "district_code": "1904"
+      },
+      {
+        "name": "Veltheim (AG)",
+        "commune_code": "4120",
+        "district_code": "1904"
+      },
+      {
+        "name": "Villigen",
+        "commune_code": "4121",
+        "district_code": "1904"
+      },
+      {
+        "name": "Villnachern",
+        "commune_code": "4122",
+        "district_code": "1904"
+      },
+      {
+        "name": "Windisch",
+        "commune_code": "4123",
+        "district_code": "1904"
+      },
+      {
+        "name": "Bözberg",
+        "commune_code": "4124",
+        "district_code": "1904"
+      },
+      {
+        "name": "Schinznach",
+        "commune_code": "4125",
+        "district_code": "1904"
+      },
+      {
+        "name": "Beinwil am See",
+        "commune_code": "4131",
+        "district_code": "1905"
+      },
+      {
+        "name": "Birrwil",
+        "commune_code": "4132",
+        "district_code": "1905"
+      },
+      {
+        "name": "Burg (AG)",
+        "commune_code": "4133",
+        "district_code": "1905"
+      },
+      {
+        "name": "Dürrenäsch",
+        "commune_code": "4134",
+        "district_code": "1905"
+      },
+      {
+        "name": "Gontenschwil",
+        "commune_code": "4135",
+        "district_code": "1905"
+      },
+      {
+        "name": "Holziken",
+        "commune_code": "4136",
+        "district_code": "1905"
+      },
+      {
+        "name": "Leimbach (AG)",
+        "commune_code": "4137",
+        "district_code": "1905"
+      },
+      {
+        "name": "Leutwil",
+        "commune_code": "4138",
+        "district_code": "1905"
+      },
+      {
+        "name": "Menziken",
+        "commune_code": "4139",
+        "district_code": "1905"
+      },
+      {
+        "name": "Oberkulm",
+        "commune_code": "4140",
+        "district_code": "1905"
+      },
+      {
+        "name": "Reinach (AG)",
+        "commune_code": "4141",
+        "district_code": "1905"
+      },
+      {
+        "name": "Schlossrued",
+        "commune_code": "4142",
+        "district_code": "1905"
+      },
+      {
+        "name": "Schmiedrued",
+        "commune_code": "4143",
+        "district_code": "1905"
+      },
+      {
+        "name": "Schöftland",
+        "commune_code": "4144",
+        "district_code": "1905"
+      },
+      {
+        "name": "Teufenthal (AG)",
+        "commune_code": "4145",
+        "district_code": "1905"
+      },
+      {
+        "name": "Unterkulm",
+        "commune_code": "4146",
+        "district_code": "1905"
+      },
+      {
+        "name": "Zetzwil",
+        "commune_code": "4147",
+        "district_code": "1905"
+      },
+      {
+        "name": "Eiken",
+        "commune_code": "4161",
+        "district_code": "1906"
+      },
+      {
+        "name": "Frick",
+        "commune_code": "4163",
+        "district_code": "1906"
+      },
+      {
+        "name": "Gansingen",
+        "commune_code": "4164",
+        "district_code": "1906"
+      },
+      {
+        "name": "Gipf-Oberfrick",
+        "commune_code": "4165",
+        "district_code": "1906"
+      },
+      {
+        "name": "Herznach",
+        "commune_code": "4166",
+        "district_code": "1906"
+      },
+      {
+        "name": "Hornussen",
+        "commune_code": "4167",
+        "district_code": "1906"
+      },
+      {
+        "name": "Kaisten",
+        "commune_code": "4169",
+        "district_code": "1906"
+      },
+      {
+        "name": "Laufenburg",
+        "commune_code": "4170",
+        "district_code": "1906"
+      },
+      {
+        "name": "Münchwilen (AG)",
+        "commune_code": "4172",
+        "district_code": "1906"
+      },
+      {
+        "name": "Oberhof",
+        "commune_code": "4173",
+        "district_code": "1906"
+      },
+      {
+        "name": "Oeschgen",
+        "commune_code": "4175",
+        "district_code": "1906"
+      },
+      {
+        "name": "Schwaderloch",
+        "commune_code": "4176",
+        "district_code": "1906"
+      },
+      {
+        "name": "Sisseln",
+        "commune_code": "4177",
+        "district_code": "1906"
+      },
+      {
+        "name": "Ueken",
+        "commune_code": "4179",
+        "district_code": "1906"
+      },
+      {
+        "name": "Wittnau",
+        "commune_code": "4181",
+        "district_code": "1906"
+      },
+      {
+        "name": "Wölflinswil",
+        "commune_code": "4182",
+        "district_code": "1906"
+      },
+      {
+        "name": "Zeihen",
+        "commune_code": "4183",
+        "district_code": "1906"
+      },
+      {
+        "name": "Mettauertal",
+        "commune_code": "4184",
+        "district_code": "1906"
+      },
+      {
+        "name": "Ammerswil",
+        "commune_code": "4191",
+        "district_code": "1907"
+      },
+      {
+        "name": "Boniswil",
+        "commune_code": "4192",
+        "district_code": "1907"
+      },
+      {
+        "name": "Brunegg",
+        "commune_code": "4193",
+        "district_code": "1907"
+      },
+      {
+        "name": "Dintikon",
+        "commune_code": "4194",
+        "district_code": "1907"
+      },
+      {
+        "name": "Egliswil",
+        "commune_code": "4195",
+        "district_code": "1907"
+      },
+      {
+        "name": "Fahrwangen",
+        "commune_code": "4196",
+        "district_code": "1907"
+      },
+      {
+        "name": "Hallwil",
+        "commune_code": "4197",
+        "district_code": "1907"
+      },
+      {
+        "name": "Hendschiken",
+        "commune_code": "4198",
+        "district_code": "1907"
+      },
+      {
+        "name": "Holderbank (AG)",
+        "commune_code": "4199",
+        "district_code": "1907"
+      },
+      {
+        "name": "Hunzenschwil",
+        "commune_code": "4200",
+        "district_code": "1907"
+      },
+      {
+        "name": "Lenzburg",
+        "commune_code": "4201",
+        "district_code": "1907"
+      },
+      {
+        "name": "Meisterschwanden",
+        "commune_code": "4202",
+        "district_code": "1907"
+      },
+      {
+        "name": "Möriken-Wildegg",
+        "commune_code": "4203",
+        "district_code": "1907"
+      },
+      {
+        "name": "Niederlenz",
+        "commune_code": "4204",
+        "district_code": "1907"
+      },
+      {
+        "name": "Othmarsingen",
+        "commune_code": "4205",
+        "district_code": "1907"
+      },
+      {
+        "name": "Rupperswil",
+        "commune_code": "4206",
+        "district_code": "1907"
+      },
+      {
+        "name": "Schafisheim",
+        "commune_code": "4207",
+        "district_code": "1907"
+      },
+      {
+        "name": "Seengen",
+        "commune_code": "4208",
+        "district_code": "1907"
+      },
+      {
+        "name": "Seon",
+        "commune_code": "4209",
+        "district_code": "1907"
+      },
+      {
+        "name": "Staufen",
+        "commune_code": "4210",
+        "district_code": "1907"
+      },
+      {
+        "name": "Abtwil",
+        "commune_code": "4221",
+        "district_code": "1908"
+      },
+      {
+        "name": "Aristau",
+        "commune_code": "4222",
+        "district_code": "1908"
+      },
+      {
+        "name": "Auw",
+        "commune_code": "4223",
+        "district_code": "1908"
+      },
+      {
+        "name": "Beinwil (Freiamt)",
+        "commune_code": "4224",
+        "district_code": "1908"
+      },
+      {
+        "name": "Besenbüren",
+        "commune_code": "4226",
+        "district_code": "1908"
+      },
+      {
+        "name": "Bettwil",
+        "commune_code": "4227",
+        "district_code": "1908"
+      },
+      {
+        "name": "Boswil",
+        "commune_code": "4228",
+        "district_code": "1908"
+      },
+      {
+        "name": "Bünzen",
+        "commune_code": "4229",
+        "district_code": "1908"
+      },
+      {
+        "name": "Buttwil",
+        "commune_code": "4230",
+        "district_code": "1908"
+      },
+      {
+        "name": "Dietwil",
+        "commune_code": "4231",
+        "district_code": "1908"
+      },
+      {
+        "name": "Geltwil",
+        "commune_code": "4232",
+        "district_code": "1908"
+      },
+      {
+        "name": "Kallern",
+        "commune_code": "4233",
+        "district_code": "1908"
+      },
+      {
+        "name": "Merenschwand",
+        "commune_code": "4234",
+        "district_code": "1908"
+      },
+      {
+        "name": "Mühlau",
+        "commune_code": "4235",
+        "district_code": "1908"
+      },
+      {
+        "name": "Muri (AG)",
+        "commune_code": "4236",
+        "district_code": "1908"
+      },
+      {
+        "name": "Oberrüti",
+        "commune_code": "4237",
+        "district_code": "1908"
+      },
+      {
+        "name": "Rottenschwil",
+        "commune_code": "4238",
+        "district_code": "1908"
+      },
+      {
+        "name": "Sins",
+        "commune_code": "4239",
+        "district_code": "1908"
+      },
+      {
+        "name": "Waltenschwil",
+        "commune_code": "4240",
+        "district_code": "1908"
+      },
+      {
+        "name": "Hellikon",
+        "commune_code": "4251",
+        "district_code": "1909"
+      },
+      {
+        "name": "Kaiseraugst",
+        "commune_code": "4252",
+        "district_code": "1909"
+      },
+      {
+        "name": "Magden",
+        "commune_code": "4253",
+        "district_code": "1909"
+      },
+      {
+        "name": "Möhlin",
+        "commune_code": "4254",
+        "district_code": "1909"
+      },
+      {
+        "name": "Mumpf",
+        "commune_code": "4255",
+        "district_code": "1909"
+      },
+      {
+        "name": "Obermumpf",
+        "commune_code": "4256",
+        "district_code": "1909"
+      },
+      {
+        "name": "Olsberg",
+        "commune_code": "4257",
+        "district_code": "1909"
+      },
+      {
+        "name": "Rheinfelden",
+        "commune_code": "4258",
+        "district_code": "1909"
+      },
+      {
+        "name": "Schupfart",
+        "commune_code": "4259",
+        "district_code": "1909"
+      },
+      {
+        "name": "Stein (AG)",
+        "commune_code": "4260",
+        "district_code": "1909"
+      },
+      {
+        "name": "Wallbach",
+        "commune_code": "4261",
+        "district_code": "1909"
+      },
+      {
+        "name": "Wegenstetten",
+        "commune_code": "4262",
+        "district_code": "1909"
+      },
+      {
+        "name": "Zeiningen",
+        "commune_code": "4263",
+        "district_code": "1909"
+      },
+      {
+        "name": "Zuzgen",
+        "commune_code": "4264",
+        "district_code": "1909"
+      },
+      {
+        "name": "Aarburg",
+        "commune_code": "4271",
+        "district_code": "1910"
+      },
+      {
+        "name": "Attelwil",
+        "commune_code": "4272",
+        "district_code": "1910"
+      },
+      {
+        "name": "Bottenwil",
+        "commune_code": "4273",
+        "district_code": "1910"
+      },
+      {
+        "name": "Brittnau",
+        "commune_code": "4274",
+        "district_code": "1910"
+      },
+      {
+        "name": "Kirchleerau",
+        "commune_code": "4275",
+        "district_code": "1910"
+      },
+      {
+        "name": "Kölliken",
+        "commune_code": "4276",
+        "district_code": "1910"
+      },
+      {
+        "name": "Moosleerau",
+        "commune_code": "4277",
+        "district_code": "1910"
+      },
+      {
+        "name": "Murgenthal",
+        "commune_code": "4279",
+        "district_code": "1910"
+      },
+      {
+        "name": "Oftringen",
+        "commune_code": "4280",
+        "district_code": "1910"
+      },
+      {
+        "name": "Reitnau",
+        "commune_code": "4281",
+        "district_code": "1910"
+      },
+      {
+        "name": "Rothrist",
+        "commune_code": "4282",
+        "district_code": "1910"
+      },
+      {
+        "name": "Safenwil",
+        "commune_code": "4283",
+        "district_code": "1910"
+      },
+      {
+        "name": "Staffelbach",
+        "commune_code": "4284",
+        "district_code": "1910"
+      },
+      {
+        "name": "Strengelbach",
+        "commune_code": "4285",
+        "district_code": "1910"
+      },
+      {
+        "name": "Uerkheim",
+        "commune_code": "4286",
+        "district_code": "1910"
+      },
+      {
+        "name": "Vordemwald",
+        "commune_code": "4287",
+        "district_code": "1910"
+      },
+      {
+        "name": "Wiliberg",
+        "commune_code": "4288",
+        "district_code": "1910"
+      },
+      {
+        "name": "Zofingen",
+        "commune_code": "4289",
+        "district_code": "1910"
+      },
+      {
+        "name": "Baldingen",
+        "commune_code": "4301",
+        "district_code": "1911"
+      },
+      {
+        "name": "Böbikon",
+        "commune_code": "4302",
+        "district_code": "1911"
+      },
+      {
+        "name": "Böttstein",
+        "commune_code": "4303",
+        "district_code": "1911"
+      },
+      {
+        "name": "Döttingen",
+        "commune_code": "4304",
+        "district_code": "1911"
+      },
+      {
+        "name": "Endingen",
+        "commune_code": "4305",
+        "district_code": "1911"
+      },
+      {
+        "name": "Fisibach",
+        "commune_code": "4306",
+        "district_code": "1911"
+      },
+      {
+        "name": "Full-Reuenthal",
+        "commune_code": "4307",
+        "district_code": "1911"
+      },
+      {
+        "name": "Kaiserstuhl",
+        "commune_code": "4308",
+        "district_code": "1911"
+      },
+      {
+        "name": "Klingnau",
+        "commune_code": "4309",
+        "district_code": "1911"
+      },
+      {
+        "name": "Koblenz",
+        "commune_code": "4310",
+        "district_code": "1911"
+      },
+      {
+        "name": "Leibstadt",
+        "commune_code": "4311",
+        "district_code": "1911"
+      },
+      {
+        "name": "Lengnau (AG)",
+        "commune_code": "4312",
+        "district_code": "1911"
+      },
+      {
+        "name": "Leuggern",
+        "commune_code": "4313",
+        "district_code": "1911"
+      },
+      {
+        "name": "Mellikon",
+        "commune_code": "4314",
+        "district_code": "1911"
+      },
+      {
+        "name": "Rekingen (AG)",
+        "commune_code": "4315",
+        "district_code": "1911"
+      },
+      {
+        "name": "Rietheim",
+        "commune_code": "4316",
+        "district_code": "1911"
+      },
+      {
+        "name": "Rümikon",
+        "commune_code": "4317",
+        "district_code": "1911"
+      },
+      {
+        "name": "Schneisingen",
+        "commune_code": "4318",
+        "district_code": "1911"
+      },
+      {
+        "name": "Siglistorf",
+        "commune_code": "4319",
+        "district_code": "1911"
+      },
+      {
+        "name": "Tegerfelden",
+        "commune_code": "4320",
+        "district_code": "1911"
+      },
+      {
+        "name": "Wislikofen",
+        "commune_code": "4322",
+        "district_code": "1911"
+      },
+      {
+        "name": "Bad Zurzach",
+        "commune_code": "4323",
+        "district_code": "1911"
+      }
+    ],
+    "TG": [
+      {
+        "name": "Arbon",
+        "commune_code": "4401",
+        "district_code": "2011"
+      },
+      {
+        "name": "Dozwil",
+        "commune_code": "4406",
+        "district_code": "2011"
+      },
+      {
+        "name": "Egnach",
+        "commune_code": "4411",
+        "district_code": "2011"
+      },
+      {
+        "name": "Hefenhofen",
+        "commune_code": "4416",
+        "district_code": "2011"
+      },
+      {
+        "name": "Horn",
+        "commune_code": "4421",
+        "district_code": "2011"
+      },
+      {
+        "name": "Kesswil",
+        "commune_code": "4426",
+        "district_code": "2011"
+      },
+      {
+        "name": "Roggwil (TG)",
+        "commune_code": "4431",
+        "district_code": "2011"
+      },
+      {
+        "name": "Romanshorn",
+        "commune_code": "4436",
+        "district_code": "2011"
+      },
+      {
+        "name": "Salmsach",
+        "commune_code": "4441",
+        "district_code": "2011"
+      },
+      {
+        "name": "Sommeri",
+        "commune_code": "4446",
+        "district_code": "2011"
+      },
+      {
+        "name": "Uttwil",
+        "commune_code": "4451",
+        "district_code": "2011"
+      },
+      {
+        "name": "Amriswil",
+        "commune_code": "4461",
+        "district_code": "2011"
+      },
+      {
+        "name": "Bischofszell",
+        "commune_code": "4471",
+        "district_code": "2015"
+      },
+      {
+        "name": "Erlen",
+        "commune_code": "4476",
+        "district_code": "2015"
+      },
+      {
+        "name": "Hauptwil-Gottshaus",
+        "commune_code": "4486",
+        "district_code": "2015"
+      },
+      {
+        "name": "Hohentannen",
+        "commune_code": "4495",
+        "district_code": "2015"
+      },
+      {
+        "name": "Kradolf-Schönenberg",
+        "commune_code": "4501",
+        "district_code": "2015"
+      },
+      {
+        "name": "Sulgen",
+        "commune_code": "4506",
+        "district_code": "2015"
+      },
+      {
+        "name": "Zihlschlacht-Sitterdorf",
+        "commune_code": "4511",
+        "district_code": "2015"
+      },
+      {
+        "name": "Basadingen-Schlattingen",
+        "commune_code": "4536",
+        "district_code": "2012"
+      },
+      {
+        "name": "Diessenhofen",
+        "commune_code": "4545",
+        "district_code": "2012"
+      },
+      {
+        "name": "Schlatt (TG)",
+        "commune_code": "4546",
+        "district_code": "2012"
+      },
+      {
+        "name": "Aadorf",
+        "commune_code": "4551",
+        "district_code": "2014"
+      },
+      {
+        "name": "Felben-Wellhausen",
+        "commune_code": "4561",
+        "district_code": "2012"
+      },
+      {
+        "name": "Frauenfeld",
+        "commune_code": "4566",
+        "district_code": "2012"
+      },
+      {
+        "name": "Gachnang",
+        "commune_code": "4571",
+        "district_code": "2012"
+      },
+      {
+        "name": "Hüttlingen",
+        "commune_code": "4590",
+        "district_code": "2012"
+      },
+      {
+        "name": "Matzingen",
+        "commune_code": "4591",
+        "district_code": "2012"
+      },
+      {
+        "name": "Neunforn",
+        "commune_code": "4601",
+        "district_code": "2012"
+      },
+      {
+        "name": "Stettfurt",
+        "commune_code": "4606",
+        "district_code": "2012"
+      },
+      {
+        "name": "Thundorf",
+        "commune_code": "4611",
+        "district_code": "2012"
+      },
+      {
+        "name": "Uesslingen-Buch",
+        "commune_code": "4616",
+        "district_code": "2012"
+      },
+      {
+        "name": "Warth-Weiningen",
+        "commune_code": "4621",
+        "district_code": "2012"
+      },
+      {
+        "name": "Altnau",
+        "commune_code": "4641",
+        "district_code": "2013"
+      },
+      {
+        "name": "Bottighofen",
+        "commune_code": "4643",
+        "district_code": "2013"
+      },
+      {
+        "name": "Ermatingen",
+        "commune_code": "4646",
+        "district_code": "2013"
+      },
+      {
+        "name": "Gottlieben",
+        "commune_code": "4651",
+        "district_code": "2013"
+      },
+      {
+        "name": "Güttingen",
+        "commune_code": "4656",
+        "district_code": "2013"
+      },
+      {
+        "name": "Kemmental",
+        "commune_code": "4666",
+        "district_code": "2013"
+      },
+      {
+        "name": "Kreuzlingen",
+        "commune_code": "4671",
+        "district_code": "2013"
+      },
+      {
+        "name": "Langrickenbach",
+        "commune_code": "4681",
+        "district_code": "2013"
+      },
+      {
+        "name": "Lengwil",
+        "commune_code": "4683",
+        "district_code": "2013"
+      },
+      {
+        "name": "Münsterlingen",
+        "commune_code": "4691",
+        "district_code": "2013"
+      },
+      {
+        "name": "Tägerwilen",
+        "commune_code": "4696",
+        "district_code": "2013"
+      },
+      {
+        "name": "Wäldi",
+        "commune_code": "4701",
+        "district_code": "2013"
+      },
+      {
+        "name": "Affeltrangen",
+        "commune_code": "4711",
+        "district_code": "2015"
+      },
+      {
+        "name": "Bettwiesen",
+        "commune_code": "4716",
+        "district_code": "2014"
+      },
+      {
+        "name": "Bichelsee-Balterswil",
+        "commune_code": "4721",
+        "district_code": "2014"
+      },
+      {
+        "name": "Braunau",
+        "commune_code": "4723",
+        "district_code": "2014"
+      },
+      {
+        "name": "Eschlikon",
+        "commune_code": "4724",
+        "district_code": "2014"
+      },
+      {
+        "name": "Fischingen",
+        "commune_code": "4726",
+        "district_code": "2014"
+      },
+      {
+        "name": "Lommis",
+        "commune_code": "4741",
+        "district_code": "2014"
+      },
+      {
+        "name": "Münchwilen (TG)",
+        "commune_code": "4746",
+        "district_code": "2014"
+      },
+      {
+        "name": "Rickenbach (TG)",
+        "commune_code": "4751",
+        "district_code": "2014"
+      },
+      {
+        "name": "Schönholzerswilen",
+        "commune_code": "4756",
+        "district_code": "2015"
+      },
+      {
+        "name": "Sirnach",
+        "commune_code": "4761",
+        "district_code": "2014"
+      },
+      {
+        "name": "Tobel-Tägerschen",
+        "commune_code": "4776",
+        "district_code": "2014"
+      },
+      {
+        "name": "Wängi",
+        "commune_code": "4781",
+        "district_code": "2014"
+      },
+      {
+        "name": "Wilen (TG)",
+        "commune_code": "4786",
+        "district_code": "2014"
+      },
+      {
+        "name": "Wuppenau",
+        "commune_code": "4791",
+        "district_code": "2015"
+      },
+      {
+        "name": "Berlingen",
+        "commune_code": "4801",
+        "district_code": "2012"
+      },
+      {
+        "name": "Eschenz",
+        "commune_code": "4806",
+        "district_code": "2012"
+      },
+      {
+        "name": "Herdern",
+        "commune_code": "4811",
+        "district_code": "2012"
+      },
+      {
+        "name": "Homburg",
+        "commune_code": "4816",
+        "district_code": "2012"
+      },
+      {
+        "name": "Hüttwilen",
+        "commune_code": "4821",
+        "district_code": "2012"
+      },
+      {
+        "name": "Mammern",
+        "commune_code": "4826",
+        "district_code": "2012"
+      },
+      {
+        "name": "Müllheim",
+        "commune_code": "4831",
+        "district_code": "2012"
+      },
+      {
+        "name": "Pfyn",
+        "commune_code": "4841",
+        "district_code": "2012"
+      },
+      {
+        "name": "Raperswilen",
+        "commune_code": "4846",
+        "district_code": "2013"
+      },
+      {
+        "name": "Salenstein",
+        "commune_code": "4851",
+        "district_code": "2013"
+      },
+      {
+        "name": "Steckborn",
+        "commune_code": "4864",
+        "district_code": "2012"
+      },
+      {
+        "name": "Wagenhausen",
+        "commune_code": "4871",
+        "district_code": "2012"
+      },
+      {
+        "name": "Amlikon-Bissegg",
+        "commune_code": "4881",
+        "district_code": "2015"
+      },
+      {
+        "name": "Berg (TG)",
+        "commune_code": "4891",
+        "district_code": "2015"
+      },
+      {
+        "name": "Birwinken",
+        "commune_code": "4901",
+        "district_code": "2015"
+      },
+      {
+        "name": "Bürglen (TG)",
+        "commune_code": "4911",
+        "district_code": "2015"
+      },
+      {
+        "name": "Bussnang",
+        "commune_code": "4921",
+        "district_code": "2015"
+      },
+      {
+        "name": "Märstetten",
+        "commune_code": "4941",
+        "district_code": "2015"
+      },
+      {
+        "name": "Weinfelden",
+        "commune_code": "4946",
+        "district_code": "2015"
+      },
+      {
+        "name": "Wigoltingen",
+        "commune_code": "4951",
+        "district_code": "2015"
+      }
+    ],
+    "TI": [
+      {
+        "name": "Arbedo-Castione",
+        "commune_code": "5001",
+        "district_code": "2101"
+      },
+      {
+        "name": "Bellinzona",
+        "commune_code": "5002",
+        "district_code": "2101"
+      },
+      {
+        "name": "Cadenazzo",
+        "commune_code": "5003",
+        "district_code": "2101"
+      },
+      {
+        "name": "Camorino",
+        "commune_code": "5004",
+        "district_code": "2101"
+      },
+      {
+        "name": "Giubiasco",
+        "commune_code": "5005",
+        "district_code": "2101"
+      },
+      {
+        "name": "Gnosca",
+        "commune_code": "5006",
+        "district_code": "2101"
+      },
+      {
+        "name": "Gorduno",
+        "commune_code": "5007",
+        "district_code": "2101"
+      },
+      {
+        "name": "Gudo",
+        "commune_code": "5008",
+        "district_code": "2101"
+      },
+      {
+        "name": "Isone",
+        "commune_code": "5009",
+        "district_code": "2101"
+      },
+      {
+        "name": "Lumino",
+        "commune_code": "5010",
+        "district_code": "2101"
+      },
+      {
+        "name": "Moleno",
+        "commune_code": "5012",
+        "district_code": "2101"
+      },
+      {
+        "name": "Monte Carasso",
+        "commune_code": "5013",
+        "district_code": "2101"
+      },
+      {
+        "name": "Pianezzo",
+        "commune_code": "5014",
+        "district_code": "2101"
+      },
+      {
+        "name": "Preonzo",
+        "commune_code": "5015",
+        "district_code": "2101"
+      },
+      {
+        "name": "Sant'Antonino",
+        "commune_code": "5017",
+        "district_code": "2101"
+      },
+      {
+        "name": "Sant'Antonio",
+        "commune_code": "5018",
+        "district_code": "2101"
+      },
+      {
+        "name": "Sementina",
+        "commune_code": "5019",
+        "district_code": "2101"
+      },
+      {
+        "name": "Acquarossa",
+        "commune_code": "5048",
+        "district_code": "2102"
+      },
+      {
+        "name": "Blenio",
+        "commune_code": "5049",
+        "district_code": "2102"
+      },
+      {
+        "name": "Serravalle",
+        "commune_code": "5050",
+        "district_code": "2102"
+      },
+      {
+        "name": "Airolo",
+        "commune_code": "5061",
+        "district_code": "2103"
+      },
+      {
+        "name": "Bedretto",
+        "commune_code": "5063",
+        "district_code": "2103"
+      },
+      {
+        "name": "Bodio",
+        "commune_code": "5064",
+        "district_code": "2103"
+      },
+      {
+        "name": "Dalpe",
+        "commune_code": "5071",
+        "district_code": "2103"
+      },
+      {
+        "name": "Faido",
+        "commune_code": "5072",
+        "district_code": "2103"
+      },
+      {
+        "name": "Giornico",
+        "commune_code": "5073",
+        "district_code": "2103"
+      },
+      {
+        "name": "Personico",
+        "commune_code": "5076",
+        "district_code": "2103"
+      },
+      {
+        "name": "Pollegio",
+        "commune_code": "5077",
+        "district_code": "2103"
+      },
+      {
+        "name": "Prato (Leventina)",
+        "commune_code": "5078",
+        "district_code": "2103"
+      },
+      {
+        "name": "Quinto",
+        "commune_code": "5079",
+        "district_code": "2103"
+      },
+      {
+        "name": "Sobrio",
+        "commune_code": "5081",
+        "district_code": "2103"
+      },
+      {
+        "name": "Ascona",
+        "commune_code": "5091",
+        "district_code": "2104"
+      },
+      {
+        "name": "Brione (Verzasca)",
+        "commune_code": "5095",
+        "district_code": "2104"
+      },
+      {
+        "name": "Brione sopra Minusio",
+        "commune_code": "5096",
+        "district_code": "2104"
+      },
+      {
+        "name": "Brissago",
+        "commune_code": "5097",
+        "district_code": "2104"
+      },
+      {
+        "name": "Corippo",
+        "commune_code": "5102",
+        "district_code": "2104"
+      },
+      {
+        "name": "Frasco",
+        "commune_code": "5105",
+        "district_code": "2104"
+      },
+      {
+        "name": "Gordola",
+        "commune_code": "5108",
+        "district_code": "2104"
+      },
+      {
+        "name": "Gresso",
+        "commune_code": "5109",
+        "district_code": "2104"
+      },
+      {
+        "name": "Lavertezzo",
+        "commune_code": "5112",
+        "district_code": "2104"
+      },
+      {
+        "name": "Locarno",
+        "commune_code": "5113",
+        "district_code": "2104"
+      },
+      {
+        "name": "Losone",
+        "commune_code": "5115",
+        "district_code": "2104"
+      },
+      {
+        "name": "Mergoscia",
+        "commune_code": "5117",
+        "district_code": "2104"
+      },
+      {
+        "name": "Minusio",
+        "commune_code": "5118",
+        "district_code": "2104"
+      },
+      {
+        "name": "Mosogno",
+        "commune_code": "5119",
+        "district_code": "2104"
+      },
+      {
+        "name": "Muralto",
+        "commune_code": "5120",
+        "district_code": "2104"
+      },
+      {
+        "name": "Orselina",
+        "commune_code": "5121",
+        "district_code": "2104"
+      },
+      {
+        "name": "Ronco sopra Ascona",
+        "commune_code": "5125",
+        "district_code": "2104"
+      },
+      {
+        "name": "Sonogno",
+        "commune_code": "5129",
+        "district_code": "2104"
+      },
+      {
+        "name": "Tenero-Contra",
+        "commune_code": "5131",
+        "district_code": "2104"
+      },
+      {
+        "name": "Vergeletto",
+        "commune_code": "5132",
+        "district_code": "2104"
+      },
+      {
+        "name": "Vogorno",
+        "commune_code": "5135",
+        "district_code": "2104"
+      },
+      {
+        "name": "Onsernone",
+        "commune_code": "5136",
+        "district_code": "2104"
+      },
+      {
+        "name": "Isorno",
+        "commune_code": "5137",
+        "district_code": "2104"
+      },
+      {
+        "name": "Cugnasco-Gerra",
+        "commune_code": "5138",
+        "district_code": "2104"
+      },
+      {
+        "name": "Agno",
+        "commune_code": "5141",
+        "district_code": "2105"
+      },
+      {
+        "name": "Aranno",
+        "commune_code": "5143",
+        "district_code": "2105"
+      },
+      {
+        "name": "Arogno",
+        "commune_code": "5144",
+        "district_code": "2105"
+      },
+      {
+        "name": "Astano",
+        "commune_code": "5146",
+        "district_code": "2105"
+      },
+      {
+        "name": "Bedano",
+        "commune_code": "5148",
+        "district_code": "2105"
+      },
+      {
+        "name": "Bedigliora",
+        "commune_code": "5149",
+        "district_code": "2105"
+      },
+      {
+        "name": "Bioggio",
+        "commune_code": "5151",
+        "district_code": "2105"
+      },
+      {
+        "name": "Bissone",
+        "commune_code": "5154",
+        "district_code": "2105"
+      },
+      {
+        "name": "Brusino Arsizio",
+        "commune_code": "5160",
+        "district_code": "2105"
+      },
+      {
+        "name": "Cademario",
+        "commune_code": "5161",
+        "district_code": "2105"
+      },
+      {
+        "name": "Cadempino",
+        "commune_code": "5162",
+        "district_code": "2105"
+      },
+      {
+        "name": "Canobbio",
+        "commune_code": "5167",
+        "district_code": "2105"
+      },
+      {
+        "name": "Caslano",
+        "commune_code": "5171",
+        "district_code": "2105"
+      },
+      {
+        "name": "Comano",
+        "commune_code": "5176",
+        "district_code": "2105"
+      },
+      {
+        "name": "Croglio",
+        "commune_code": "5178",
+        "district_code": "2105"
+      },
+      {
+        "name": "Cureglia",
+        "commune_code": "5180",
+        "district_code": "2105"
+      },
+      {
+        "name": "Curio",
+        "commune_code": "5181",
+        "district_code": "2105"
+      },
+      {
+        "name": "Grancia",
+        "commune_code": "5186",
+        "district_code": "2105"
+      },
+      {
+        "name": "Gravesano",
+        "commune_code": "5187",
+        "district_code": "2105"
+      },
+      {
+        "name": "Lamone",
+        "commune_code": "5189",
+        "district_code": "2105"
+      },
+      {
+        "name": "Lugano",
+        "commune_code": "5192",
+        "district_code": "2105"
+      },
+      {
+        "name": "Magliaso",
+        "commune_code": "5193",
+        "district_code": "2105"
+      },
+      {
+        "name": "Manno",
+        "commune_code": "5194",
+        "district_code": "2105"
+      },
+      {
+        "name": "Maroggia",
+        "commune_code": "5195",
+        "district_code": "2105"
+      },
+      {
+        "name": "Massagno",
+        "commune_code": "5196",
+        "district_code": "2105"
+      },
+      {
+        "name": "Melano",
+        "commune_code": "5197",
+        "district_code": "2105"
+      },
+      {
+        "name": "Melide",
+        "commune_code": "5198",
+        "district_code": "2105"
+      },
+      {
+        "name": "Mezzovico-Vira",
+        "commune_code": "5199",
+        "district_code": "2105"
+      },
+      {
+        "name": "Miglieglia",
+        "commune_code": "5200",
+        "district_code": "2105"
+      },
+      {
+        "name": "Monteggio",
+        "commune_code": "5202",
+        "district_code": "2105"
+      },
+      {
+        "name": "Morcote",
+        "commune_code": "5203",
+        "district_code": "2105"
+      },
+      {
+        "name": "Muzzano",
+        "commune_code": "5205",
+        "district_code": "2105"
+      },
+      {
+        "name": "Neggio",
+        "commune_code": "5206",
+        "district_code": "2105"
+      },
+      {
+        "name": "Novaggio",
+        "commune_code": "5207",
+        "district_code": "2105"
+      },
+      {
+        "name": "Origlio",
+        "commune_code": "5208",
+        "district_code": "2105"
+      },
+      {
+        "name": "Paradiso",
+        "commune_code": "5210",
+        "district_code": "2105"
+      },
+      {
+        "name": "Ponte Capriasca",
+        "commune_code": "5212",
+        "district_code": "2105"
+      },
+      {
+        "name": "Ponte Tresa",
+        "commune_code": "5213",
+        "district_code": "2105"
+      },
+      {
+        "name": "Porza",
+        "commune_code": "5214",
+        "district_code": "2105"
+      },
+      {
+        "name": "Pura",
+        "commune_code": "5216",
+        "district_code": "2105"
+      },
+      {
+        "name": "Rovio",
+        "commune_code": "5219",
+        "district_code": "2105"
+      },
+      {
+        "name": "Savosa",
+        "commune_code": "5221",
+        "district_code": "2105"
+      },
+      {
+        "name": "Sessa",
+        "commune_code": "5222",
+        "district_code": "2105"
+      },
+      {
+        "name": "Sorengo",
+        "commune_code": "5225",
+        "district_code": "2105"
+      },
+      {
+        "name": "Capriasca",
+        "commune_code": "5226",
+        "district_code": "2105"
+      },
+      {
+        "name": "Torricella-Taverne",
+        "commune_code": "5227",
+        "district_code": "2105"
+      },
+      {
+        "name": "Vernate",
+        "commune_code": "5230",
+        "district_code": "2105"
+      },
+      {
+        "name": "Vezia",
+        "commune_code": "5231",
+        "district_code": "2105"
+      },
+      {
+        "name": "Vico Morcote",
+        "commune_code": "5233",
+        "district_code": "2105"
+      },
+      {
+        "name": "Collina d'Oro",
+        "commune_code": "5236",
+        "district_code": "2105"
+      },
+      {
+        "name": "Alto Malcantone",
+        "commune_code": "5237",
+        "district_code": "2105"
+      },
+      {
+        "name": "Monteceneri",
+        "commune_code": "5238",
+        "district_code": "2105"
+      },
+      {
+        "name": "Balerna",
+        "commune_code": "5242",
+        "district_code": "2106"
+      },
+      {
+        "name": "Castel San Pietro",
+        "commune_code": "5249",
+        "district_code": "2106"
+      },
+      {
+        "name": "Chiasso",
+        "commune_code": "5250",
+        "district_code": "2106"
+      },
+      {
+        "name": "Coldrerio",
+        "commune_code": "5251",
+        "district_code": "2106"
+      },
+      {
+        "name": "Mendrisio",
+        "commune_code": "5254",
+        "district_code": "2106"
+      },
+      {
+        "name": "Morbio Inferiore",
+        "commune_code": "5257",
+        "district_code": "2106"
+      },
+      {
+        "name": "Novazzano",
+        "commune_code": "5260",
+        "district_code": "2106"
+      },
+      {
+        "name": "Riva San Vitale",
+        "commune_code": "5263",
+        "district_code": "2106"
+      },
+      {
+        "name": "Stabio",
+        "commune_code": "5266",
+        "district_code": "2106"
+      },
+      {
+        "name": "Vacallo",
+        "commune_code": "5268",
+        "district_code": "2106"
+      },
+      {
+        "name": "Breggia",
+        "commune_code": "5269",
+        "district_code": "2106"
+      },
+      {
+        "name": "Biasca",
+        "commune_code": "5281",
+        "district_code": "2107"
+      },
+      {
+        "name": "Claro",
+        "commune_code": "5282",
+        "district_code": "2107"
+      },
+      {
+        "name": "Cresciano",
+        "commune_code": "5283",
+        "district_code": "2107"
+      },
+      {
+        "name": "Iragna",
+        "commune_code": "5284",
+        "district_code": "2107"
+      },
+      {
+        "name": "Lodrino",
+        "commune_code": "5285",
+        "district_code": "2107"
+      },
+      {
+        "name": "Osogna",
+        "commune_code": "5286",
+        "district_code": "2107"
+      },
+      {
+        "name": "Bosco/Gurin",
+        "commune_code": "5304",
+        "district_code": "2108"
+      },
+      {
+        "name": "Campo (Vallemaggia)",
+        "commune_code": "5307",
+        "district_code": "2108"
+      },
+      {
+        "name": "Cerentino",
+        "commune_code": "5309",
+        "district_code": "2108"
+      },
+      {
+        "name": "Cevio",
+        "commune_code": "5310",
+        "district_code": "2108"
+      },
+      {
+        "name": "Linescio",
+        "commune_code": "5315",
+        "district_code": "2108"
+      },
+      {
+        "name": "Maggia",
+        "commune_code": "5317",
+        "district_code": "2108"
+      },
+      {
+        "name": "Lavizzara",
+        "commune_code": "5323",
+        "district_code": "2108"
+      },
+      {
+        "name": "Avegno Gordevio",
+        "commune_code": "5324",
+        "district_code": "2108"
+      },
+      {
+        "name": "Terre di Pedemonte",
+        "commune_code": "5396",
+        "district_code": "2104"
+      },
+      {
+        "name": "Centovalli",
+        "commune_code": "5397",
+        "district_code": "2104"
+      },
+      {
+        "name": "Gambarogno",
+        "commune_code": "5398",
+        "district_code": "2104"
+      }
+    ],
+    "VD": [
+      {
+        "name": "Apples",
+        "commune_code": "5421",
+        "district_code": "2227"
+      },
+      {
+        "name": "Montherod",
+        "commune_code": "5432",
+        "district_code": "2227"
+      },
+      {
+        "name": "Cottens (VD)",
+        "commune_code": "5478",
+        "district_code": "2227"
+      },
+      {
+        "name": "Pampigny",
+        "commune_code": "5494",
+        "district_code": "2227"
+      },
+      {
+        "name": "Sévery",
+        "commune_code": "5500",
+        "district_code": "2227"
+      },
+      {
+        "name": "Bioley-Orjulaz",
+        "commune_code": "5513",
+        "district_code": "2223"
+      },
+      {
+        "name": "Bussy-Chardonney",
+        "commune_code": "5625",
+        "district_code": "2227"
+      },
+      {
+        "name": "Reverolle",
+        "commune_code": "5644",
+        "district_code": "2227"
+      },
+      {
+        "name": "Brenles",
+        "commune_code": "5662",
+        "district_code": "2222"
+      },
+      {
+        "name": "Chesalles-sur-Moudon",
+        "commune_code": "5666",
+        "district_code": "2222"
+      },
+      {
+        "name": "Cremin",
+        "commune_code": "5668",
+        "district_code": "2222"
+      },
+      {
+        "name": "Forel-sur-Lucens",
+        "commune_code": "5672",
+        "district_code": "2222"
+      },
+      {
+        "name": "Sarzens",
+        "commune_code": "5686",
+        "district_code": "2222"
+      },
+      {
+        "name": "Crans-près-Céligny",
+        "commune_code": "5713",
+        "district_code": "2228"
+      },
+      {
+        "name": "Corcelles-sur-Chavornay",
+        "commune_code": "5751",
+        "district_code": "2224"
+      },
+      {
+        "name": "Carrouge (VD)",
+        "commune_code": "5782",
+        "district_code": "2222"
+      },
+      {
+        "name": "Essertes",
+        "commune_code": "5788",
+        "district_code": "2226"
+      },
+      {
+        "name": "Ferlens (VD)",
+        "commune_code": "5789",
+        "district_code": "2226"
+      },
+      {
+        "name": "Mézières (VD)",
+        "commune_code": "5791",
+        "district_code": "2226"
+      },
+      {
+        "name": "Blonay",
+        "commune_code": "5881",
+        "district_code": "2230"
+      },
+      {
+        "name": "Saint-Légier-La Chiésaz",
+        "commune_code": "5888",
+        "district_code": "2230"
+      },
+      {
+        "name": "Essert-Pittet",
+        "commune_code": "5915",
+        "district_code": "2224"
+      }
+    ],
+    "VS": [
+      {
+        "name": "Bagnes",
+        "commune_code": "6031",
+        "district_code": "2303"
+      },
+      {
+        "name": "Vollèges",
+        "commune_code": "6036",
+        "district_code": "2303"
+      },
+      {
+        "name": "Blitzingen",
+        "commune_code": "6055",
+        "district_code": "2304"
+      },
+      {
+        "name": "Niederwald",
+        "commune_code": "6064",
+        "district_code": "2304"
+      },
+      {
+        "name": "Grafschaft",
+        "commune_code": "6073",
+        "district_code": "2304"
+      },
+      {
+        "name": "Münster-Geschinen",
+        "commune_code": "6074",
+        "district_code": "2304"
+      },
+      {
+        "name": "Reckingen-Gluringen",
+        "commune_code": "6075",
+        "district_code": "2304"
+      },
+      {
+        "name": "Les Agettes",
+        "commune_code": "6081",
+        "district_code": "2305"
+      },
+      {
+        "name": "Charrat",
+        "commune_code": "6132",
+        "district_code": "2307"
+      },
+      {
+        "name": "Chermignon",
+        "commune_code": "6234",
+        "district_code": "2311"
+      },
+      {
+        "name": "Miège",
+        "commune_code": "6241",
+        "district_code": "2311"
+      },
+      {
+        "name": "Mollens (VS)",
+        "commune_code": "6242",
+        "district_code": "2311"
+      },
+      {
+        "name": "Montana",
+        "commune_code": "6243",
+        "district_code": "2311"
+      },
+      {
+        "name": "Randogne",
+        "commune_code": "6244",
+        "district_code": "2311"
+      },
+      {
+        "name": "Venthône",
+        "commune_code": "6249",
+        "district_code": "2311"
+      },
+      {
+        "name": "Veyras",
+        "commune_code": "6250",
+        "district_code": "2311"
+      }
+    ],
+    "NE": [
+      {
+        "name": "Bevaix",
+        "commune_code": "6402",
+        "district_code": "2401"
+      },
+      {
+        "name": "Brot-Dessous",
+        "commune_code": "6405",
+        "district_code": "2401"
+      },
+      {
+        "name": "Corcelles-Cormondrèche",
+        "commune_code": "6407",
+        "district_code": "2401"
+      },
+      {
+        "name": "Fresens",
+        "commune_code": "6409",
+        "district_code": "2401"
+      },
+      {
+        "name": "Gorgier",
+        "commune_code": "6410",
+        "district_code": "2401"
+      },
+      {
+        "name": "Montalchez",
+        "commune_code": "6411",
+        "district_code": "2401"
+      },
+      {
+        "name": "Peseux",
+        "commune_code": "6412",
+        "district_code": "2401"
+      },
+      {
+        "name": "Saint-Aubin-Sauges",
+        "commune_code": "6414",
+        "district_code": "2401"
+      },
+      {
+        "name": "Vaumarcus",
+        "commune_code": "6415",
+        "district_code": "2401"
+      },
+      {
+        "name": "Les Brenets",
+        "commune_code": "6431",
+        "district_code": "2403"
+      },
+      {
+        "name": "Enges",
+        "commune_code": "6453",
+        "district_code": "2404"
+      },
+      {
+        "name": "Hauterive (NE)",
+        "commune_code": "6454",
+        "district_code": "2404"
+      },
+      {
+        "name": "Saint-Blaise",
+        "commune_code": "6459",
+        "district_code": "2404"
+      },
+      {
+        "name": "La Tène",
+        "commune_code": "6461",
+        "district_code": "2404"
+      },
+      {
+        "name": "Valangin",
+        "commune_code": "6485",
+        "district_code": "2405"
+      }
+    ],
+    "JU": [
+      {
+        "name": "Corban",
+        "commune_code": "6705",
+        "district_code": "2601"
+      },
+      {
+        "name": "Rebeuvelier",
+        "commune_code": "6720",
+        "district_code": "2601"
+      },
+      {
+        "name": "Vellerat",
+        "commune_code": "6728",
+        "district_code": "2601"
+      },
+      {
+        "name": "La Chaux-des-Breuleux",
+        "commune_code": "6744",
+        "district_code": "2602"
+      },
+      {
+        "name": "Beurnevésin",
+        "commune_code": "6773",
+        "district_code": "2603"
+      },
+      {
+        "name": "Bonfol",
+        "commune_code": "6775",
+        "district_code": "2603"
+      },
+      {
+        "name": "Damphreux",
+        "commune_code": "6787",
+        "district_code": "2603"
+      },
+      {
+        "name": "Lugnez",
+        "commune_code": "6793",
+        "district_code": "2603"
+      },
+      {
+        "name": "Rocourt",
+        "commune_code": "6803",
+        "district_code": "2603"
+      }
+    ]
+  },
+  "with_coordinates": {
+    "Corpataux-Magnedens": {
+      "lat": 46.78,
+      "lon": 7.12,
+      "npa": 1727
+    },
+    "Farvagny": {
+      "lat": 46.765,
+      "lon": 7.08,
+      "npa": 1726
+    },
+    "Rossens (FR)": {
+      "lat": 46.73,
+      "lon": 7.09,
+      "npa": 1728
+    },
+    "Vuisternens-en-Ogoz": {
+      "lat": 46.75,
+      "lon": 7.11,
+      "npa": 1637
+    },
+    "Posieux": {
+      "lat": 46.76,
+      "lon": 7.13,
+      "npa": 1725
+    }
+  },
+  "priority_communes": [
+    "Corpataux-Magnedens",
+    "Farvagny",
+    "Rossens (FR)",
+    "Vuisternens-en-Ogoz",
+    "Posieux"
+  ]
+}

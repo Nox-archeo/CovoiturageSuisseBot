@@ -11,6 +11,7 @@ from telegram.ext import ContextTypes, CommandHandler, CallbackQueryHandler, Con
 from database.db_manager import get_db
 from database.models import User, Trip, Booking
 from paypal_utils import create_trip_payment, complete_trip_payment, pay_driver
+from utils.swiss_pricing import round_to_nearest_0_05, format_swiss_price
 import asyncio
 from contextlib import contextmanager
 
@@ -194,13 +195,13 @@ class PaymentHandlers:
                         f"💰 *Paiement du trajet #{trip_id}*\n\n"
                         f"🚗 Trajet : {trip_description}\n"
                         f"👤 Conducteur : {driver.full_name or 'Nom non défini'}\n"
-                        f"💵 Montant : {booking.total_price} CHF\n\n"
+                        f"💵 Montant : {format_swiss_price(booking.total_price)} CHF\n\n"
                         f"Cliquez sur le bouton ci-dessous pour procéder au paiement PayPal :",
                         parse_mode='Markdown',
                         reply_markup=reply_markup
                     )
                     
-                    logger.info(f"Paiement initié pour le trajet {trip_id}, montant: {booking.total_price} CHF")
+                    logger.info(f"Paiement initié pour le trajet {trip_id}, montant: {format_swiss_price(booking.total_price)} CHF")
                     
                 else:
                     await update.message.reply_text(
@@ -437,7 +438,7 @@ class PaymentHandlers:
                     message += (
                         f"{status_emoji} *Trajet #{trip.id}*\n"
                         f"🚗 {trip.departure_city} → {trip.arrival_city}\n"
-                        f"💰 {booking.total_price} CHF - {status_text}\n\n"
+                        f"💰 {format_swiss_price(booking.total_price)} CHF - {status_text}\n\n"
                     )
                 
                 await update.message.reply_text(message, parse_mode='Markdown')
@@ -446,6 +447,176 @@ class PaymentHandlers:
             logger.error(f"Erreur lors de la vérification du statut des paiements : {e}")
             await update.message.reply_text(
                 "❌ Erreur lors de la vérification. Veuillez réessayer plus tard."
+            )
+
+    @staticmethod
+    async def view_payments_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+        """
+        Callback pour voir les paiements de l'utilisateur
+        """
+        query = update.callback_query
+        await query.answer()
+        
+        user_id = update.effective_user.id
+        
+        try:
+            with get_db_session() as session:
+                user = session.query(User).filter_by(telegram_id=user_id).first()
+                if not user:
+                    await query.edit_message_text("❌ Utilisateur non trouvé.")
+                    return
+                
+                # Récupérer les derniers paiements (tous statuts)
+                bookings = session.query(Booking).filter_by(
+                    passenger_id=user.id
+                ).order_by(Booking.booking_date.desc()).limit(10).all()
+                
+                if not bookings:
+                    message = "💰 *Mes paiements*\n\n" \
+                             "Aucun paiement trouvé.\n\n" \
+                             "Vos paiements apparaîtront ici une fois que vous aurez réservé des trajets."
+                else:
+                    message = "💰 *Mes paiements* (10 derniers)\n\n"
+                    
+                    for booking in bookings:
+                        trip = booking.trip if booking.trip else None
+                        if trip:
+                            status_emoji = {
+                                'pending': '⏳',
+                                'completed': '✅',
+                                'paid': '✅',
+                                'unpaid': '❌',
+                                'cancelled': '🚫'
+                            }.get(booking.payment_status, '❓')
+                            
+                            # Utiliser le bon champ pour le montant
+                            amount = booking.total_price or booking.amount or 0
+                            
+                            message += f"{status_emoji} **{trip.departure_city} → {trip.arrival_city}**\n"
+                            message += f"📅 {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
+                            message += f"💰 {format_swiss_price(amount)} CHF\n"
+                            message += f"📊 Statut: {booking.payment_status.upper()}\n\n"
+            
+            keyboard = [
+                [InlineKeyboardButton("📊 Voir tout l'historique", callback_data="payment_history")],
+                [InlineKeyboardButton("🔄 Actualiser", callback_data="view_payments")],
+                [InlineKeyboardButton("🔙 Retour", callback_data="menu:back_to_main")]
+            ]
+            
+            await query.edit_message_text(
+                message,
+                reply_markup=InlineKeyboardMarkup(keyboard),
+                parse_mode="Markdown"
+            )
+            
+        except Exception as e:
+            logger.error(f"Erreur lors de l'affichage des paiements : {e}")
+            # Message plus détaillé pour déboguer
+            await query.edit_message_text(
+                f"❌ Erreur technique lors de l'affichage des paiements.\n\n"
+                f"Détail de l'erreur: {str(e)}\n\n"
+                f"Veuillez contacter le support si le problème persiste."
+            )
+
+    @staticmethod
+    async def payment_history_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+        """
+        Callback pour voir l'historique complet des paiements
+        """
+        query = update.callback_query
+        await query.answer()
+        
+        user_id = update.effective_user.id
+        
+        try:
+            with get_db_session() as session:
+                user = session.query(User).filter_by(telegram_id=user_id).first()
+                if not user:
+                    await query.edit_message_text("❌ Utilisateur non trouvé.")
+                    return
+                
+                # Récupérer TOUS les paiements (comme passager)
+                passenger_bookings = session.query(Booking).filter_by(
+                    passenger_id=user.id
+                ).order_by(Booking.booking_date.desc()).all()
+                
+                # Récupérer les trajets où l'utilisateur est conducteur et a reçu des paiements
+                driver_trips = session.query(Trip).filter_by(
+                    creator_id=user.id
+                ).all()
+                
+                driver_bookings = []
+                for trip in driver_trips:
+                    bookings = session.query(Booking).filter_by(
+                        trip_id=trip.id
+                    ).filter(Booking.payment_status.in_(['completed', 'paid'])).all()
+                    driver_bookings.extend(bookings)
+                
+                if not passenger_bookings and not driver_bookings:
+                    message = "📊 *Historique complet*\n\n" \
+                             "Aucun historique de paiement trouvé.\n\n" \
+                             "Votre historique apparaîtra ici au fur et à mesure de vos activités."
+                else:
+                    message = "📊 *Historique complet des paiements*\n\n"
+                    
+                    # Statistiques rapides
+                    total_spent = sum((b.total_price or b.amount or 0) for b in passenger_bookings if b.payment_status in ['completed', 'paid'])
+                    total_earned = sum((b.total_price or b.amount or 0) for b in driver_bookings if b.payment_status in ['completed', 'paid'])
+                    
+                    message += f"💸 **Total dépensé:** {format_swiss_price(total_spent)} CHF\n"
+                    message += f"💰 **Total gagné:** {format_swiss_price(total_earned)} CHF\n"
+                    message += f"📈 **Solde net:** {format_swiss_price(total_earned - total_spent)} CHF\n\n"
+                    
+                    # Paiements en tant que passager
+                    if passenger_bookings:
+                        message += "👥 **En tant que passager:**\n"
+                        for booking in passenger_bookings[:5]:  # Limiter à 5 pour éviter un message trop long
+                            trip = booking.trip if booking.trip else None
+                            if trip:
+                                status_emoji = {
+                                    'pending': '⏳',
+                                    'completed': '✅',
+                                    'paid': '✅',
+                                    'unpaid': '❌',
+                                    'cancelled': '🚫'
+                                }.get(booking.payment_status, '❓')
+                                
+                                amount = booking.total_price or booking.amount or 0
+                                message += f"{status_emoji} {trip.departure_city} → {trip.arrival_city} - {format_swiss_price(amount)} CHF\n"
+                        message += "\n"
+                    
+                    # Paiements reçus en tant que conducteur
+                    if driver_bookings:
+                        message += "🚗 **En tant que conducteur:**\n"
+                        for booking in driver_bookings[:5]:  # Limiter à 5
+                            trip = booking.trip if booking.trip else None
+                            if trip:
+                                amount = booking.total_price or booking.amount or 0
+                                message += f"✅ {trip.departure_city} → {trip.arrival_city} - {format_swiss_price(amount)} CHF\n"
+                        message += "\n"
+                    
+                    if len(passenger_bookings) > 5 or len(driver_bookings) > 5:
+                        message += "📝 *Historique limité à 5 entrées par catégorie*"
+            
+            keyboard = [
+                [InlineKeyboardButton("💰 Voir mes paiements", callback_data="view_payments")],
+                [InlineKeyboardButton("🔄 Actualiser", callback_data="payment_history")],
+                [InlineKeyboardButton("🔙 Retour", callback_data="menu:back_to_main")]
+            ]
+            
+            await query.edit_message_text(
+                message,
+                reply_markup=InlineKeyboardMarkup(keyboard),
+                parse_mode="Markdown"
+            )
+            
+        except Exception as e:
+            logger.error(f"Erreur lors de l'affichage de l'historique : {e}")
+            # Message plus détaillé pour déboguer
+            await query.edit_message_text(
+                f"❌ Erreur technique lors de l'affichage de l'historique.\n\n"
+                f"Détail de l'erreur: {str(e)}\n\n"
+                f"Veuillez contacter le support si le problème persiste."
             )
 
 
@@ -479,6 +650,17 @@ payment_callback_handler = CallbackQueryHandler(
     pattern=r'^(cancel_payment_|confirm_payment_)'
 )
 
+# Nouveaux gestionnaires pour les callbacks des paiements
+view_payments_handler = CallbackQueryHandler(
+    PaymentHandlers.view_payments_callback,
+    pattern=r'^view_payments$'
+)
+
+payment_history_handler = CallbackQueryHandler(
+    PaymentHandlers.payment_history_callback,
+    pattern=r'^payment_history$'
+)
+
 
 def get_payment_handlers():
     """
@@ -487,7 +669,7 @@ def get_payment_handlers():
     return {
         'conversation_handlers': [paypal_setup_conv_handler],
         'command_handlers': payment_command_handlers,
-        'callback_handlers': [payment_callback_handler]
+        'callback_handlers': [payment_callback_handler, view_payments_handler, payment_history_handler]
     }
 
 

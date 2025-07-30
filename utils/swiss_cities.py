@@ -8,7 +8,7 @@ from unidecode import unidecode
 logger = logging.getLogger(__name__)
 
 # Chemin vers le fichier JSON des localités suisses
-JSON_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'scripts', 'data', 'swiss_localities.json')
+JSON_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'swiss_localities.json')
 
 # Cache pour les données chargées
 _localities_data = None
@@ -59,20 +59,42 @@ def find_locality(query: str) -> List[Dict[str, str]]:
                 results.append({
                     "name": name,
                     "canton": data.get("canton", ""),
-                    "zip": data.get("zip", "")
+                    "zip": data.get("zip", ""),
+                    "lat": data.get("lat", 0.0),
+                    "lon": data.get("lon", 0.0)
                 })
     # Sinon, on cherche par nom
     else:
+        exact_matches = []  # Correspondances exactes
+        partial_matches = []  # Correspondances partielles
+        
         for name, data in localities.items():
             if query in name.lower():
-                results.append({
+                result = {
                     "name": name,
                     "canton": data.get("canton", ""),
-                    "zip": data.get("zip", "")
-                })
+                    "zip": data.get("zip", ""),
+                    "lat": data.get("lat", 0.0),
+                    "lon": data.get("lon", 0.0)
+                }
+                
+                # Correspondance exacte?
+                if name.lower() == query:
+                    exact_matches.append(result)
+                else:
+                    partial_matches.append(result)
+        
+        # Mettre les correspondances exactes en premier
+        results = exact_matches + partial_matches
     
-    # Trier les résultats par nom
-    results.sort(key=lambda x: x["name"])
+    # Trier les résultats par nom (exact matches restent en premier)
+    if len(results) > 1 and not query.isdigit():
+        exact_matches.sort(key=lambda x: x["name"])
+        partial_matches.sort(key=lambda x: x["name"])
+        results = exact_matches + partial_matches
+    else:
+        results.sort(key=lambda x: x["name"])
+    
     return results
 
 def is_valid_locality(locality: str) -> bool:

@@ -21,11 +21,14 @@ async def start(update: Update, context: CallbackContext):
         db_user = db.query(User).filter(User.telegram_id == user.id).first()
         
         if not db_user:
+            full_name = f"{user.first_name or ''} {user.last_name or ''}".strip()
+            if not full_name:
+                full_name = "Utilisateur"
+            
             new_user = User(
                 telegram_id=user.id,
                 username=user.username,
-                first_name=user.first_name,
-                last_name=user.last_name
+                full_name=full_name
             )
             db.add(new_user)
             db.commit()
@@ -62,7 +65,7 @@ async def show_main_menu(update: Update, context: CallbackContext):
     keyboard = [
         [
             InlineKeyboardButton("🔍 Rechercher", callback_data="rechercher"),
-            InlineKeyboardButton("➕ Créer", callback_data="creer_trajet")
+            InlineKeyboardButton("➕ Créer", callback_data="menu:create")
         ],
         [
             InlineKeyboardButton("👤 Mon Profil", callback_data="profil"),
