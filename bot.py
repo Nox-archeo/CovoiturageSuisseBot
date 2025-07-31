@@ -5,9 +5,39 @@ Ce fichier a été modifié pour utiliser l'approche synchrone qui fonctionne co
 """
 import os
 import sys
+import re
 import asyncio
 import logging
 from dotenv import load_dotenv
+
+# NETTOYAGE IMMÉDIAT DES VARIABLES D'ENVIRONNEMENT (SOLUTION RENDER)
+load_dotenv()
+
+def clean_env_variable(value):
+    """Nettoie une variable d'environnement des caractères non-ASCII"""
+    if not value:
+        return value
+    # Supprimer TOUS les caractères non-ASCII (0-127) et de contrôle  
+    cleaned = re.sub(r'[^\x20-\x7E]', '', value)
+    return cleaned.strip()
+
+# Nettoyer immédiatement les variables critiques AVANT tout import Telegram
+critical_vars = ['TELEGRAM_BOT_TOKEN', 'PAYPAL_CLIENT_ID', 'PAYPAL_CLIENT_SECRET']
+for var_name in critical_vars:
+    value = os.getenv(var_name)
+    if value:
+        cleaned_value = clean_env_variable(value)
+        if len(cleaned_value) != len(value):
+            print(f"🔧 Variable {var_name}: {len(value) - len(cleaned_value)} caractères non-ASCII supprimés")
+        os.environ[var_name] = cleaned_value
+        print(f"✅ Variable {var_name} nettoyée")
+
+# Marquer l'environnement
+os.environ['RENDER'] = 'true'
+os.environ['ENVIRONMENT'] = 'production'
+
+print("✅ Variables d'environnement nettoyées avant imports Telegram")
+
 from telegram.ext import (
     Application, 
     CommandHandler, 
