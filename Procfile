@@ -1,1 +1,1 @@
-web: python clean_start.py
+web: python webhook_server.py

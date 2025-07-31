@@ -4,7 +4,7 @@ services:
     runtime: python
     plan: free
     buildCommand: "pip install -r requirements-render.txt"
-    startCommand: "python clean_start.py"
+    startCommand: "python webhook_server.py"
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.4
