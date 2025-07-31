@@ -27,16 +27,32 @@ class DatabaseManager:
         Initialise le gestionnaire de base de données
         
         Args:
-            db_path: Chemin vers la base de données SQLite
+            db_path: Chemin vers la base de données SQLite (ignoré si DATABASE_URL est définie)
         """
-        if db_path is None:
-            # Utilise la base de données du projet
-            self.db_path = Path(__file__).parent / "database" / "covoiturage.db"
+        # Vérifier si on utilise PostgreSQL ou SQLite
+        database_url = os.getenv('DATABASE_URL')
+        
+        if database_url:
+            # Production : PostgreSQL via DATABASE_URL
+            logger.info("🚀 Utilisation PostgreSQL pour production")
+            self.use_postgresql = True
+            self.db_url = database_url
+            if self.db_url.startswith('postgres://'):
+                self.db_url = self.db_url.replace('postgres://', 'postgresql://', 1)
         else:
-            self.db_path = Path(db_path)
+            # Local : SQLite
+            logger.info("🏠 Utilisation SQLite pour développement local")
+            self.use_postgresql = False
+            if db_path is None:
+                self.db_path = Path(__file__).parent / "covoiturage.db"
+            else:
+                self.db_path = Path(db_path)
         
         self.commission_rate = float(os.getenv('COMMISSION_RATE', '0.12'))
-        logger.info(f"Base de données : {self.db_path}")
+        if hasattr(self, 'db_path'):
+            logger.info(f"Base de données SQLite : {self.db_path}")
+        else:
+            logger.info("Base de données PostgreSQL configurée")
         logger.info(f"Taux de commission : {self.commission_rate * 100}%")
     
     @contextmanager

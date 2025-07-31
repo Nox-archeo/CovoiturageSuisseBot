@@ -9,6 +9,7 @@ uvicorn[standard]==0.24.0
 pydantic==2.4.2
 geopy==2.4.0
 pytz==2023.3
+psycopg2-binary==2.9.9
 
 # Dependencies explicitly defined to avoid compilation issues
 httpx==0.25.2
