@@ -3,7 +3,7 @@ services:
     name: covoiturage-suisse-bot
     runtime: python
     plan: free
-    buildCommand: "pip install -r requirements.txt"
+    buildCommand: "pip install -r requirements-render.txt"
     startCommand: "python start_render.py"
     envVars:
       - key: PYTHON_VERSION
