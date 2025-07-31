@@ -90,6 +90,16 @@ async def create_bot_app_webhook():
     if not BOT_TOKEN:
         raise ValueError("Token non trouvé")
     
+    # INITIALISATION CRITIQUE DE LA BASE DE DONNÉES
+    logger.info("Initialisation de la base de données...")
+    try:
+        from database.db_manager import init_db
+        init_db()
+        logger.info("✅ Base de données initialisée avec succès")
+    except Exception as e:
+        logger.error(f"❌ Erreur d'initialisation de la base de données: {e}")
+        raise
+    
     # Créer l'application
     persistence = PicklePersistence(filepath="bot_data.pickle")
     application = Application.builder().token(BOT_TOKEN).persistence(persistence).build()
