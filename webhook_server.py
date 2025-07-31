@@ -278,18 +278,29 @@ async def webhook_handler(request: Request):
 
 @app.post("/paypal/webhook")
 async def paypal_webhook_handler(request: Request):
-    """Gère les webhooks PayPal"""
+    """Gère les webhooks PayPal avec logique complète"""
     try:
         json_data = await request.json()
-        logger.info(f"Webhook PayPal reçu: {json_data.get('event_type', 'unknown')}")
+        event_type = json_data.get('event_type', 'unknown')
+        logger.info(f"Webhook PayPal reçu: {event_type}")
         
-        # Traiter le webhook PayPal
-        # TODO: Ajouter la logique de traitement PayPal
+        # Importer et utiliser la logique PayPal existante
+        from paypal_webhook_handler import handle_paypal_webhook
         
-        return {"status": "ok"}
+        # Traiter le webhook avec la logique existante
+        success = await handle_paypal_webhook(json_data, telegram_app)
+        
+        if success:
+            logger.info(f"✅ Webhook PayPal {event_type} traité avec succès")
+            return {"status": "ok"}
+        else:
+            logger.warning(f"⚠️ Webhook PayPal {event_type} traité avec des avertissements")
+            return {"status": "ok"}  # Toujours retourner OK à PayPal
+            
     except Exception as e:
-        logger.error(f"Erreur webhook PayPal: {e}")
-        return {"status": "error", "message": str(e)}
+        logger.error(f"❌ Erreur webhook PayPal: {e}")
+        # Toujours retourner OK à PayPal pour éviter les retry
+        return {"status": "ok"}
 
 @app.get("/health")
 async def health_check():
