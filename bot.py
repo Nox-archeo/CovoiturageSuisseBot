@@ -12,9 +12,11 @@ if __name__ == "__main__":
     print("🔄 Redirection vers webhook_server.py...")
     print("📍 Déploiement Render détecté")
     
-    # Exécuter webhook_server.py directement avec subprocess
+    # Exécuter webhook_server.py directement en important et lançant
     try:
-        subprocess.run([sys.executable, "webhook_server.py"], check=True)
+        # Importer et exécuter directement le serveur webhook
+        import webhook_server
+        # Le serveur se lance automatiquement via le if __name__ == "__main__"
     except Exception as e:
         print(f"❌ Erreur lors du démarrage: {e}")
         sys.exit(1)
