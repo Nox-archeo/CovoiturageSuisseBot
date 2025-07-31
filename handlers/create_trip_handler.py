@@ -1859,32 +1859,35 @@ async def handle_calendar_navigation(update: Update, context: CallbackContext):
     await query.answer()
     logger.info(f"[CAL NAV] callback reçu: {query.data}")
     try:
-        _, action, year, month = query.data.split(":")
-        year, month = int(year), int(month)
-        if action == "cal_month":
-            # Extrait l'action (prev/next) depuis le 5ème élément
-            action = query.data.split(":")[4] if len(query.data.split(":")) >= 5 else "none"
-        
-        if action == "prev":
-            if month == 1:
-                month = 12
-                year -= 1
-            else:
-                month -= 1
-        elif action == "next":
-            if month == 12:
-                month = 1
-                year += 1
-            else:
-                month += 1
-        
-        logger.info(f"[CAL NAV] Nouvelle date après navigation: {month}/{year}")
-        markup = await create_calendar_markup(year, month)
-        await query.edit_message_text(
-            "📅 Sélectionnez la date du trajet:",
-            reply_markup=markup
-        )
-        return CREATE_CALENDAR
+        # Parsing correct pour create_cal_month:year:month:direction
+        parts = query.data.split(":")
+        if len(parts) >= 4 and parts[0] == "create_cal_month":
+            year, month, direction = int(parts[1]), int(parts[2]), parts[3]
+            
+            if direction == "prev":
+                if month == 1:
+                    month = 12
+                    year -= 1
+                else:
+                    month -= 1
+            elif direction == "next":
+                if month == 12:
+                    month = 1
+                    year += 1
+                else:
+                    month += 1
+            
+            logger.info(f"[CAL NAV] Nouvelle date après navigation: {month}/{year}")
+            markup = await create_calendar_markup(year, month)
+            await query.edit_message_text(
+                "📅 Sélectionnez la date du trajet:",
+                reply_markup=markup
+            )
+            return CREATE_CALENDAR
+        else:
+            logger.error(f"[CAL NAV] Format callback invalide: {query.data}")
+            return CREATE_CALENDAR
+            
     except Exception as e:
         logger.error(f"[CAL NAV] Erreur navigation calendrier: {str(e)}", exc_info=True)
         return CREATE_CALENDAR
