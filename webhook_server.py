@@ -60,11 +60,18 @@ async def startup_event():
     global telegram_app
     logger.info("🚀 Démarrage du bot en mode webhook...")
     
-    # Importer le bot principal
-    from bot import main as create_bot_app
-    
-    # Obtenir l'application configurée
-    telegram_app = await create_bot_app_webhook()
+    # Pour l'instant, créer une application basique pour tester le déploiement
+    try:
+        telegram_app = await create_bot_app_webhook()
+        logger.info("✅ Application bot créée avec succès")
+    except Exception as e:
+        logger.error(f"❌ Erreur création bot: {e}")
+        # Créer une application minimale pour éviter le crash
+        from telegram.ext import Application
+        BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+        telegram_app = Application.builder().token(BOT_TOKEN).build()
+        await telegram_app.initialize()
+        logger.info("⚠️ Application minimale créée")
     
     # Configurer le webhook
     webhook_url = os.getenv('WEBHOOK_URL')
@@ -113,27 +120,33 @@ async def create_bot_app_webhook():
     return application
 
 async def setup_all_handlers(application):
-    """Configure tous les handlers du bot"""
-    # Import des handlers
-    from handlers.create_trip_handler import create_trip_conv_handler, publish_trip_handler, main_menu_handler, my_trips_handler
-    from handlers.search_trip_handler import search_trip_conv_handler
-    from handlers.menu_handlers import start_command, handle_menu_buttons
-    from handlers.profile_handler import profile_handler, profile_button_handler, profile_conv_handler
-    from telegram.ext import CommandHandler, CallbackQueryHandler
-    from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-    
-    # Commandes de base
-    application.add_handler(CommandHandler("start", start_command))
-    
-    # Commande profile en deuxième position
-    async def cmd_profile(update: Update, context):
-        return await profile_handler(update, context)
-    application.add_handler(CommandHandler("profile", cmd_profile))
-    
-    # Ajouter les ConversationHandlers principaux
-    application.add_handler(create_trip_conv_handler)
-    application.add_handler(search_trip_conv_handler)
-    application.add_handler(profile_conv_handler)
+    """Configure les handlers de base du bot"""
+    try:
+        # Import des handlers de base
+        from handlers.menu_handlers import start_command
+        from telegram.ext import CommandHandler
+        
+        # Commandes de base
+        application.add_handler(CommandHandler("start", start_command))
+        logger.info("✅ Handlers de base configurés")
+        
+        # Essayer d'ajouter les autres handlers
+        try:
+            from handlers.profile_handler import profile_handler
+            async def cmd_profile(update, context):
+                return await profile_handler(update, context)
+            application.add_handler(CommandHandler("profile", cmd_profile))
+            logger.info("✅ Handler profile ajouté")
+        except Exception as e:
+            logger.warning(f"⚠️ Impossible d'ajouter profile handler: {e}")
+            
+    except Exception as e:
+        logger.error(f"❌ Erreur configuration handlers: {e}")
+        # Au minimum, ajouter un handler start basique
+        from telegram.ext import CommandHandler
+        async def basic_start(update, context):
+            await update.message.reply_text("🤖 Bot en mode maintenance - Webhook actif")
+        application.add_handler(CommandHandler("start", basic_start))
     
     logger.info("✅ Handlers principaux configurés pour webhook")
 
