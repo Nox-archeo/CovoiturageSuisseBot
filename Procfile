@@ -1,1 +1,1 @@
-web: python start_render.py
+web: python clean_start.py
