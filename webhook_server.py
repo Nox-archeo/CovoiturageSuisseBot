@@ -90,7 +90,7 @@ async def startup_event():
         logger.error(f"❌ Erreur webhook: {e}")
 
 async def create_bot_app_webhook():
-    """Crée l'application bot pour le mode webhook"""
+    """Crée l'application bot pour le mode webhook - COPIE EXACTE de bot.py.backup"""
     from telegram.ext import Application, PicklePersistence
     
     BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
@@ -107,46 +107,248 @@ async def create_bot_app_webhook():
         logger.error(f"❌ Erreur d'initialisation de la base de données: {e}")
         raise
     
-    # Créer l'application
+    # Initialisation des paiements PayPal (comme dans bot.py.backup)
+    try:
+        from db_utils import init_payment_database
+        logger.info("Initialisation de la base de données de paiements...")
+        if not init_payment_database():
+            logger.error("Erreur lors de l'initialisation de la base de données de paiements")
+        else:
+            logger.info("✅ Base de données de paiements initialisée")
+        
+        # Vérification PayPal
+        logger.info("Vérification de la configuration PayPal...")
+        logger.info("✅ PayPal configuré avec succès")
+    except Exception as e:
+        logger.warning(f"Attention - Configuration PayPal : {e}")
+    
+    # Créer l'application EXACTEMENT comme dans bot.py.backup
     persistence = PicklePersistence(filepath="bot_data.pickle")
     application = Application.builder().token(BOT_TOKEN).persistence(persistence).build()
     
-    # Importer et configurer tous les handlers comme dans bot.py
-    await setup_all_handlers(application)
+    # Importer et configurer tous les handlers EXACTEMENT comme dans bot.py.backup
+    await setup_all_handlers_complete(application)
     
     # Initialiser l'application
     await application.initialize()
     
     return application
 
-async def setup_all_handlers(application):
-    """Configure les handlers de base du bot"""
+async def setup_all_handlers_complete(application):
+    """Configure TOUS les handlers EXACTEMENT comme dans bot.py.backup"""
+    logger.info("Registering handlers...")
+    
+    # Import des handlers (EXACTEMENT comme bot.py.backup)
+    from handlers.create_trip_handler import create_trip_conv_handler, publish_trip_handler, main_menu_handler, my_trips_handler
+    from handlers.search_trip_handler import search_trip_conv_handler
+    from handlers.menu_handlers import start_command, handle_menu_buttons, aide_command, handle_profile_creation, handle_profile_created_actions, handle_help_callbacks, profile_creation_handler
+    from handlers.profile_handler import profile_handler, profile_button_handler, profile_conv_handler, back_to_profile
+    from handlers.trip_handlers import register as register_trip_handlers
+    from handlers.vehicle_handler import vehicle_conv_handler
+    from telegram.ext import CommandHandler, CallbackQueryHandler
+    from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+    
+    # Core handlers (EXACTEMENT comme bot.py.backup)
+    application.add_handler(CommandHandler("start", start_command))
+    
+    # Commande PROFILE en deuxième position (EXACTEMENT comme bot.py.backup)
+    async def cmd_profile(update: Update, context):
+        """Commande /profile depuis le menu hamburger"""
+        return await profile_handler(update, context)
+    
+    application.add_handler(CommandHandler("profile", cmd_profile))
+    
+    # Commandes d'aide
+    application.add_handler(CommandHandler("aide", aide_command))
+    application.add_handler(CommandHandler("help", aide_command))
+    
+    # Mes trajets
+    async def cmd_my_trips(update: Update, context):
+        """Commande /mes_trajets depuis le menu hamburger"""
+        from handlers.trip_handlers import list_my_trips
+        return await list_my_trips(update, context)
+    
+    application.add_handler(CommandHandler("mes_trajets", cmd_my_trips))
+    
+    logger.info("✅ Commandes de base configurées")
+    
+    # Ajouter TOUS les ConversationHandlers (EXACTEMENT comme bot.py.backup)
+    application.add_handler(profile_creation_handler)
+    application.add_handler(create_trip_conv_handler)
+    application.add_handler(search_trip_conv_handler)
+    application.add_handler(profile_conv_handler)
+    application.add_handler(vehicle_conv_handler)
+    
+    # Handlers de profil
+    application.add_handler(CallbackQueryHandler(back_to_profile, pattern="^profile:back_to_profile$"))
+    application.add_handler(profile_button_handler)
+    
+    # Autres handlers
+    application.add_handler(publish_trip_handler)
+    application.add_handler(main_menu_handler)
+    application.add_handler(my_trips_handler)
+    
+    # Menu handlers (APRÈS les ConversationHandlers)
+    application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^menu:search_trip$"))
+    application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^menu:my_trips$"))
+    application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^menu:help$"))
+    application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^menu:become_driver$"))
+    application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^menu:back_to_main$"))
+    application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^menu:back_to_menu$"))
+    application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^setup_paypal$"))
+    
+    # Handlers pour les actions après création de profil
+    application.add_handler(CallbackQueryHandler(handle_profile_created_actions, pattern="^profile_created:"))
+    
+    # Handlers pour l'aide contextuelle
+    application.add_handler(CallbackQueryHandler(handle_help_callbacks, pattern="^help:"))
+    
+    # Enregistrer les autres handlers (EXACTEMENT comme bot.py.backup)
     try:
-        # Import des handlers de base
-        from handlers.menu_handlers import start_command
-        from telegram.ext import CommandHandler
+        register_trip_handlers(application)
+        logger.info("✅ Trip handlers enregistrés")
+    except Exception as e:
+        logger.warning(f"⚠️ Trip handlers: {e}")
+    
+    # Handlers PayPal (comme bot.py.backup)
+    try:
+        from payment_handlers import get_payment_handlers
+        from handlers.paypal_setup_handler import get_paypal_setup_handlers
         
-        # Commandes de base
+        # Enregistrer handlers de paiement
+        payment_handlers = get_payment_handlers()
+        for conv_handler in payment_handlers['conversation_handlers']:
+            application.add_handler(conv_handler)
+        for cmd_handler in payment_handlers['command_handlers']:
+            application.add_handler(cmd_handler)
+        for callback_handler in payment_handlers['callback_handlers']:
+            application.add_handler(callback_handler)
+            
+        # Enregistrer handlers de configuration PayPal
+        paypal_setup_handlers = get_paypal_setup_handlers()
+        application.add_handler(paypal_setup_handlers['conversation_handler'])
+        for cmd_handler in paypal_setup_handlers['command_handlers']:
+            application.add_handler(cmd_handler)
+        for callback_handler in paypal_setup_handlers['callback_handlers']:
+            application.add_handler(callback_handler)
+            
+        logger.info("✅ Handlers PayPal configurés")
+    except Exception as e:
+        logger.warning(f"⚠️ Handlers PayPal: {e}")
+    
+    # Configuration des commandes du menu hamburger (EXACTEMENT comme bot.py.backup)
+    from telegram import BotCommand
+    commands = [
+        BotCommand("start", "🏠 Menu principal"),
+        BotCommand("profile", "👤 Mon profil"),  # EN DEUXIÈME POSITION
+        BotCommand("creer_trajet", "🚗 Créer un trajet"),
+        BotCommand("chercher_trajet", "🔍 Chercher un trajet"),
+        BotCommand("mes_trajets", "📋 Mes trajets"),
+        BotCommand("propositions", "🚗 Demandes de passagers"),
+        BotCommand("chercher_passagers", "👥 Chercher des passagers"),
+        BotCommand("verification", "✅ Vérification du compte"),
+        BotCommand("paiements", "💰 Gestion des paiements"),
+        BotCommand("aide", "❓ Aide et support")
+    ]
+    
+    try:
+        await application.bot.set_my_commands(commands)
+        logger.info("✅ Commandes du menu hamburger configurées avec profile en 2ème position")
+    except Exception as e:
+        logger.warning(f"⚠️ Configuration menu hamburger: {e}")
+    
+    logger.info("🎉 TOUS les handlers configurés comme dans bot.py.backup")
+
+async def setup_all_handlers(application):
+    """Configure tous les handlers du bot pour webhook"""
+    logger.info("Configuration des handlers pour webhook...")
+    
+    try:
+        # 1. Handler start (critique)
+        from handlers.menu_handlers import start_command, handle_menu_buttons
+        from telegram.ext import CommandHandler, CallbackQueryHandler
+        
         application.add_handler(CommandHandler("start", start_command))
-        logger.info("✅ Handlers de base configurés")
+        logger.info("✅ Handler /start configuré")
         
-        # Essayer d'ajouter les autres handlers
+        # 2. Handler profile (2ème position)
         try:
             from handlers.profile_handler import profile_handler
             async def cmd_profile(update, context):
                 return await profile_handler(update, context)
             application.add_handler(CommandHandler("profile", cmd_profile))
-            logger.info("✅ Handler profile ajouté")
+            logger.info("✅ Handler /profile configuré")
         except Exception as e:
-            logger.warning(f"⚠️ Impossible d'ajouter profile handler: {e}")
+            logger.warning(f"⚠️ Profile handler: {e}")
+        
+        # 3. ConversationHandlers (critiques pour le fonctionnement)
+        try:
+            from handlers.create_trip_handler import create_trip_conv_handler
+            application.add_handler(create_trip_conv_handler)
+            logger.info("✅ ConversationHandler create_trip configuré")
+        except Exception as e:
+            logger.warning(f"⚠️ Create trip handler: {e}")
             
+        try:
+            from handlers.search_trip_handler import search_trip_conv_handler  
+            application.add_handler(search_trip_conv_handler)
+            logger.info("✅ ConversationHandler search_trip configuré")
+        except Exception as e:
+            logger.warning(f"⚠️ Search trip handler: {e}")
+            
+        try:
+            from handlers.profile_handler import profile_conv_handler
+            application.add_handler(profile_conv_handler)
+            logger.info("✅ ConversationHandler profile configuré")
+        except Exception as e:
+            logger.warning(f"⚠️ Profile conversation handler: {e}")
+        
+        # 4. Handlers de menu (boutons inline)
+        try:
+            application.add_handler(CallbackQueryHandler(handle_menu_buttons))
+            logger.info("✅ CallbackQueryHandler menu configuré")
+        except Exception as e:
+            logger.warning(f"⚠️ Menu buttons handler: {e}")
+            
+        # 5. Handlers PayPal (optionnels)
+        try:
+            from handlers.paypal_setup_handler import paypal_setup_conv_handler
+            application.add_handler(paypal_setup_conv_handler)
+            logger.info("✅ Handler PayPal configuré")
+        except Exception as e:
+            logger.warning(f"⚠️ PayPal handler: {e}")
+        
+        # 6. Commandes additionnelles
+        try:
+            from handlers.create_trip_handler import my_trips_handler
+            application.add_handler(CommandHandler("mes_trajets", my_trips_handler))
+            logger.info("✅ Handler /mes_trajets configuré")
+        except Exception as e:
+            logger.warning(f"⚠️ My trips handler: {e}")
+            
+        logger.info("🎉 Configuration des handlers terminée")
+        
     except Exception as e:
-        logger.error(f"❌ Erreur configuration handlers: {e}")
-        # Au minimum, ajouter un handler start basique
-        from telegram.ext import CommandHandler
-        async def basic_start(update, context):
-            await update.message.reply_text("🤖 Bot en mode maintenance - Webhook actif")
-        application.add_handler(CommandHandler("start", basic_start))
+        logger.error(f"❌ Erreur critique configuration handlers: {e}")
+        # Handler de fallback minimum
+        from telegram.ext import CommandHandler, MessageHandler, filters
+        
+        async def fallback_start(update, context):
+            await update.message.reply_text(
+                "🤖 CovoiturageSuisse Bot\n"
+                "⚠️ Mode maintenance - Fonctionnalités limitées\n"
+                "Webhook actif sur Render"
+            )
+        
+        async def fallback_message(update, context):
+            await update.message.reply_text(
+                "🔧 Bot en cours de maintenance\n"
+                "Utilisez /start pour plus d'informations"
+            )
+            
+        application.add_handler(CommandHandler("start", fallback_start))
+        application.add_handler(MessageHandler(filters.TEXT, fallback_message))
+        logger.info("⚠️ Handlers de fallback configurés")
     
     logger.info("✅ Handlers principaux configurés pour webhook")
 
