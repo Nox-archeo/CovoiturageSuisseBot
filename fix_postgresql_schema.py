@@ -57,10 +57,23 @@ def fix_postgresql_schema():
             corrections = [
                 # Assurer que les colonnes TEXT sont bien définies
                 "ALTER TABLE users ALTER COLUMN notification_preferences TYPE TEXT",
-                # Assurer les contraintes NOT NULL
+                # Conversion des colonnes String sans limite vers des tailles définies
+                "ALTER TABLE users ALTER COLUMN username TYPE VARCHAR(100)",
+                "ALTER TABLE users ALTER COLUMN car_model TYPE VARCHAR(100)",
+                "ALTER TABLE users ALTER COLUMN language TYPE VARCHAR(10)",
+                "ALTER TABLE users ALTER COLUMN phone TYPE VARCHAR(20)",
+                "ALTER TABLE users ALTER COLUMN license_plate TYPE VARCHAR(20)",
+                "ALTER TABLE users ALTER COLUMN gender TYPE VARCHAR(1)",
+                "ALTER TABLE users ALTER COLUMN preferred_language TYPE VARCHAR(10)",
+                "ALTER TABLE users ALTER COLUMN full_name TYPE VARCHAR(100)",
+                "ALTER TABLE users ALTER COLUMN paypal_email TYPE VARCHAR(254)",
+                # Nettoyer les chaînes vides en NULL
                 "UPDATE users SET paypal_email = NULL WHERE paypal_email = ''",
                 "UPDATE users SET car_model = NULL WHERE car_model = ''",
                 "UPDATE users SET username = NULL WHERE username = ''",
+                "UPDATE users SET license_plate = NULL WHERE license_plate = ''",
+                "UPDATE users SET gender = NULL WHERE gender = ''",
+                "UPDATE users SET full_name = NULL WHERE full_name = ''",
             ]
             
             for correction in corrections:
@@ -82,11 +95,16 @@ def test_user_creation():
     """Test la création d'un utilisateur pour vérifier le schéma"""
     try:
         from database.models import User
+        import random
+        
         db = get_db()
+        
+        # ID aléatoire pour éviter les conflits
+        test_id = random.randint(100000000, 999999999)
         
         # Test simple de création (rollback après)
         test_user = User(
-            telegram_id=999999999,
+            telegram_id=test_id,
             username="test_user",
             full_name="Test User",
             age=25,
