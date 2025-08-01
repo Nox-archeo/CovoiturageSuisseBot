@@ -267,9 +267,10 @@ async def setup_all_handlers_complete(application):
     
     # Handlers de recherche spécialisés
     try:
-        from handlers.menu_handlers import register_menu_search_handlers
+        # Fonction register_menu_search_handlers n'existe pas encore
+        # from handlers.menu_handlers import register_menu_search_handlers
         from handlers.search_passengers import register_search_passengers_handler
-        register_menu_search_handlers(application)
+        # register_menu_search_handlers(application)
         register_search_passengers_handler(application)
         logger.info("✅ Handlers de recherche spécialisés enregistrés")
     except Exception as e:
