@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean, ForeignKey, Text
 from sqlalchemy.orm import relationship
 from .db_manager import Base
 from datetime import datetime  # Ajout de l'import manquant
@@ -7,13 +7,13 @@ class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     telegram_id = Column(Integer, unique=True, nullable=False)
-    username = Column(String)
+    username = Column(String(100))
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     
     # Profil conducteur
     is_driver = Column(Boolean, default=False, nullable=False)
     driver_rating = Column(Float, default=5.0, nullable=False)
-    car_model = Column(String, nullable=True)
+    car_model = Column(String(100), nullable=True)
     license_verified = Column(Boolean, default=False, nullable=False)
     
     # Profil passager
@@ -21,24 +21,24 @@ class User(Base):
     passenger_rating = Column(Float, default=5.0, nullable=False)
     
     # Commun - Retrait de subscription_end qui n'est pas utilisé
-    stripe_customer_id = Column(String, nullable=True)
-    stripe_subscription_id = Column(String, nullable=True)
-    stripe_account_id = Column(String, nullable=True)  # ID du compte Stripe Connect Express pour les conducteurs
+    stripe_customer_id = Column(String(100), nullable=True)
+    stripe_subscription_id = Column(String(100), nullable=True)
+    stripe_account_id = Column(String(100), nullable=True)  # ID du compte Stripe Connect Express pour les conducteurs
     is_admin = Column(Boolean, default=False)
-    language = Column(String, default='fr')
-    phone = Column(String)
-    license_plate = Column(String)
+    language = Column(String(10), default='fr')
+    phone = Column(String(20))
+    license_plate = Column(String(20))
     
     # Informations de vérification
     id_verified = Column(Boolean, default=False)
     email_verified = Column(Boolean, default=False)
     phone_verified = Column(Boolean, default=False)
-    gender = Column(String)  # 'F' pour femme, 'M' pour homme
+    gender = Column(String(1))  # 'F' pour femme, 'M' pour homme
     identity_verified = Column(Boolean, default=False)  # Vérification d'identité
     
     # Préférences générales
-    preferred_language = Column(String, default='fr')
-    notification_preferences = Column(String)
+    preferred_language = Column(String(10), default='fr')
+    notification_preferences = Column(Text)
     female_only = Column(Boolean, default=False)
     
     # Stats et réputation
@@ -47,11 +47,11 @@ class User(Base):
     response_rate = Column(Float, default=0.0)
 
     # Ajout du champ pour le nom complet
-    full_name = Column(String)
+    full_name = Column(String(100))
     age = Column(Integer, nullable=True)
     
     # Champ PayPal
-    paypal_email = Column(String, nullable=True)  # Email PayPal pour recevoir les paiements
+    paypal_email = Column(String(254), nullable=True)  # Email PayPal pour recevoir les paiements
 
     def __init__(self, **kwargs):
         # S'assurer que les champs requis ont des valeurs par défaut
@@ -67,12 +67,12 @@ class Trip(Base):
     __tablename__ = 'trips'
     id = Column(Integer, primary_key=True)
     driver_id = Column(Integer, ForeignKey('users.id'))
-    departure_city = Column(String)
-    arrival_city = Column(String)
+    departure_city = Column(String(100))
+    arrival_city = Column(String(100))
     departure_time = Column(DateTime)
     seats_available = Column(Integer)
     price_per_seat = Column(Float)
-    additional_info = Column(String)
+    additional_info = Column(Text)
     driver = relationship("User", foreign_keys=[driver_id])
     bookings = relationship("Booking", back_populates="trip")
     
@@ -80,12 +80,12 @@ class Trip(Base):
     total_trip_price = Column(Float, nullable=True)  # Prix total théorique du trajet
     
     # Nouvelles colonnes
-    smoking = Column(String, default="no_smoking")
-    music = Column(String, default="music_ok")
-    talk_preference = Column(String, default="depends")
-    pets_allowed = Column(String, default="no_pets")
-    luggage_size = Column(String, default="medium")
-    stops = Column(String)  # Liste de villes intermédiaires
+    smoking = Column(String(20), default="no_smoking")
+    music = Column(String(20), default="music_ok")
+    talk_preference = Column(String(20), default="depends")
+    pets_allowed = Column(String(20), default="no_pets")
+    luggage_size = Column(String(20), default="medium")
+    stops = Column(Text)  # Liste de villes intermédiaires
     highway = Column(Boolean, default=True)  # Trajet par autoroute
     flexible_time = Column(Boolean, default=False)  # Horaire flexible
     women_only = Column(Boolean, default=False)  # Option "Entre femmes"

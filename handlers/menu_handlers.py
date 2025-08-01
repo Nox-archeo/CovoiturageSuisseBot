@@ -772,7 +772,7 @@ async def complete_profile_creation(update: Update, context: CallbackContext):
         username=user_data.username,
         age=context.user_data['age'],
         phone=context.user_data['phone'],
-        paypal_email=context.user_data.get('paypal_email', ''),
+        paypal_email=context.user_data.get('paypal_email') or None,
         is_driver=(selected_role == "driver"),
         is_passenger=True  # Tous les utilisateurs peuvent être passagers
     )
