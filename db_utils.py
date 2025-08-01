@@ -60,18 +60,22 @@ class DatabaseManager:
         """
         Context manager pour gérer les connexions à la base de données
         """
-        conn = None
-        try:
-            conn = sqlite3.connect(self.db_path)
-            conn.row_factory = sqlite3.Row  # Pour accéder aux colonnes par nom
-            yield conn
-        except Exception as e:
-            if conn:
-                conn.rollback()
-            logger.error(f"Erreur de base de données : {e}")
-            raise
-        finally:
-            if conn:
+        if self.use_postgresql:
+            # PostgreSQL via SQLAlchemy
+            try:
+                from database.db_manager import get_db
+                db = get_db()
+                yield db
+            finally:
+                if 'db' in locals():
+                    db.close()
+        else:
+            # SQLite
+            conn = sqlite3.connect(str(self.db_path))
+            conn.row_factory = sqlite3.Row
+            try:
+                yield conn
+            finally:
                 conn.close()
     
     def initialize_database(self) -> bool:
