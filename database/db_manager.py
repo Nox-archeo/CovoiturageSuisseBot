@@ -9,17 +9,6 @@ load_dotenv()
 
 logger = logging.getLogger(__name__)
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, scoped_session, declarative_base
-from sqlalchemy.pool import StaticPool
-import os
-import logging
-from dotenv import load_dotenv
-
-load_dotenv()
-
-logger = logging.getLogger(__name__)
-
 # Configuration automatique de la base de données (SQLite local ou PostgreSQL Render)
 DATABASE_URL = os.getenv('DATABASE_URL')
 
