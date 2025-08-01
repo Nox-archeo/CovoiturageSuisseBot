@@ -81,78 +81,46 @@ class DatabaseManager:
     def initialize_database(self) -> bool:
         """
         Initialise la base de données avec les tables nécessaires pour les paiements
-        
-        Returns:
-            True si l'initialisation réussit
+        Compatible SQLite et PostgreSQL
         """
         try:
-            with self.get_connection() as conn:
-                cursor = conn.cursor()
-                
-                # Table pour stocker les détails des paiements
-                cursor.execute('''
-                    CREATE TABLE IF NOT EXISTS payments (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        booking_id INTEGER NOT NULL,
-                        trip_id INTEGER NOT NULL,
-                        passenger_id INTEGER NOT NULL,
-                        driver_id INTEGER NOT NULL,
-                        amount REAL NOT NULL,
-                        commission_amount REAL NOT NULL,
-                        driver_amount REAL NOT NULL,
-                        payment_method TEXT NOT NULL DEFAULT 'paypal',
-                        paypal_payment_id TEXT,
-                        paypal_payout_id TEXT,
-                        payment_status TEXT NOT NULL DEFAULT 'pending',
-                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                        completed_at TIMESTAMP,
-                        FOREIGN KEY (booking_id) REFERENCES bookings (id),
-                        FOREIGN KEY (trip_id) REFERENCES trips (id),
-                        FOREIGN KEY (passenger_id) REFERENCES users (id),
-                        FOREIGN KEY (driver_id) REFERENCES users (id)
-                    )
-                ''')
-                
-                # Table pour l'historique des transactions
-                cursor.execute('''
-                    CREATE TABLE IF NOT EXISTS payment_transactions (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        payment_id INTEGER NOT NULL,
-                        transaction_type TEXT NOT NULL,
-                        amount REAL NOT NULL,
-                        status TEXT NOT NULL,
-                        external_id TEXT,
-                        details TEXT,
-                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                        FOREIGN KEY (payment_id) REFERENCES payments (id)
-                    )
-                ''')
-                
-                # Table pour les emails PayPal des utilisateurs
-                cursor.execute('''
-                    CREATE TABLE IF NOT EXISTS user_payment_info (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        user_id INTEGER NOT NULL UNIQUE,
-                        paypal_email TEXT,
-                        stripe_account_id TEXT,
-                        payment_method_preference TEXT DEFAULT 'paypal',
-                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                        FOREIGN KEY (user_id) REFERENCES users (id)
-                    )
-                ''')
-                
-                # Index pour améliorer les performances
-                cursor.execute('CREATE INDEX IF NOT EXISTS idx_payments_booking ON payments(booking_id)')
-                cursor.execute('CREATE INDEX IF NOT EXISTS idx_payments_trip ON payments(trip_id)')
-                cursor.execute('CREATE INDEX IF NOT EXISTS idx_payments_status ON payments(payment_status)')
-                cursor.execute('CREATE INDEX IF NOT EXISTS idx_transactions_payment ON payment_transactions(payment_id)')
-                cursor.execute('CREATE INDEX IF NOT EXISTS idx_user_payment_user ON user_payment_info(user_id)')
-                
-                conn.commit()
-                logger.info("✅ Base de données initialisée avec succès")
+            if self.use_postgresql:
+                # PostgreSQL : Les tables sont gérées par SQLAlchemy
+                logger.info("✅ Base de données PostgreSQL gérée par SQLAlchemy")
                 return True
+            else:
+                # SQLite : Création manuelle des tables
+                with self.get_connection() as conn:
+                    cursor = conn.cursor()
+                    
+                    # Table pour stocker les détails des paiements
+                    cursor.execute('''
+                        CREATE TABLE IF NOT EXISTS payments (
+                            id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            booking_id INTEGER NOT NULL,
+                            trip_id INTEGER NOT NULL,
+                            passenger_id INTEGER NOT NULL,
+                            driver_id INTEGER NOT NULL,
+                            amount REAL NOT NULL,
+                            commission_amount REAL NOT NULL,
+                            driver_amount REAL NOT NULL,
+                            payment_method TEXT NOT NULL DEFAULT 'paypal',
+                            paypal_payment_id TEXT,
+                            paypal_payout_id TEXT,
+                            payment_status TEXT NOT NULL DEFAULT 'pending',
+                            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                            completed_at TIMESTAMP,
+                            FOREIGN KEY (booking_id) REFERENCES bookings (id),
+                            FOREIGN KEY (trip_id) REFERENCES trips (id),
+                            FOREIGN KEY (passenger_id) REFERENCES users (id),
+                            FOREIGN KEY (driver_id) REFERENCES users (id)
+                        )
+                    ''')
+                    
+                    conn.commit()
+                    logger.info("✅ Base de données SQLite initialisée avec succès")
+                    return True
                 
         except Exception as e:
             logger.error(f"Erreur lors de l'initialisation de la base de données : {e}")

@@ -60,7 +60,7 @@ async def startup_event():
     global telegram_app
     logger.info("🚀 Démarrage du bot en mode webhook...")
     
-    # Pour l'instant, créer une application basique pour tester le déploiement
+    # Créer l'application bot
     try:
         telegram_app = await create_bot_app_webhook()
         logger.info("✅ Application bot créée avec succès")
