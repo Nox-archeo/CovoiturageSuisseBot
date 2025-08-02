@@ -104,15 +104,14 @@ async def create_bot_app_webhook():
         init_db()
         logger.info("✅ Base de données initialisée avec succès")
         
-        # MIGRATION AUTOMATIQUE POUR POSTGRESQL (DÉSACTIVÉE TEMPORAIREMENT)
-        # logger.info("🔧 Application des corrections PostgreSQL...")
-        # try:
-        #     import fix_postgresql_schema
-        #     fix_postgresql_schema.fix_postgresql_schema()
-        #     logger.info("✅ Corrections PostgreSQL appliquées")
-        # except Exception as migration_error:
-        #     logger.warning(f"⚠️ Migration PostgreSQL échouée: {migration_error}")
-        logger.info("⚠️ Migration PostgreSQL désactivée - serveur démarre d'abord")
+        # MIGRATION RAPIDE POUR POSTGRESQL (NON-BLOQUANTE)
+        logger.info("🔧 Application correction rapide PostgreSQL...")
+        try:
+            import quick_postgresql_fix
+            quick_postgresql_fix.quick_postgresql_fix()
+            logger.info("✅ Correction PostgreSQL appliquée")
+        except Exception as migration_error:
+            logger.warning(f"⚠️ Migration rapide échouée (continuons): {migration_error}")
             
     except Exception as e:
         logger.error(f"❌ Erreur d'initialisation de la base de données: {e}")
