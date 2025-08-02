@@ -104,14 +104,19 @@ async def create_bot_app_webhook():
         init_db()
         logger.info("✅ Base de données initialisée avec succès")
         
-        # MIGRATION RAPIDE POUR POSTGRESQL (NON-BLOQUANTE)
-        logger.info("🔧 Application correction rapide PostgreSQL...")
+        # SOLUTION RADICALE POUR ERREUR SQL 9h9h PERSISTANTE
+        logger.info("� Correction radicale PostgreSQL pour SQL 9h9h...")
         try:
-            import quick_postgresql_fix
-            quick_postgresql_fix.quick_postgresql_fix()
-            logger.info("✅ Correction PostgreSQL appliquée")
+            import force_recreate_tables
+            success = force_recreate_tables.force_recreate_tables()
+            if success:
+                logger.info("🎉 Tables PostgreSQL recréées - Création profils va fonctionner!")
+            else:
+                logger.warning("⚠️ Recréation échouée - Tentative correction simple...")
+                import quick_postgresql_fix
+                quick_postgresql_fix.quick_postgresql_fix()
         except Exception as migration_error:
-            logger.warning(f"⚠️ Migration rapide échouée (continuons): {migration_error}")
+            logger.warning(f"⚠️ Toutes corrections échouées: {migration_error}")
             
     except Exception as e:
         logger.error(f"❌ Erreur d'initialisation de la base de données: {e}")
