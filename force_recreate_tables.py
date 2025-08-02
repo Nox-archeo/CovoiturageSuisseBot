@@ -55,12 +55,12 @@ def force_recreate_tables():
             conn.commit()
             logger.info("🔥 TOUTES LES TABLES SUPPRIMÉES")
             
-        # Recréer avec le schéma corrigé
         logger.info("🔨 RECREATION AVEC SCHÉMA CORRIGÉ...")
         Base.metadata.create_all(bind=engine)
         
         logger.info("🎉 TABLES RECRÉÉES AVEC SUCCÈS!")
-        logger.info("✅ PROBLÈME SQL 9h9h RÉSOLU")
+        logger.info("✅ telegram_id = BigInteger (fix integer out of range)")
+        logger.info("✅ PROBLÈME SQL 9h9h + NumericValueOutOfRange RÉSOLU")
         return True
         
     except Exception as e:
