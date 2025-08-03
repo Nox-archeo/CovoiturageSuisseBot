@@ -542,9 +542,14 @@ async def setup_all_handlers_complete(application):
         BotCommand("aide", "❓ Aide et support")
     ]
     
+    # Log pour confirmer la suppression de 'propositions'
+    command_list = [cmd.command for cmd in commands]
+    logger.info(f"📋 Menu hamburger configuré avec {len(commands)} commandes: {', '.join(command_list)}")
+    logger.info("🗑️ Commande 'propositions' définitivement supprimée du menu")
+    
     try:
         await application.bot.set_my_commands(commands)
-        logger.info("✅ Commandes du menu hamburger configurées avec profile en 2ème position")
+        logger.info("✅ Commandes du menu hamburger configurées - version nettoyée sans propositions")
     except Exception as e:
         logger.warning(f"⚠️ Configuration menu hamburger: {e}")
     
