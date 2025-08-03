@@ -83,7 +83,28 @@ def get_cities_by_canton(canton_code: str) -> List[str]:
     
     # Trier par ordre alphabétique
     cities.sort()
+    
+    # Debug: afficher le nombre de villes trouvées
+    logger.info(f"Canton {canton_code}: {len(cities)} villes trouvées")
+    if len(cities) > 0 and len(cities) <= 10:
+        logger.info(f"Villes du canton {canton_code}: {', '.join(cities)}")
+    elif len(cities) > 10:
+        logger.info(f"Premières villes du canton {canton_code}: {', '.join(cities[:10])}...")
+    
     return cities
+
+def get_date_display(date_filter: str) -> str:
+    """Retourne un texte lisible pour le filtre de date"""
+    if date_filter == "today":
+        return "aujourd'hui"
+    elif date_filter == "tomorrow":
+        return "demain"
+    elif date_filter == "week":
+        return "cette semaine"
+    elif date_filter == "month":
+        return "ce mois"
+    else:
+        return "toutes les dates"
 
 async def start_passenger_search(update: Update, context: CallbackContext) -> int:
     """Démarre la recherche de passagers"""
@@ -246,11 +267,30 @@ async def perform_passenger_search(update: Update, context: CallbackContext) -> 
         if canton and canton != "ALL":
             # Charger les villes du canton
             canton_cities = get_cities_by_canton(canton)
+            logger.info(f"Recherche dans canton {canton}: {len(canton_cities)} villes trouvées")
+            
             if canton_cities:
+                # Appliquer le filtre des villes du canton
                 base_query = base_query.filter(
                     Trip.departure_city.in_(canton_cities) | 
                     Trip.arrival_city.in_(canton_cities)
                 )
+                logger.info(f"Filtre appliqué pour canton {canton}")
+            else:
+                # Aucune ville trouvée pour ce canton - pas de résultats
+                logger.warning(f"Aucune ville trouvée pour canton {canton}")
+                await query.edit_message_text(
+                    f"🔍 *Recherche de passagers*\n\n"
+                    f"📍 Région: {CANTONS.get(canton, {}).get('name', canton)}\n"
+                    f"📅 Période: {get_date_display(date_filter)}\n\n"
+                    f"❌ Aucune ville connue pour ce canton.\n\n"
+                    f"Veuillez vérifier les données ou essayer un autre canton.",
+                    parse_mode="Markdown",
+                    reply_markup=InlineKeyboardMarkup([[
+                        InlineKeyboardButton("🔍 Nouvelle recherche", callback_data="search_passengers")
+                    ]])
+                )
+                return SHOWING_RESULTS
         
         # Filtrer par date
         now = datetime.now()

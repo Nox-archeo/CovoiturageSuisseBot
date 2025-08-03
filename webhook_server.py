@@ -118,6 +118,8 @@ import logging
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request
 import uvicorn
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import CallbackContext
 
 # NETTOYAGE IMMÉDIAT DES VARIABLES D'ENVIRONNEMENT (SOLUTION RENDER)
 load_dotenv()
@@ -260,6 +262,32 @@ async def create_bot_app_webhook():
     await application.initialize()
     
     return application
+
+async def handle_search_user_type_selection(update: Update, context: CallbackContext):
+    """Gère la sélection du type d'utilisateur (conducteur/passager) en dehors du ConversationHandler"""
+    from telegram.ext import CallbackContext
+    query = update.callback_query
+    await query.answer()
+    
+    user_type = query.data.split(":")[1]  # "driver" ou "passenger"
+    
+    if user_type == "driver":
+        # Rediriger vers la recherche de passagers
+        from handlers.search_passengers import start_passenger_search
+        return await start_passenger_search(update, context)
+    elif user_type == "passenger":
+        # Rediriger vers la recherche de trajets normale
+        from handlers.search_trip_handler import start_search_trip
+        context.user_data.clear()
+        context.user_data['search_user_type'] = 'passenger'
+        return await start_search_trip(update, context)
+    else:
+        await query.edit_message_text(
+            "❌ Option non reconnue. Veuillez réessayer.",
+            reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton("🔙 Menu principal", callback_data="main_menu")
+            ]])
+        )
 
 async def setup_all_handlers_complete(application):
     """Configure TOUS les handlers EXACTEMENT comme dans bot.py.backup"""
@@ -479,6 +507,9 @@ async def setup_all_handlers_complete(application):
     application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^search_drivers$"))
     application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^why_paypal_required$"))
     application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^ignore$"))  # Pour calendriers
+    
+    # 🔧 NOUVEAU: Handlers pour types de recherche (fix boutons non-fonctionnels)
+    application.add_handler(CallbackQueryHandler(handle_search_user_type_selection, pattern="^search_user_type:(driver|passenger)$"))
     
     # Handlers pour les actions après création de profil
     application.add_handler(CallbackQueryHandler(handle_profile_created_actions, pattern="^profile_created:"))

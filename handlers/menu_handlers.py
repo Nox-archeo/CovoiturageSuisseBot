@@ -78,15 +78,11 @@ async def start_command(update: Update, context: CallbackContext):
         has_passenger_profile = True  # Tous les utilisateurs peuvent être passagers
         
         if has_driver_profile and has_passenger_profile:
-            # L'utilisateur a les deux profils - demander quel profil utiliser
+            # L'utilisateur a les deux profils - menu simplifié
             keyboard = [
                 [
                     InlineKeyboardButton("🚗 Créer un trajet", callback_data="menu:create"),
                     InlineKeyboardButton("🔍 Chercher un trajet", callback_data="menu:search_trip")
-                ],
-                [
-                    InlineKeyboardButton("🔍 Chercher passagers", callback_data="search_passengers"),
-                    InlineKeyboardButton("🔍 Chercher conducteurs", callback_data="search_drivers")
                 ],
                 [
                     InlineKeyboardButton("📋 Mes trajets", callback_data="menu:my_trips"),
@@ -107,18 +103,17 @@ async def start_command(update: Update, context: CallbackContext):
                 f"Que souhaitez-vous faire aujourd'hui ?"
             )
         elif has_driver_profile:
-            # Uniquement profil conducteur - proposer de créer le profil passager
+            # Uniquement profil conducteur - menu simplifié
             keyboard = [
                 [
                     InlineKeyboardButton("🚗 Créer un trajet", callback_data="menu:create"),
                     InlineKeyboardButton("🔍 Chercher un trajet", callback_data="menu:search_trip")
                 ],
                 [
-                    InlineKeyboardButton("🔍 Chercher passagers", callback_data="search_passengers"),
-                    InlineKeyboardButton("📋 Mes trajets", callback_data="menu:my_trips")
+                    InlineKeyboardButton("� Mes trajets", callback_data="menu:my_trips"),
+                    InlineKeyboardButton("� Mon profil", callback_data="menu:profile")
                 ],
                 [
-                    InlineKeyboardButton("👤 Mon profil", callback_data="menu:profile"),
                     InlineKeyboardButton("❓ Aide", callback_data="menu:help")
                 ]
             ]
@@ -136,14 +131,11 @@ async def start_command(update: Update, context: CallbackContext):
                     InlineKeyboardButton("🔍 Chercher un trajet", callback_data="menu:search_trip")
                 ],
                 [
-                    InlineKeyboardButton("� Chercher conducteurs", callback_data="search_drivers"),
-                    InlineKeyboardButton("� Mes trajets", callback_data="menu:my_trips")
+                    InlineKeyboardButton("📋 Mes trajets", callback_data="menu:my_trips"),
+                    InlineKeyboardButton("👤 Mon profil", callback_data="menu:profile")
                 ],
                 [
-                    InlineKeyboardButton("� Mon profil", callback_data="menu:profile"),
-                    InlineKeyboardButton("�🚗 Devenir conducteur", callback_data="menu:become_driver")
-                ],
-                [
+                    InlineKeyboardButton("🚗 Devenir conducteur", callback_data="menu:become_driver"),
                     InlineKeyboardButton("❓ Aide", callback_data="menu:help")
                 ]
             ]
