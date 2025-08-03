@@ -210,25 +210,19 @@ async def create_bot_app_webhook():
         init_db()
         logger.info("✅ Base de données initialisée avec succès")
         
-        # CORRECTION FINALE: Migration sécurisée uniquement si nécessaire
-        logger.info("🔍 Vérification PostgreSQL non-destructive...")
+        # SOLUTION RADICALE POUR ERREUR SQL 9h9h PERSISTANTE
+        logger.info("� Correction radicale PostgreSQL pour SQL 9h9h...")
         try:
-            from database.db_manager import get_db
-            from database.models import User
-            db = get_db()
-            user_count = db.query(User).count()
-            db.close()
-            logger.info(f"✅ PostgreSQL OK - {user_count} utilisateurs en base")
-        except Exception as test_error:
-            logger.warning(f"⚠️ Test PostgreSQL: {test_error}")
-            logger.info("🔧 Application migration douce...")
-            try:
+            import force_recreate_tables
+            success = force_recreate_tables.force_recreate_tables()
+            if success:
+                logger.info("🎉 Tables PostgreSQL recréées - Création profils va fonctionner!")
+            else:
+                logger.warning("⚠️ Recréation échouée - Tentative correction simple...")
                 import quick_postgresql_fix
                 quick_postgresql_fix.quick_postgresql_fix()
-                logger.info("✅ Migration douce appliquée avec succès")
-            except Exception as migration_error:
-                logger.error(f"❌ Migration échouée: {migration_error}")
-                logger.info("⚠️ Démarrage avec base existante...")
+        except Exception as migration_error:
+            logger.warning(f"⚠️ Toutes corrections échouées: {migration_error}")
             
     except Exception as e:
         logger.error(f"❌ Erreur d'initialisation de la base de données: {e}")
