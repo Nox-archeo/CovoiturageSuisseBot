@@ -14,36 +14,21 @@ async def initiate_contact(update: Update, context: CallbackContext):
     query = update.callback_query
     await query.answer()
     
-    # Extrait l'ID du conducteur selon le format du callback_data
-    if query.data.startswith("contact_driver_"):
-        driver_id_str = query.data.replace("contact_driver_", "")
-        driver_id = int(driver_id_str)
-    else:
-        logger.error(f"Format de callback_data non reconnu: {query.data}")
-        await query.edit_message_text("❌ Format de demande non reconnu.")
-        return ConversationHandler.END
-    
-    context.user_data['contact_driver_id'] = driver_id
-    
-    db = get_db()
-    driver = db.query(User).get(driver_id)
-    
-    if not driver:
-        await query.edit_message_text("❌ Conducteur non trouvé.")
-        return ConversationHandler.END
-    
-    # Sauvegarde l'ID du destinataire pour la conversation
-    context.user_data['recipient_id'] = driver.id
-    
-    keyboard = [[InlineKeyboardButton("❌ Annuler", callback_data="cancel_contact")]]
-    
+    # 🚨 SÉCURITÉ: Cette fonction utilise l'ancien format avec driver_id visible
+    # Elle ne devrait plus être utilisée - rediriger vers la recherche sécurisée
     await query.edit_message_text(
-        f"📱 Vous allez envoyer un message à {driver.username or 'le conducteur'}\n\n"
-        "Veuillez saisir votre message:",
-        reply_markup=InlineKeyboardMarkup(keyboard)
+        "🔒 *Accès sécurisé requis*\n\n"
+        "Pour protéger la vie privée des conducteurs, l'accès aux contacts "
+        "nécessite maintenant une réservation payée.\n\n"
+        "Utilisez la fonction de recherche pour trouver et réserver un trajet.",
+        reply_markup=InlineKeyboardMarkup([
+            [InlineKeyboardButton("🔍 Rechercher un trajet", callback_data="search_new")],
+            [InlineKeyboardButton("🏠 Menu principal", callback_data="main_menu")]
+        ]),
+        parse_mode="Markdown"
     )
     
-    return TYPING_MESSAGE
+    return ConversationHandler.END
 
 async def send_message(update: Update, context: CallbackContext):
     """Envoie le message au conducteur"""
@@ -129,40 +114,25 @@ def register(application):
     logger.info("Contact handlers registered.")
 
 async def initiate_contact(update: Update, context: CallbackContext):
-    """Démarre une conversation avec le conducteur"""
+    """Démarre une conversation avec le conducteur - VERSION DÉPRÉCIÉE"""
     query = update.callback_query
     await query.answer()
     
-    # Extrait l'ID du conducteur selon le format du callback_data
-    if query.data.startswith("contact_driver_"):
-        driver_id_str = query.data.replace("contact_driver_", "")
-        driver_id = int(driver_id_str)
-    else:
-        logger.error(f"Format de callback_data non reconnu: {query.data}")
-        await query.edit_message_text("❌ Format de demande non reconnu.")
-        return ConversationHandler.END
-    
-    context.user_data['contact_driver_id'] = driver_id
-    
-    db = get_db()
-    driver = db.query(User).get(driver_id)
-    
-    if not driver:
-        await query.edit_message_text("❌ Conducteur non trouvé.")
-        return ConversationHandler.END
-    
-    # Sauvegarde l'ID du destinataire pour la conversation
-    context.user_data['recipient_id'] = driver.id
-    
-    keyboard = [[InlineKeyboardButton("❌ Annuler", callback_data="cancel_contact")]]
-    
+    # 🚨 SÉCURITÉ: Cette fonction utilise l'ancien format avec driver_id visible
+    # Elle ne devrait plus être utilisée - rediriger vers la recherche sécurisée
     await query.edit_message_text(
-        f"📱 Vous allez envoyer un message à {driver.username or 'le conducteur'}\n\n"
-        "Veuillez saisir votre message:",
-        reply_markup=InlineKeyboardMarkup(keyboard)
+        "🔒 *Accès sécurisé requis*\n\n"
+        "Pour protéger la vie privée des conducteurs, l'accès aux contacts "
+        "nécessite maintenant une réservation payée.\n\n"
+        "Utilisez la fonction de recherche pour trouver et réserver un trajet.",
+        reply_markup=InlineKeyboardMarkup([
+            [InlineKeyboardButton("🔍 Rechercher un trajet", callback_data="search_new")],
+            [InlineKeyboardButton("🏠 Menu principal", callback_data="main_menu")]
+        ]),
+        parse_mode="Markdown"
     )
     
-    return TYPING_MESSAGE
+    return ConversationHandler.END
 
 async def send_message(update: Update, context: CallbackContext):
     """Envoie le message au conducteur"""

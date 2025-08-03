@@ -841,16 +841,46 @@ async def contact_driver_from_search(update: Update, context: CallbackContext, t
             )
             return SEARCH_RESULTS
         
-        # Récupérer les informations du conducteur
+        # 🔒 VÉRIFICATION CRITIQUE: Vérifier le statut de paiement avant révélation des informations conducteur
+        user_telegram_id = update.effective_user.id
+        user = db.query(User).filter_by(telegram_id=user_telegram_id).first()
+        
+        if user:
+            # Vérifier si l'utilisateur a une réservation payée pour ce trajet
+            booking = db.query(Booking).filter_by(
+                trip_id=trip_id,
+                passenger_id=user.id
+            ).first()
+            
+            # Autoriser le contact seulement si le paiement est effectué ou en cours
+            payment_authorized = booking and booking.payment_status in ['paid', 'completed']
+            
+            if not payment_authorized:
+                await query.edit_message_text(
+                    "🔒 *Accès restreint*\n\n"
+                    "Pour contacter le conducteur, vous devez d'abord:\n"
+                    "1️⃣ Réserver une place sur ce trajet\n"
+                    "2️⃣ Effectuer le paiement\n\n"
+                    "Ceci protège la vie privée des conducteurs.",
+                    reply_markup=InlineKeyboardMarkup([
+                        [InlineKeyboardButton("🎫 Réserver ce trajet", callback_data=f"search_book_trip:{trip_id}")],
+                        [InlineKeyboardButton("🔙 Retour aux détails", callback_data=f"search_view_trip:{trip_id}")],
+                        [InlineKeyboardButton("❌ Annuler", callback_data="search_back_results")]
+                    ]),
+                    parse_mode="Markdown"
+                )
+                return SEARCH_RESULTS
+        
+        # Récupérer les informations du conducteur (seulement après paiement)
         driver = db.query(User).get(trip.driver_id)
         driver_name = driver.username if driver and driver.username else "Conducteur anonyme"
         
         # Stocker l'ID du conducteur à contacter dans les données utilisateur
         context.user_data['contact_driver_id'] = trip.driver_id
         
-        # Inviter l'utilisateur à entrer son message
+        # 🔒 SÉCURITÉ: Utiliser trip_id au lieu de driver_id pour préserver la confidentialité
         keyboard = [
-            [InlineKeyboardButton("📱 Contacter le conducteur", callback_data=f"contact_driver_{trip.driver_id}")],
+            [InlineKeyboardButton("📱 Contacter le conducteur", callback_data=f"search_contact_driver:{trip_id}")],
             [InlineKeyboardButton("🔙 Retour aux détails", callback_data=f"search_view_trip:{trip_id}")],
             [InlineKeyboardButton("❌ Annuler", callback_data="search_back_results")]
         ]
@@ -858,6 +888,7 @@ async def contact_driver_from_search(update: Update, context: CallbackContext, t
         # Utiliser les handlers de contact existants
         await query.edit_message_text(
             f"📱 *Contact avec le conducteur*\n\n"
+            f"✅ Paiement confirmé - Accès autorisé\n\n"
             f"Vous allez contacter *{driver_name}* pour le trajet:\n"
             f"{trip.departure_city} → {trip.arrival_city}\n\n"
             f"Pour envoyer un message, cliquez sur le bouton ci-dessous:",
