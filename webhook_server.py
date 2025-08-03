@@ -489,6 +489,9 @@ async def setup_all_handlers_complete(application):
     # 🔧 NOUVEAU: Handlers pour types de recherche (fix boutons non-fonctionnels)
     application.add_handler(CallbackQueryHandler(handle_search_user_type_selection, pattern="^search_user_type:(driver|passenger)$"))
     
+    # 🚨 CORRECTION CRITIQUE: Handler de fallback pour callbacks non gérés (doit être en DERNIER)
+    from handlers.global_callback_handler import handle_missing_callbacks
+    
     # Handlers pour les actions après création de profil
     application.add_handler(CallbackQueryHandler(handle_profile_created_actions, pattern="^profile_created:"))
     
@@ -552,6 +555,14 @@ async def setup_all_handlers_complete(application):
         logger.info("✅ Commandes du menu hamburger configurées - version nettoyée sans propositions")
     except Exception as e:
         logger.warning(f"⚠️ Configuration menu hamburger: {e}")
+    
+    # 🚨 HANDLER GLOBAL DE FALLBACK - DOIT ÊTRE EN DERNIER POUR NE PAS INTERCEPTER LES AUTRES
+    logger.info("🔧 Ajout du handler global de fallback en dernier...")
+    application.add_handler(CallbackQueryHandler(
+        handle_missing_callbacks, 
+        pattern=".*"  # Capture tout callback non géré par les handlers précédents
+    ))
+    logger.info("✅ Handler global de fallback ajouté")
     
     logger.info("🎉 TOUS les handlers configurés comme dans bot.py.backup")
 
