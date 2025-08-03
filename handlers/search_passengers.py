@@ -649,7 +649,7 @@ async def send_secure_proposal(update: Update, context: CallbackContext, trip_id
         proposal = DriverProposal(
             trip_id=trip_id,
             driver_id=conductor_id,
-            driver_name=conductor.first_name or conductor.username or "Conducteur",
+            driver_name=conductor.full_name or conductor.username or "Conducteur",
             driver_paypal_email=conductor.paypal_email,
             status='pending',
             created_at=datetime.now()

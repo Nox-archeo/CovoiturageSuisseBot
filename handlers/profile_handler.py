@@ -1241,11 +1241,82 @@ async def handle_trip_sub_callbacks_from_profile(update: Update, context: Callba
             return PROFILE_MAIN
             
         elif query.data.startswith("passenger:view_"):
-            # Pour les demandes/réservations passager, afficher un message simple avec retour
+            # Récupérer et afficher les vraies demandes/réservations passager
+            user_id = update.effective_user.id
+            db = get_db()
+            user = db.query(User).filter(User.telegram_id == user_id).first()
+            
             if "requests" in query.data:
-                message = "🎒 *Mes demandes de trajet*\n\n📋 Vos demandes de trajets apparaîtront ici."
+                # Récupérer les demandes de trajet de l'utilisateur (trajets créés en tant que passager)
+                passenger_trips = db.query(Trip).filter(
+                    Trip.creator_id == user.id,
+                    Trip.trip_role == 'passenger'  # Correction: utiliser trip_role
+                ).order_by(Trip.departure_time.desc()).limit(10).all()
+                
+                if not passenger_trips:
+                    message = "🎒 *Mes demandes de trajet*\n\n📋 Aucune demande de trajet trouvée.\n\n💡 Créez votre première demande avec /creer_trajet"
+                else:
+                    message = f"🎒 *Mes demandes de trajet*\n\n📊 {len(passenger_trips)} demande(s) trouvée(s)\n\n"
+                    
+                    for i, trip in enumerate(passenger_trips, 1):
+                        departure_date = trip.departure_time.strftime("%d/%m/%Y à %H:%M")
+                        seats_text = f"{trip.seats_available} place{'s' if trip.seats_available > 1 else ''}"
+                        
+                        status_emoji = {
+                            'active': '✅',
+                            'pending': '⏳', 
+                            'completed': '✅',
+                            'cancelled': '❌'
+                        }.get(trip.status, '❓')
+                        
+                        message += f"{status_emoji} **Demande {i}:**\n"
+                        message += f"📍 {trip.departure_city} → {trip.arrival_city}\n"
+                        message += f"📅 {departure_date}\n"
+                        message += f"👥 {seats_text} recherchée{'s' if trip.seats_available > 1 else ''}\n"
+                        
+                        if hasattr(trip, 'additional_info') and trip.additional_info:
+                            info_preview = trip.additional_info[:50] + "..." if len(trip.additional_info) > 50 else trip.additional_info
+                            message += f"� {info_preview}\n"
+                        
+                        message += "\n"
+                    
+                    if len(passenger_trips) == 10:
+                        message += "📝 *Affichage limité aux 10 dernières demandes*"
             else:
-                message = "🔖 *Mes réservations*\n\n📋 Vos réservations apparaîtront ici."
+                # Récupérer les réservations (bookings) de l'utilisateur
+                bookings = db.query(Booking).filter(
+                    Booking.passenger_id == user.id
+                ).join(Trip).order_by(Trip.departure_time.desc()).limit(10).all()
+                
+                if not bookings:
+                    message = "�🔖 *Mes réservations*\n\n📋 Aucune réservation trouvée.\n\n💡 Réservez votre première place avec /chercher_trajet"
+                else:
+                    message = f"🔖 *Mes réservations*\n\n📊 {len(bookings)} réservation(s) trouvée(s)\n\n"
+                    
+                    for i, booking in enumerate(bookings, 1):
+                        trip = booking.trip
+                        departure_date = trip.departure_time.strftime("%d/%m/%Y à %H:%M")
+                        
+                        status_emoji = {
+                            'confirmed': '✅',
+                            'pending': '⏳',
+                            'completed': '✅',
+                            'cancelled': '❌'
+                        }.get(booking.status, '❓')
+                        
+                        payment_emoji = {
+                            'paid': '💳',
+                            'pending': '⏳',
+                            'unpaid': '❌'
+                        }.get(booking.payment_status, '❓')
+                        
+                        message += f"{status_emoji} **Réservation {i}:**\n"
+                        message += f"📍 {trip.departure_city} → {trip.arrival_city}\n"
+                        message += f"📅 {departure_date}\n"
+                        message += f"{payment_emoji} Paiement: {booking.payment_status}\n\n"
+                    
+                    if len(bookings) == 10:
+                        message += "📝 *Affichage limité aux 10 dernières réservations*"
             
             keyboard = [
                 [InlineKeyboardButton("🔙 Retour aux trajets", callback_data="passenger_trip_management")],
