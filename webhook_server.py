@@ -1,113 +1,7 @@
 #!/usr/bin/env python3
 """
 Version webhook du bot avec port HTTP pour Render
-Combine bot + serveur web pou        # MIGRAT    try:
-        from database.db_m        # SOLUTION         # MIGRATIO        # MIGRATION SÉCURISÉE - VERSION FINALE CORRIGÉE
-        logger.info("🔍 Test de fonctionnement PostgreSQL...")
-        try:
-            from database.db_manager import get_db
-            from database.models import User
-            db = get_db()
-            test_count = db.query(User).count()
-            db.close()
-            logger.info("✅ PostgreSQL opérationnel - Pas de migration destructive")
-        except Exception as test_error:
-            logger.warning(f"⚠️ Test PostgreSQL: {test_error}")
-            logger.info("🔧 Migration douce uniquement...")
-            try:
-                import quick_postgresql_fix
-                quick_postgresql_fix.quick_postgresql_fix()
-                logger.info("✅ Migration douce terminée")
-            except Exception as migration_error:
-                logger.error(f"❌ Migration: {migration_error}")
-                logger.info("⚠️ Poursuite avec base existante...")E UNIQUEMENT SI NÉCESSAIRE (VERSION CORRIGÉE)
-        logger.info("🔍 Test PostgreSQL sans destruction...")
-        try:
-            from database.db_manager import get_db
-            from database.models import User
-            db = get_db()
-            test_count = db.query(User).count()
-            db.close()
-            logger.info("✅ PostgreSQL fonctionne parfaitement - Aucune migration")
-        except Exception as test_error:
-            logger.warning(f"⚠️ Test PostgreSQL: {test_error}")
-            logger.info("🔧 Migration douce seulement si absolument nécessaire...")
-            try:
-                import quick_postgresql_fix
-                quick_postgresql_fix.quick_postgresql_fix()
-                logger.info("✅ Migration douce réussie")
-            except Exception as migration_error:
-                logger.error(f"❌ Migration: {migration_error}")
-                logger.info("⚠️ Démarrage avec base actuelle...") ERREUR SQL 9h9h PERSISTANTE
-        logger.info("🔍 Vérification état PostgreSQL...")
-        try:
-            # Test simple pour éviter les migrations destructives
-            from database.db_manager import get_db
-            from database.models import User
-            db = get_db()
-            test_count = db.query(User).count()
-            db.close()
-            logger.info("✅ PostgreSQL opérationnel - Migration non nécessaire")
-        except Exception as test_error:
-            logger.warning(f"⚠️ Test PostgreSQL échoué: {test_error}")
-            logger.info("🔧 Migration douce uniquement si nécessaire...")
-            try:
-                import quick_postgresql_fix
-                quick_postgresql_fix.quick_postgresql_fix()
-                logger.info("✅ Migration douce appliquée")
-            except Exception as migration_error:
-                logger.error(f"❌ Migration échouée: {migration_error}")
-                logger.info("⚠️ Démarrage avec base existante...") init_db
-        init_db()
-        logger.info("✅ Base de données initialisée avec succès")
-        
-        # MIGRATION INTELLIGENTE UNIQUEMENT SI NÉCESSAIRE
-        logger.info("🔍 Vérification état base de données PostgreSQL...")
-        try:
-            # Test simple pour vérifier si les tables existent et fonctionnent
-            from database.db_manager import get_db
-            db = get_db()
-            
-            # Test de création d'un utilisateur test pour vérifier le schéma
-            from database.models import User
-            test_query = db.query(User).filter_by(telegram_id=999999999).first()
-            db.close()
-            
-            logger.info("✅ Base de données PostgreSQL fonctionnelle - Aucune migration nécessaire")
-            
-        except Exception as test_error:
-            logger.warning(f"⚠️ Test base échoué: {test_error}")
-            logger.info("🔧 Migration intelligente en cours...")
-            
-            # Seulement si vraiment nécessaire - migration douce
-            try:
-                import quick_postgresql_fix
-                quick_postgresql_fix.quick_postgresql_fix()
-                logger.info("✅ Migration douce terminée")
-            except Exception as migration_error:
-                logger.error(f"❌ Migration échouée: {migration_error}")
-                logger.info("⚠️ Démarrage avec base existante...")
-            
-    except Exception as e:
-        logger.error(f"❌ Erreur d'initialisation de la base de données: {e}")E POSTGRESQL (PRESERVE LES DONNÉES)
-        logger.info("🔧 Vérification schéma PostgreSQL...")
-        try:
-            # Ne plus recréer les tables ! Juste vérifier la connexion
-            from database.models import User
-            from database.db_manager import get_db
-            
-            db = get_db()
-            try:
-                # Test simple de connexion sans suppression
-                count = db.query(User).count()
-                logger.info(f"✅ PostgreSQL OK - {count} utilisateurs existants")
-                db.close()
-            except Exception as e:
-                db.close()
-                logger.warning(f"⚠️ Problème schéma (mais on continue): {e}")
-                
-        except Exception as migration_error:
-            logger.warning(f"⚠️ Vérification PostgreSQL échouée: {migration_error}")s PayPal
+Combine bot + serveur web pour les webhooks PayPal
 """
 
 import os
@@ -210,25 +104,9 @@ async def create_bot_app_webhook():
         init_db()
         logger.info("✅ Base de données initialisée avec succès")
         
-        # CORRECTION FINALE: Migration sécurisée uniquement si nécessaire
-        logger.info("🔍 Vérification PostgreSQL non-destructive...")
-        try:
-            from database.db_manager import get_db
-            from database.models import User
-            db = get_db()
-            user_count = db.query(User).count()
-            db.close()
-            logger.info(f"✅ PostgreSQL OK - {user_count} utilisateurs en base")
-        except Exception as test_error:
-            logger.warning(f"⚠️ Test PostgreSQL: {test_error}")
-            logger.info("🔧 Application migration douce...")
-            try:
-                import quick_postgresql_fix
-                quick_postgresql_fix.quick_postgresql_fix()
-                logger.info("✅ Migration douce appliquée avec succès")
-            except Exception as migration_error:
-                logger.error(f"❌ Migration échouée: {migration_error}")
-                logger.info("⚠️ Démarrage avec base existante...")
+        # DÉMARRAGE ULTRA-RAPIDE - ZÉRO TESTS BLOQUANTS
+        logger.info("� Démarrage express - Ignorant tous les tests PostgreSQL")
+        logger.info("✅ Base de données assumée opérationnelle pour démarrage rapide")
             
     except Exception as e:
         logger.error(f"❌ Erreur d'initialisation de la base de données: {e}")
