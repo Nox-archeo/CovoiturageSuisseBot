@@ -295,6 +295,82 @@ async def handle_menu_buttons(update: Update, context: CallbackContext):
     elif query.data == "back_to_menu":
         # This is a common callback, ensure start_command handles callback_query
         return await start_command(update, context)
+    
+    # 🔧 CORRECTION: Nouveaux callbacks gérés
+    elif query.data == "main_menu":
+        return await start_command(update, context)
+    
+    elif query.data == "profile_main":
+        from handlers.profile_handler import profile_handler
+        return await profile_handler(update, context)
+    
+    elif query.data == "view_payments":
+        await query.edit_message_text(
+            "💳 *Mes paiements*\n\n"
+            "Cette fonctionnalité sera bientôt disponible.\n"
+            "En attendant, utilisez /paiements pour accéder aux options de paiement.",
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("🏠 Menu principal", callback_data="menu:back_to_main")]
+            ]),
+            parse_mode="Markdown"
+        )
+    
+    elif query.data == "payment_history":
+        await query.edit_message_text(
+            "📊 *Historique des paiements*\n\n"
+            "Cette fonctionnalité sera bientôt disponible.\n"
+            "En attendant, utilisez /paiements pour accéder aux options de paiement.",
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("🏠 Menu principal", callback_data="menu:back_to_main")]
+            ]),
+            parse_mode="Markdown"
+        )
+    
+    elif query.data == "search_passengers":
+        # Rediriger vers la recherche de passagers
+        keyboard = [
+            [InlineKeyboardButton("⚡ Vue rapide", callback_data="view_quick_passenger_trips")],
+            [InlineKeyboardButton("🔍 Recherche avancée", callback_data="advanced_search_passengers")],
+            [InlineKeyboardButton("🔙 Retour", callback_data="menu:back_to_main")]
+        ]
+        await query.edit_message_text(
+            "🚗 *Recherche de passagers*\n\n"
+            "Comment souhaitez-vous rechercher des passagers ?",
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode="Markdown"
+        )
+    
+    elif query.data == "search_drivers":
+        # Rediriger vers la recherche de conducteurs
+        await query.edit_message_text(
+            "🔍 *Recherche de conducteurs*\n\n"
+            "Utilisez la recherche de trajets pour trouver des conducteurs disponibles.",
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("🔍 Rechercher un trajet", callback_data="menu:search_trip")],
+                [InlineKeyboardButton("🔙 Retour", callback_data="menu:back_to_main")]
+            ]),
+            parse_mode="Markdown"
+        )
+    
+    elif query.data == "why_paypal_required":
+        await query.edit_message_text(
+            "💳 *Pourquoi PayPal est requis ?*\n\n"
+            "• **Sécurité** : Paiements sécurisés garantis\n"
+            "• **Automatisation** : Paiements automatiques après trajets\n"
+            "• **Protection** : Protection acheteur et vendeur\n"
+            "• **Rapidité** : Virements instantanés\n\n"
+            "💡 Configuration PayPal gratuite et rapide !",
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("💳 Configurer PayPal", callback_data="setup_paypal")],
+                [InlineKeyboardButton("🔙 Retour", callback_data="menu:back_to_main")]
+            ]),
+            parse_mode="Markdown"
+        )
+    
+    elif query.data == "ignore":
+        # Pour les éléments de calendrier ou autres éléments non-cliquables
+        await query.answer("ℹ️ Élément non-cliquable", show_alert=False)
+        return
 
     # ... (handle other specific menu actions like public:driver_trips if not covered by sub-menus)
     

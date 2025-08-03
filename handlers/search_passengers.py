@@ -309,6 +309,14 @@ async def perform_passenger_search(update: Update, context: CallbackContext) -> 
                 [InlineKeyboardButton("🔍 Nouvelle recherche", callback_data="search_new")],
                 [InlineKeyboardButton("🏠 Menu principal", callback_data="back_to_menu")]
             ]
+            
+            await query.edit_message_text(
+                message_text,
+                parse_mode=ParseMode.MARKDOWN,
+                reply_markup=InlineKeyboardMarkup(keyboard)
+            )
+            
+            return SHOWING_RESULTS
         else:
             # Message d'en-tête
             header_message = (
@@ -373,15 +381,6 @@ async def perform_passenger_search(update: Update, context: CallbackContext) -> 
                 )
             
             return SHOWING_RESULTS
-        
-        # Cette partie ne sera jamais atteinte car on a un return au-dessus
-        await query.edit_message_text(
-            "Message d'erreur - cette partie ne devrait pas être atteinte",
-            parse_mode=ParseMode.MARKDOWN,
-            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🏠 Menu", callback_data="back_to_menu")]])
-        )
-        
-        return SHOWING_RESULTS
         
     except Exception as e:
         logger.error(f"Erreur lors de la recherche de passagers: {e}")
