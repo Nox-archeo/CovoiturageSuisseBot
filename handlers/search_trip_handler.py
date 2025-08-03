@@ -690,7 +690,8 @@ async def show_trip_details(update: Update, context: CallbackContext, trip_id):
         # Récupérer les informations du conducteur - Méthode plus sûre pour éviter l'erreur de colonne
         try:
             driver = db.query(User).filter(User.id == trip.driver_id).first()
-            driver_name = driver.username if driver and driver.username else "Conducteur anonyme"
+            # 🔧 FIX: Utiliser full_name en priorité, puis username, puis fallback
+            driver_name = driver.full_name if driver and driver.full_name else driver.username if driver and driver.username else "Conducteur anonyme"
         except Exception as driver_error:
             logger.error(f"Erreur lors de la récupération des informations du conducteur: {str(driver_error)}")
             driver_name = "Conducteur anonyme"
@@ -873,7 +874,8 @@ async def contact_driver_from_search(update: Update, context: CallbackContext, t
         
         # Récupérer les informations du conducteur (seulement après paiement)
         driver = db.query(User).get(trip.driver_id)
-        driver_name = driver.username if driver and driver.username else "Conducteur anonyme"
+        # 🔧 FIX: Utiliser full_name en priorité, puis username, puis fallback
+        driver_name = driver.full_name if driver and driver.full_name else driver.username if driver and driver.username else "Conducteur anonyme"
         
         # Stocker l'ID du conducteur à contacter dans les données utilisateur
         context.user_data['contact_driver_id'] = trip.driver_id
@@ -1003,8 +1005,30 @@ async def book_trip(update: Update, context: CallbackContext):
             )
             return SEARCH_RESULTS
         
-        # Récupérer les informations du conducteur
+        # 🔧 FIX: Vérifier d'abord que trip.driver_id n'est pas None
+        if not trip.driver_id:
+            logger.error(f"Trajet {trip_id} n'a pas de conducteur assigné (driver_id est None)")
+            await query.edit_message_text(
+                "❌ Ce trajet n'a pas encore de conducteur assigné. "
+                "Veuillez réessayer plus tard ou contacter le support.",
+                reply_markup=InlineKeyboardMarkup([[
+                    InlineKeyboardButton("🔙 Retour", callback_data=f"search_view_trip:{trip_id}")
+                ]])
+            )
+            return SEARCH_RESULTS
+        
+        # Récupérer les informations du conducteur avec vérification supplémentaire
         driver = db.query(User).get(trip.driver_id)
+        if not driver:
+            logger.error(f"Conducteur avec ID {trip.driver_id} non trouvé pour le trajet {trip_id}")
+            await query.edit_message_text(
+                "❌ Informations du conducteur non trouvées. "
+                "Veuillez réessayer plus tard ou contacter le support.",
+                reply_markup=InlineKeyboardMarkup([[
+                    InlineKeyboardButton("🔙 Retour", callback_data=f"search_view_trip:{trip_id}")
+                ]])
+            )
+            return SEARCH_RESULTS
         
         # Vérifier que price_per_seat existe et n'est pas None avec arrondi suisse
         try:
@@ -1024,7 +1048,7 @@ async def book_trip(update: Update, context: CallbackContext):
             f"🎟️ *Récapitulatif de votre réservation*\n\n"
             f"🏁 *Trajet* : {trip.departure_city} → {trip.arrival_city}\n"
             f"📅 *Date* : {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
-            f"👤 *Conducteur* : {driver.username if driver and driver.username else 'Conducteur anonyme'}\n"
+            f"👤 *Conducteur* : {driver.full_name if driver.full_name else driver.username if driver.username else 'Conducteur anonyme'}\n"
             f"💺 *Places* : {seats}\n"
             f"💰 *Prix actuel par place* : {format_swiss_price(rounded_price_per_seat)} CHF\n"
             f"💳 *Total à payer* : {format_swiss_price(total_price)} CHF\n\n"
@@ -1033,8 +1057,8 @@ async def book_trip(update: Update, context: CallbackContext):
             f"Confirmez-vous cette réservation ?"
         )
         
-        # Vérifier si le conducteur a un compte PayPal
-        has_paypal_account = driver.paypal_email is not None
+        # Vérifier si le conducteur a un compte PayPal - MAINTENANT SÉCURISÉ
+        has_paypal_account = driver and hasattr(driver, 'paypal_email') and driver.paypal_email is not None
         
         if has_paypal_account:
             # Le conducteur a un compte PayPal, proposer le paiement
@@ -1244,11 +1268,12 @@ async def book_without_payment(update: Update, context: CallbackContext):
             
             # Récupérer les informations du conducteur
             driver = db.query(User).get(trip.driver_id)
-            driver_name = driver.username if driver and driver.username else "Conducteur anonyme"
+            # 🔧 FIX: Utiliser full_name en priorité, puis username, puis fallback
+            driver_name = driver.full_name if driver and driver.full_name else driver.username if driver and driver.username else "Conducteur anonyme"
             driver_phone = driver.phone if driver and hasattr(driver, 'phone') and driver.phone else "Non renseigné"
             
-            # Récupérer les informations du passager
-            passenger_name = update.effective_user.username or update.effective_user.first_name or "Passager"
+            # Récupérer les informations du passager  
+            passenger_name = db_user.full_name if db_user.full_name else update.effective_user.username or update.effective_user.first_name or "Passager"
             passenger_phone = db_user.phone if hasattr(db_user, 'phone') and db_user.phone else "Non renseigné"
             
             # Envoyer les informations du conducteur au passager
