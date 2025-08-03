@@ -1,7 +1,25 @@
 #!/usr/bin/env python3
 """
 Version webhook du bot avec port HTTP pour Render
-Combine bot + serveur web pour les webhooks PayPal
+Combine bot + serveur web pou        # MIGRATION INTELLIGENTE POSTGRESQL (PRESERVE LES DONNÉES)
+        logger.info("🔧 Vérification schéma PostgreSQL...")
+        try:
+            # Ne plus recréer les tables ! Juste vérifier la connexion
+            from database.models import User
+            from database.db_manager import get_db
+            
+            db = get_db()
+            try:
+                # Test simple de connexion sans suppression
+                count = db.query(User).count()
+                logger.info(f"✅ PostgreSQL OK - {count} utilisateurs existants")
+                db.close()
+            except Exception as e:
+                db.close()
+                logger.warning(f"⚠️ Problème schéma (mais on continue): {e}")
+                
+        except Exception as migration_error:
+            logger.warning(f"⚠️ Vérification PostgreSQL échouée: {migration_error}")s PayPal
 """
 
 import os
