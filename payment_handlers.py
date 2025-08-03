@@ -619,6 +619,80 @@ class PaymentHandlers:
                 f"Veuillez contacter le support si le problème persiste."
             )
 
+    @staticmethod 
+    async def handle_proposal_payment(update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Gère le paiement d'une proposition de conducteur"""
+        query = update.callback_query
+        await query.answer()
+        
+        try:
+            proposal_id = int(query.data.split(':')[1])
+            
+            with get_db_session() as db:
+                from database.models import DriverProposal
+                proposal = db.query(DriverProposal).filter_by(id=proposal_id).first()
+                
+                if not proposal:
+                    await query.edit_message_text(
+                        "❌ Proposition non trouvée.",
+                        reply_markup=InlineKeyboardMarkup([[
+                            InlineKeyboardButton("🔙 Menu principal", callback_data="main_menu")
+                        ]])
+                    )
+                    return
+                
+                if proposal.status != 'pending':
+                    await query.edit_message_text(
+                        "❌ Cette proposition n'est plus disponible.",
+                        reply_markup=InlineKeyboardMarkup([[
+                            InlineKeyboardButton("🔙 Menu principal", callback_data="main_menu")
+                        ]])
+                    )
+                    return
+                
+                # Récupérer les informations du trajet
+                trip = db.query(Trip).filter_by(id=proposal.trip_id).first()
+                if not trip:
+                    await query.edit_message_text("❌ Trajet non trouvé.")
+                    return
+                
+                # Demander le prix au passager
+                trip_info = f"{trip.departure_city} → {trip.arrival_city}"
+                trip_date = trip.departure_time.strftime("%d/%m/%Y à %H:%M")
+                
+                payment_message = (
+                    f"💳 *Paiement sécurisé*\n\n"
+                    f"👤 *Conducteur:* {proposal.driver_name}\n"
+                    f"📍 *Trajet:* {trip_info}\n"
+                    f"📅 *Date:* {trip_date}\n\n"
+                    f"💰 *Veuillez proposer un prix pour ce trajet:*\n"
+                    f"(Commission 12% incluse)\n\n"
+                    f"💡 *Prix suggérés:*\n"
+                    f"• Courte distance (< 50km): 15-25 CHF\n"
+                    f"• Moyenne distance (50-100km): 25-45 CHF\n"
+                    f"• Longue distance (> 100km): 45+ CHF"
+                )
+                
+                keyboard = [
+                    [InlineKeyboardButton("💳 Entrer le prix", callback_data=f"enter_price:{proposal_id}")],
+                    [InlineKeyboardButton("❌ Annuler", callback_data=f"reject_proposal:{proposal_id}")]
+                ]
+                
+                await query.edit_message_text(
+                    payment_message,
+                    parse_mode="Markdown",
+                    reply_markup=InlineKeyboardMarkup(keyboard)
+                )
+                
+        except Exception as e:
+            logger.error(f"Erreur dans handle_proposal_payment: {e}")
+            await query.edit_message_text(
+                "❌ Erreur lors du traitement de la demande de paiement.",
+                reply_markup=InlineKeyboardMarkup([[
+                    InlineKeyboardButton("🔙 Menu principal", callback_data="main_menu")
+                ]])
+            )
+
 
 # Création du ConversationHandler pour la configuration PayPal
 paypal_setup_conv_handler = ConversationHandler(
@@ -661,6 +735,12 @@ payment_history_handler = CallbackQueryHandler(
     pattern=r'^payment_history$'
 )
 
+# Handler pour les propositions de conducteur
+proposal_payment_handler = CallbackQueryHandler(
+    PaymentHandlers.handle_proposal_payment,
+    pattern=r'^pay_proposal:\d+$'
+)
+
 
 def get_payment_handlers():
     """
@@ -669,7 +749,7 @@ def get_payment_handlers():
     return {
         'conversation_handlers': [paypal_setup_conv_handler],
         'command_handlers': payment_command_handlers,
-        'callback_handlers': [payment_callback_handler, view_payments_handler, payment_history_handler]
+        'callback_handlers': [payment_callback_handler, view_payments_handler, payment_history_handler, proposal_payment_handler]
     }
 
 

@@ -512,7 +512,7 @@ async def show_passenger_trip_details(update: Update, context: CallbackContext) 
         return SHOWING_RESULTS
 
 async def contact_passenger(update: Update, context: CallbackContext) -> int:
-    """Gère le contact avec un passager"""
+    """Gère le contact avec un passager - VERSION SÉCURISÉE avec paiement obligatoire"""
     query = update.callback_query
     await query.answer()
     
@@ -531,7 +531,7 @@ async def contact_passenger(update: Update, context: CallbackContext) -> int:
             )
             return SHOWING_RESULTS
         
-        # Récupérer les informations du passager
+        # Récupérer les informations du passager (mais sans révéler les détails de contact)
         passenger = db.query(User).filter_by(id=trip.creator_id).first()
         
         if not passenger:
@@ -543,48 +543,53 @@ async def contact_passenger(update: Update, context: CallbackContext) -> int:
             )
             return SHOWING_RESULTS
         
-        # Récupérer les infos du conducteur (utilisateur actuel)
-        conductor_id = update.effective_user.id
-        conductor = db.query(User).filter_by(telegram_id=conductor_id).first()
-        conductor_name = conductor.username if conductor and conductor.username else "Un conducteur"
+        # Vérifier si ce conducteur a déjà une proposition en cours
+        from database.models import DriverProposal
+        conductor_id = query.from_user.id
+        existing_proposal = db.query(DriverProposal).filter(
+            DriverProposal.trip_id == trip_id,
+            DriverProposal.driver_id == conductor_id,
+            DriverProposal.status == 'pending'
+        ).first()
         
-        # Créer le message prédéfini
+        # Construire les informations du trajet (sans révéler l'identité du passager)
         trip_info = f"{trip.departure_city} → {trip.arrival_city}"
         trip_date = trip.departure_time.strftime("%d/%m/%Y à %H:%M")
         
-        message_template = (
-            f"🚗 Bonjour !\n\n"
-            f"J'ai vu votre demande de trajet :\n"
-            f"📍 {trip_info}\n"
-            f"📅 {trip_date}\n\n"
-            f"Je suis conducteur et je pourrais vous proposer ce trajet.\n"
-            f"Êtes-vous toujours intéressé(e) ?\n\n"
-            f"Contactez-moi : @{conductor_name}"
-        )
-        
-        # Options de contact
-        keyboard = [
-            [InlineKeyboardButton("💬 Envoyer un message direct", 
-                                url=f"https://t.me/{passenger.username}" if passenger.username else None)],
-            [InlineKeyboardButton("📋 Copier le message type", callback_data=f"search_copy_message:{trip_id}")],
-            [InlineKeyboardButton("📞 Proposer mon numéro", callback_data=f"search_share_phone:{trip_id}")],
-            [InlineKeyboardButton("🔙 Retour aux détails", callback_data=f"search_passenger_details:{trip_id}")]
-        ]
-        
-        # Si le passager n'a pas de username public, retirer l'option de message direct
-        if not passenger.username:
-            keyboard[0] = [InlineKeyboardButton("⚠️ Profil privé - Contact par les options ci-dessous", 
-                                             callback_data="search_no_direct_contact")]
-        
-        contact_message = (
-            f"📱 *Contacter le passager*\n\n"
-            f"👤 *Passager:* @{passenger.username if passenger.username else 'Profil privé'}\n"
-            f"📍 *Trajet:* {trip_info}\n"
-            f"📅 *Date:* {trip_date}\n\n"
-            f"🔽 *Message prédéfini:*\n"
-            f"```\n{message_template}\n```\n\n"
-            f"Choisissez votre méthode de contact:"
-        )
+        if existing_proposal:
+            # Proposition déjà envoyée - Afficher l'état
+            keyboard = [
+                [InlineKeyboardButton("⏳ Proposition en attente", callback_data="search_no_action")],
+                [InlineKeyboardButton("� Retour aux détails", callback_data=f"search_passenger_details:{trip_id}")]
+            ]
+            
+            contact_message = (
+                f"⏳ *Proposition déjà envoyée*\n\n"
+                f"👤 *Passager:* Anonyme (révélé après paiement)\n"
+                f"📍 *Trajet:* {trip_info}\n"
+                f"📅 *Date:* {trip_date}\n\n"
+                f"🔒 *Votre proposition est en attente de réponse.*\n"
+                f"📱 *Contact révélé uniquement après paiement du passager.*"
+            )
+        else:
+            # Nouvelle proposition - Système sécurisé
+            keyboard = [
+                [InlineKeyboardButton("� Proposer mon service", callback_data=f"search_send_proposal:{trip_id}")],
+                [InlineKeyboardButton("🔙 Retour aux détails", callback_data=f"search_passenger_details:{trip_id}")]
+            ]
+            
+            contact_message = (
+                f"💰 *Proposer votre service de conducteur*\n\n"
+                f"👤 *Passager:* Anonyme (révélé après paiement)\n"
+                f"📍 *Trajet:* {trip_info}\n"
+                f"📅 *Date:* {trip_date}\n\n"
+                f"🔐 *Système sécurisé PayPal:*\n"
+                f"• Votre proposition sera envoyée au passager\n"
+                f"• Il recevra un lien de paiement sécurisé\n"
+                f"• Vos contacts révélés après paiement confirmé\n"
+                f"• Commission: 12% | Votre part: 88%\n\n"
+                f"📝 *Proposez vos services pour ce trajet.*"
+            )
         
         await query.edit_message_text(
             contact_message,
@@ -603,6 +608,121 @@ async def contact_passenger(update: Update, context: CallbackContext) -> int:
             ]])
         )
         return SHOWING_RESULTS
+
+async def send_secure_proposal(update: Update, context: CallbackContext, trip_id: int) -> int:
+    """Envoie une proposition sécurisée au passager avec paiement PayPal obligatoire"""
+    query = update.callback_query
+    await query.answer()
+    
+    try:
+        db = get_db()
+        trip = db.query(Trip).filter_by(id=trip_id).first()
+        
+        if not trip:
+            await query.edit_message_text(
+                "❌ Cette demande de trajet n'existe plus.",
+                reply_markup=InlineKeyboardMarkup([[
+                    InlineKeyboardButton("🔙 Retour", callback_data="search_back_results")
+                ]])
+            )
+            return SHOWING_RESULTS
+        
+        # Vérifier que le conducteur a un profil complet
+        from database.models import DriverProposal
+        conductor_id = query.from_user.id
+        conductor = db.query(User).filter_by(telegram_id=conductor_id).first()
+        
+        if not conductor or not conductor.paypal_email:
+            await query.edit_message_text(
+                "❌ *Profil incomplet*\n\n"
+                "Pour proposer vos services, vous devez d'abord :\n"
+                "• Créer votre profil conducteur\n"
+                "• Ajouter votre email PayPal\n\n"
+                "Utilisez /profil pour compléter votre profil.",
+                parse_mode=ParseMode.MARKDOWN,
+                reply_markup=InlineKeyboardMarkup([[
+                    InlineKeyboardButton("🔙 Retour", callback_data=f"search_passenger_details:{trip_id}")
+                ]])
+            )
+            return CONTACT_PASSENGER
+        
+        # Créer la proposition de conducteur
+        proposal = DriverProposal(
+            trip_id=trip_id,
+            driver_id=conductor_id,
+            driver_name=conductor.first_name or conductor.username or "Conducteur",
+            driver_paypal_email=conductor.paypal_email,
+            status='pending',
+            created_at=datetime.now()
+        )
+        
+        db.add(proposal)
+        db.commit()
+        
+        # Informer le passager qu'il a reçu une proposition
+        passenger = db.query(User).filter_by(id=trip.creator_id).first()
+        if passenger and passenger.telegram_id:
+            trip_info = f"{trip.departure_city} → {trip.arrival_city}"
+            trip_date = trip.departure_time.strftime("%d/%m/%Y à %H:%M")
+            
+            # Message au passager avec lien de paiement sécurisé
+            passenger_message = (
+                f"🚗 *Nouvelle proposition de conducteur !*\n\n"
+                f"📍 *Trajet:* {trip_info}\n"
+                f"📅 *Date:* {trip_date}\n"
+                f"👤 *Conducteur:* {proposal.driver_name}\n\n"
+                f"💰 *Paiement sécurisé PayPal requis*\n"
+                f"• Commission plateforme: 12%\n"
+                f"• Montant conducteur: 88%\n\n"
+                f"🔐 Les coordonnées du conducteur seront révélées après paiement confirmé."
+            )
+            
+            keyboard = [
+                [InlineKeyboardButton("💳 Procéder au paiement", callback_data=f"pay_proposal:{proposal.id}")],
+                [InlineKeyboardButton("❌ Refuser", callback_data=f"reject_proposal:{proposal.id}")]
+            ]
+            
+            try:
+                await context.bot.send_message(
+                    chat_id=passenger.telegram_id,
+                    text=passenger_message,
+                    parse_mode=ParseMode.MARKDOWN,
+                    reply_markup=InlineKeyboardMarkup(keyboard)
+                )
+            except Exception as e:
+                logger.error(f"Erreur envoi message au passager {passenger.telegram_id}: {e}")
+        
+        # Confirmer au conducteur
+        confirmation_message = (
+            f"✅ *Proposition envoyée avec succès !*\n\n"
+            f"📍 *Trajet:* {trip.departure_city} → {trip.arrival_city}\n"
+            f"📅 *Date:* {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n\n"
+            f"🔔 *Le passager a été notifié*\n"
+            f"💳 *Paiement sécurisé requis avant révélation des contacts*\n"
+            f"⏰ *Vous serez notifié dès qu'il confirme le paiement*\n\n"
+            f"💰 *Votre rémunération: 88% du montant payé*"
+        )
+        
+        await query.edit_message_text(
+            confirmation_message,
+            parse_mode=ParseMode.MARKDOWN,
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("🔙 Retour aux recherches", callback_data="search_back_results")],
+                [InlineKeyboardButton("🏠 Menu principal", callback_data="back_to_menu")]
+            ])
+        )
+        
+        return CONTACT_PASSENGER
+        
+    except Exception as e:
+        logger.error(f"Erreur lors de l'envoi de la proposition pour le trajet {trip_id}: {e}")
+        await query.edit_message_text(
+            "❌ Erreur lors de l'envoi de la proposition.",
+            reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton("🔙 Retour", callback_data=f"search_passenger_details:{trip_id}")
+            ]])
+        )
+        return CONTACT_PASSENGER
 
 async def handle_search_actions(update: Update, context: CallbackContext) -> int:
     """Gère les actions diverses de la recherche"""
@@ -626,6 +746,15 @@ async def handle_search_actions(update: Update, context: CallbackContext) -> int
             ]])
         )
         return ConversationHandler.END
+    
+    elif query.data.startswith("search_send_proposal:"):
+        # Envoyer une proposition sécurisée au passager
+        trip_id = int(query.data.split(':')[1])
+        return await send_secure_proposal(update, context, trip_id)
+    
+    elif query.data == "search_no_action":
+        await query.answer("⏳ Votre proposition est en attente de réponse.", show_alert=True)
+        return CONTACT_PASSENGER
     
     elif query.data.startswith("search_copy_message:"):
         # Copier le message prédéfini
@@ -679,7 +808,11 @@ search_passengers_handler = ConversationHandler(
         CONTACT_PASSENGER: [
             CallbackQueryHandler(handle_search_actions, pattern=r"^search_copy_message:"),
             CallbackQueryHandler(handle_search_actions, pattern=r"^search_share_phone:"),
+            CallbackQueryHandler(handle_search_actions, pattern=r"^search_send_proposal:"),
+            CallbackQueryHandler(handle_search_actions, pattern=r"^search_no_action$"),
             CallbackQueryHandler(handle_search_actions, pattern=r"^search_no_direct_contact$"),
+            CallbackQueryHandler(show_passenger_trip_details, pattern=r"^search_passenger_details:"),
+            CallbackQueryHandler(handle_search_actions, pattern=r"^(search_new|search_back_results|back_to_menu)"),
             # Permettre de relancer la recherche même si on est dans cet état
             CommandHandler("chercher_passagers", start_passenger_search)
         ]
