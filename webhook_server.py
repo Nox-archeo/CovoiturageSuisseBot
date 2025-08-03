@@ -558,11 +558,13 @@ async def setup_all_handlers_complete(application):
     
     # 🚨 HANDLER GLOBAL DE FALLBACK - DOIT ÊTRE EN DERNIER POUR NE PAS INTERCEPTER LES AUTRES
     logger.info("🔧 Ajout du handler global de fallback en dernier...")
+    # 🚨 CRITIQUE: Exclure les patterns spécialisés pour éviter l'interception
+    # Le gestionnaire global ne doit capturer que les callbacks vraiment non gérés
     application.add_handler(CallbackQueryHandler(
         handle_missing_callbacks, 
-        pattern=".*"  # Capture tout callback non géré par les handlers précédents
+        pattern=r"^(?!search_canton:|search_date:|search_cancel|search_back_canton|search_new|search_contact_driver:|search_view_trip:|search_book_trip:|search_back_results|contact_driver_|profile:|menu:|pay_proposal:|enter_price:|reject_proposal:|cancel_payment_|confirm_payment_|view_payments|payment_history|book_|trip_|edit_).*"
     ))
-    logger.info("✅ Handler global de fallback ajouté")
+    logger.info("✅ Handler global de fallback ajouté avec exclusions spécialisées")
     
     logger.info("🎉 TOUS les handlers configurés comme dans bot.py.backup")
 

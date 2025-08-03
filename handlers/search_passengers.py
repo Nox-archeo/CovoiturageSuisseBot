@@ -819,6 +819,15 @@ async def handle_search_actions(update: Update, context: CallbackContext) -> int
         await query.edit_message_text("❌ Action non reconnue.")
         return ConversationHandler.END
 
+async def handle_cancel_search(update: Update, context: CallbackContext) -> int:
+    """Gère l'annulation de la recherche depuis n'importe quel état"""
+    query = update.callback_query
+    await query.answer()
+    
+    await query.edit_message_text("❌ Recherche annulée.")
+    context.user_data.clear()
+    return ConversationHandler.END
+
 # Configuration du ConversationHandler
 search_passengers_handler = ConversationHandler(
     entry_points=[
@@ -858,7 +867,8 @@ search_passengers_handler = ConversationHandler(
     },
     fallbacks=[
         CommandHandler("chercher_passagers", start_passenger_search),  # Fallback pour relancer
-        CallbackQueryHandler(handle_search_actions, pattern=r"^back_to_menu$")
+        CallbackQueryHandler(handle_search_actions, pattern=r"^back_to_menu$"),
+        CallbackQueryHandler(handle_cancel_search, pattern=r"^search_cancel$")  # 🔧 FIX: Gérer l'annulation
     ],
     allow_reentry=True,  # Permettre de relancer la conversation
     name="search_passengers",
