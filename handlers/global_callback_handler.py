@@ -40,7 +40,7 @@ async def handle_missing_callbacks(update: Update, context: ContextTypes.DEFAULT
         response_text = (
             "🔍 *Recherche*\n\n"
             "Fonction de recherche en cours de développement.\n"
-            "Utilisez les commandes /chercher ou /propositions en attendant."
+            "Utilisez les commandes /chercher ou /chercher_passagers en attendant."
         )
     elif "paiement" in callback_data.lower() or "payment" in callback_data.lower():
         response_text = (

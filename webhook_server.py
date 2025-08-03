@@ -326,27 +326,6 @@ async def setup_all_handlers_complete(application):
     application.add_handler(CommandHandler("mes_trajets", cmd_my_trips))
     
     # TOUS les CommandHandlers manquants du menu hamburger (CRITIQUES)
-    async def cmd_propositions(update: Update, context):
-        """Commande /propositions depuis le menu hamburger"""
-        keyboard = [
-            [InlineKeyboardButton("⚡ Vue rapide - Dernières demandes", callback_data="view_quick_passenger_trips")],
-            [InlineKeyboardButton("🔍 Recherche avancée - Par canton et date", callback_data="search_passengers")],
-            [InlineKeyboardButton("🔙 Retour au menu", callback_data="menu:back_to_main")]
-        ]
-        
-        text = (
-            "🚗 **Demandes de passagers**\n\n"
-            "Comment souhaitez-vous rechercher des passagers ?\n\n"
-            "⚡ **Vue rapide** : Voir les 10 dernières demandes\n"
-            "🔍 **Recherche avancée** : Par canton et date"
-        )
-        
-        await update.message.reply_text(
-            text,
-            reply_markup=InlineKeyboardMarkup(keyboard),
-            parse_mode="Markdown"
-        )
-    
     async def cmd_verification(update: Update, context):
         """Commande /verification depuis le menu hamburger"""
         keyboard = [
@@ -387,7 +366,6 @@ async def setup_all_handlers_complete(application):
         )
     
     # Enregistrer les nouvelles commandes
-    application.add_handler(CommandHandler("propositions", cmd_propositions))
     application.add_handler(CommandHandler("verification", cmd_verification))
     application.add_handler(CommandHandler("paiements", cmd_paiements))
     
@@ -558,7 +536,6 @@ async def setup_all_handlers_complete(application):
         BotCommand("creer_trajet", "🚗 Créer un trajet"),
         BotCommand("chercher_trajet", "🔍 Chercher un trajet"),
         BotCommand("mes_trajets", "📋 Mes trajets"),
-        BotCommand("propositions", "🚗 Demandes de passagers"),
         BotCommand("chercher_passagers", "👥 Chercher des passagers"),
         BotCommand("verification", "✅ Vérification du compte"),
         BotCommand("paiements", "💰 Gestion des paiements"),
