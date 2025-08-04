@@ -108,7 +108,7 @@ def get_date_display(date_filter: str) -> str:
 
 async def start_passenger_search(update: Update, context: CallbackContext) -> int:
     """Démarre la recherche de passagers"""
-    logger.info(f"Démarrage recherche passagers: user_id={update.effective_user.id}")
+    logger.info(f"🚀 START PASSENGER SEARCH: user_id={update.effective_user.id}")
     
     # RESET COMPLET des données utilisateur pour éviter les conflits d'état
     context.user_data.clear()
@@ -120,6 +120,7 @@ async def start_passenger_search(update: Update, context: CallbackContext) -> in
     user = db.query(User).filter_by(telegram_id=user_id).first()
     
     if not user or not user.is_driver:
+        logger.warning(f"🚫 Utilisateur {user_id} n'est pas conducteur - accès refusé")
         if update.callback_query:
             await update.callback_query.edit_message_text(
                 "❌ Vous devez être un conducteur vérifié pour rechercher des passagers.\n\n"
@@ -133,11 +134,13 @@ async def start_passenger_search(update: Update, context: CallbackContext) -> in
         db.close()
         return ConversationHandler.END
     
+    logger.info(f"✅ Utilisateur {user_id} est un conducteur vérifié - accès autorisé")
     db.close()
     
     # Initialiser les données de recherche
     context.user_data['search_data'] = {}
     context.user_data['conversation_state'] = 'CANTON_SELECTION'
+    logger.info("📋 Données de recherche initialisées - passage à CANTON_SELECTION")
     logger.info("✅ Données de recherche initialisées")
     
     # Créer le clavier avec les cantons
@@ -190,11 +193,19 @@ async def handle_canton_selection(update: Update, context: CallbackContext) -> i
     query = update.callback_query
     await query.answer()
     
+    logger.info(f"🎯 CANTON SELECTION: Callback data reçu: {query.data}")
+    
     if query.data == "search_cancel":
         await query.edit_message_text("❌ Recherche annulée.")
         return ConversationHandler.END
     
     canton_code = query.data.split(':')[1]
+    logger.info(f"🎯 CANTON SELECTION: Canton sélectionné: {canton_code}")
+    
+    # Initialiser search_data si nécessaire
+    if 'search_data' not in context.user_data:
+        context.user_data['search_data'] = {}
+    
     context.user_data['search_data']['canton'] = canton_code
     
     # Créer le clavier pour la sélection de date
@@ -883,20 +894,19 @@ def register_search_passengers_handler(application):
     """Enregistre le handler de recherche de passagers"""
     logger.info("Enregistrement du handler de recherche de passagers")
     
-    # Handler principal de conversation
+    # Handler principal de conversation - PRIORITÉ ABSOLUE
     application.add_handler(search_passengers_handler)
     
-    # Handler pour les callbacks isolés
-    application.add_handler(CallbackQueryHandler(
-        start_passenger_search, 
-        pattern=r"^search_passengers$"
-    ))
+    # ❌ SUPPRIMÉ: Handler en doublon qui crée des conflits avec menu_handlers
+    # application.add_handler(CallbackQueryHandler(
+    #     start_passenger_search, 
+    #     pattern=r"^search_passengers$"
+    # ))
     
     # Ajouter la commande /chercher_passagers
     application.add_handler(CommandHandler("chercher_passagers", cmd_search_passengers))
     
-    # NE PAS écraser les commandes du menu - c'est géré dans bot.py
-    logger.info("✅ Handler de recherche de passagers enregistré")
+    logger.info("✅ Handler de recherche de passagers enregistré SANS conflit")
 
 if __name__ == "__main__":
     # Pour les tests
