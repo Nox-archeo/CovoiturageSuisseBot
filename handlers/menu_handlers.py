@@ -319,18 +319,10 @@ async def handle_menu_buttons(update: Update, context: CallbackContext):
         )
     
     elif query.data == "search_passengers":
-        # Rediriger vers la recherche de passagers
-        keyboard = [
-            [InlineKeyboardButton("⚡ Vue rapide", callback_data="view_quick_passenger_trips")],
-            [InlineKeyboardButton("🔍 Recherche avancée", callback_data="advanced_search_passengers")],
-            [InlineKeyboardButton("🔙 Retour", callback_data="menu:back_to_main")]
-        ]
-        await query.edit_message_text(
-            "🚗 *Recherche de passagers*\n\n"
-            "Comment souhaitez-vous rechercher des passagers ?",
-            reply_markup=InlineKeyboardMarkup(keyboard),
-            parse_mode="Markdown"
-        )
+        # 🔧 CORRECTION: Démarrer directement le ConversationHandler de recherche de passagers
+        from handlers.search_passengers import start_passenger_search
+        await start_passenger_search(update, context)
+        return
     
     elif query.data == "search_drivers":
         # Rediriger vers la recherche de conducteurs
