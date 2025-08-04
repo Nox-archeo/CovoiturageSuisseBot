@@ -60,7 +60,7 @@ async def handle_missing_callbacks(update: Update, context: ContextTypes.DEFAULT
     else:
         response_text = (
             "⚠️ *Fonction non disponible*\n\n"
-            f"La fonction demandée (`{callback_data}`) n'est pas encore implémentée.\n\n"
+            f"La fonction demandée (*{callback_data}*) n'est pas encore implémentée.\n\n"
             "Nous travaillons activement sur cette fonctionnalité !"
         )
     
