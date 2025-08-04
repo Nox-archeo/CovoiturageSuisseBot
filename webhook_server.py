@@ -398,6 +398,19 @@ async def setup_all_handlers_complete(application):
     except Exception as e:
         logger.warning(f"⚠️ ConversationHandlers principaux non disponibles: {e}")
     
+    # 🔥 DEBUG HANDLER - CAPTURE TOUS LES CALLBACKS EN PREMIER
+    try:
+        from debug_callbacks import debug_all_callbacks
+        from telegram.ext import CallbackQueryHandler
+        
+        # Handler debug avec priorité absolue - pattern qui capture TOUT
+        debug_handler = CallbackQueryHandler(debug_all_callbacks, pattern=".*")
+        application.add_handler(debug_handler)
+        logger.error("🔥 DEBUG HANDLER AJOUTÉ EN PREMIER - CAPTURE TOUS LES CALLBACKS")
+        print("🔥 DEBUG HANDLER AJOUTÉ EN PREMIER - CAPTURE TOUS LES CALLBACKS")
+    except Exception as e:
+        logger.error(f"🔥 Erreur ajout debug handler: {e}")
+    
     # Handlers de recherche spécialisés
     try:
         # Fonction register_menu_search_handlers n'existe pas encore
