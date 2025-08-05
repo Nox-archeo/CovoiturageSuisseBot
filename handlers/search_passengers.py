@@ -190,6 +190,10 @@ async def start_passenger_search(update: Update, context: CallbackContext) -> in
 
 async def handle_canton_selection(update: Update, context: CallbackContext) -> int:
     """Gère la sélection du canton"""
+    # LOG CRITIQUE POUR VOIR SI ON ARRIVE ICI
+    print(f"🚨 HANDLE_CANTON_SELECTION APPELÉ! Callback: {update.callback_query.data if update.callback_query else 'NO CALLBACK'}")
+    logger.error(f"🚨 HANDLE_CANTON_SELECTION APPELÉ! Callback: {update.callback_query.data if update.callback_query else 'NO CALLBACK'}")
+    
     query = update.callback_query
     await query.answer()
     
