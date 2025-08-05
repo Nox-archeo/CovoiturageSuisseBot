@@ -565,6 +565,11 @@ async def webhook_handler(request: Request):
         json_data = await request.json()
         update = Update.de_json(json_data, telegram_app.bot)
         
+        # LOG CRITIQUE POUR VOIR TOUS LES CALLBACKS
+        if update.callback_query:
+            logger.error(f"🔥 WEBHOOK: Callback reçu: {update.callback_query.data}")
+            print(f"🔥 WEBHOOK: Callback reçu: {update.callback_query.data}")
+        
         # Traiter l'update
         await telegram_app.process_update(update)
         

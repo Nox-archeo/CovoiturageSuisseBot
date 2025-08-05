@@ -143,6 +143,10 @@ async def start_passenger_search(update: Update, context: CallbackContext) -> in
     logger.info("📋 Données de recherche initialisées - passage à CANTON_SELECTION")
     logger.info("✅ Données de recherche initialisées")
     
+    # LOG CRITIQUE POUR VÉRIFIER L'ÉTAT DU CONVERSATIONHANDLER
+    logger.error(f"🔥 CRITICAL: ConversationHandler va retourner CANTON_SELECTION = {CANTON_SELECTION}")
+    print(f"🔥 CRITICAL: ConversationHandler va retourner CANTON_SELECTION = {CANTON_SELECTION}")
+    
     # Créer le clavier avec les cantons
     keyboard = []
     canton_items = list(CANTONS.items())
@@ -185,6 +189,10 @@ async def start_passenger_search(update: Update, context: CallbackContext) -> in
             parse_mode=ParseMode.MARKDOWN,
             reply_markup=reply_markup
         )
+    
+    # LOG CRITIQUE POUR CONFIRMER LE RETOUR
+    logger.error(f"🚨 START_PASSENGER_SEARCH: Retourne CANTON_SELECTION = {CANTON_SELECTION}")
+    print(f"🚨 START_PASSENGER_SEARCH: Retourne CANTON_SELECTION = {CANTON_SELECTION}")
     
     return CANTON_SELECTION
 
@@ -897,6 +905,12 @@ async def cmd_search_passengers(update: Update, context: CallbackContext):
 def register_search_passengers_handler(application):
     """Enregistre le handler de recherche de passagers"""
     logger.info("🔧 REGISTRATION: Enregistrement du handler de recherche de passagers")
+    
+    # LOG CRITIQUE POUR VÉRIFIER LA CONFIGURATION
+    logger.error(f"🔥 REGISTRATION: Pattern search_canton configuré: ^search_canton:")
+    print(f"🔥 REGISTRATION: Pattern search_canton configuré: ^search_canton:")
+    logger.error(f"🔥 REGISTRATION: CANTON_SELECTION state = {CANTON_SELECTION}")
+    print(f"🔥 REGISTRATION: CANTON_SELECTION state = {CANTON_SELECTION}")
     
     # Handler principal de conversation - PRIORITÉ ABSOLUE
     application.add_handler(search_passengers_handler)
