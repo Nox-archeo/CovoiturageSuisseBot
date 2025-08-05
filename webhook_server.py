@@ -567,8 +567,38 @@ async def webhook_handler(request: Request):
         
         # LOG CRITIQUE POUR VOIR TOUS LES CALLBACKS
         if update.callback_query:
-            logger.error(f"🔥 WEBHOOK: Callback reçu: {update.callback_query.data}")
-            print(f"🔥 WEBHOOK: Callback reçu: {update.callback_query.data}")
+            callback_data = update.callback_query.data
+            user_id = update.callback_query.from_user.id
+            logger.error(f"🔥 WEBHOOK: Callback reçu: {callback_data}")
+            print(f"🔥 WEBHOOK: Callback reçu: {callback_data}")
+            
+            # 🚨 LOG CRITIQUE: Vérifier l'état du ConversationHandler
+            if callback_data and callback_data.startswith("search_canton:"):
+                logger.error(f"🚨 ÉTAT ConversationHandler AVANT traitement:")
+                print(f"🚨 ÉTAT ConversationHandler AVANT traitement:")
+                
+                # Accéder aux données de conversation
+                try:
+                    # Rechercher le ConversationHandler
+                    search_conv_handler = None
+                    for handler in telegram_app.handlers[0]:  # Groupe 0
+                        if hasattr(handler, 'name') and handler.name == "search_passengers":
+                            search_conv_handler = handler
+                            break
+                    
+                    if search_conv_handler:
+                        # Obtenir la clé de conversation
+                        conv_key = (user_id, user_id)  # per_user=True, per_chat=True
+                        conversations = getattr(search_conv_handler, 'conversations', {})
+                        current_state = conversations.get(conv_key, "NO_STATE")
+                        logger.error(f"🚨 CONV_STATE pour user {user_id}: {current_state}")
+                        print(f"🚨 CONV_STATE pour user {user_id}: {current_state}")
+                    else:
+                        logger.error(f"🚨 ConversationHandler NOT FOUND!")
+                        print(f"🚨 ConversationHandler NOT FOUND!")
+                except Exception as e:
+                    logger.error(f"🚨 Erreur vérification état: {e}")
+                    print(f"🚨 Erreur vérification état: {e}")
         
         # Traiter l'update
         await telegram_app.process_update(update)
