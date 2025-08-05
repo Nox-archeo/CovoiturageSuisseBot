@@ -321,8 +321,8 @@ async def handle_menu_buttons(update: Update, context: CallbackContext):
     elif query.data == "search_passengers":
         # 🔧 CORRECTION: Démarrer directement le ConversationHandler de recherche de passagers
         from handlers.search_passengers import start_passenger_search
-        await start_passenger_search(update, context)
-        return
+        result = await start_passenger_search(update, context)
+        return result
     
     elif query.data == "search_drivers":
         # Rediriger vers la recherche de conducteurs
