@@ -891,7 +891,7 @@ search_passengers_handler = ConversationHandler(
     ],
     allow_reentry=True,  # Permettre de relancer la conversation
     name="search_passengers",
-    persistent=True
+    persistent=False  # 🔧 FIX: Désactiver la persistence pour éviter les erreurs
 )
 
 async def cmd_search_passengers(update: Update, context: CallbackContext):

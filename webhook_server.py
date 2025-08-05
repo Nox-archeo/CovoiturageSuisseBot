@@ -478,7 +478,8 @@ async def setup_all_handlers_complete(application):
     application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^profile_main$"))
     application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^view_payments$"))
     application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^payment_history$"))
-    application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^search_passengers$"))  # 🔧 Remis - menu handler redirige maintenant
+    # ❌ SUPPRIMÉ: Conflit avec ConversationHandler search_passengers
+    # application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^search_passengers$"))
     # application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^search_drivers$"))  # Garde supprimé pour l'instant
     application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^why_paypal_required$"))
     application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^ignore$"))  # Pour calendriers
