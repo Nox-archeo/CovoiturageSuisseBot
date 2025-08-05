@@ -387,14 +387,6 @@ async def setup_all_handlers_complete(application):
     application.add_handler(profile_creation_handler)
     
     # Import des ConversationHandlers manquants
-    # 🎯 PRIORITÉ ABSOLUE: ConversationHandler de recherche EN PREMIER
-    try:
-        from handlers.search_passengers import register_search_passengers_handler
-        register_search_passengers_handler(application)
-        logger.info("✅ ConversationHandler recherche passagers enregistré EN PREMIER")
-    except Exception as e:
-        logger.error(f"❌ ERREUR CRITIQUE ConversationHandler: {e}")
-    
     try:
         from handlers.create_trip_handler import create_trip_conv_handler
         from handlers.search_trip_handler import search_trip_conv_handler
@@ -563,6 +555,14 @@ async def setup_all_handlers_complete(application):
         pattern=r"^(?!search_|contact_driver_|profile:|menu:|pay_proposal:|enter_price:|reject_proposal:|cancel_payment_|confirm_payment_|view_payments|payment_history|book_|trip_|edit_).*"
     ))
     logger.info("✅ Handler global de fallback ajouté - exclut search_ prefix")
+    
+    # 🎯 PRIORITÉ ABSOLUE: ConversationHandler de recherche EN DERNIER pour priorité maximale
+    try:
+        from handlers.search_passengers import register_search_passengers_handler
+        register_search_passengers_handler(application)
+        logger.info("✅ ConversationHandler recherche passagers enregistré EN DERNIER avec priorité maximale")
+    except Exception as e:
+        logger.error(f"❌ ERREUR CRITIQUE ConversationHandler: {e}")
     
     logger.info("🎉 TOUS les handlers configurés comme dans bot.py.backup")
 
