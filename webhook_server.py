@@ -458,20 +458,6 @@ async def setup_all_handlers_complete(application):
     
     # 🎯 PRIORITÉ ABSOLUE: ConversationHandler de recherche AVANT tous les autres handlers
     try:
-        # 🚨 DÉBOGAGE ULTIME: Handler direct pour intercepter search_canton
-        async def debug_search_canton_interceptor(update: Update, context: CallbackContext):
-            """Handler de debug pour intercepter TOUS les callbacks search_canton"""
-            query = update.callback_query
-            logger.error(f"🚨🚨🚨 DEBUG_INTERCEPTOR: Callback search_canton intercepté: {query.data}")
-            print(f"🚨🚨🚨 DEBUG_INTERCEPTOR: Callback search_canton intercepté: {query.data}")
-            await query.answer()
-            await query.edit_message_text(f"🚨 DEBUG: Callback {query.data} intercepté par le debug handler!")
-            return
-        
-        # Ajouter l'interceptor EN PREMIER
-        application.add_handler(CallbackQueryHandler(debug_search_canton_interceptor, pattern=r"^search_canton:"))
-        logger.error("🚨 DEBUG_INTERCEPTOR ajouté en priorité absolue")
-        
         from handlers.search_passengers import register_search_passengers_handler
         register_search_passengers_handler(application)
         logger.info("✅ ConversationHandler recherche passagers enregistré AVEC priorité maximale")
