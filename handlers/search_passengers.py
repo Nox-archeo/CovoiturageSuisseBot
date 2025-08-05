@@ -188,6 +188,14 @@ async def start_passenger_search(update: Update, context: CallbackContext) -> in
     
     return CANTON_SELECTION
 
+async def handle_canton_selection_with_logs(update: Update, context: CallbackContext) -> int:
+    """Wrapper avec logs détaillés pour handle_canton_selection"""
+    logger.error(f"🎯 WRAPPER: handle_canton_selection appelé avec callback: {update.callback_query.data if update.callback_query else 'NO CALLBACK'}")
+    print(f"🎯 WRAPPER: handle_canton_selection appelé avec callback: {update.callback_query.data if update.callback_query else 'NO CALLBACK'}")
+    
+    # Appeler la vraie fonction
+    return await handle_canton_selection(update, context)
+
 async def handle_canton_selection(update: Update, context: CallbackContext) -> int:
     """Gère la sélection du canton"""
     query = update.callback_query
@@ -847,7 +855,7 @@ search_passengers_handler = ConversationHandler(
     ],
     states={
         CANTON_SELECTION: [
-            CallbackQueryHandler(handle_canton_selection, pattern=r"^search_canton:"),
+            CallbackQueryHandler(handle_canton_selection_with_logs, pattern=r"^search_canton:"),
             # Permettre de relancer la recherche même si on est dans cet état
             CommandHandler("chercher_passagers", start_passenger_search)
         ],
@@ -892,10 +900,11 @@ async def cmd_search_passengers(update: Update, context: CallbackContext):
 
 def register_search_passengers_handler(application):
     """Enregistre le handler de recherche de passagers"""
-    logger.info("Enregistrement du handler de recherche de passagers")
+    logger.info("🔧 REGISTRATION: Enregistrement du handler de recherche de passagers")
     
     # Handler principal de conversation - PRIORITÉ ABSOLUE
     application.add_handler(search_passengers_handler)
+    logger.info("✅ REGISTRATION: ConversationHandler search_passengers_handler ajouté")
     
     # ❌ SUPPRIMÉ: Handler en doublon qui crée des conflits avec menu_handlers
     # application.add_handler(CallbackQueryHandler(
@@ -906,7 +915,7 @@ def register_search_passengers_handler(application):
     # Ajouter la commande /chercher_passagers
     application.add_handler(CommandHandler("chercher_passagers", cmd_search_passengers))
     
-    logger.info("✅ Handler de recherche de passagers enregistré SANS conflit")
+    logger.info("✅ REGISTRATION: Handler de recherche de passagers enregistré SANS conflit")
 
 if __name__ == "__main__":
     # Pour les tests
