@@ -895,7 +895,11 @@ search_passengers_handler = ConversationHandler(
     ],
     allow_reentry=True,  # Permettre de relancer la conversation
     name="search_passengers",
-    persistent=False  # 🔧 FIX: Désactiver la persistence pour éviter les erreurs
+    persistent=False,  # 🔧 FIX: Désactiver la persistence pour éviter les erreurs
+    # 🎯 FIX ULTIME: Configuration explicite pour forcer le suivi
+    per_user=True,
+    per_chat=True, 
+    per_message=True  # 🔥 CRUCIAL: Forcer le suivi par message
 )
 
 async def cmd_search_passengers(update: Update, context: CallbackContext):
