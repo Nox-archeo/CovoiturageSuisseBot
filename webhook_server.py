@@ -587,12 +587,17 @@ async def webhook_handler(request: Request):
                             break
                     
                     if search_conv_handler:
-                        # Obtenir la clé de conversation
-                        conv_key = (user_id, user_id)  # per_user=True, per_chat=True
+                        # Obtenir la clé de conversation CORRECTE
+                        chat_id = update.callback_query.message.chat.id
+                        conv_key = (user_id, chat_id)  # per_user=True, per_chat=True
                         conversations = getattr(search_conv_handler, 'conversations', {})
                         current_state = conversations.get(conv_key, "NO_STATE")
-                        logger.error(f"🚨 CONV_STATE pour user {user_id}: {current_state}")
-                        print(f"🚨 CONV_STATE pour user {user_id}: {current_state}")
+                        logger.error(f"🚨 CONV_STATE pour user {user_id}, chat {chat_id}: {current_state}")
+                        print(f"🚨 CONV_STATE pour user {user_id}, chat {chat_id}: {current_state}")
+                        logger.error(f"🚨 CONV_KEY utilisée: {conv_key}")
+                        print(f"🚨 CONV_KEY utilisée: {conv_key}")
+                        logger.error(f"🚨 CONVERSATIONS actives: {list(conversations.keys())}")
+                        print(f"🚨 CONVERSATIONS actives: {list(conversations.keys())}")
                     else:
                         logger.error(f"🚨 ConversationHandler NOT FOUND!")
                         print(f"🚨 ConversationHandler NOT FOUND!")
