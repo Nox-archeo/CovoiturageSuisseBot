@@ -456,6 +456,14 @@ async def setup_all_handlers_complete(application):
     except Exception as e:
         logger.warning(f"⚠️ Handlers de switch: {e}")
     
+    # 🎯 PRIORITÉ ABSOLUE: ConversationHandler de recherche AVANT tous les autres handlers
+    try:
+        from handlers.search_passengers import register_search_passengers_handler
+        register_search_passengers_handler(application)
+        logger.info("✅ ConversationHandler recherche passagers enregistré AVEC priorité maximale")
+    except Exception as e:
+        logger.error(f"❌ ERREUR CRITIQUE ConversationHandler: {e}")
+    
     # Menu handlers (APRÈS les ConversationHandlers)
     application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^menu:search_trip$"))
     application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^menu:my_trips$"))
@@ -545,16 +553,8 @@ async def setup_all_handlers_complete(application):
         logger.info("✅ Commandes du menu hamburger configurées - version nettoyée sans propositions")
     except Exception as e:
         logger.warning(f"⚠️ Configuration menu hamburger: {e}")
-    
-    # 🎯 PRIORITÉ ABSOLUE: ConversationHandler de recherche AVANT le handler de fallback
-    try:
-        from handlers.search_passengers import register_search_passengers_handler
-        register_search_passengers_handler(application)
-        logger.info("✅ ConversationHandler recherche passagers enregistré AVEC priorité maximale")
-    except Exception as e:
-        logger.error(f"❌ ERREUR CRITIQUE ConversationHandler: {e}")
 
-    logger.info("🎉 TOUS les handlers configurés - SANS handler de fallback qui interfère")
+    logger.info("🎉 TOUS les handlers configurés - ConversationHandler en priorité")
 
 @app.post("/webhook")
 async def webhook_handler(request: Request):
