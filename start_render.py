@@ -109,7 +109,7 @@ def main():
             os.environ['WEBHOOK_URL'] = webhook_url
             logger.info(f"🔧 WEBHOOK_URL configurée automatiquement: {webhook_url}")
         
-        from webhook_bot import app
+        from webhook_server import app
         import uvicorn
         
         port = int(os.getenv('PORT', 8000))
