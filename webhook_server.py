@@ -387,24 +387,24 @@ async def setup_all_handlers_complete(application):
     application.add_handler(profile_creation_handler)
     
     # Import des ConversationHandlers manquants
+    # 🎯 PRIORITÉ ABSOLUE: ConversationHandler de recherche EN PREMIER
+    try:
+        from handlers.search_passengers import register_search_passengers_handler
+        register_search_passengers_handler(application)
+        logger.info("✅ ConversationHandler recherche passagers enregistré EN PREMIER")
+    except Exception as e:
+        logger.error(f"❌ ERREUR CRITIQUE ConversationHandler: {e}")
+    
     try:
         from handlers.create_trip_handler import create_trip_conv_handler
         from handlers.search_trip_handler import search_trip_conv_handler
         
-        # IMPORTANT: Enregistrer create_trip_conv_handler EN PREMIER
+        # IMPORTANT: Enregistrer create_trip_conv_handler
         application.add_handler(create_trip_conv_handler)
         logger.info("✅ create_trip_conv_handler enregistré")
         
     except Exception as e:
         logger.warning(f"⚠️ ConversationHandlers principaux non disponibles: {e}")
-    
-    # Handlers de recherche spécialisés - PRIORITÉ ABSOLUE POUR CONVERSATIONHANDLERS
-    try:
-        from handlers.search_passengers import register_search_passengers_handler
-        register_search_passengers_handler(application)
-        logger.info("✅ Handlers de recherche spécialisés enregistrés")
-    except Exception as e:
-        logger.warning(f"⚠️ Handlers de recherche: {e}")
     
     # Ajouter les autres ConversationHandlers nécessaires
     application.add_handler(search_trip_conv_handler)
