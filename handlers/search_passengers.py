@@ -188,14 +188,6 @@ async def start_passenger_search(update: Update, context: CallbackContext) -> in
     
     return CANTON_SELECTION
 
-async def handle_canton_selection_with_logs(update: Update, context: CallbackContext) -> int:
-    """Wrapper avec logs détaillés pour handle_canton_selection"""
-    logger.error(f"🎯 WRAPPER: handle_canton_selection appelé avec callback: {update.callback_query.data if update.callback_query else 'NO CALLBACK'}")
-    print(f"🎯 WRAPPER: handle_canton_selection appelé avec callback: {update.callback_query.data if update.callback_query else 'NO CALLBACK'}")
-    
-    # Appeler la vraie fonction
-    return await handle_canton_selection(update, context)
-
 async def handle_canton_selection(update: Update, context: CallbackContext) -> int:
     """Gère la sélection du canton"""
     query = update.callback_query
@@ -855,7 +847,7 @@ search_passengers_handler = ConversationHandler(
     ],
     states={
         CANTON_SELECTION: [
-            CallbackQueryHandler(handle_canton_selection_with_logs, pattern=r"^search_canton:"),
+            CallbackQueryHandler(handle_canton_selection, pattern=r"^search_canton:"),
             # Permettre de relancer la recherche même si on est dans cet état
             CommandHandler("chercher_passagers", start_passenger_search)
         ],

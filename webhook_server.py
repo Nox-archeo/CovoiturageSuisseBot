@@ -546,25 +546,15 @@ async def setup_all_handlers_complete(application):
     except Exception as e:
         logger.warning(f"⚠️ Configuration menu hamburger: {e}")
     
-    # 🚨 HANDLER GLOBAL DE FALLBACK - DOIT ÊTRE EN DERNIER POUR NE PAS INTERCEPTER LES AUTRES
-    logger.info("🔧 Ajout du handler global de fallback en dernier...")
-    # 🚨 CRITIQUE: Le handler global ne doit PAS capturer les callbacks de recherche
-    # Motif simplifié pour exclure tous les callbacks commençant par search_
-    application.add_handler(CallbackQueryHandler(
-        handle_missing_callbacks, 
-        pattern=r"^(?!search_|contact_driver_|profile:|menu:|pay_proposal:|enter_price:|reject_proposal:|cancel_payment_|confirm_payment_|view_payments|payment_history|book_|trip_|edit_).*"
-    ))
-    logger.info("✅ Handler global de fallback ajouté - exclut search_ prefix")
-    
-    # 🎯 PRIORITÉ ABSOLUE: ConversationHandler de recherche EN DERNIER pour priorité maximale
+    # 🎯 PRIORITÉ ABSOLUE: ConversationHandler de recherche AVANT le handler de fallback
     try:
         from handlers.search_passengers import register_search_passengers_handler
         register_search_passengers_handler(application)
-        logger.info("✅ ConversationHandler recherche passagers enregistré EN DERNIER avec priorité maximale")
+        logger.info("✅ ConversationHandler recherche passagers enregistré AVEC priorité maximale")
     except Exception as e:
         logger.error(f"❌ ERREUR CRITIQUE ConversationHandler: {e}")
-    
-    logger.info("🎉 TOUS les handlers configurés comme dans bot.py.backup")
+
+    logger.info("🎉 TOUS les handlers configurés - SANS handler de fallback qui interfère")
 
 @app.post("/webhook")
 async def webhook_handler(request: Request):
