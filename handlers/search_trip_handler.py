@@ -135,6 +135,14 @@ async def handle_search_user_type(update: Update, context: CallbackContext):
     user_type = query.data.split(":")[1]  # "driver" ou "passenger"
     context.user_data['search_user_type'] = user_type
     
+    # 🚨 FIX CRUCIAL: Rediriger vers la recherche de passagers pour les conducteurs
+    if user_type == "driver":
+        # Conducteur cherche des passagers - rediriger vers le ConversationHandler spécialisé
+        logger.info(f"🎯 REDIRECT: Conducteur détecté - redirection vers start_passenger_search")
+        from handlers.search_passengers import start_passenger_search
+        return await start_passenger_search(update, context)
+    
+    # Sinon continuer avec la logique normale pour les passagers
     # Créer un clavier avec les villes principales pour l'étape suivante
     keyboard = []
     popular_cities = ["Fribourg", "Genève", "Lausanne", "Zürich", "Berne", "Bâle"]

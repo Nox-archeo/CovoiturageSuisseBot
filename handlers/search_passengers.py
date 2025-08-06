@@ -896,10 +896,10 @@ search_passengers_handler = ConversationHandler(
     allow_reentry=True,  # Permettre de relancer la conversation
     name="search_passengers",
     persistent=False,  # 🔧 FIX: Désactiver la persistence pour éviter les erreurs
-    # 🎯 FIX ULTIME: Configuration explicite pour forcer le suivi
+    # 🎯 FIX CORRECT: Configuration standard pour ConversationHandler
     per_user=True,
-    per_chat=True, 
-    per_message=True  # 🔥 CRUCIAL: Forcer le suivi par message
+    per_chat=True
+    # ❌ SUPPRIMÉ per_message=True qui CASSAIT la sauvegarde d'état
 )
 
 async def cmd_search_passengers(update: Update, context: CallbackContext):
