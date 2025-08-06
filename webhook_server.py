@@ -263,31 +263,9 @@ async def create_bot_app_webhook():
     
     return application
 
-async def handle_search_user_type_selection(update: Update, context: CallbackContext):
-    """Gère la sélection du type d'utilisateur (conducteur/passager) en dehors du ConversationHandler"""
-    from telegram.ext import CallbackContext
-    query = update.callback_query
-    await query.answer()
-    
-    user_type = query.data.split(":")[1]  # "driver" ou "passenger"
-    
-    if user_type == "driver":
-        # Rediriger vers la recherche de passagers
-        from handlers.search_passengers import start_passenger_search
-        return await start_passenger_search(update, context)
-    elif user_type == "passenger":
-        # Rediriger vers la recherche de trajets normale
-        from handlers.search_trip_handler import start_search_trip
-        context.user_data.clear()
-        context.user_data['search_user_type'] = 'passenger'
-        return await start_search_trip(update, context)
-    else:
-        await query.edit_message_text(
-            "❌ Option non reconnue. Veuillez réessayer.",
-            reply_markup=InlineKeyboardMarkup([[
-                InlineKeyboardButton("🔙 Menu principal", callback_data="main_menu")
-            ]])
-        )
+# 🎯 SUPPRIMÉ: handle_search_user_type_selection qui causait des conflits ConversationHandler
+# Cette fonction appelait start_passenger_search directement sans passer par le ConversationHandler
+# Maintenant, search_trip_handler.py gère search_user_type:driver via handle_search_user_type
 
 async def setup_all_handlers_complete(application):
     """Configure TOUS les handlers EXACTEMENT comme dans bot.py.backup"""
@@ -484,8 +462,9 @@ async def setup_all_handlers_complete(application):
     application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^why_paypal_required$"))
     application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^ignore$"))  # Pour calendriers
     
-    # 🔧 NOUVEAU: Handlers pour types de recherche (fix boutons non-fonctionnels)
-    application.add_handler(CallbackQueryHandler(handle_search_user_type_selection, pattern="^search_user_type:(driver|passenger)$"))
+    # ❌ SUPPRIMÉ: Handler conflictuel qui appelait start_passenger_search en dehors du ConversationHandler
+    # application.add_handler(CallbackQueryHandler(handle_search_user_type_selection, pattern="^search_user_type:(driver|passenger)$"))
+    # 🎯 FIX: Laisser search_trip_handler.py gérer search_user_type via son ConversationHandler
     
     # 🚨 CORRECTION CRITIQUE: Handler de fallback pour callbacks non gérés (doit être en DERNIER)
     from handlers.global_callback_handler import handle_missing_callbacks
