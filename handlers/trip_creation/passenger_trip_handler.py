@@ -430,10 +430,9 @@ async def handle_after_creation_action(update: Update, context: CallbackContext)
     action = query.data
     
     if action == "search_trips":
-        # Rediriger vers la recherche de trajets
-        # Cette fonction doit être définie ailleurs
-        from handlers.trip_search.search_handler import start_search
-        return await start_search(update, context)
+        # Rediriger vers la recherche de trajets - UTILISER LE BON HANDLER
+        from handlers.search_trip_handler import start_search_trip
+        return await start_search_trip(update, context)
     
     elif action == "view_my_requests":
         # Rediriger vers la liste des demandes de l'utilisateur
