@@ -65,11 +65,41 @@ CANTONS = {
 
 def load_swiss_localities() -> Dict[str, Any]:
     """Charge les données des localités suisses"""
+    import os
+    
+    # Construire le chemin relatif au répertoire de travail
+    current_dir = os.getcwd()
+    file_path = os.path.join(current_dir, 'data', 'swiss_localities.json')
+    
     try:
-        with open('/Users/margaux/CovoiturageSuisse/data/swiss_localities.json', 'r', encoding='utf-8') as f:
-            return json.load(f)
+        logger.info(f"🔍 DEBUG: Tentative de chargement depuis: {file_path}")
+        with open(file_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            logger.info(f"✅ DEBUG: Données chargées avec succès, {len(data)} localités trouvées")
+            return data
     except Exception as e:
-        logger.error(f"Erreur lors du chargement des localités suisses: {e}")
+        logger.error(f"❌ Erreur lors du chargement des localités suisses: {e}")
+        logger.error(f"❌ Chemin testé: {file_path}")
+        logger.error(f"❌ Répertoire de travail: {current_dir}")
+        
+        # Essayer d'autres chemins possibles
+        alternative_paths = [
+            'data/swiss_localities.json',
+            './data/swiss_localities.json',
+            '/app/data/swiss_localities.json',  # Chemin potentiel sur Render
+            '/Users/margaux/CovoiturageSuisse/data/swiss_localities.json'  # Chemin local
+        ]
+        
+        for alt_path in alternative_paths:
+            try:
+                logger.info(f"🔍 DEBUG: Essai chemin alternatif: {alt_path}")
+                with open(alt_path, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                    logger.info(f"✅ DEBUG: Données chargées depuis chemin alternatif: {alt_path}")
+                    return data
+            except Exception as alt_e:
+                logger.warning(f"❌ Échec chemin alternatif {alt_path}: {alt_e}")
+        
         return {}
 
 def get_cities_by_canton(canton_code: str) -> List[str]:
