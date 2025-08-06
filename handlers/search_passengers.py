@@ -883,11 +883,11 @@ search_passengers_handler = ConversationHandler(
     ],
     allow_reentry=True,  # Permettre de relancer la conversation
     name="search_passengers",
-    persistent=False,  # 🔧 FIX: Désactiver la persistence pour éviter les erreurs
-    # 🎯 FIX CORRECT: Configuration standard pour ConversationHandler
-    per_user=True,
-    per_chat=True
-    # ❌ SUPPRIMÉ per_message=True qui CASSAIT la sauvegarde d'état
+    # 🎯 FIX FINAL: Configuration identique au create_trip_handler qui FONCTIONNE
+    persistent=True,
+    per_message=False,
+    per_chat=False,
+    per_user=True  # Chaque utilisateur a sa propre conversation
 )
 
 async def cmd_search_passengers(update: Update, context: CallbackContext):
