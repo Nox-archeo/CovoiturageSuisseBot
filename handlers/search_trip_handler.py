@@ -135,21 +135,19 @@ async def handle_search_user_type(update: Update, context: CallbackContext):
     user_type = query.data.split(":")[1]  # "driver" ou "passenger"
     context.user_data['search_user_type'] = user_type
     
-    # 🚨 FIX CRUCIAL: Rediriger vers la recherche de passagers pour les conducteurs
+    # 🚨 FIX CRUCIAL: Rediriger DIRECTEMENT vers la recherche de passagers pour les conducteurs
     if user_type == "driver":
-        # Conducteur cherche des passagers - TERMINER ce ConversationHandler et déclencher l'entry point search_passengers
-        logger.info(f"🎯 REDIRECT: Conducteur détecté - fin de search_trip + déclenchement search_passengers entry point")
+        # Conducteur cherche des passagers - appeler DIRECTEMENT start_passenger_search
+        logger.info(f"🎯 REDIRECT DIRECT: Conducteur détecté - appel direct start_passenger_search")
         
-        # Créer un nouveau callback qui déclenche l'entry point du ConversationHandler search_passengers
-        await query.edit_message_text(
-            "🔄 Redirection vers la recherche de passagers...",
-            reply_markup=InlineKeyboardMarkup([[
-                InlineKeyboardButton("🔍 Commencer la recherche", callback_data="search_passengers")
-            ]])
-        )
+        # Importer et appeler directement la fonction de recherche de passagers
+        from handlers.search_passengers import start_passenger_search
         
-        # Terminer ce ConversationHandler pour permettre au search_passengers de démarrer
-        return ConversationHandler.END
+        # Terminer AVANT d'appeler la nouvelle fonction pour éviter les conflits
+        context.user_data.clear()  # Reset pour éviter les conflits d'état
+        
+        # Appeler directement start_passenger_search qui va créer l'interface des cantons
+        return await start_passenger_search(update, context)
     
     # Sinon continuer avec la logique normale pour les passagers
     # Créer un clavier avec les villes principales pour l'étape suivante

@@ -544,45 +544,11 @@ async def webhook_handler(request: Request):
         json_data = await request.json()
         update = Update.de_json(json_data, telegram_app.bot)
         
-        # LOG CRITIQUE POUR VOIR TOUS LES CALLBACKS
+        # LOG MINIMAL pour les callbacks importants
         if update.callback_query:
             callback_data = update.callback_query.data
             user_id = update.callback_query.from_user.id
-            logger.error(f"🔥 WEBHOOK: Callback reçu: {callback_data}")
-            print(f"🔥 WEBHOOK: Callback reçu: {callback_data}")
-            
-            # 🚨 LOG CRITIQUE: Vérifier l'état du ConversationHandler
-            if callback_data and callback_data.startswith("search_canton:"):
-                logger.error(f"🚨 ÉTAT ConversationHandler AVANT traitement:")
-                print(f"🚨 ÉTAT ConversationHandler AVANT traitement:")
-                
-                # Accéder aux données de conversation
-                try:
-                    # Rechercher le ConversationHandler
-                    search_conv_handler = None
-                    for handler in telegram_app.handlers[0]:  # Groupe 0
-                        if hasattr(handler, 'name') and handler.name == "search_passengers":
-                            search_conv_handler = handler
-                            break
-                    
-                    if search_conv_handler:
-                        # Obtenir la clé de conversation CORRECTE
-                        chat_id = update.callback_query.message.chat.id
-                        conv_key = (user_id, chat_id)  # per_user=True, per_chat=True
-                        conversations = getattr(search_conv_handler, 'conversations', {})
-                        current_state = conversations.get(conv_key, "NO_STATE")
-                        logger.error(f"🚨 CONV_STATE pour user {user_id}, chat {chat_id}: {current_state}")
-                        print(f"🚨 CONV_STATE pour user {user_id}, chat {chat_id}: {current_state}")
-                        logger.error(f"🚨 CONV_KEY utilisée: {conv_key}")
-                        print(f"🚨 CONV_KEY utilisée: {conv_key}")
-                        logger.error(f"🚨 CONVERSATIONS actives: {list(conversations.keys())}")
-                        print(f"🚨 CONVERSATIONS actives: {list(conversations.keys())}")
-                    else:
-                        logger.error(f"🚨 ConversationHandler NOT FOUND!")
-                        print(f"🚨 ConversationHandler NOT FOUND!")
-                except Exception as e:
-                    logger.error(f"🚨 Erreur vérification état: {e}")
-                    print(f"🚨 Erreur vérification état: {e}")
+            logger.info(f"� Callback: {callback_data[:50]}... user: {user_id}")
         
         # Traiter l'update
         await telegram_app.process_update(update)
