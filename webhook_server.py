@@ -364,6 +364,14 @@ async def setup_all_handlers_complete(application):
     # Ajouter TOUS les ConversationHandlers (EXACTEMENT comme bot.py.backup)
     application.add_handler(profile_creation_handler)
     
+    # 🎯 PRIORITÉ ABSOLUE: ConversationHandler de recherche passagers AVANT search_trip
+    try:
+        from handlers.search_passengers import register_search_passengers_handler
+        register_search_passengers_handler(application)
+        logger.info("✅ ConversationHandler recherche passagers enregistré EN PREMIER")
+    except Exception as e:
+        logger.error(f"❌ ERREUR CRITIQUE ConversationHandler search_passengers: {e}")
+    
     # Import des ConversationHandlers manquants
     try:
         from handlers.create_trip_handler import create_trip_conv_handler
@@ -373,11 +381,14 @@ async def setup_all_handlers_complete(application):
         application.add_handler(create_trip_conv_handler)
         logger.info("✅ create_trip_conv_handler enregistré")
         
+        # APRÈS search_passengers: Enregistrer search_trip_conv_handler
+        application.add_handler(search_trip_conv_handler)
+        logger.info("✅ search_trip_conv_handler enregistré APRÈS search_passengers")
+        
     except Exception as e:
         logger.warning(f"⚠️ ConversationHandlers principaux non disponibles: {e}")
     
     # Ajouter les autres ConversationHandlers nécessaires
-    application.add_handler(search_trip_conv_handler)
     application.add_handler(profile_conv_handler)
     application.add_handler(vehicle_conv_handler)
     
@@ -433,14 +444,6 @@ async def setup_all_handlers_complete(application):
         logger.info("✅ Handlers de switch de profil enregistrés")
     except Exception as e:
         logger.warning(f"⚠️ Handlers de switch: {e}")
-    
-    # 🎯 PRIORITÉ ABSOLUE: ConversationHandler de recherche AVANT tous les autres handlers
-    try:
-        from handlers.search_passengers import register_search_passengers_handler
-        register_search_passengers_handler(application)
-        logger.info("✅ ConversationHandler recherche passagers enregistré AVEC priorité maximale")
-    except Exception as e:
-        logger.error(f"❌ ERREUR CRITIQUE ConversationHandler: {e}")
     
     # Menu handlers (APRÈS les ConversationHandlers)
     application.add_handler(CallbackQueryHandler(handle_menu_buttons, pattern="^menu:search_trip$"))
