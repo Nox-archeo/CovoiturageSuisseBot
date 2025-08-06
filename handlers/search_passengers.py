@@ -277,8 +277,21 @@ async def perform_passenger_search(update: Update, context: CallbackContext) -> 
         # Filtrer par canton si spécifié
         if canton and canton != "ALL":
             # Charger les villes du canton
+            logger.info(f"🔍 DEBUG: Tentative de chargement des villes pour canton: {canton}")
             canton_cities = get_cities_by_canton(canton)
-            logger.info(f"Recherche dans canton {canton}: {len(canton_cities)} villes trouvées")
+            logger.info(f"🔍 DEBUG: Recherche dans canton {canton}: {len(canton_cities)} villes trouvées")
+            
+            # Debug détaillé pour FR
+            if canton == "FR":
+                logger.info(f"🔍 DEBUG FRIBOURG: Fonction retourne {len(canton_cities)} villes")
+                if canton_cities:
+                    logger.info(f"🔍 DEBUG FRIBOURG: Premières villes: {', '.join(canton_cities[:10])}")
+                    if "Giffers" in canton_cities:
+                        logger.info("✅ DEBUG FRIBOURG: Giffers trouvé dans la liste")
+                    else:
+                        logger.error("❌ DEBUG FRIBOURG: Giffers PAS trouvé dans la liste")
+                else:
+                    logger.error("❌ DEBUG FRIBOURG: Liste des villes est VIDE")
             
             if canton_cities:
                 # Appliquer le filtre des villes du canton
@@ -286,10 +299,10 @@ async def perform_passenger_search(update: Update, context: CallbackContext) -> 
                     Trip.departure_city.in_(canton_cities) | 
                     Trip.arrival_city.in_(canton_cities)
                 )
-                logger.info(f"Filtre appliqué pour canton {canton}")
+                logger.info(f"✅ Filtre appliqué pour canton {canton}")
             else:
                 # Aucune ville trouvée pour ce canton - pas de résultats
-                logger.warning(f"Aucune ville trouvée pour canton {canton}")
+                logger.error(f"❌ ERREUR: Aucune ville trouvée pour canton {canton}")
                 await query.edit_message_text(
                     f"🔍 *Recherche de passagers*\n\n"
                     f"📍 Région: {CANTONS.get(canton, {}).get('name', canton)}\n"
