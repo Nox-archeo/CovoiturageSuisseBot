@@ -349,10 +349,20 @@ async def setup_all_handlers_complete(application):
     
     # Ajouter les commandes manquantes critiques pour le menu hamburger
     async def cmd_chercher_passagers(update: Update, context):
-        """Commande /chercher_passagers depuis le menu hamburger"""
+        """Commande /chercher_passagers depuis le menu hamburger - DÉCLENCHE LE ConversationHandler"""
         try:
-            from handlers.search_passengers import cmd_search_passengers
-            return await cmd_search_passengers(update, context)
+            # Ne PAS appeler directement start_passenger_search !
+            # Créer un callback pour déclencher l'entry point du ConversationHandler
+            
+            from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+            
+            await update.message.reply_text(
+                "🔄 Démarrage de la recherche de passagers...",
+                reply_markup=InlineKeyboardMarkup([[
+                    InlineKeyboardButton("🔍 Commencer", callback_data="search_passengers")
+                ]])
+            )
+            
         except Exception as e:
             logger.error(f"Erreur cmd_chercher_passagers: {e}")
             await update.message.reply_text("🔍 Recherche de passagers temporairement indisponible")
