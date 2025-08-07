@@ -1115,10 +1115,18 @@ async def pay_with_paypal(update: Update, context: CallbackContext):
     query = update.callback_query
     await query.answer()
     
-    # Extraire les données du callback
+    # Extraire les données du callback - gérer différents formats
     parts = query.data.split(":")
-    trip_id = int(parts[1])
-    seats = int(parts[2])
+    
+    if parts[0] == "pay_trip":
+        # Format: pay_trip:trip_id
+        trip_id = int(parts[1])
+        # Récupérer les seats depuis user_data si disponible
+        seats = context.user_data.get('seats', 1)
+    else:
+        # Format: book_pay_paypal:trip_id:seats
+        trip_id = int(parts[1])
+        seats = int(parts[2])
     
     try:
         # Utiliser PayPal via les handlers de paiement
@@ -1428,6 +1436,7 @@ search_trip_conv_handler = ConversationHandler(
             CallbackQueryHandler(handle_search_results_buttons, pattern='^search_view_trip:|^search_new$|^search_back_to_menu$|^search_contact_driver:|^search_back_results$'),
             CallbackQueryHandler(book_trip, pattern='^search_book_trip:'),
             CallbackQueryHandler(pay_with_paypal, pattern='^book_pay_paypal:'),
+            CallbackQueryHandler(pay_with_paypal, pattern='^pay_trip:'),  # Ajout du handler pour pay_trip
             CallbackQueryHandler(book_without_payment, pattern='^book_without_payment:')
         ]
     },
