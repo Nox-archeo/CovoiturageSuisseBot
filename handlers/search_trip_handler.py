@@ -841,6 +841,46 @@ async def handle_search_cancel(update: Update, context: CallbackContext):
     context.user_data.clear()
     return ConversationHandler.END
 
+async def handle_cancel_payment(update: Update, context: CallbackContext):
+    """Annule un paiement PayPal en cours."""
+    query = update.callback_query
+    await query.answer()
+    
+    # Extraire l'ID de la réservation
+    booking_id = int(query.data.split(":")[1])
+    
+    try:
+        db = get_db()
+        booking = db.query(Booking).get(booking_id)
+        
+        if booking:
+            # Supprimer la réservation
+            db.delete(booking)
+            db.commit()
+            logger.info(f"Réservation {booking_id} annulée par l'utilisateur")
+        
+        await query.edit_message_text(
+            "❌ *Paiement annulé*\n\n"
+            "Votre réservation a été annulée.\n"
+            "Vous pouvez réessayer à tout moment.",
+            reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton("🔍 Nouvelle recherche", callback_data="search_new"),
+                InlineKeyboardButton("🔙 Menu principal", callback_data="search_back_to_menu")
+            ]]),
+            parse_mode="Markdown"
+        )
+        
+    except Exception as e:
+        logger.error(f"Erreur lors de l'annulation du paiement: {e}")
+        await query.edit_message_text(
+            "❌ Erreur lors de l'annulation.",
+            reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton("🔙 Menu principal", callback_data="search_back_to_menu")
+            ]])
+        )
+    
+    return SEARCH_RESULTS
+
 async def contact_driver_from_search(update: Update, context: CallbackContext, trip_id):
     """Gère la demande de contact avec le conducteur depuis les résultats de recherche."""
     query = update.callback_query
@@ -1157,41 +1197,74 @@ async def pay_with_paypal(update: Update, context: CallbackContext):
             return SEARCH_RESULTS
         
         # Créer une réservation en attente de paiement
-        from database.models import Booking
         from datetime import datetime
+        from paypal_utils import PayPalManager
         
+        # Calculer le montant total
+        total_amount = round_to_nearest_0_05(trip.price_per_seat * seats)
+        
+        # Créer la réservation
         new_booking = Booking(
             trip_id=trip_id,
             passenger_id=db_user.id,
             status="pending_payment",
             seats=seats,
             booking_date=datetime.now(),
-            amount=round_to_nearest_0_05(trip.price_per_seat * seats),
+            amount=total_amount,
             is_paid=False
         )
         
         db.add(new_booking)
         db.commit()
+        db.refresh(new_booking)  # Pour obtenir l'ID
         
-        # Rediriger vers le système de paiement PayPal existant
-        context.user_data['pending_booking_id'] = new_booking.id
-        context.user_data['trip_id'] = trip_id
-        context.user_data['seats'] = seats
-        
-        # Utiliser le système PayPal existant
-        keyboard = [
-            [InlineKeyboardButton("💳 Procéder au paiement PayPal", callback_data=f"pay_trip:{trip_id}")],
-            [InlineKeyboardButton("🔙 Retour", callback_data=f"search_view_trip:{trip_id}")]
-        ]
-        
-        await query.edit_message_text(
-            "💰 *Paiement avec PayPal*\n\n"
-            "Votre réservation a été créée. Cliquez sur le bouton ci-dessous "
-            "pour procéder au paiement via PayPal.\n\n"
-            "Une fois le paiement effectué, votre réservation sera confirmée automatiquement.",
-            reply_markup=InlineKeyboardMarkup(keyboard),
-            parse_mode="Markdown"
-        )
+        # Créer le paiement PayPal
+        try:
+            paypal_manager = PayPalManager()
+            success, payment_id, approval_url = paypal_manager.create_payment(
+                amount=float(total_amount),
+                description=f"Covoiturage {trip.departure_city} → {trip.arrival_city}",
+                return_url=f"https://covoiturageuissebot.onrender.com/payment/success/{new_booking.id}",
+                cancel_url=f"https://covoiturageuissebot.onrender.com/payment/cancel/{new_booking.id}"
+            )
+            
+            if success and approval_url:
+                # Sauvegarder l'ID PayPal
+                new_booking.paypal_payment_id = payment_id
+                db.commit()
+                
+                keyboard = [
+                    [InlineKeyboardButton("💳 Payer avec PayPal", url=approval_url)],
+                    [InlineKeyboardButton("❌ Annuler", callback_data=f"cancel_payment:{new_booking.id}")]
+                ]
+                
+                await query.edit_message_text(
+                    f"💰 *Paiement PayPal*\n\n"
+                    f"🚗 Trajet : {trip.departure_city} → {trip.arrival_city}\n"
+                    f"📅 Date : {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
+                    f"👥 Places : {seats}\n"
+                    f"💵 Montant total : {total_amount:.2f} CHF\n\n"
+                    f"Cliquez sur le bouton ci-dessous pour procéder au paiement :",
+                    reply_markup=InlineKeyboardMarkup(keyboard),
+                    parse_mode="Markdown"
+                )
+            else:
+                raise Exception("Impossible de créer le paiement PayPal")
+                
+        except Exception as paypal_error:
+            logger.error(f"Erreur PayPal: {paypal_error}")
+            # Supprimer la réservation en cas d'erreur
+            db.delete(new_booking)
+            db.commit()
+            
+            await query.edit_message_text(
+                "❌ Erreur lors de la création du paiement PayPal.\n\n"
+                "Veuillez réessayer plus tard ou contacter le support.",
+                reply_markup=InlineKeyboardMarkup([[
+                    InlineKeyboardButton("🔙 Retour", callback_data=f"search_view_trip:{trip_id}")
+                ]]),
+                parse_mode="Markdown"
+            )
         
     except Exception as e:
         logger.error(f"Erreur lors du paiement PayPal: {str(e)}", exc_info=True)
@@ -1437,6 +1510,7 @@ search_trip_conv_handler = ConversationHandler(
             CallbackQueryHandler(book_trip, pattern='^search_book_trip:'),
             CallbackQueryHandler(pay_with_paypal, pattern='^book_pay_paypal:'),
             CallbackQueryHandler(pay_with_paypal, pattern='^pay_trip:'),  # Ajout du handler pour pay_trip
+            CallbackQueryHandler(handle_cancel_payment, pattern='^cancel_payment:'),  # Handler pour annulation
             CallbackQueryHandler(book_without_payment, pattern='^book_without_payment:')
         ]
     },
