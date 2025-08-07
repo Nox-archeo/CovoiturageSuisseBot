@@ -248,6 +248,69 @@ class PayPalManager:
             logger.error(f"Erreur lors du remboursement PayPal: {e}")
             return False, None
     
+    def refund_card_payment(self, payment_id: str, refund_amount: float = None, 
+                           currency: str = "CHF", reason: str = "Annulation covoiturage") -> Tuple[bool, Optional[str]]:
+        """
+        Rembourse un paiement par carte bancaire via PayPal
+        
+        Args:
+            payment_id: ID du paiement PayPal original
+            refund_amount: Montant à rembourser (None = remboursement total)
+            currency: Devise du remboursement
+            reason: Motif du remboursement
+            
+        Returns:
+            Tuple[success, refund_id]
+        """
+        try:
+            # Récupérer les détails du paiement original
+            payment = paypalrestsdk.Payment.find(payment_id)
+            
+            if not payment or payment.state != "approved":
+                logger.error(f"Paiement {payment_id} non trouvé ou non approuvé")
+                return False, None
+            
+            # Trouver la transaction à rembourser
+            for transaction in payment.transactions:
+                for related_resource in transaction.related_resources:
+                    if hasattr(related_resource, 'sale'):
+                        sale = related_resource.sale
+                        
+                        # Déterminer le montant du remboursement
+                        if refund_amount is None:
+                            refund_data = {
+                                "reason": reason
+                            }
+                        else:
+                            refund_data = {
+                                "amount": {
+                                    "total": str(refund_amount),
+                                    "currency": currency
+                                },
+                                "reason": reason
+                            }
+                        
+                        # Effectuer le remboursement
+                        refund = sale.refund(refund_data)
+                        
+                        if refund:
+                            logger.info(f"Remboursement créé: {refund.id} pour le paiement {payment_id}")
+                            return True, refund.id
+                        else:
+                            logger.error(f"Échec du remboursement: {refund.error if hasattr(refund, 'error') else 'Erreur inconnue'}")
+                            return False, None
+            
+            logger.error(f"Aucune transaction de vente trouvée pour le paiement {payment_id}")
+            return False, None
+                            
+        except Exception as e:
+            logger.error(f"Erreur lors du remboursement de carte: {e}")
+            return False, None
+                            
+        except Exception as e:
+            logger.error(f"Erreur lors du remboursement PayPal: {e}")
+            return False, None
+    
     def get_payment_details(self, payment_id: str) -> Optional[Dict]:
         """
         Récupère les détails d'un paiement

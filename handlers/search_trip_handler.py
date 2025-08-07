@@ -1224,8 +1224,8 @@ async def pay_with_paypal(update: Update, context: CallbackContext):
             success, payment_id, approval_url = paypal_manager.create_payment(
                 amount=float(total_amount),
                 description=f"Covoiturage {trip.departure_city} → {trip.arrival_city}",
-                return_url=f"https://covoiturageuissebot.onrender.com/payment/success/{new_booking.id}",
-                cancel_url=f"https://covoiturageuissebot.onrender.com/payment/cancel/{new_booking.id}"
+                return_url=f"https://covoituragesuissebot.onrender.com/payment/success/{new_booking.id}",
+                cancel_url=f"https://covoituragesuissebot.onrender.com/payment/cancel/{new_booking.id}"
             )
             
             if success and approval_url:
@@ -1244,6 +1244,10 @@ async def pay_with_paypal(update: Update, context: CallbackContext):
                     f"📅 Date : {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
                     f"👥 Places : {seats}\n"
                     f"💵 Montant total : {total_amount:.2f} CHF\n\n"
+                    f"💳 *Vous pouvez payer :*\n"
+                    f"• Avec votre compte PayPal\n"
+                    f"• Directement par carte bancaire (sans compte PayPal)\n\n"
+                    f"🔒 Paiement sécurisé - Remboursement automatique possible\n\n"
                     f"Cliquez sur le bouton ci-dessous pour procéder au paiement :",
                     reply_markup=InlineKeyboardMarkup(keyboard),
                     parse_mode="Markdown"
@@ -1481,6 +1485,63 @@ async def prompt_driver_paypal_setup(update: Update, context: CallbackContext):
         )
     
     return ConversationHandler.END
+
+async def handle_cancel_payment(update: Update, context: CallbackContext):
+    """Gère l'annulation d'un paiement PayPal."""
+    query = update.callback_query
+    await query.answer()
+    
+    try:
+        # Extraire l'ID de la réservation depuis les données de callback
+        booking_id = int(query.data.split(':')[1])
+        
+        db = get_db()
+        booking = db.query(Booking).get(booking_id)
+        
+        if booking:
+            # Supprimer la réservation annulée
+            trip = db.query(Trip).get(booking.trip_id)
+            if trip:
+                # Restaurer les places disponibles
+                try:
+                    if hasattr(trip, 'available_seats') and trip.available_seats is not None:
+                        trip.available_seats += booking.seats
+                    elif hasattr(trip, 'seats_available') and trip.seats_available is not None:
+                        trip.seats_available += booking.seats
+                except Exception as e:
+                    logger.error(f"Erreur lors de la restauration des places: {str(e)}")
+            
+            db.delete(booking)
+            db.commit()
+            
+            await query.edit_message_text(
+                "❌ *Paiement annulé*\n\n"
+                "Votre réservation a été annulée et les places ont été libérées.\n"
+                "Vous pouvez essayer de nouveau à tout moment.",
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("🔍 Nouvelle recherche", callback_data="search_new")],
+                    [InlineKeyboardButton("🔙 Menu principal", callback_data="search_back_to_menu")]
+                ]),
+                parse_mode="Markdown"
+            )
+        else:
+            await query.edit_message_text(
+                "❌ Réservation non trouvée.",
+                reply_markup=InlineKeyboardMarkup([[
+                    InlineKeyboardButton("🔙 Menu principal", callback_data="search_back_to_menu")
+                ]])
+            )
+    
+    except Exception as e:
+        logger.error(f"Erreur lors de l'annulation du paiement: {str(e)}")
+        await query.edit_message_text(
+            "❌ Erreur lors de l'annulation.",
+            reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton("🔙 Menu principal", callback_data="search_back_to_menu")
+            ]])
+        )
+    
+    return SEARCH_RESULTS
 
 # Définition du ConversationHandler pour la recherche de trajet
 search_trip_conv_handler = ConversationHandler(
