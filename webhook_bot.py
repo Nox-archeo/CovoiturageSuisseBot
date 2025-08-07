@@ -253,10 +253,14 @@ async def handle_payment_completed(data: dict):
             driver = booking.trip.driver
             driver_contact = ""
             if driver:
+                contact_info = []
                 if driver.username:
-                    driver_contact = f"👤 *Contact conducteur:* @{driver.username}\n"
-                elif driver.telegram_id:
-                    driver_contact = f"👤 *Contact conducteur:* Telegram ID {driver.telegram_id}\n"
+                    contact_info.append(f"@{driver.username}")
+                if driver.phone:
+                    contact_info.append(f"📞 {driver.phone}")
+                
+                if contact_info:
+                    driver_contact = f"👤 *Contact conducteur:* {' | '.join(contact_info)}\n"
                 else:
                     driver_contact = f"👤 *Conducteur:* {driver.first_name or 'Nom non disponible'}\n"
             
@@ -288,10 +292,14 @@ async def handle_payment_completed(data: dict):
             # Récupérer les infos du passager pour contact
             passenger_contact = ""
             if passenger:
+                contact_info = []
                 if passenger.username:
-                    passenger_contact = f"👤 *Contact passager:* @{passenger.username}\n"
-                elif passenger.telegram_id:
-                    passenger_contact = f"👤 *Contact passager:* Telegram ID {passenger.telegram_id}\n"
+                    contact_info.append(f"@{passenger.username}")
+                if passenger.phone:
+                    contact_info.append(f"📞 {passenger.phone}")
+                
+                if contact_info:
+                    passenger_contact = f"👤 *Contact passager:* {' | '.join(contact_info)}\n"
                 else:
                     passenger_contact = f"👤 *Passager:* {passenger.first_name or 'Nom non disponible'}\n"
             

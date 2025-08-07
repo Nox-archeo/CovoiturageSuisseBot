@@ -1287,25 +1287,24 @@ async def book_without_payment(update: Update, context: CallbackContext):
             driver = db.query(User).get(trip.driver_id)
             # 🔧 FIX: Utiliser full_name en priorité, puis username, puis fallback
             driver_name = driver.full_name if driver and driver.full_name else driver.username if driver and driver.username else "Conducteur anonyme"
-            driver_phone = driver.phone if driver and hasattr(driver, 'phone') and driver.phone else "Non renseigné"
             
+            # ⚠️ SÉCURITÉ: Ne pas révéler les contacts tant que le paiement n'est pas effectué
             # Récupérer les informations du passager  
             passenger_name = db_user.full_name if db_user.full_name else update.effective_user.username or update.effective_user.first_name or "Passager"
-            passenger_phone = db_user.phone if hasattr(db_user, 'phone') and db_user.phone else "Non renseigné"
             
-            # Envoyer les informations du conducteur au passager
+            # Envoyer confirmation SANS révéler les contacts
             await query.edit_message_text(
-                "✅ *Réservation confirmée !*\n\n"
-                f"Vous avez réservé {seats} place(s) pour le trajet :\n"
+                "✅ *Réservation enregistrée !*\n\n"
+                f"Vous avez pré-réservé {seats} place(s) pour le trajet :\n"
                 f"{trip.departure_city} → {trip.arrival_city}\n"
                 f"Date : {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
                 f"Montant à payer au conducteur : {final_price}.- CHF\n\n"
-                f"📱 *Coordonnées du conducteur* :\n"
-                f"Nom : {driver_name}\n"
-                f"Téléphone : {driver_phone}\n\n"
-                "Le conducteur a été notifié de votre réservation.",
+                f"� *Conducteur :* {driver_name}\n\n"
+                f"⚠️ *IMPORTANT :* Les coordonnées de contact seront révélées "
+                f"après confirmation du paiement par les deux parties.\n\n"
+                "Le conducteur a été notifié de votre demande de réservation.",
                 reply_markup=InlineKeyboardMarkup([
-                    [InlineKeyboardButton("📱 Contacter le conducteur", callback_data=f"search_contact_driver:{trip_id}")],
+                    [InlineKeyboardButton("� Confirmer avec paiement PayPal", callback_data=f"search_pay_now:{trip_id}:{seats}")],
                     [InlineKeyboardButton("🔍 Nouvelle recherche", callback_data="search_new")],
                     [InlineKeyboardButton("🔙 Menu principal", callback_data="search_back_to_menu")]
                 ]),
@@ -1317,14 +1316,14 @@ async def book_without_payment(update: Update, context: CallbackContext):
                 try:
                     await context.bot.send_message(
                         chat_id=driver.telegram_id,
-                        text=f"🎟️ *Nouvelle réservation !*\n\n"
-                             f"Un passager a réservé {seats} place(s) pour votre trajet :\n"
+                        text=f"🎟️ *Nouvelle demande de réservation !*\n\n"
+                             f"Un passager souhaite réserver {seats} place(s) pour votre trajet :\n"
                              f"{trip.departure_city} → {trip.arrival_city}\n"
                              f"Date : {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
-                             f"Montant à recevoir : {final_price}.- CHF\n\n"
-                             f"📱 *Coordonnées du passager* :\n"
-                             f"Nom : {passenger_name}\n"
-                             f"Téléphone : {passenger_phone}",
+                             f"Montant potentiel : {final_price}.- CHF\n\n"
+                             f"� *Passager :* {passenger_name}\n\n"
+                             f"⚠️ *IMPORTANT :* Les coordonnées de contact seront révélées "
+                             f"après confirmation du paiement par les deux parties.",
                         parse_mode="Markdown"
                     )
                     logger.info(f"Notification de réservation envoyée au conducteur {driver.telegram_id}")
