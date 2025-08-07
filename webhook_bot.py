@@ -249,11 +249,23 @@ async def handle_payment_completed(data: dict):
         # Notifier le passager
         passenger = booking.passenger
         if passenger and passenger.telegram_id:
+            # Récupérer les infos du conducteur pour contact
+            driver = booking.trip.driver
+            driver_contact = ""
+            if driver:
+                if driver.username:
+                    driver_contact = f"👤 *Contact conducteur:* @{driver.username}\n"
+                elif driver.telegram_id:
+                    driver_contact = f"👤 *Contact conducteur:* Telegram ID {driver.telegram_id}\n"
+                else:
+                    driver_contact = f"👤 *Conducteur:* {driver.first_name or 'Nom non disponible'}\n"
+            
             message = (
                 f"✅ *Paiement confirmé !*\n\n"
                 f"Votre réservation pour le trajet {booking.trip.departure_city} → {booking.trip.arrival_city} "
                 f"le {booking.trip.departure_time.strftime('%d/%m/%Y à %H:%M')} est confirmée.\n\n"
                 f"💰 Montant payé: {booking.total_price:.2f} CHF\n\n"
+                f"{driver_contact}"
                 f"ℹ️ *Nouveau système de prix:*\n"
                 f"Si d'autres passagers s'ajoutent, vous serez automatiquement remboursé "
                 f"de la différence via PayPal pour équilibrer les coûts."
@@ -273,11 +285,21 @@ async def handle_payment_completed(data: dict):
                 Booking.payment_status == 'completed'
             ).count()
             
+            # Récupérer les infos du passager pour contact
+            passenger_contact = ""
+            if passenger:
+                if passenger.username:
+                    passenger_contact = f"👤 *Contact passager:* @{passenger.username}\n"
+                elif passenger.telegram_id:
+                    passenger_contact = f"👤 *Contact passager:* Telegram ID {passenger.telegram_id}\n"
+                else:
+                    passenger_contact = f"👤 *Passager:* {passenger.first_name or 'Nom non disponible'}\n"
+            
             message = (
                 f"💰 *Nouveau passager confirmé !*\n\n"
                 f"Un passager a payé pour votre trajet {booking.trip.departure_city} → {booking.trip.arrival_city} "
                 f"le {booking.trip.departure_time.strftime('%d/%m/%Y à %H:%M')}.\n\n"
-                f"👤 Passager: {passenger.first_name if passenger else 'Inconnu'}\n"
+                f"{passenger_contact}"
                 f"👥 Total passagers payants: {total_paid_passengers}\n"
                 f"💰 Prix payé: {booking.total_price:.2f} CHF\n\n"
                 f"ℹ️ *Système automatique:*\n"

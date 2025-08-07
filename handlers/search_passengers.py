@@ -453,7 +453,7 @@ async def perform_passenger_search(update: Update, context: CallbackContext) -> 
                     f"🏁 {trip.departure_city} → {trip.arrival_city}\n"
                     f"📅 {departure_date}\n"
                     f"👥 {seats_text} recherchée{'s' if seats_needed > 1 else ''}\n"
-                    f"👤 Par: @{passenger_name}\n"
+                    f"👤 Passager anonyme (ID révélé après réservation)\n"
                 )
                 
                 if hasattr(trip, 'additional_info') and trip.additional_info:
@@ -537,7 +537,7 @@ async def show_passenger_trip_details(update: Update, context: CallbackContext) 
             f"🏁 *Itinéraire:* {trip.departure_city} → {trip.arrival_city}\n"
             f"📅 *Date:* {time_display}\n"
             f"👥 *Places recherchées:* {seats_text}\n"
-            f"👤 *Passager:* @{passenger_name}\n"
+            f"👤 *Passager:* Anonyme (ID révélé après réservation)\n"
             f"⭐ *Note:* {passenger_rating:.1f}/5.0\n\n"
         )
         
