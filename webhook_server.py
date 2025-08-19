@@ -774,6 +774,82 @@ async def force_payment_processing(request: Request):
         logger.error(f"❌ Erreur force payment: {e}")
         return {"error": str(e)}
 
+@app.post("/admin/migrate-database")
+async def migrate_database_render():
+    """Endpoint de migration pour Render - Ajoute les colonnes manquantes"""
+    try:
+        logger.info("🚀 DÉBUT MIGRATION RENDER")
+        
+        from database.db_manager import get_db
+        from sqlalchemy import text
+        
+        db = get_db()
+        
+        # Vérifier PostgreSQL
+        if 'postgresql' not in str(db.bind.url):
+            return {"success": False, "error": "Pas en PostgreSQL"}
+        
+        # Liste des colonnes à ajouter (uniquement celles qui manquent)
+        migrations = [
+            ("trips", "driver_confirmed_completion", "BOOLEAN DEFAULT FALSE"),
+            ("trips", "payment_released", "BOOLEAN DEFAULT FALSE"),
+            ("bookings", "passenger_confirmed_completion", "BOOLEAN DEFAULT FALSE"),
+            ("trips", "total_trip_price", "DECIMAL(10,2)"),
+            ("users", "paypal_email", "VARCHAR(254)"),
+            ("trips", "confirmed_by_driver", "BOOLEAN DEFAULT FALSE"),
+            ("trips", "confirmed_by_passengers", "BOOLEAN DEFAULT FALSE"),
+            ("trips", "driver_amount", "DECIMAL(10,2)"),
+            ("trips", "commission_amount", "DECIMAL(10,2)"),
+            ("trips", "payout_batch_id", "VARCHAR(255)"),
+            ("trips", "last_paypal_reminder", "TIMESTAMP"),
+            ("bookings", "paypal_payment_id", "VARCHAR(255)"),
+            ("bookings", "refund_id", "VARCHAR(255)"),
+            ("bookings", "refund_amount", "DECIMAL(10,2)"),
+            ("bookings", "refund_date", "TIMESTAMP"),
+            ("bookings", "original_price", "DECIMAL(10,2)"),
+        ]
+        
+        results = []
+        success_count = 0
+        
+        for table, column, definition in migrations:
+            try:
+                # Vérifier si la colonne existe
+                check_sql = f"""
+                SELECT column_name 
+                FROM information_schema.columns 
+                WHERE table_name = '{table}' AND column_name = '{column}'
+                """
+                
+                result = db.execute(text(check_sql)).fetchone()
+                
+                if result:
+                    results.append(f"⏭️ {table}.{column} - EXISTE DÉJÀ")
+                    continue
+                
+                # Ajouter la colonne
+                add_sql = f"ALTER TABLE {table} ADD COLUMN {column} {definition};"
+                db.execute(text(add_sql))
+                db.commit()
+                
+                results.append(f"✅ {table}.{column} - AJOUTÉE")
+                success_count += 1
+                
+            except Exception as e:
+                results.append(f"❌ {table}.{column} - ERREUR: {str(e)}")
+        
+        logger.info(f"✅ Migration terminée - {success_count} colonnes ajoutées")
+        
+        return {
+            "success": True,
+            "message": f"Migration terminée - {success_count} colonnes ajoutées",
+            "details": results
+        }
+        
+    except Exception as e:
+        logger.error(f"❌ Erreur migration Render: {e}")
+        return {"success": False, "error": str(e)}
+
 @app.get("/admin/pending-payments")
 async def get_pending_payments():
     """Liste les paiements en attente"""
