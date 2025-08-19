@@ -951,10 +951,11 @@ async def reprocess_last_payment():
         if not booking:
             return {"error": "Aucune réservation PayPal trouvée"}
         
-        # Créer l'app bot
-        global telegram_app
+        # Créer l'app bot directement
+        global telegram_app, application
         if 'telegram_app' not in globals() or not telegram_app:
-            telegram_app = create_application()
+            # Utiliser l'app déjà créée dans ce serveur
+            telegram_app = application
         
         # Simuler le retraitement du paiement
         success = await handle_payment_completion(booking.paypal_payment_id, telegram_app)
@@ -968,6 +969,61 @@ async def reprocess_last_payment():
         
     except Exception as e:
         logger.error(f"❌ Erreur retraitement: {e}")
+        return {"success": False, "error": str(e)}
+
+@app.post("/admin/debug-system")
+async def debug_complete_system():
+    """Debug complet: réservations + boutons + notifications"""
+    try:
+        logger.info("🔍 DEBUG COMPLET DU SYSTÈME")
+        
+        from database.db_manager import get_db
+        from database.models import Booking, Trip, User
+        from trip_confirmation_system import add_confirmation_buttons_to_trip
+        
+        db = get_db()
+        
+        # 1. Compter les réservations dupliquées
+        duplicate_bookings = db.query(Booking).filter(
+            Booking.trip_id == 8,  # Le trajet avec beaucoup de réservations
+            Booking.passenger_id == 5932296330  # Ton ID utilisateur
+        ).all()
+        
+        # 2. Tester les boutons de confirmation
+        confirmation_buttons = await add_confirmation_buttons_to_trip(8, 5932296330, 'passenger')
+        
+        # 3. Dernière réservation payée
+        last_paid = db.query(Booking).filter(
+            Booking.payment_status == 'completed'
+        ).order_by(Booking.id.desc()).first()
+        
+        # 4. Test notification simple
+        global application
+        notification_test = "❌ Bot non initialisé"
+        if application:
+            try:
+                await application.bot.send_message(
+                    chat_id=5932296330,
+                    text="🔧 TEST DEBUG SYSTÈME\n\nCe message confirme que les notifications fonctionnent !",
+                    parse_mode='Markdown'
+                )
+                notification_test = "✅ Notification envoyée"
+            except Exception as e:
+                notification_test = f"❌ Erreur: {str(e)}"
+        
+        return {
+            "success": True,
+            "duplicate_bookings_count": len(duplicate_bookings),
+            "duplicate_booking_ids": [b.id for b in duplicate_bookings],
+            "confirmation_buttons": len(confirmation_buttons) if confirmation_buttons else 0,
+            "confirmation_buttons_details": [str(btn.text) for btn in confirmation_buttons] if confirmation_buttons else [],
+            "last_paid_booking": last_paid.id if last_paid else None,
+            "notification_test": notification_test,
+            "bot_available": application is not None
+        }
+        
+    except Exception as e:
+        logger.error(f"❌ Erreur debug: {e}")
         return {"success": False, "error": str(e)}
 
 @app.get("/admin/pending-payments")
