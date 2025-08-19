@@ -96,7 +96,7 @@ class PayPalManager:
                 "application_context": {
                     "brand_name": "CovoiturageSuisse",
                     "locale": "fr-CH",
-                    "landing_page": "BILLING",  # ✅ FORCE l'affichage de la page de facturation/carte
+                    "landing_page": "LOGIN",  # ✅ Permet solde PayPal ET cartes
                     "shipping_preference": "NO_SHIPPING",
                     "user_action": "PAY_NOW",
                     "payment_method": {

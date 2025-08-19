@@ -117,6 +117,7 @@ import asyncio
 import logging
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
 import uvicorn
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext
@@ -606,6 +607,131 @@ async def health_check():
 async def root():
     """Page d'accueil"""
     return {"message": "CovoiturageSuisse Bot Webhook", "status": "running"}
+
+@app.get("/payment/success/{booking_id}")
+async def payment_success(booking_id: int, token: str = None, PayerID: str = None):
+    """Route de retour après succès de paiement PayPal"""
+    logger.info(f"🎉 PAYMENT SUCCESS: booking_id={booking_id}, token={token}, PayerID={PayerID}")
+    
+    try:
+        from paypal_utils import PayPalManager
+        from database import get_db
+        from database.models import Booking
+        
+        # Récupérer la réservation
+        db = get_db()
+        booking = db.query(Booking).filter_by(id=booking_id).first()
+        
+        if not booking:
+            logger.error(f"❌ Réservation {booking_id} non trouvée")
+            db.close()
+            return {"error": "Réservation non trouvée"}
+        
+        # Capturer le paiement PayPal
+        paypal = PayPalManager()
+        success, capture_data = paypal.capture_order(token)
+        
+        if success:
+            # Mettre à jour le statut de la réservation
+            booking.payment_status = 'completed'
+            booking.paypal_transaction_id = capture_data.get('id')
+            db.commit()
+            
+            logger.info(f"✅ Paiement capturé avec succès: {capture_data.get('id')}")
+            
+            # Page de succès simple
+            html_content = f"""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="utf-8">
+                <title>Paiement Réussi</title>
+                <style>
+                    body {{ font-family: Arial, sans-serif; text-align: center; padding: 50px; }}
+                    .success {{ color: green; font-size: 24px; }}
+                    .info {{ color: #666; margin: 20px 0; }}
+                </style>
+            </head>
+            <body>
+                <h1 class="success">✅ Paiement Réussi !</h1>
+                <p class="info">Votre réservation #{booking_id} a été confirmée.</p>
+                <p class="info">Vous recevrez un message de confirmation dans le bot Telegram.</p>
+                <p>Merci d'utiliser CovoiturageSuisse ! 🚗</p>
+                <script>
+                    // Fermer la fenêtre après 3 secondes
+                    setTimeout(() => {{
+                        window.close();
+                    }}, 3000);
+                </script>
+            </body>
+            </html>
+            """
+            
+            db.close()
+            return HTMLResponse(content=html_content)
+            
+        else:
+            booking.payment_status = 'failed'
+            db.commit()
+            db.close()
+            
+            logger.error(f"❌ Échec capture paiement: {capture_data}")
+            return {"error": "Échec de la capture du paiement"}
+            
+    except Exception as e:
+        logger.error(f"❌ Erreur payment success: {e}")
+        return {"error": "Erreur interne"}
+
+@app.get("/payment/cancel/{booking_id}")
+async def payment_cancel(booking_id: int):
+    """Route de retour après annulation de paiement PayPal"""
+    logger.info(f"❌ PAYMENT CANCELLED: booking_id={booking_id}")
+    
+    try:
+        from database import get_db
+        from database.models import Booking
+        
+        # Marquer la réservation comme annulée
+        db = get_db()
+        booking = db.query(Booking).filter_by(id=booking_id).first()
+        
+        if booking:
+            booking.payment_status = 'cancelled'
+            db.commit()
+        
+        db.close()
+        
+        # Page d'annulation
+        html_content = """
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <title>Paiement Annulé</title>
+            <style>
+                body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+                .cancel { color: orange; font-size: 24px; }
+                .info { color: #666; margin: 20px 0; }
+            </style>
+        </head>
+        <body>
+            <h1 class="cancel">❌ Paiement Annulé</h1>
+            <p class="info">Votre paiement a été annulé.</p>
+            <p class="info">Vous pouvez réessayer depuis le bot Telegram.</p>
+            <script>
+                setTimeout(() => {
+                    window.close();
+                }, 3000);
+            </script>
+        </body>
+        </html>
+        """
+        
+        return HTMLResponse(content=html_content)
+        
+    except Exception as e:
+        logger.error(f"❌ Erreur payment cancel: {e}")
+        return {"error": "Erreur interne"}
 
 if __name__ == "__main__":
     port = int(os.getenv('PORT', 8000))
