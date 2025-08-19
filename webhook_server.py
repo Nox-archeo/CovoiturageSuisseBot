@@ -850,6 +850,84 @@ async def migrate_database_render():
         logger.error(f"❌ Erreur migration Render: {e}")
         return {"success": False, "error": str(e)}
 
+@app.post("/admin/test-notifications")
+async def test_notifications():
+    """Test des notifications sans faire de vrais paiements"""
+    try:
+        logger.info("🧪 TEST DES NOTIFICATIONS")
+        
+        from database.db_manager import get_db
+        from database.models import Booking, Trip, User
+        
+        db = get_db()
+        
+        # Prendre la dernière réservation payée
+        booking = db.query(Booking).filter(
+            Booking.payment_status == 'completed'
+        ).order_by(Booking.id.desc()).first()
+        
+        if not booking:
+            return {"error": "Aucune réservation payée trouvée"}
+        
+        trip = db.query(Trip).filter(Trip.id == booking.trip_id).first()
+        passenger = db.query(User).filter(User.id == booking.passenger_id).first()
+        
+        if not trip or not passenger:
+            return {"error": "Données manquantes"}
+        
+        # Obtenir l'instance bot
+        global application
+        if not application:
+            return {"error": "Bot non initialisé"}
+        
+        # Test notification passager
+        try:
+            await application.bot.send_message(
+                chat_id=booking.passenger_id,
+                text=f"🧪 **TEST - Notification passager**\n\n"
+                     f"✅ Votre réservation #{booking.id} est confirmée !\n"
+                     f"📍 {trip.departure_city} → {trip.arrival_city}\n"
+                     f"🕒 {trip.departure_datetime}\n\n"
+                     f"*Ce message est un test système*",
+                parse_mode='Markdown'
+            )
+            logger.info(f"✅ Test notification passager envoyée à {booking.passenger_id}")
+            passenger_notif = "✅ Envoyée"
+        except Exception as e:
+            logger.error(f"❌ Erreur test passager: {e}")
+            passenger_notif = f"❌ Erreur: {str(e)}"
+        
+        # Test notification conducteur
+        try:
+            await application.bot.send_message(
+                chat_id=trip.driver_id,
+                text=f"🧪 **TEST - Notification conducteur**\n\n"
+                     f"🎉 Nouvelle réservation pour votre trajet !\n"
+                     f"📍 {trip.departure_city} → {trip.arrival_city}\n"
+                     f"👤 Passager: {passenger.first_name}\n"
+                     f"📋 Réservation #{booking.id}\n\n"
+                     f"*Ce message est un test système*",
+                parse_mode='Markdown'
+            )
+            logger.info(f"✅ Test notification conducteur envoyée à {trip.driver_id}")
+            driver_notif = "✅ Envoyée"
+        except Exception as e:
+            logger.error(f"❌ Erreur test conducteur: {e}")
+            driver_notif = f"❌ Erreur: {str(e)}"
+        
+        return {
+            "success": True,
+            "booking_id": booking.id,
+            "trip_id": trip.id,
+            "passenger_notification": passenger_notif,
+            "driver_notification": driver_notif,
+            "message": "Test des notifications terminé"
+        }
+        
+    except Exception as e:
+        logger.error(f"❌ Erreur test notifications: {e}")
+        return {"success": False, "error": str(e)}
+
 @app.get("/admin/pending-payments")
 async def get_pending_payments():
     """Liste les paiements en attente"""
