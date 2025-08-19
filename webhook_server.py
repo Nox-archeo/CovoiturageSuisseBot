@@ -870,11 +870,30 @@ async def test_simple():
             Booking.paypal_payment_id.isnot(None)
         ).count()
         
+        # TOUTES les réservations de l'utilisateur
+        user_bookings = db.query(Booking).filter(
+            Booking.passenger_id == 5932296330
+        ).all()
+        
+        # Détails des réservations
+        booking_details = []
+        for booking in user_bookings[-10:]:  # Les 10 dernières
+            trip = db.query(db.query(Booking).filter(Booking.id == booking.id).first().trip).first() if hasattr(booking, 'trip') else None
+            booking_details.append({
+                "id": booking.id,
+                "trip_id": booking.trip_id,
+                "payment_status": booking.payment_status,
+                "is_paid": booking.is_paid,
+                "paypal_id": booking.paypal_payment_id[:10] + "..." if booking.paypal_payment_id else None
+            })
+        
         return {
             "success": True,
             "message": "Test simple réussi",
             "duplicate_bookings_trip_8": bookings_count,
             "total_paypal_bookings": paypal_bookings,
+            "total_user_bookings": len(user_bookings),
+            "last_10_bookings": booking_details,
             "postgres_working": True
         }
         
