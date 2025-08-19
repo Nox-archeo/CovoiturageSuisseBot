@@ -876,13 +876,14 @@ async def test_notifications():
             return {"error": "Données manquantes"}
         
         # Obtenir l'instance bot
-        global application
-        if not application:
-            return {"error": "Bot non initialisé"}
+        from bot import create_application
+        global telegram_app
+        if 'telegram_app' not in globals() or not telegram_app:
+            telegram_app = create_application()
         
         # Test notification passager
         try:
-            await application.bot.send_message(
+            await telegram_app.bot.send_message(
                 chat_id=booking.passenger_id,
                 text=f"🧪 **TEST - Notification passager**\n\n"
                      f"✅ Votre réservation #{booking.id} est confirmée !\n"
@@ -899,7 +900,7 @@ async def test_notifications():
         
         # Test notification conducteur
         try:
-            await application.bot.send_message(
+            await telegram_app.bot.send_message(
                 chat_id=trip.driver_id,
                 text=f"🧪 **TEST - Notification conducteur**\n\n"
                      f"🎉 Nouvelle réservation pour votre trajet !\n"
@@ -926,6 +927,47 @@ async def test_notifications():
         
     except Exception as e:
         logger.error(f"❌ Erreur test notifications: {e}")
+        return {"success": False, "error": str(e)}
+
+@app.post("/admin/reprocess-last-payment")
+async def reprocess_last_payment():
+    """Retraiter le dernier paiement pour tester les notifications"""
+    try:
+        logger.info("🔄 RETRAITEMENT DERNIER PAIEMENT")
+        
+        from database.db_manager import get_db
+        from database.models import Booking
+        from paypal_webhook_handler import handle_payment_completion
+        from bot import create_application
+        
+        db = get_db()
+        
+        # Prendre la dernière réservation avec un PayPal ID
+        booking = db.query(Booking).filter(
+            Booking.paypal_payment_id.isnot(None),
+            Booking.payment_status == 'completed'
+        ).order_by(Booking.id.desc()).first()
+        
+        if not booking:
+            return {"error": "Aucune réservation PayPal trouvée"}
+        
+        # Créer l'app bot
+        global telegram_app
+        if 'telegram_app' not in globals() or not telegram_app:
+            telegram_app = create_application()
+        
+        # Simuler le retraitement du paiement
+        success = await handle_payment_completion(booking.paypal_payment_id, telegram_app)
+        
+        return {
+            "success": success,
+            "booking_id": booking.id,
+            "paypal_id": booking.paypal_payment_id,
+            "message": "Retraitement terminé - Vérifiez vos notifications Telegram"
+        }
+        
+    except Exception as e:
+        logger.error(f"❌ Erreur retraitement: {e}")
         return {"success": False, "error": str(e)}
 
 @app.get("/admin/pending-payments")
