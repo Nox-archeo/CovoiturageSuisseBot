@@ -56,7 +56,14 @@ class FixedAutoRefundManager:
             
             for booking in paid_bookings:
                 passenger = db.query(User).filter(User.id == booking.passenger_id).first()
-                amount_paid = float(booking.total_price)
+                
+                # Vérifier que total_price existe
+                if not booking.total_price:
+                    logger.warning(f"Réservation {booking.id}: pas de total_price, utilisation du prix original")
+                    amount_paid = float(booking.original_price) if booking.original_price else 1.0
+                else:
+                    amount_paid = float(booking.total_price)
+                    
                 refund_amount = amount_paid - new_price_per_passenger
                 
                 if refund_amount > 0.05:  # Seuil minimum de remboursement

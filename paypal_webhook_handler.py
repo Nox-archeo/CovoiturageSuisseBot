@@ -94,7 +94,10 @@ async def handle_payment_completion(payment_id: str, bot=None) -> bool:
         if bot:
             # Notification au passager
             try:
-                await bot.send_message(
+                # Si c'est une Application, utiliser bot.bot, sinon utiliser bot directement
+                telegram_bot = bot.bot if hasattr(bot, 'bot') else bot
+                
+                await telegram_bot.send_message(
                     chat_id=booking.passenger_id,
                     text=f"✅ *Réservation confirmée !*\n\n"
                          f"Votre paiement a été traité avec succès.\n"
@@ -109,7 +112,9 @@ async def handle_payment_completion(payment_id: str, bot=None) -> bool:
             trip = db.query(Trip).filter(Trip.id == booking.trip_id).first()
             if trip:
                 try:
-                    await bot.send_message(
+                    telegram_bot = bot.bot if hasattr(bot, 'bot') else bot
+                    
+                    await telegram_bot.send_message(
                         chat_id=trip.driver_id,
                         text=f"🎉 *Nouvelle réservation confirmée !*\n\n"
                              f"Un passager a confirmé sa réservation pour votre trajet.\n"
