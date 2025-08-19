@@ -76,6 +76,11 @@ class PayPalManager:
                     "return_url": return_url,
                     "cancel_url": cancel_url
                 },
+                "application_context": {
+                    "landing_page": "Billing",
+                    "user_action": "commit",
+                    "shipping_preference": "NO_SHIPPING"
+                },
                 "transactions": [{
                     "item_list": {
                         "items": [{
