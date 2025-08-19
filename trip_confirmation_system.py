@@ -12,6 +12,7 @@ from telegram.ext import CallbackContext
 from database.db_manager import get_db
 from database.models import Booking, Trip, User
 from datetime import datetime, timedelta
+from paypal_utils import PayPalManager
 import logging
 
 logger = logging.getLogger(__name__)
@@ -404,7 +405,103 @@ async def release_payment_to_driver(query, trip: Trip, db):
         
         logger.info(f"🎉 Paiement de {driver_amount:.2f} CHF libéré pour trajet {trip.id}")
         
-        # TODO: Ici déclencher le vrai paiement au conducteur
+        # 🚀 NOUVEAU: Déclencher le vrai paiement au conducteur
+        await process_driver_payout(trip, driver_amount, db)
         
     except Exception as e:
         logger.error(f"Erreur release_payment_to_driver: {e}")
+
+async def process_driver_payout(trip: Trip, driver_amount: float, db):
+    """
+    Traite le paiement automatique au conducteur via PayPal
+    """
+    try:
+        # Récupérer les infos du conducteur
+        driver = db.query(User).filter(User.id == trip.driver_id).first()
+        
+        if not driver:
+            logger.error(f"Conducteur non trouvé pour trip {trip.id}")
+            return
+            
+        if not driver.paypal_email:
+            logger.error(f"Conducteur {driver.id} n'a pas d'email PayPal configuré")
+            # Marquer qu'il faut un paiement manuel
+            trip.status = 'payment_pending_manual'
+            db.commit()
+            return
+        
+        # Initialiser PayPal
+        paypal = PayPalManager()
+        
+        # Description du trajet pour PayPal
+        trip_description = f"{trip.departure_city} → {trip.arrival_city} ({trip.departure_time.strftime('%d/%m/%Y')})"
+        
+        # 💰 EFFECTUER LE PAIEMENT RÉEL
+        logger.info(f"🏦 Tentative de paiement PayPal : {driver_amount:.2f} CHF vers {driver.paypal_email}")
+        
+        success, payout_details = paypal.payout_to_driver(
+            driver_email=driver.paypal_email,
+            amount=driver_amount,
+            trip_description=trip_description
+        )
+        
+        if success and payout_details:
+            # ✅ PAIEMENT RÉUSSI
+            batch_id = payout_details.get('batch_id')
+            trip.payout_batch_id = batch_id
+            trip.status = 'completed_paid'
+            trip.driver_amount = driver_amount
+            trip.commission_amount = sum(booking.amount for booking in db.query(Booking).filter(
+                Booking.trip_id == trip.id,
+                Booking.is_paid == True
+            ).all()) * 0.12
+            
+            db.commit()
+            
+            logger.info(f"✅ Paiement PayPal réussi ! Batch ID: {batch_id}")
+            
+            # Notifier le conducteur du paiement réussi
+            try:
+                from telegram import Bot
+                bot = Bot(token=os.getenv('TELEGRAM_BOT_TOKEN'))
+                await bot.send_message(
+                    chat_id=driver.telegram_id,
+                    text=f"💰 **PAIEMENT ENVOYÉ !**\n\n"
+                         f"📧 PayPal: {driver.paypal_email}\n"
+                         f"💵 Montant: {driver_amount:.2f} CHF\n"
+                         f"🚗 Trajet: {trip_description}\n\n"
+                         f"✅ Le paiement arrivera dans votre compte PayPal dans les prochaines minutes.\n\n"
+                         f"Merci d'utiliser CovoiturageSuisse !",
+                    parse_mode='Markdown'
+                )
+            except Exception as e:
+                logger.error(f"Erreur notification conducteur paiement: {e}")
+                
+        else:
+            # ❌ ÉCHEC DU PAIEMENT
+            logger.error(f"❌ Échec paiement PayPal pour trajet {trip.id}")
+            trip.status = 'payment_failed'
+            db.commit()
+            
+            # Notifier l'échec
+            try:
+                from telegram import Bot
+                bot = Bot(token=os.getenv('TELEGRAM_BOT_TOKEN'))
+                await bot.send_message(
+                    chat_id=driver.telegram_id,
+                    text=f"⚠️ **Problème avec votre paiement**\n\n"
+                         f"💰 Montant: {driver_amount:.2f} CHF\n"
+                         f"🚗 Trajet: {trip_description}\n\n"
+                         f"❌ Le paiement automatique a échoué.\n"
+                         f"📧 Vérifiez votre email PayPal: {driver.paypal_email}\n\n"
+                         f"Notre équipe va traiter le paiement manuellement dans les 24h.",
+                    parse_mode='Markdown'
+                )
+            except Exception as e:
+                logger.error(f"Erreur notification échec paiement: {e}")
+                
+    except Exception as e:
+        logger.error(f"Erreur process_driver_payout: {e}")
+        # Marquer pour traitement manuel
+        trip.status = 'payment_error'
+        db.commit()
