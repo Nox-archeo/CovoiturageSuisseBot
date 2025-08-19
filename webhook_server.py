@@ -850,7 +850,42 @@ async def migrate_database_render():
         logger.error(f"❌ Erreur migration Render: {e}")
         return {"success": False, "error": str(e)}
 
-@app.post("/admin/test-simple")
+@app.post("/admin/show-user-bookings")
+async def show_user_bookings():
+    """Voir toutes les réservations de l'utilisateur"""
+    try:
+        from database.db_manager import get_db
+        from database.models import Booking, Trip
+        
+        db = get_db()
+        
+        # TOUTES tes réservations
+        user_bookings = db.query(Booking).filter(
+            Booking.passenger_id == 5932296330
+        ).order_by(Booking.id.desc()).all()
+        
+        booking_details = []
+        for booking in user_bookings:
+            trip = db.query(Trip).filter(Trip.id == booking.trip_id).first()
+            booking_details.append({
+                "booking_id": booking.id,
+                "trip_id": booking.trip_id,
+                "departure": trip.departure_city if trip else "Unknown",
+                "arrival": trip.arrival_city if trip else "Unknown", 
+                "payment_status": booking.payment_status,
+                "is_paid": booking.is_paid,
+                "paypal_id": booking.paypal_payment_id[:15] + "..." if booking.paypal_payment_id else None,
+                "amount": str(booking.amount) if booking.amount else "No amount"
+            })
+        
+        return {
+            "success": True,
+            "total_bookings": len(user_bookings),
+            "bookings": booking_details
+        }
+        
+    except Exception as e:
+        return {"success": False, "error": str(e)}
 async def test_simple():
     """Test simple sans imports compliqués"""
     try:
@@ -1106,6 +1141,60 @@ async def get_pending_payments():
     except Exception as e:
         logger.error(f"❌ Erreur get pending payments: {e}")
         return {"error": str(e)}
+
+@app.post("/admin/cleanup-bookings")
+async def cleanup_duplicate_bookings():
+    """Supprimer les réservations dupliquées non payées"""
+    try:
+        from database.db_manager import get_db
+        from database.models import Booking
+        
+        db = get_db()
+        
+        # Supprimer les réservations non payées sans PayPal ID
+        deleted_bookings = db.query(Booking).filter(
+            Booking.passenger_id == 5932296330,
+            Booking.payment_status != 'completed',
+            Booking.is_paid == False,
+            Booking.paypal_payment_id.is_(None)
+        ).all()
+        
+        deleted_ids = [b.id for b in deleted_bookings]
+        
+        # Supprimer
+        for booking in deleted_bookings:
+            db.delete(booking)
+        
+        db.commit()
+        
+        return {
+            "success": True,
+            "message": f"Supprimé {len(deleted_bookings)} réservations non payées",
+            "deleted_booking_ids": deleted_ids
+        }
+        
+    except Exception as e:
+        db.rollback()
+        return {"success": False, "error": str(e)}
+
+@app.post("/admin/test-real-notification")
+async def test_real_notification():
+    """Test notification avec l'app globale"""
+    try:
+        global application
+        
+        if not application:
+            return {"error": "Application non initialisée"}
+        
+        await application.bot.send_message(
+            chat_id=5932296330,
+            text="🎉 **TEST NOTIFICATION RÉUSSIE !**\n\nLes notifications fonctionnent maintenant !"
+        )
+        
+        return {"success": True, "message": "Notification envoyée !"}
+        
+    except Exception as e:
+        return {"success": False, "error": str(e)}
 
 if __name__ == "__main__":
     port = int(os.getenv('PORT', 8000))
