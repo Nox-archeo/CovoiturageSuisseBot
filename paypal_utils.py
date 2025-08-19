@@ -499,3 +499,91 @@ class PayPalManager:
         except Exception as e:
             logger.error(f"Erreur lors de la recherche du paiement : {e}")
             return False, None
+
+# ================================
+# FONCTIONS DE COMPATIBILITÉ ET RACCOURCIS
+# ================================
+
+def pay_driver(driver_email: str, trip_amount: float) -> Tuple[bool, Optional[str]]:
+    """
+    Fonction de raccourci pour payer un conducteur (88% du montant total)
+    
+    Args:
+        driver_email: Email PayPal du conducteur
+        trip_amount: Montant total du trajet
+        
+    Returns:
+        Tuple[success, payout_batch_id]
+    """
+    try:
+        paypal_manager = PayPalManager()
+        
+        # Calculer 88% pour le conducteur
+        driver_amount = round(trip_amount * 0.88, 2)
+        
+        success, payout_data = paypal_manager.payout_to_driver(
+            driver_email=driver_email,
+            amount=driver_amount,
+            trip_description=f"Paiement trajet ({trip_amount} CHF total)"
+        )
+        
+        if success:
+            batch_id = payout_data.get('batch_id')
+            logger.info(f"✅ Paiement conducteur: {driver_amount} CHF envoyé à {driver_email}")
+            return True, batch_id
+        else:
+            logger.error(f"❌ Échec paiement conducteur: {driver_email}")
+            return False, None
+            
+    except Exception as e:
+        logger.error(f"Erreur pay_driver: {e}")
+        return False, None
+
+def create_trip_payment(amount: float, description: str, return_url: str = None, cancel_url: str = None) -> Tuple[bool, Optional[str], Optional[str]]:
+    """
+    Fonction de raccourci pour créer un paiement de trajet
+    
+    Args:
+        amount: Montant du paiement
+        description: Description du trajet
+        return_url: URL de retour après succès
+        cancel_url: URL de retour après annulation
+        
+    Returns:
+        Tuple[success, order_id, approval_url]
+    """
+    try:
+        paypal_manager = PayPalManager()
+        
+        return paypal_manager.create_payment(
+            amount=amount,
+            currency="CHF",
+            description=description,
+            return_url=return_url,
+            cancel_url=cancel_url
+        )
+        
+    except Exception as e:
+        logger.error(f"Erreur create_trip_payment: {e}")
+        return False, None, None
+
+def execute_payment(payment_id: str, payer_id: str) -> Tuple[bool, Optional[Dict]]:
+    """
+    Fonction de compatibilité pour exécuter un paiement (capture)
+    
+    Args:
+        payment_id: ID du paiement PayPal
+        payer_id: ID du payeur
+        
+    Returns:
+        Tuple[success, capture_data]
+    """
+    try:
+        paypal_manager = PayPalManager()
+        
+        # Dans la nouvelle API, on capture directement avec l'order_id
+        return paypal_manager.capture_order(payment_id)
+        
+    except Exception as e:
+        logger.error(f"Erreur execute_payment: {e}")
+        return False, None

@@ -1231,6 +1231,28 @@ async def pay_with_paypal(update: Update, context: CallbackContext):
                 new_booking.paypal_payment_id = payment_id
                 db.commit()
                 
+                # 🚨 NOTIFICATION CONDUCTEUR - NOUVEAU PAIEMENT EN COURS
+                try:
+                    driver = trip.driver
+                    if driver and driver.telegram_id:
+                        await context.bot.send_message(
+                            chat_id=driver.telegram_id,
+                            text=(
+                                f"💰 *Nouveau paiement en cours !*\n\n"
+                                f"👤 Passager : {db_user.first_name}\n"
+                                f"🚗 Trajet : {trip.departure_city} → {trip.arrival_city}\n"
+                                f"📅 Date : {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
+                                f"👥 Places réservées : {seats}\n"
+                                f"💵 Montant : {total_amount:.2f} CHF\n\n"
+                                f"⏳ Le passager procède actuellement au paiement PayPal.\n"
+                                f"Vous recevrez une confirmation dès validation du paiement."
+                            ),
+                            parse_mode="Markdown"
+                        )
+                        logger.info(f"✅ Notification envoyée au conducteur {driver.telegram_id} pour paiement en cours")
+                except Exception as notif_error:
+                    logger.error(f"Erreur notification conducteur: {notif_error}")
+                
                 keyboard = [
                     [InlineKeyboardButton("💳 Payer avec PayPal", url=approval_url)],
                     [InlineKeyboardButton("❌ Annuler", callback_data=f"cancel_payment:{new_booking.id}")]
