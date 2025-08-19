@@ -1234,7 +1234,8 @@ async def pay_with_paypal(update: Update, context: CallbackContext):
                 amount=float(total_amount),
                 description=f"Covoiturage {trip.departure_city} → {trip.arrival_city}",
                 return_url=f"https://covoituragesuissebot.onrender.com/payment/success/{new_booking.id}",
-                cancel_url=f"https://covoituragesuissebot.onrender.com/payment/cancel/{new_booking.id}"
+                cancel_url=f"https://covoituragesuissebot.onrender.com/payment/cancel/{new_booking.id}",
+                custom_id=str(new_booking.id)  # 🔥 CRUCIAL: Passer l'ID de réservation
             )
             
             if success and approval_url:

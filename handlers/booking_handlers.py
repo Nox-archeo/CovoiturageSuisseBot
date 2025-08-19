@@ -161,8 +161,10 @@ async def confirm_booking_with_payment(update: Update, context: CallbackContext)
         trip_description = f"{trip.departure_city} → {trip.arrival_city}"
         success, payment_id, approval_url = create_trip_payment(
             amount=float(price_per_passenger),  # Utiliser le prix dynamique
-            trip_description=trip_description,
-            booking_id=booking.id  # Pour le suivi
+            description=trip_description,
+            return_url=f"https://covoituragesuissebot.onrender.com/payment/success/{booking.id}",
+            cancel_url=f"https://covoituragesuissebot.onrender.com/payment/cancel/{booking.id}",
+            custom_id=str(booking.id)  # 🔥 CRUCIAL: Passer l'ID de réservation
         )
         
         if success and payment_id and approval_url:

@@ -175,7 +175,10 @@ class PaymentHandlers:
                 trip_description = f"{trip.departure_city} → {trip.arrival_city}"
                 success, payment_id, approval_url = create_trip_payment(
                     amount=float(booking.total_price),
-                    trip_description=trip_description
+                    description=trip_description,
+                    return_url=f"https://covoituragesuissebot.onrender.com/payment/success/{booking.id}",
+                    cancel_url=f"https://covoituragesuissebot.onrender.com/payment/cancel/{booking.id}",
+                    custom_id=str(booking.id)  # 🔥 CRUCIAL: Passer l'ID de réservation
                 )
                 
                 if success and payment_id and approval_url:

@@ -38,30 +38,14 @@ class PayPalManager:
             
         logger.info(f"PayPal configuré en mode {self.mode}")
     
-    def create_payment(self, amount: float, currency: str = "CHF", 
-                      description: str = "Paiement covoiturage",
-                      return_url: str = None, cancel_url: str = None) -> Tuple[bool, Optional[str], Optional[str]]:
+    def get_access_token(self) -> str:
         """
-        Crée un paiement PayPal moderne avec support carte bancaire
+        Obtient un token d'accès PayPal
         
-        Args:
-            amount: Montant du paiement
-            currency: Devise (par défaut CHF)
-            description: Description du paiement
-            return_url: URL de retour après succès
-            cancel_url: URL de retour après annulation
-            
         Returns:
-            Tuple[success, order_id, approval_url]
+            str: Token d'accès ou None si erreur
         """
         try:
-            # URLs par défaut si non fournies
-            if not return_url:
-                return_url = "https://covoituragesuissebot.onrender.com/payment/success"
-            if not cancel_url:
-                cancel_url = "https://covoituragesuissebot.onrender.com/payment/cancel"
-            
-            # Obtenir token d'accès moderne
             credentials = f"{self.client_id}:{self.client_secret}"
             encoded_credentials = base64.b64encode(credentials.encode()).decode()
             
@@ -77,11 +61,46 @@ class PayPalManager:
                 data="grant_type=client_credentials"
             )
             
-            if token_response.status_code != 200:
+            if token_response.status_code == 200:
+                return token_response.json()["access_token"]
+            else:
                 logger.error(f"Erreur token PayPal : {token_response.status_code}")
-                return False, None, None
+                return None
+                
+        except Exception as e:
+            logger.error(f"Erreur lors de l'obtention du token PayPal : {e}")
+            return None
+    
+    def create_payment(self, amount: float, currency: str = "CHF", 
+                      description: str = "Paiement covoiturage",
+                      return_url: str = None, cancel_url: str = None,
+                      custom_id: str = None) -> Tuple[bool, Optional[str], Optional[str]]:
+        """
+        Crée un paiement PayPal moderne avec support carte bancaire
+        
+        Args:
+            amount: Montant du paiement
+            currency: Devise (par défaut CHF)
+            description: Description du paiement
+            return_url: URL de retour après succès
+            cancel_url: URL de retour après annulation
+            custom_id: ID personnalisé pour identifier la réservation
             
-            access_token = token_response.json()["access_token"]
+        Returns:
+            Tuple[success, order_id, approval_url]
+        """
+        try:
+            # URLs par défaut si non fournies
+            if not return_url:
+                return_url = "https://covoituragesuissebot.onrender.com/payment/success"
+            if not cancel_url:
+                cancel_url = "https://covoituragesuissebot.onrender.com/payment/cancel"
+            
+            # Obtenir token d'accès moderne
+            access_token = self.get_access_token()
+            if not access_token:
+                logger.error("Impossible d'obtenir le token d'accès PayPal")
+                return False, None, None
             
             # Créer commande moderne avec support carte
             order_headers = {
@@ -109,6 +128,7 @@ class PayPalManager:
                 "purchase_units": [{
                     "reference_id": "covoiturage_payment",
                     "description": description,
+                    "custom_id": custom_id,  # 🔥 CRUCIAL: ID de la réservation pour webhook
                     "amount": {
                         "currency_code": currency,
                         "value": f"{amount:.2f}"
@@ -539,7 +559,7 @@ def pay_driver(driver_email: str, trip_amount: float) -> Tuple[bool, Optional[st
         logger.error(f"Erreur pay_driver: {e}")
         return False, None
 
-def create_trip_payment(amount: float, description: str, return_url: str = None, cancel_url: str = None) -> Tuple[bool, Optional[str], Optional[str]]:
+def create_trip_payment(amount: float, description: str, return_url: str = None, cancel_url: str = None, custom_id: str = None) -> Tuple[bool, Optional[str], Optional[str]]:
     """
     Fonction de raccourci pour créer un paiement de trajet
     
@@ -548,6 +568,7 @@ def create_trip_payment(amount: float, description: str, return_url: str = None,
         description: Description du trajet
         return_url: URL de retour après succès
         cancel_url: URL de retour après annulation
+        custom_id: ID de la réservation pour identification webhook
         
     Returns:
         Tuple[success, order_id, approval_url]
@@ -560,7 +581,8 @@ def create_trip_payment(amount: float, description: str, return_url: str = None,
             currency="CHF",
             description=description,
             return_url=return_url,
-            cancel_url=cancel_url
+            cancel_url=cancel_url,
+            custom_id=custom_id  # 🔥 PASS CUSTOM_ID
         )
         
     except Exception as e:
