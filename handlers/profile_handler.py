@@ -513,52 +513,95 @@ async def show_my_trips(update: Update, context: CallbackContext):
 
 async def show_my_bookings(update: Update, context: CallbackContext):
     """
-    Affiche la liste des réservations de l'utilisateur (page totalement différente du profil principal)
+    Affiche la liste COMPLÈTE des réservations de l'utilisateur avec infos de paiement
     """
     try:
         query = update.callback_query
         await query.answer()
-        logger.info("[NAVIGATION] Affichage de la page MES RESERVATIONS")
+        logger.info("[NAVIGATION] Affichage de la page MES RESERVATIONS COMPLÈTE")
         user_id = update.effective_user.id
         db = get_db()
         user = db.query(User).filter(User.telegram_id == user_id).first()
+        
         if not user:
             await query.edit_message_text(
                 "⚠️ Utilisateur non trouvé.",
                 reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🏠 Menu principal", callback_data="menu:back_to_menu")]])
             )
             return PROFILE_MAIN
+        
+        # 🔥 CORRECTION: Récupérer TOUTES les réservations avec infos de paiement
         bookings = db.query(Booking).filter(
-            Booking.passenger_id == user.id,
-            Booking.status.in_(['confirmed', 'pending']),
-        ).join(Trip).filter(
-            Trip.departure_time > datetime.now()
-        ).order_by(Trip.departure_time).all()
+            Booking.passenger_id == user.id
+        ).join(Trip).order_by(Trip.departure_time.desc()).limit(20).all()
+        
         if not bookings:
-            message = "🎫 *Mes réservations :*\n\nAucune réservation active."
+            message = "🎫 *Mes réservations :*\n\nAucune réservation trouvée.\n\n💡 Réservez votre première place avec /chercher_trajet"
         else:
-            message = "🎫 *Mes réservations :*\n\n"
-            for booking in bookings:
+            message = f"🎫 *Mes réservations :*\n\n📊 {len(bookings)} réservation(s) trouvée(s)\n\n"
+            
+            for i, booking in enumerate(bookings, 1):
                 trip = booking.trip
-                departure_date = trip.departure_time.strftime("%d/%m/%Y %H:%M")
+                departure_date = trip.departure_time.strftime("%d/%m/%Y à %H:%M")
                 departure_city = getattr(trip, 'departure_city', "Départ")
                 arrival_city = getattr(trip, 'arrival_city', "Arrivée")
-                status = "✅ Confirmée" if booking.status == 'confirmed' else "⏳ En attente"
-                message += (
-                    f"• {departure_city} → {arrival_city}\n"
-                    f"  📅 {departure_date}\n"
-                    f"  {status}\n\n"
-                )
+                
+                # Status de la réservation
+                status_emoji = {
+                    'confirmed': '✅',
+                    'pending': '⏳',
+                    'completed': '🎉',
+                    'cancelled': '❌'
+                }.get(booking.status, '❓')
+                
+                # Status du paiement - COMBINAISON des deux champs
+                if booking.is_paid:
+                    payment_emoji = '💳'
+                    payment_status = 'payé'
+                elif booking.payment_status == 'completed':
+                    payment_emoji = '⚠️'
+                    payment_status = 'completed (webhook échoué)'
+                elif booking.payment_status == 'pending':
+                    payment_emoji = '⏳'
+                    payment_status = 'en attente'
+                else:
+                    payment_emoji = '❌'
+                    payment_status = 'non payé'
+                
+                # Indicateur si trajet passé ou futur
+                now = datetime.now()
+                time_indicator = '🕒' if trip.departure_time > now else '📅'
+                
+                message += f"{status_emoji} **Réservation {i}:**\n"
+                message += f"📍 {departure_city} → {arrival_city}\n"
+                message += f"{time_indicator} {departure_date}\n"
+                message += f"{payment_emoji} Paiement: {payment_status}\n"
+                
+                # Afficher le montant si disponible
+                if booking.amount:
+                    message += f"💰 Montant: {booking.amount} CHF\n"
+                
+                # PayPal ID pour debug si nécessaire
+                if booking.paypal_payment_id and not booking.is_paid:
+                    message += f"🔧 PayPal: {booking.paypal_payment_id[:10]}...\n"
+                    
+                message += "\n"
+            
+            if len(bookings) == 20:
+                message += "📝 *Affichage limité aux 20 dernières réservations*"
+        
         keyboard = [
             [InlineKeyboardButton("🔍 Rechercher un trajet", callback_data="menu:search_trip")],
             [InlineKeyboardButton("⬅️ Retour au profil", callback_data="profile:back_to_profile")]
         ]
+        
         await query.edit_message_text(
             text=message,
             reply_markup=InlineKeyboardMarkup(keyboard),
             parse_mode=ParseMode.MARKDOWN
         )
         return PROFILE_MAIN
+        
     except Exception as e:
         logger.error(f"Erreur dans show_my_bookings: {str(e)}")
         await update.callback_query.edit_message_text(
@@ -1240,6 +1283,12 @@ async def handle_trip_sub_callbacks_from_profile(update: Update, context: Callba
             
             return PROFILE_MAIN
             
+        elif query.data.startswith("confirm_trip_"):
+            # 🔥 NOUVEAU: Gestionnaire de confirmation de trajet
+            from trip_confirmation_system import handle_trip_confirmation_callback
+            await handle_trip_confirmation_callback(update, context)
+            return PROFILE_MAIN
+            
         elif query.data.startswith("passenger:view_"):
             # Récupérer et afficher les vraies demandes/réservations passager
             user_id = update.effective_user.id
@@ -1300,23 +1349,43 @@ async def handle_trip_sub_callbacks_from_profile(update: Update, context: Callba
                         status_emoji = {
                             'confirmed': '✅',
                             'pending': '⏳',
-                            'completed': '✅',
+                            'completed': '🎉',
                             'cancelled': '❌'
                         }.get(booking.status, '❓')
                         
-                        payment_emoji = {
-                            'paid': '💳',
-                            'pending': '⏳',
-                            'unpaid': '❌'
-                        }.get(booking.payment_status, '❓')
+                        # 🔥 CORRECTION: Même logique de paiement cohérente
+                        if booking.is_paid:
+                            payment_emoji = '💳'
+                            payment_status = 'payé'
+                        elif booking.payment_status == 'completed':
+                            payment_emoji = '⚠️'
+                            payment_status = 'completed (webhook échoué)'
+                        elif booking.payment_status == 'pending':
+                            payment_emoji = '⏳'
+                            payment_status = 'en attente'
+                        else:
+                            payment_emoji = '❌'
+                            payment_status = 'non payé'
+                        
+                        # Indicateur temporel
+                        now = datetime.now()
+                        time_indicator = '🕒' if trip.departure_time > now else '📅'
                         
                         message += f"{status_emoji} **Réservation {i}:**\n"
                         message += f"📍 {trip.departure_city} → {trip.arrival_city}\n"
-                        message += f"📅 {departure_date}\n"
-                        message += f"{payment_emoji} Paiement: {booking.payment_status}\n\n"
+                        message += f"{time_indicator} {departure_date}\n"
+                        message += f"{payment_emoji} Paiement: {payment_status}\n"
+                        
+                        # Montant et debug info
+                        if booking.amount:
+                            message += f"💰 {booking.amount} CHF\n"
+                        if booking.paypal_payment_id and not booking.is_paid:
+                            message += f"🔧 PayPal: {booking.paypal_payment_id[:10]}...\n"
+                            
+                        message += "\n"
                     
-                    if len(bookings) == 10:
-                        message += "📝 *Affichage limité aux 10 dernières réservations*"
+                    if len(bookings) == 20:
+                        message += "📝 *Affichage limité aux 20 dernières réservations*"
             
             keyboard = [
                 [InlineKeyboardButton("🔙 Retour aux trajets", callback_data="passenger_trip_management")],
