@@ -23,7 +23,10 @@ if DATABASE_URL:
     engine = create_engine(
         DATABASE_URL,
         pool_pre_ping=True,
-        pool_recycle=300
+        pool_recycle=300,
+        pool_size=20,          # Augmenter la taille de la pool
+        max_overflow=30,       # Augmenter le overflow
+        pool_timeout=60        # Timeout plus long
     )
 else:
     # Local : Utiliser SQLite

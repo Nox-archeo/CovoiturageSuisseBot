@@ -137,19 +137,17 @@ async def handle_search_user_type(update: Update, context: CallbackContext):
     
     # 🚨 FIX CRUCIAL: Rediriger vers la recherche de passagers pour les conducteurs
     if user_type == "driver":
-        # Conducteur cherche des passagers - TERMINER ce ConversationHandler et déclencher l'entry point search_passengers
-        logger.info(f"🎯 REDIRECT: Conducteur détecté - fin de search_trip + déclenchement search_passengers entry point")
+        # Conducteur cherche des passagers - APPEL DIRECT à la fonction search_passengers
+        logger.info(f"🎯 REDIRECT: Conducteur détecté - appel direct à start_passenger_search")
         
-        # Créer un nouveau callback qui déclenche l'entry point du ConversationHandler search_passengers
-        await query.edit_message_text(
-            "🔄 Redirection vers la recherche de passagers...",
-            reply_markup=InlineKeyboardMarkup([[
-                InlineKeyboardButton("🔍 Commencer la recherche", callback_data="search_passengers")
-            ]])
-        )
+        # Importer et appeler directement la fonction
+        from handlers.search_passengers import start_passenger_search
         
-        # Terminer ce ConversationHandler pour permettre au search_passengers de démarrer
-        return ConversationHandler.END
+        # Appeler directement la fonction de recherche de passagers
+        result = await start_passenger_search(update, context)
+        
+        # Terminer ce ConversationHandler et retourner le résultat de search_passengers
+        return result
     
     # Sinon continuer avec la logique normale pour les passagers
     # Créer un clavier avec les villes principales pour l'étape suivante
