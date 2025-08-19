@@ -1532,13 +1532,17 @@ async def save_paypal_email(update: Update, context: CallbackContext):
         user.paypal_email = new_email
         db.commit()
         
+        # Créer les boutons pour retourner au menu
+        keyboard = [[InlineKeyboardButton("🔙 Retour au menu PayPal", callback_data="profile:paypal")]]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        
         await update.message.reply_text(
             f"✅ **Email PayPal mis à jour !**\n\nNouveau email : `{new_email}`",
-            parse_mode=ParseMode.MARKDOWN
+            parse_mode=ParseMode.MARKDOWN,
+            reply_markup=reply_markup
         )
         
-        # Retourner au menu PayPal
-        return await show_paypal_menu(update, context)
+        return ConversationHandler.END
         
     except Exception as e:
         logger.error(f"Erreur save_paypal_email: {e}")

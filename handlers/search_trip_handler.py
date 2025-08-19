@@ -126,6 +126,8 @@ async def handle_search_user_type(update: Update, context: CallbackContext):
     query = update.callback_query
     await query.answer()
     
+    logger.info(f"🎯 handle_search_user_type appelé avec callback: {query.data}")
+    
     if query.data == "search_cancel":
         await query.edit_message_text("❌ Recherche annulée.")
         context.user_data.clear()
@@ -135,19 +137,28 @@ async def handle_search_user_type(update: Update, context: CallbackContext):
     user_type = query.data.split(":")[1]  # "driver" ou "passenger"
     context.user_data['search_user_type'] = user_type
     
+    logger.info(f"🎯 Type utilisateur sélectionné: {user_type}")
+    
     # 🚨 FIX CRUCIAL: Rediriger vers la recherche de passagers pour les conducteurs
     if user_type == "driver":
         # Conducteur cherche des passagers - APPEL DIRECT à la fonction search_passengers
         logger.info(f"🎯 REDIRECT: Conducteur détecté - appel direct à start_passenger_search")
         
-        # Importer et appeler directement la fonction
-        from handlers.search_passengers import start_passenger_search
-        
-        # Appeler directement la fonction de recherche de passagers
-        result = await start_passenger_search(update, context)
-        
-        # Terminer ce ConversationHandler et retourner le résultat de search_passengers
-        return result
+        try:
+            # Importer et appeler directement la fonction
+            from handlers.search_passengers import start_passenger_search
+            
+            # Appeler directement la fonction de recherche de passagers
+            result = await start_passenger_search(update, context)
+            
+            logger.info(f"🎯 Résultat de start_passenger_search: {result}")
+            
+            # Terminer ce ConversationHandler et retourner le résultat de search_passengers
+            return result
+        except Exception as e:
+            logger.error(f"❌ Erreur lors du redirect vers search_passengers: {e}")
+            await query.edit_message_text("❌ Erreur lors de la redirection. Veuillez réessayer.")
+            return ConversationHandler.END
     
     # Sinon continuer avec la logique normale pour les passagers
     # Créer un clavier avec les villes principales pour l'étape suivante
