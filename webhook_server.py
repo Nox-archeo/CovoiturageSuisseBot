@@ -850,7 +850,36 @@ async def migrate_database_render():
         logger.error(f"❌ Erreur migration Render: {e}")
         return {"success": False, "error": str(e)}
 
-@app.post("/admin/test-notifications")
+@app.post("/admin/test-simple")
+async def test_simple():
+    """Test simple sans imports compliqués"""
+    try:
+        from database.db_manager import get_db
+        from database.models import Booking
+        
+        db = get_db()
+        
+        # Compter les réservations de l'utilisateur pour le trajet 8
+        bookings_count = db.query(Booking).filter(
+            Booking.trip_id == 8,
+            Booking.passenger_id == 5932296330
+        ).count()
+        
+        # Réservations avec PayPal ID
+        paypal_bookings = db.query(Booking).filter(
+            Booking.paypal_payment_id.isnot(None)
+        ).count()
+        
+        return {
+            "success": True,
+            "message": "Test simple réussi",
+            "duplicate_bookings_trip_8": bookings_count,
+            "total_paypal_bookings": paypal_bookings,
+            "postgres_working": True
+        }
+        
+    except Exception as e:
+        return {"success": False, "error": str(e)}
 async def test_notifications():
     """Test des notifications sans faire de vrais paiements"""
     try:
