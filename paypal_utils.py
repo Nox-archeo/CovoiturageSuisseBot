@@ -109,17 +109,17 @@ class PayPalManager:
                 "PayPal-Request-Id": f"covoiturage-{int(time.time())}"
             }
             
-            # Configuration spéciale pour FORCER l'affichage carte bancaire
+            # Configuration spéciale pour FORCER l'affichage carte bancaire ET solde PayPal
             order_data = {
                 "intent": "CAPTURE",
                 "application_context": {
                     "brand_name": "CovoiturageSuisse",
                     "locale": "fr-CH",
-                    "landing_page": "LOGIN",  # ✅ Permet solde PayPal ET cartes
+                    "landing_page": "BILLING",  # 🔥 FORCER affichage toutes options de paiement
                     "shipping_preference": "NO_SHIPPING",
                     "user_action": "PAY_NOW",
                     "payment_method": {
-                        "payee_preferred": "IMMEDIATE_PAYMENT_REQUIRED",
+                        "payee_preferred": "UNRESTRICTED",  # 🔥 ACCEPTER TOUS les types de paiement
                         "payer_selected": "PAYPAL"
                     },
                     "return_url": return_url,

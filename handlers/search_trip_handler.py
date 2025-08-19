@@ -1227,6 +1227,8 @@ async def pay_with_paypal(update: Update, context: CallbackContext):
         db.commit()
         db.refresh(new_booking)  # Pour obtenir l'ID
         
+        logger.info(f"✅ RÉSERVATION CRÉÉE: ID={new_booking.id}, Trip={trip_id}, User={db_user.id}, Amount={total_amount}")
+        
         # Créer le paiement PayPal
         try:
             paypal_manager = PayPalManager()
@@ -1243,6 +1245,8 @@ async def pay_with_paypal(update: Update, context: CallbackContext):
                 new_booking.paypal_payment_id = payment_id
                 db.commit()
                 
+                logger.info(f"✅ PAIEMENT PAYPAL CRÉÉ: Order={payment_id}, Booking={new_booking.id}, URL={approval_url[:50]}...")
+                
                 # 🚨 NOTIFICATION CONDUCTEUR - NOUVEAU PAIEMENT EN COURS
                 try:
                     driver = trip.driver
@@ -1251,7 +1255,7 @@ async def pay_with_paypal(update: Update, context: CallbackContext):
                             chat_id=driver.telegram_id,
                             text=(
                                 f"💰 *Nouveau paiement en cours !*\n\n"
-                                f"👤 Passager : {db_user.first_name}\n"
+                                f"👤 Passager : {db_user.full_name or db_user.username or 'Passager'}\n"
                                 f"🚗 Trajet : {trip.departure_city} → {trip.arrival_city}\n"
                                 f"📅 Date : {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
                                 f"👥 Places réservées : {seats}\n"
@@ -1261,9 +1265,10 @@ async def pay_with_paypal(update: Update, context: CallbackContext):
                             ),
                             parse_mode="Markdown"
                         )
-                        logger.info(f"✅ Notification envoyée au conducteur {driver.telegram_id} pour paiement en cours")
+                        logger.info(f"✅ NOTIFICATION CONDUCTEUR ENVOYÉE: Driver={driver.telegram_id}")
                 except Exception as notif_error:
-                    logger.error(f"Erreur notification conducteur: {notif_error}")
+                    logger.error(f"❌ ERREUR NOTIFICATION CONDUCTEUR: {notif_error}")
+                    # NE PAS FAIRE ÉCHOUER LA TRANSACTION pour une erreur de notification
                 
                 keyboard = [
                     [InlineKeyboardButton("💳 Payer avec PayPal", url=approval_url)],
