@@ -66,7 +66,7 @@ class User(Base):
 class Trip(Base):
     __tablename__ = 'trips'
     id = Column(Integer, primary_key=True)
-    driver_id = Column(Integer, ForeignKey('users.id'))
+    driver_id = Column(Integer, ForeignKey('users.id'))  # Conducteur principal
     departure_city = Column(String(100))
     arrival_city = Column(String(100))
     departure_time = Column(DateTime)
@@ -78,6 +78,12 @@ class Trip(Base):
     
     # CORRECTION CRITIQUE: Ajout du prix total du trajet
     total_trip_price = Column(Float, nullable=True)  # Prix total théorique du trajet
+    
+    # 🆕 NOUVEAU: Support pour plusieurs conducteurs
+    max_co_drivers = Column(Integer, default=1)  # Nombre max de co-conducteurs autorisé
+    current_co_drivers = Column(Integer, default=1)  # Nombre actuel de conducteurs
+    shared_fuel_cost = Column(Float, nullable=True)  # Coût total de l'essence à partager
+    cost_per_driver = Column(Float, nullable=True)  # Coût par conducteur (calculé automatiquement)
     
     # Nouvelles colonnes
     smoking = Column(String(20), default="no_smoking")
@@ -155,6 +161,25 @@ class Booking(Base):
     
     passenger = relationship("User", foreign_keys=[passenger_id])
     trip = relationship("Trip", foreign_keys=[trip_id], back_populates="bookings")
+
+class CoDriver(Base):
+    """Modèle pour les co-conducteurs qui partagent les frais d'un trajet"""
+    __tablename__ = 'co_drivers'
+    id = Column(Integer, primary_key=True)
+    trip_id = Column(Integer, ForeignKey('trips.id'))
+    driver_id = Column(Integer, ForeignKey('users.id'))
+    join_date = Column(DateTime, default=datetime.utcnow)
+    status = Column(String, default='confirmed')  # 'pending', 'confirmed', 'cancelled'
+    
+    # Paiement du co-conducteur
+    amount_to_pay = Column(Float)  # Montant que ce co-conducteur doit payer
+    has_paid = Column(Boolean, default=False)
+    paypal_payment_id = Column(String, nullable=True)
+    payment_status = Column(String, default='unpaid')  # 'unpaid', 'pending', 'completed'
+    
+    # Relations
+    trip = relationship("Trip")
+    driver = relationship("User", foreign_keys=[driver_id])
 
 class DriverProposal(Base):
     """Modèle pour les propositions de conducteurs aux trajets de passagers"""

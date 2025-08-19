@@ -7,7 +7,7 @@ import logging
 from datetime import datetime
 from database.models import Booking, Trip
 from database import get_db
-from auto_refund_manager import trigger_automatic_refunds
+from fixed_auto_refund_manager import trigger_automatic_refunds_fixed
 
 logger = logging.getLogger(__name__)
 
@@ -121,7 +121,7 @@ async def handle_payment_completion(payment_id: str, bot=None) -> bool:
                     logger.error(f"❌ Erreur notification conducteur: {e}")
         
         # Déclencher les remboursements automatiques si nécessaire
-        await trigger_automatic_refunds(booking.trip_id, bot)
+        await trigger_automatic_refunds_fixed(booking.trip_id, bot)
         
         logger.info(f"✅ Traitement du paiement {payment_id} terminé avec succès")
         return True

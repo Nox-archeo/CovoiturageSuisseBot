@@ -251,11 +251,3 @@ async def trigger_automatic_refunds_fixed(trip_id: int, bot=None) -> Tuple[bool,
     except Exception as e:
         logger.error(f"Erreur trigger_automatic_refunds_fixed: {e}")
         return False, str(e)
-
-# Wrapper de compatibilité pour l'ancien nom
-async def trigger_automatic_refunds(trip_id: int, bot=None) -> bool:
-    """
-    Wrapper de compatibilité - redirige vers le système fixé
-    """
-    success, error = await trigger_automatic_refunds_fixed(trip_id, bot)
-    return success
