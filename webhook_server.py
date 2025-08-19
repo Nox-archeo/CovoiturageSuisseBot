@@ -733,6 +733,80 @@ async def payment_cancel(booking_id: int):
         logger.error(f"❌ Erreur payment cancel: {e}")
         return {"error": "Erreur interne"}
 
+@app.post("/admin/force-payment")
+async def force_payment_processing(request: Request):
+    """Endpoint d'administration pour forcer le traitement d'un paiement"""
+    try:
+        data = await request.json()
+        payment_id = data.get('payment_id')
+        booking_id = data.get('booking_id')
+        
+        if not payment_id and not booking_id:
+            return {"error": "payment_id ou booking_id requis"}
+        
+        logger.info(f"🔧 Force traitement: payment_id={payment_id}, booking_id={booking_id}")
+        
+        from paypal_webhook_handler import handle_payment_completion
+        
+        # Si booking_id fourni, récupérer le payment_id
+        if booking_id and not payment_id:
+            from database.db_manager import get_db
+            from database.models import Booking
+            
+            db = get_db()
+            booking = db.query(Booking).filter(Booking.id == booking_id).first()
+            if booking and booking.paypal_payment_id:
+                payment_id = booking.paypal_payment_id
+            else:
+                return {"error": f"Aucun payment_id trouvé pour booking {booking_id}"}
+        
+        # Traiter le paiement
+        result = await handle_payment_completion(payment_id, telegram_app)
+        
+        if result:
+            logger.info(f"✅ Force traitement réussi pour {payment_id}")
+            return {"success": True, "payment_id": payment_id, "message": "Paiement traité avec succès"}
+        else:
+            logger.error(f"❌ Force traitement échoué pour {payment_id}")
+            return {"success": False, "payment_id": payment_id, "message": "Échec du traitement"}
+            
+    except Exception as e:
+        logger.error(f"❌ Erreur force payment: {e}")
+        return {"error": str(e)}
+
+@app.get("/admin/pending-payments")
+async def get_pending_payments():
+    """Liste les paiements en attente"""
+    try:
+        from database.db_manager import get_db
+        from database.models import Booking
+        
+        db = get_db()
+        pending = db.query(Booking).filter(
+            Booking.paypal_payment_id.isnot(None),
+            Booking.is_paid == False
+        ).order_by(Booking.id.desc()).limit(20).all()
+        
+        result = []
+        for booking in pending:
+            result.append({
+                "id": booking.id,
+                "passenger_id": booking.passenger_id,
+                "trip_id": booking.trip_id,
+                "amount": booking.amount,
+                "status": booking.status,
+                "paypal_payment_id": booking.paypal_payment_id,
+                "payment_status": booking.payment_status,
+                "booking_date": booking.booking_date.isoformat() if booking.booking_date else None
+            })
+        
+        logger.info(f"📊 {len(result)} paiements en attente trouvés")
+        return {"pending_payments": result, "count": len(result)}
+        
+    except Exception as e:
+        logger.error(f"❌ Erreur get pending payments: {e}")
+        return {"error": str(e)}
+
 if __name__ == "__main__":
     port = int(os.getenv('PORT', 8000))
     logger.info(f"🚀 Démarrage serveur webhook sur port {port}")
