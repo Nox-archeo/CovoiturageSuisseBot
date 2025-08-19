@@ -79,9 +79,9 @@ class Trip(Base):
     # CORRECTION CRITIQUE: Ajout du prix total du trajet
     total_trip_price = Column(Float, nullable=True)  # Prix total théorique du trajet
     
-    # 🆕 NOUVEAU: Support pour plusieurs conducteurs
-    max_co_drivers = Column(Integer, default=1)  # Nombre max de co-conducteurs autorisé
-    current_co_drivers = Column(Integer, default=1)  # Nombre actuel de conducteurs
+    # Support pour plusieurs conducteurs - TEMPORAIREMENT DÉSACTIVÉ
+    # max_co_drivers = Column(Integer, default=1)  # Nombre max de co-conducteurs autorisé
+    # current_co_drivers = Column(Integer, default=1)  # Nombre actuel de conducteurs
     shared_fuel_cost = Column(Float, nullable=True)  # Coût total de l'essence à partager
     cost_per_driver = Column(Float, nullable=True)  # Coût par conducteur (calculé automatiquement)
     
