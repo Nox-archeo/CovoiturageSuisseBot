@@ -118,6 +118,10 @@ class Trip(Base):
     confirmed_by_passengers = Column(Boolean, default=False)  # Confirmation des passagers
     driver_amount = Column(Float, nullable=True)  # Montant versé au conducteur (88%)
     commission_amount = Column(Float, nullable=True)  # Commission de la plateforme (12%)
+    
+    # Nouvelles colonnes pour système de confirmation avancé
+    driver_confirmed_completion = Column(Boolean, default=False)  # Nouvelle confirmation conducteur
+    payment_released = Column(Boolean, default=False)  # Paiement libéré
 
 class Booking(Base):
     __tablename__ = 'bookings'
@@ -145,6 +149,9 @@ class Booking(Base):
     refund_amount = Column(Float, nullable=True)  # Montant remboursé
     refund_date = Column(DateTime, nullable=True)  # Date du remboursement
     original_price = Column(Float, nullable=True)  # Prix original payé
+    
+    # Nouvelle colonne pour système de confirmation avancé
+    passenger_confirmed_completion = Column(Boolean, default=False)  # Confirmation passager
     
     passenger = relationship("User", foreign_keys=[passenger_id])
     trip = relationship("Trip", foreign_keys=[trip_id], back_populates="bookings")

@@ -18,6 +18,7 @@ from database.models import User, Trip, Booking, Review
 from database import get_db
 from datetime import datetime
 from utils.message_utils import safe_edit_message_text
+from trip_confirmation_system import add_confirmation_buttons_to_trip
 
 logger = logging.getLogger(__name__)
 
@@ -467,6 +468,12 @@ async def show_my_trips(update: Update, context: CallbackContext):
                     f"  💰 {price_per_seat:.2f} CHF/place"
                 )
                 row_btns = []
+                
+                # Ajouter les boutons de confirmation si éligible
+                confirmation_buttons = await add_confirmation_buttons_to_trip(trip.id, user.id, 'driver')
+                if confirmation_buttons:
+                    row_btns.extend(confirmation_buttons)
+                
                 if booking_count == 0:
                     row_btns.append(InlineKeyboardButton("✏️ Modifier", callback_data=f"trip:edit:{trip.id}"))
                 row_btns.append(InlineKeyboardButton("❌ Annuler", callback_data=f"trip:cancel:{trip.id}"))
@@ -513,7 +520,7 @@ async def show_my_trips(update: Update, context: CallbackContext):
 
 async def show_my_bookings(update: Update, context: CallbackContext):
     """
-    Affiche la liste COMPLÈTE des réservations de l'utilisateur avec infos de paiement
+    Affiche la liste COMPLÈTE des réservations de l'utilisateur avec infos de paiement et boutons de confirmation
     """
     try:
         query = update.callback_query
@@ -537,8 +544,13 @@ async def show_my_bookings(update: Update, context: CallbackContext):
         
         if not bookings:
             message = "🎫 *Mes réservations :*\n\nAucune réservation trouvée.\n\n💡 Réservez votre première place avec /chercher_trajet"
+            keyboard = [
+                [InlineKeyboardButton("🔍 Rechercher un trajet", callback_data="menu:search_trip")],
+                [InlineKeyboardButton("⬅️ Retour au profil", callback_data="profile:back_to_profile")]
+            ]
         else:
-            message = f"🎫 *Mes réservations :*\n\n📊 {len(bookings)} réservation(s) trouvée(s)\n\n"
+            # Organiser en blocs avec boutons individuels comme show_my_trips
+            reservation_blocks = []
             
             for i, booking in enumerate(bookings, 1):
                 trip = booking.trip
@@ -572,28 +584,46 @@ async def show_my_bookings(update: Update, context: CallbackContext):
                 now = datetime.now()
                 time_indicator = '🕒' if trip.departure_time > now else '📅'
                 
-                message += f"{status_emoji} **Réservation {i}:**\n"
-                message += f"📍 {departure_city} → {arrival_city}\n"
-                message += f"{time_indicator} {departure_date}\n"
-                message += f"{payment_emoji} Paiement: {payment_status}\n"
+                booking_str = f"{status_emoji} **Réservation {i}:**\n"
+                booking_str += f"📍 {departure_city} → {arrival_city}\n"
+                booking_str += f"{time_indicator} {departure_date}\n"
+                booking_str += f"{payment_emoji} Paiement: {payment_status}\n"
                 
                 # Afficher le montant si disponible
                 if booking.amount:
-                    message += f"💰 Montant: {booking.amount} CHF\n"
+                    booking_str += f"💰 Montant: {booking.amount} CHF\n"
                 
                 # PayPal ID pour debug si nécessaire
                 if booking.paypal_payment_id and not booking.is_paid:
-                    message += f"🔧 PayPal: {booking.paypal_payment_id[:10]}...\n"
-                    
-                message += "\n"
+                    booking_str += f"🔧 PayPal: {booking.paypal_payment_id[:10]}...\n"
+                
+                # Boutons pour cette réservation
+                row_btns = []
+                
+                # Ajouter les boutons de confirmation si éligible
+                confirmation_buttons = await add_confirmation_buttons_to_trip(trip.id, user.id, 'passenger')
+                if confirmation_buttons:
+                    row_btns.extend(confirmation_buttons)
+                
+                reservation_blocks.append({'text': booking_str, 'buttons': row_btns})
+            
+            # Construction du message et du clavier
+            message = f"🎫 *Mes réservations :*\n\n📊 {len(bookings)} réservation(s) trouvée(s)"
+            keyboard = []
+            
+            for block in reservation_blocks:
+                message += f"\n\n{block['text']}"
+                if block['buttons']:
+                    keyboard.append(block['buttons'])
             
             if len(bookings) == 20:
-                message += "📝 *Affichage limité aux 20 dernières réservations*"
-        
-        keyboard = [
-            [InlineKeyboardButton("🔍 Rechercher un trajet", callback_data="menu:search_trip")],
-            [InlineKeyboardButton("⬅️ Retour au profil", callback_data="profile:back_to_profile")]
-        ]
+                message += "\n\n📝 *Affichage limité aux 20 dernières réservations*"
+            
+            # Boutons de navigation
+            keyboard.extend([
+                [InlineKeyboardButton("🔍 Rechercher un trajet", callback_data="menu:search_trip")],
+                [InlineKeyboardButton("⬅️ Retour au profil", callback_data="profile:back_to_profile")]
+            ])
         
         await query.edit_message_text(
             text=message,
