@@ -200,30 +200,64 @@ async def process_paypal_webhook(event_type: str, data: dict):
 async def handle_payment_completed(data: dict):
     """Gère un paiement PayPal complété avec remboursements automatiques"""
     try:
+        logger.info("🔥 DÉBUT TRAITEMENT WEBHOOK PAYPAL")
+        
         # Extraire les informations du paiement
         resource = data.get('resource', {})
         payment_id = resource.get('id')  # ID du paiement PayPal
         custom_id = resource.get('custom_id')  # ID de la réservation
         amount = float(resource.get('amount', {}).get('value', 0))
         
+        logger.info(f"📋 DONNÉES WEBHOOK: payment_id={payment_id}, custom_id={custom_id}, amount={amount}")
+        
         if not custom_id:
-            logger.error("Pas de custom_id dans le paiement PayPal")
+            logger.error("❌ Pas de custom_id dans le paiement PayPal")
             return
         
-        db = get_db()
+        logger.info(f"✅ Custom ID trouvé: {custom_id}")
+        
+        try:
+            db = get_db()
+            logger.info("✅ Connexion base de données établie")
+        except Exception as db_error:
+            logger.error(f"❌ ERREUR CONNEXION BASE: {db_error}")
+            return
         
         # Trouver la réservation via paypal_payment_id
         booking = None
         if payment_id:
+            logger.info(f"🔍 Recherche réservation par payment_id: {payment_id}")
             booking = db.query(Booking).filter(Booking.paypal_payment_id == payment_id).first()
+            if booking:
+                logger.info(f"✅ Réservation trouvée par payment_id: {booking.id}")
+            else:
+                logger.warning(f"⚠️ Aucune réservation trouvée par payment_id: {payment_id}")
         
         # Fallback: utiliser custom_id
         if not booking and custom_id:
-            booking = db.query(Booking).filter(Booking.id == int(custom_id)).first()
+            logger.info(f"🔍 Recherche réservation par custom_id: {custom_id}")
+            try:
+                booking = db.query(Booking).filter(Booking.id == int(custom_id)).first()
+                if booking:
+                    logger.info(f"✅ Réservation trouvée par custom_id: {booking.id}")
+                else:
+                    logger.error(f"❌ AUCUNE réservation trouvée pour custom_id: {custom_id}")
+                    
+                    # DEBUG: Lister toutes les réservations récentes
+                    recent_bookings = db.query(Booking).order_by(Booking.id.desc()).limit(10).all()
+                    logger.info(f"📋 Réservations récentes en base ({len(recent_bookings)}):")
+                    for rb in recent_bookings:
+                        logger.info(f"   ID: {rb.id}, Trip: {rb.trip_id}, Status: {rb.status}, Payment: {rb.payment_status}")
+                        
+            except Exception as search_error:
+                logger.error(f"❌ ERREUR lors de la recherche par custom_id: {search_error}")
+                return
         
         if not booking:
-            logger.error(f"Réservation non trouvée pour payment_id={payment_id}, custom_id={custom_id}")
+            logger.error(f"❌ RÉSERVATION NON TROUVÉE pour payment_id={payment_id}, custom_id={custom_id}")
             return
+        
+        logger.info(f"🎯 RÉSERVATION TROUVÉE: ID={booking.id}, Trip={booking.trip_id}, Passenger={booking.passenger_id}")
         
         # Marquer le paiement comme complété
         booking.payment_status = 'completed'
@@ -231,22 +265,24 @@ async def handle_payment_completed(data: dict):
         booking.paid_at = datetime.utcnow()
         db.commit()
         
-        logger.info(f"Paiement complété pour la réservation {booking.id}, trajet {booking.trip_id}")
+        logger.info(f"✅ Paiement complété pour la réservation {booking.id}, trajet {booking.trip_id}")
         
         # NOUVEAU: Déclencher les remboursements automatiques
         try:
+            logger.info("🔄 Tentative de traitement des remboursements automatiques...")
             from paypal_webhook_handler import handle_payment_completion
             success = await handle_payment_completion(payment_id, telegram_app.bot)
             
             if success:
-                logger.info(f"Remboursements automatiques traités pour le trajet {booking.trip_id}")
+                logger.info(f"✅ Remboursements automatiques traités pour le trajet {booking.trip_id}")
             else:
-                logger.warning(f"Erreur lors des remboursements automatiques pour le trajet {booking.trip_id}")
+                logger.warning(f"⚠️ Erreur lors des remboursements automatiques pour le trajet {booking.trip_id}")
                 
         except Exception as refund_error:
-            logger.error(f"Erreur lors du traitement des remboursements automatiques: {refund_error}")
+            logger.error(f"❌ Erreur lors du traitement des remboursements automatiques: {refund_error}")
         
         # Notifier le passager
+        logger.info(f"📱 Notification passager pour réservation {booking.id}")
         passenger = booking.passenger
         if passenger and passenger.telegram_id:
             # Récupérer les infos du conducteur pour contact
