@@ -262,7 +262,9 @@ async def handle_payment_completed(data: dict):
                 if contact_info:
                     driver_contact = f"👤 *Contact conducteur:* {' | '.join(contact_info)}\n"
                 else:
-                    driver_contact = f"👤 *Conducteur:* {driver.first_name or 'Nom non disponible'}\n"
+                    # Utiliser username ou telegram_username comme fallback
+                    driver_name = driver.username or driver.telegram_username or 'Nom non disponible'
+                    driver_contact = f"👤 *Conducteur:* {driver_name}\n"
             
             message = (
                 f"✅ *Paiement confirmé !*\n\n"
@@ -301,7 +303,9 @@ async def handle_payment_completed(data: dict):
                 if contact_info:
                     passenger_contact = f"👤 *Contact passager:* {' | '.join(contact_info)}\n"
                 else:
-                    passenger_contact = f"👤 *Passager:* {passenger.first_name or 'Nom non disponible'}\n"
+                    # Utiliser username ou username telegram comme fallback
+                    passenger_name = passenger.username or passenger.telegram_username or 'Nom non disponible'
+                    passenger_contact = f"👤 *Passager:* {passenger_name}\n"
             
             message = (
                 f"💰 *Nouveau passager confirmé !*\n\n"
