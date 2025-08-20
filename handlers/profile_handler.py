@@ -548,7 +548,7 @@ async def show_my_bookings(update: Update, context: CallbackContext):
         ).join(Trip).order_by(Trip.departure_time.desc()).limit(20).all()
         
         if not bookings:
-            message = "🎫 *Mes réservations :*\n\nAucune réservation trouvée.\n\n💡 Réservez votre première place avec /chercher_trajet"
+            message = "🎫 *Mes réservations :*\n\nAucune réservation trouvée.\n\n💡 Utilisez le bouton ci-dessous pour rechercher un trajet"
             keyboard = [
                 [InlineKeyboardButton("🔍 Rechercher un trajet", callback_data="menu:search_trip")],
                 [InlineKeyboardButton("⬅️ Retour au profil", callback_data="profile:back_to_profile")]
