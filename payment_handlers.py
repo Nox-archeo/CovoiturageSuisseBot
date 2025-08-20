@@ -10,7 +10,7 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes, CommandHandler, CallbackQueryHandler, ConversationHandler, MessageHandler, filters
 from database.db_manager import get_db
 from database.models import User, Trip, Booking
-from paypal_utils import create_trip_payment, complete_trip_payment, pay_driver
+from paypal_utils import create_trip_payment, pay_driver
 from utils.swiss_pricing import round_to_nearest_0_05, format_swiss_price
 import asyncio
 from contextlib import contextmanager
