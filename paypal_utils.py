@@ -128,7 +128,16 @@ class PayPalManager:
                         "value": f"{amount:.2f}"
                     },
                     "description": description
-                }]
+                }],
+                # 🔥 ALTERNATIVE: Ajouter les URLs de retour au niveau racine aussi
+                "payment_source": {
+                    "paypal": {
+                        "experience_context": {
+                            "return_url": return_url,
+                            "cancel_url": cancel_url
+                        }
+                    }
+                }
             }
             
             response = requests.post(
