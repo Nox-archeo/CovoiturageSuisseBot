@@ -127,17 +127,12 @@ class PayPalManager:
                     },
                     "description": description
                 }],
-                # 🔥 URLs de retour au niveau racine (approche correcte pour PayPal v2)
+                # 🔥 URLs de retour dans payment_source (approche correcte PayPal v2)
                 "payment_source": {
                     "paypal": {
                         "experience_context": {
                             "return_url": return_url,
-                            "cancel_url": cancel_url,
-                            "brand_name": "CovoiturageSuisse",
-                            "locale": "fr-CH",
-                            "landing_page": "BILLING",
-                            "shipping_preference": "NO_SHIPPING",
-                            "user_action": "PAY_NOW"
+                            "cancel_url": cancel_url
                         }
                     }
                 }
