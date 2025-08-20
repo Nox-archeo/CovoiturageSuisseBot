@@ -45,6 +45,14 @@ async def handle_booking_cancellation(update: Update, context: CallbackContext):
             return
         
         trip = booking.trip
+        if not trip:
+            await query.edit_message_text("❌ Trajet associé introuvable.")
+            return
+        
+        # Vérifier que les champs essentiels ne sont pas None
+        if not booking.total_price or not trip.departure_time:
+            await query.edit_message_text("❌ Données de réservation incomplètes.")
+            return
         
         # Confirmation d'annulation
         keyboard = [
