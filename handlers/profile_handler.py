@@ -303,21 +303,26 @@ async def get_user_stats(user_id):
     stats['trips_count'] = future_trips or 0
     
     # Compter les réservations actives (en tant que passager)
-    active_bookings = db.query(func.count(Booking.id)).filter(
-        Booking.passenger_id == user.id,
-        Booking.status.in_(['confirmed', 'pending']),
-        Trip.departure_time > datetime.now()
-    ).join(Trip).scalar()
-    stats['bookings_count'] = active_bookings or 0
+    try:
+        active_bookings = db.query(func.count(Booking.id)).filter(
+            Booking.passenger_id == user.id,
+            Booking.status.in_(['confirmed', 'pending']),
+            Trip.departure_time > datetime.now()
+        ).join(Trip).scalar()
+        stats['bookings_count'] = active_bookings or 0
+    except Exception as e:
+        logger.error(f"Erreur lors du comptage des réservations: {e}")
+        stats['bookings_count'] = 0
     
     # Calculer les gains (trajets complétés * prix par siège * 0.88 (100% - 12%))
-    completed_trips = db.query(Trip).filter(
-        Trip.driver_id == user.id,
-        Trip.departure_time <= datetime.now()
-    ).all()
-    
-    total_earnings = 0
-    for trip in completed_trips:
+    try:
+        completed_trips = db.query(Trip).filter(
+            Trip.driver_id == user.id,
+            Trip.departure_time <= datetime.now()
+        ).all()
+        
+        total_earnings = 0
+        for trip in completed_trips:
         try:
             # Trouver les réservations confirmées pour ce trajet
             try:
@@ -355,7 +360,11 @@ async def get_user_stats(user_id):
             logger.error(f"Erreur lors du calcul des gains pour le trajet {trip.id}: {str(e)}")
             # Continuer avec le trajet suivant
     
-    stats['earnings'] = total_earnings
+        stats['earnings'] = total_earnings
+    
+    except Exception as e:
+        logger.error(f"Erreur lors du calcul des gains: {e}")
+        stats['earnings'] = 0.0
     
     return stats
 
