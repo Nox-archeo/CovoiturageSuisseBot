@@ -12,6 +12,12 @@ logger = logging.getLogger(__name__)
 # Configuration automatique de la base de données (SQLite local ou PostgreSQL Render)
 DATABASE_URL = os.getenv('DATABASE_URL')
 
+# FORCER PostgreSQL TOUJOURS (même en local) pour éviter les problèmes de synchronisation
+if not DATABASE_URL:
+    # Si pas de DATABASE_URL, utiliser PostgreSQL Render directement
+    DATABASE_URL = "postgresql://covoiturage_qw9c_user:UT15TWaumLIVkmHOOakrhSpFhmKH5vaX@dpg-d26ah2muk2gs73bqjnn0-a.oregon-postgres.render.com/covoiturage_qw9c"
+    logger.info("🔧 FORÇAGE PostgreSQL pour éviter les problèmes de synchronisation")
+
 if DATABASE_URL:
     # Render/Production : Utiliser PostgreSQL
     logger.info("🚀 Utilisation PostgreSQL pour production")
@@ -29,17 +35,9 @@ if DATABASE_URL:
         pool_timeout=60        # Timeout plus long
     )
 else:
-    # Local : Utiliser SQLite
-    logger.info("🏠 Utilisation SQLite pour développement local")
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    DB_PATH = os.path.join(BASE_DIR, 'covoiturage.db')
-    DATABASE_URL = f"sqlite:///{DB_PATH}"
-    
-    engine = create_engine(
-        DATABASE_URL,
-        connect_args={'check_same_thread': False},
-        poolclass=StaticPool
-    )
+    # Ce code ne devrait plus jamais être exécuté
+    logger.error("❌ ERREUR: PostgreSQL devrait toujours être utilisé")
+    raise Exception("PostgreSQL requis pour éviter les problèmes de synchronisation")
 
 # Création de la session
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
