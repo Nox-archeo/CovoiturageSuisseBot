@@ -117,7 +117,9 @@ class PayPalManager:
                     "locale": "fr-CH",
                     "landing_page": "BILLING",  # 🔥 FORCER affichage toutes options de paiement
                     "shipping_preference": "NO_SHIPPING",
-                    "user_action": "PAY_NOW"
+                    "user_action": "PAY_NOW",
+                    "return_url": return_url,  # 🔥 CRUCIAL: URLs de retour pour éviter rechargement infini
+                    "cancel_url": cancel_url
                 },
                 "purchase_units": [{
                     "reference_id": custom_id or f"trip-{int(time.time())}",
