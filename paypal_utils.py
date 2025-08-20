@@ -144,14 +144,15 @@ class PayPalManager:
                 json=order_data
             )
             
-            if response.status_code == 201:
+            # PayPal peut retourner 200 ou 201 pour un succès
+            if response.status_code in [200, 201]:
                 order_data = response.json()
                 order_id = order_data["id"]
                 
-                # Trouver le lien d'approbation
+                # Trouver le lien d'approbation - peut être "approve" ou "payer-action"
                 approval_url = None
                 for link in order_data.get("links", []):
-                    if link["rel"] == "approve":
+                    if link["rel"] in ["approve", "payer-action"]:
                         approval_url = link["href"]
                         break
                 
