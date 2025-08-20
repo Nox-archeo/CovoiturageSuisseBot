@@ -12,3 +12,34 @@ venv/
 
 # Base de données
 *.db
+
+# 🚨 SÉCURITÉ: Fichiers de diagnostic contenant des URLs de base de données
+check_margaux_bookings.py
+clean_margaux_booking.py
+complete_cleanup.py
+critical_db_check.py
+debug_booking_issue.py
+delete_from_render_postgresql.py
+diagnostic_paypal_rechargement.py
+find_exact_booking.py
+find_margaux_everywhere.py
+find_sebastien.py
+fix_booking.py
+improved_cancellation_system.py
+process_real_refund.py
+real_db_check.py
+system_diagnostic.py
+test_correction_paypal.py
+test_refund_with_user.py
+test_trip_types_comprehensive.py
+verify_trip_types_compatibility.py
+
+# Patterns pour éviter l'exposition d'URLs
+diagnostic_*.py
+test_*.py
+debug_*.py
+fix_*.py
+check_*.py
+find_*.py
+*_diagnostic.py
+*_test.py

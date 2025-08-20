@@ -14,9 +14,10 @@ DATABASE_URL = os.getenv('DATABASE_URL')
 
 # FORCER PostgreSQL TOUJOURS (même en local) pour éviter les problèmes de synchronisation
 if not DATABASE_URL:
-    # Si pas de DATABASE_URL, utiliser PostgreSQL Render directement
-    DATABASE_URL = "postgresql://covoiturage_qw9c_user:UT15TWaumLIVkmHOOakrhSpFhmKH5vaX@dpg-d26ah2muk2gs73bqjnn0-a.oregon-postgres.render.com/covoiturage_qw9c"
-    logger.info("🔧 FORÇAGE PostgreSQL pour éviter les problèmes de synchronisation")
+    # 🚨 ERREUR: Ne jamais exposer l'URL PostgreSQL en dur !
+    # L'URL doit être dans .env ou variables d'environnement Render
+    logger.error("❌ DATABASE_URL manquante ! Configurez la variable d'environnement.")
+    raise ValueError("DATABASE_URL doit être configurée dans .env ou variables d'environnement")
 
 if DATABASE_URL:
     # Render/Production : Utiliser PostgreSQL
