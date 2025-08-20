@@ -323,9 +323,8 @@ async def get_user_stats(user_id):
         
         total_earnings = 0
         for trip in completed_trips:
-        try:
-            # Trouver les réservations confirmées pour ce trajet
             try:
+                # Trouver les réservations confirmées pour ce trajet
                 # Vérifier de façon sécurisée si la colonne is_paid existe
                 bookings = db.query(Booking).filter(
                     Booking.trip_id == trip.id,
@@ -356,9 +355,6 @@ async def get_user_stats(user_id):
                     total_earnings += seats * price * 0.88  # 88% après commission de 12%
             except Exception as booking_error:
                 logger.error(f"Erreur lors de la requête des réservations pour le trajet {trip.id}: {str(booking_error)}")
-        except Exception as e:
-            logger.error(f"Erreur lors du calcul des gains pour le trajet {trip.id}: {str(e)}")
-            # Continuer avec le trajet suivant
     
         stats['earnings'] = total_earnings
     
@@ -2032,4 +2028,5 @@ async def handle_cancel_trip_callback(update: Update, context: CallbackContext):
     except Exception as e:
         logger.error(f"[CANCEL] Exception globale dans handle_cancel_trip_callback : {e}")
         await query.answer("Erreur lors de l'annulation du trajet.", show_alert=True)
+        return PROFILE_MAIN
         return PROFILE_MAIN
