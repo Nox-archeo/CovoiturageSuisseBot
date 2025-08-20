@@ -117,9 +117,7 @@ class PayPalManager:
                     "locale": "fr-CH",
                     "landing_page": "BILLING",  # 🔥 FORCER affichage toutes options de paiement
                     "shipping_preference": "NO_SHIPPING",
-                    "user_action": "PAY_NOW",
-                    "return_url": return_url,  # 🔥 CRUCIAL: URLs de retour pour éviter rechargement infini
-                    "cancel_url": cancel_url
+                    "user_action": "PAY_NOW"
                 },
                 "purchase_units": [{
                     "reference_id": custom_id or f"trip-{int(time.time())}",
@@ -129,12 +127,17 @@ class PayPalManager:
                     },
                     "description": description
                 }],
-                # 🔥 ALTERNATIVE: Ajouter les URLs de retour au niveau racine aussi
+                # 🔥 URLs de retour au niveau racine (approche correcte pour PayPal v2)
                 "payment_source": {
                     "paypal": {
                         "experience_context": {
                             "return_url": return_url,
-                            "cancel_url": cancel_url
+                            "cancel_url": cancel_url,
+                            "brand_name": "CovoiturageSuisse",
+                            "locale": "fr-CH",
+                            "landing_page": "BILLING",
+                            "shipping_preference": "NO_SHIPPING",
+                            "user_action": "PAY_NOW"
                         }
                     }
                 }
