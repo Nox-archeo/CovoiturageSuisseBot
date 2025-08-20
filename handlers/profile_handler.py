@@ -577,7 +577,7 @@ async def show_my_bookings(update: Update, context: CallbackContext):
                     payment_status = 'payé'
                 elif booking.payment_status == 'completed':
                     payment_emoji = '⚠️'
-                    payment_status = 'completed (webhook échoué)'
+                    payment_status = 'completed webhook échoué'
                 elif booking.payment_status == 'pending':
                     payment_emoji = '⏳'
                     payment_status = 'en attente'
@@ -589,8 +589,8 @@ async def show_my_bookings(update: Update, context: CallbackContext):
                 now = datetime.now()
                 time_indicator = '🕒' if trip.departure_time > now else '📅'
                 
-                booking_str = f"{status_emoji} *Réservation {i}:*\n"
-                booking_str += f"📍 {departure_city} → {arrival_city}\n"
+                booking_str = f"{status_emoji} Réservation {i}:\n"
+                booking_str += f"📍 {departure_city} vers {arrival_city}\n"
                 booking_str += f"{time_indicator} {departure_date}\n"
                 booking_str += f"{payment_emoji} Paiement: {payment_status}\n"
                 
@@ -600,7 +600,8 @@ async def show_my_bookings(update: Update, context: CallbackContext):
                 
                 # PayPal ID pour debug si nécessaire
                 if booking.paypal_payment_id and not booking.is_paid:
-                    booking_str += f"🔧 PayPal: {booking.paypal_payment_id[:10]}...\n"
+                    paypal_short = booking.paypal_payment_id[:10] if len(booking.paypal_payment_id) > 10 else booking.paypal_payment_id
+                    booking_str += f"🔧 PayPal: {paypal_short}\n"
                 
                 # Boutons pour cette réservation
                 row_btns = []
