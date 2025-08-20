@@ -71,6 +71,92 @@ class PayPalManager:
             logger.error(f"Erreur lors de la récupération de paiement : {e}")
             return False, None
     
+    def create_payment(self, amount: float, currency: str = "CHF", 
+                      description: str = "Paiement covoiturage",
+                      return_url: str = None, cancel_url: str = None,
+                      custom_id: str = None) -> Tuple[bool, Optional[str], Optional[str]]:
+        """
+        Crée un paiement PayPal moderne avec support carte bancaire
+        
+        Args:
+            amount: Montant du paiement
+            currency: Devise (par défaut CHF)
+            description: Description du paiement
+            return_url: URL de retour après succès
+            cancel_url: URL de retour après annulation
+            custom_id: ID personnalisé pour identifier la réservation
+            
+        Returns:
+            Tuple[success, order_id, approval_url]
+        """
+        try:
+            # URLs par défaut si non fournies
+            if not return_url:
+                return_url = "https://covoituragesuissebot.onrender.com/payment/success"
+            if not cancel_url:
+                cancel_url = "https://covoituragesuissebot.onrender.com/payment/cancel"
+            
+            # Obtenir token d'accès moderne
+            access_token = self.get_access_token()
+            if not access_token:
+                logger.error("Impossible d'obtenir le token d'accès PayPal")
+                return False, None, None
+            
+            # Créer commande moderne avec support carte
+            order_headers = {
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {access_token}",
+                "PayPal-Request-Id": f"covoiturage-{int(time.time())}"
+            }
+            
+            # Configuration spéciale pour FORCER l'affichage carte bancaire ET solde PayPal
+            order_data = {
+                "intent": "CAPTURE",
+                "application_context": {
+                    "brand_name": "CovoiturageSuisse",
+                    "locale": "fr-CH",
+                    "landing_page": "BILLING",  # 🔥 FORCER affichage toutes options de paiement
+                    "shipping_preference": "NO_SHIPPING",
+                    "user_action": "PAY_NOW"
+                },
+                "purchase_units": [{
+                    "reference_id": custom_id or f"trip-{int(time.time())}",
+                    "amount": {
+                        "currency_code": currency,
+                        "value": f"{amount:.2f}"
+                    },
+                    "description": description
+                }]
+            }
+            
+            response = requests.post(
+                f"{self.base_url}/v2/checkout/orders",
+                headers=order_headers,
+                json=order_data
+            )
+            
+            if response.status_code == 201:
+                order_data = response.json()
+                order_id = order_data["id"]
+                
+                # Trouver le lien d'approbation
+                approval_url = None
+                for link in order_data.get("links", []):
+                    if link["rel"] == "approve":
+                        approval_url = link["href"]
+                        break
+                
+                logger.info(f"Commande PayPal créée avec succès : {order_id}")
+                return True, order_id, approval_url
+            else:
+                logger.error(f"Erreur lors de la création de la commande PayPal : {response.status_code}")
+                logger.error(response.text)
+                return False, None, None
+                
+        except Exception as e:
+            logger.error(f"Erreur lors de la création du paiement PayPal : {e}")
+            return False, None, None
+    
     async def process_refund(self, payment_id: str, refund_amount: float, recipient_email: str, reason: str = None) -> Dict[str, Any]:
         """
         Traite un remboursement automatique pour une annulation de réservation
@@ -146,109 +232,6 @@ class PayPalManager:
                 'success': False,
                 'error': f'Erreur technique: {str(e)}'
             }
-
-
-# Instance globale
-paypal_manager = PayPalManager()
-
-def pay_driver(driver_email: str, trip_amount: float) -> Tuple[bool, Optional[str]]:
-    
-    def create_payment(self, amount: float, currency: str = "CHF", 
-                      description: str = "Paiement covoiturage",
-                      return_url: str = None, cancel_url: str = None,
-                      custom_id: str = None) -> Tuple[bool, Optional[str], Optional[str]]:
-        """
-        Crée un paiement PayPal moderne avec support carte bancaire
-        
-        Args:
-            amount: Montant du paiement
-            currency: Devise (par défaut CHF)
-            description: Description du paiement
-            return_url: URL de retour après succès
-            cancel_url: URL de retour après annulation
-            custom_id: ID personnalisé pour identifier la réservation
-            
-        Returns:
-            Tuple[success, order_id, approval_url]
-        """
-        try:
-            # URLs par défaut si non fournies
-            if not return_url:
-                return_url = "https://covoituragesuissebot.onrender.com/payment/success"
-            if not cancel_url:
-                cancel_url = "https://covoituragesuissebot.onrender.com/payment/cancel"
-            
-            # Obtenir token d'accès moderne
-            access_token = self.get_access_token()
-            if not access_token:
-                logger.error("Impossible d'obtenir le token d'accès PayPal")
-                return False, None, None
-            
-            # Créer commande moderne avec support carte
-            order_headers = {
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {access_token}",
-                "PayPal-Request-Id": f"covoiturage-{int(time.time())}"
-            }
-            
-            # Configuration spéciale pour FORCER l'affichage carte bancaire ET solde PayPal
-            order_data = {
-                "intent": "CAPTURE",
-                "application_context": {
-                    "brand_name": "CovoiturageSuisse",
-                    "locale": "fr-CH",
-                    "landing_page": "BILLING",  # 🔥 FORCER affichage toutes options de paiement
-                    "shipping_preference": "NO_SHIPPING",
-                    "user_action": "PAY_NOW",
-                    "payment_method": {
-                        "payee_preferred": "UNRESTRICTED",  # 🔥 ACCEPTER TOUS les types de paiement
-                        "payer_selected": "PAYPAL"
-                    },
-                    "return_url": return_url,
-                    "cancel_url": cancel_url
-                },
-                "purchase_units": [{
-                    "reference_id": "covoiturage_payment",
-                    "description": description,
-                    "custom_id": custom_id,  # 🔥 CRUCIAL: ID de la réservation pour webhook
-                    "amount": {
-                        "currency_code": currency,
-                        "value": f"{amount:.2f}"
-                    }
-                }]
-            }
-            
-            order_response = requests.post(
-                f"{self.base_url}/v2/checkout/orders",
-                headers=order_headers,
-                json=order_data
-            )
-            
-            if order_response.status_code == 201:
-                order = order_response.json()
-                order_id = order["id"]
-                
-                # Trouver URL d'approbation
-                approval_url = None
-                for link in order.get("links", []):
-                    if link["rel"] == "approve":
-                        approval_url = link["href"]
-                        break
-                
-                if approval_url:
-                    logger.info(f"Commande PayPal créée avec succès : {order_id}")
-                    return True, order_id, approval_url
-                else:
-                    logger.error("URL d'approbation non trouvée")
-                    return False, None, None
-            else:
-                logger.error(f"Erreur création commande : {order_response.status_code}")
-                logger.error(order_response.text)
-                return False, None, None
-                
-        except Exception as e:
-            logger.error(f"Erreur lors de la création du paiement PayPal : {e}")
-            return False, None, None
 
     def find_payment(self, payment_id: str) -> Tuple[bool, Optional[Dict]]:
         """
@@ -759,3 +742,6 @@ def execute_payment(payment_id: str, payer_id: str) -> Tuple[bool, Optional[Dict
     except Exception as e:
         logger.error(f"Erreur execute_payment: {e}")
         return False, None
+
+# Instance globale PayPal
+paypal_manager = PayPalManager()
