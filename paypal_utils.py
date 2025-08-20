@@ -68,8 +68,90 @@ class PayPalManager:
                 return None
                 
         except Exception as e:
-            logger.error(f"Erreur lors de l'obtention du token PayPal : {e}")
-            return None
+            logger.error(f"Erreur lors de la récupération de paiement : {e}")
+            return False, None
+    
+    async def process_refund(self, payment_id: str, refund_amount: float, recipient_email: str, reason: str = None) -> Dict[str, Any]:
+        """
+        Traite un remboursement automatique pour une annulation de réservation
+        
+        Args:
+            payment_id: ID du paiement PayPal original
+            refund_amount: Montant à rembourser
+            recipient_email: Email PayPal du destinataire
+            reason: Raison du remboursement
+            
+        Returns:
+            Dict contenant success (bool), refund_id, error message
+        """
+        try:
+            logger.info(f"🔄 Traitement remboursement: {refund_amount:.2f} CHF vers {recipient_email}")
+            
+            # Récupérer les détails du paiement pour trouver le capture_id
+            success, payment_details = self.find_payment(payment_id)
+            
+            if not success or not payment_details:
+                return {
+                    'success': False,
+                    'error': 'Paiement original non trouvé'
+                }
+            
+            # Extraire le capture_id depuis les détails du paiement
+            capture_id = None
+            
+            # Structure pour commandes v2
+            if 'purchase_units' in payment_details:
+                for unit in payment_details['purchase_units']:
+                    if 'payments' in unit and 'captures' in unit['payments']:
+                        for capture in unit['payments']['captures']:
+                            if capture.get('status') == 'COMPLETED':
+                                capture_id = capture['id']
+                                break
+                    if capture_id:
+                        break
+            
+            if not capture_id:
+                return {
+                    'success': False,
+                    'error': 'Aucune capture trouvée pour ce paiement'
+                }
+            
+            logger.info(f"💡 Capture ID trouvé: {capture_id}")
+            
+            # Effectuer le remboursement
+            success, refund_data = self.refund_payment(
+                capture_id=capture_id,
+                amount=refund_amount,
+                currency="CHF"
+            )
+            
+            if success and refund_data:
+                return {
+                    'success': True,
+                    'refund_id': refund_data.get('id'),
+                    'status': refund_data.get('status'),
+                    'amount': refund_amount,
+                    'currency': 'CHF',
+                    'recipient_email': recipient_email
+                }
+            else:
+                return {
+                    'success': False,
+                    'error': 'Échec du traitement PayPal'
+                }
+                
+        except Exception as e:
+            logger.error(f"❌ Erreur process_refund: {e}")
+            return {
+                'success': False,
+                'error': f'Erreur technique: {str(e)}'
+            }
+
+
+# Instance globale
+paypal_manager = PayPalManager()
+
+def pay_driver(driver_email: str, trip_amount: float) -> Tuple[bool, Optional[str]]:
     
     def create_payment(self, amount: float, currency: str = "CHF", 
                       description: str = "Paiement covoiturage",

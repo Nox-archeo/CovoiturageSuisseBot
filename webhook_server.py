@@ -522,6 +522,23 @@ async def setup_all_handlers_complete(application):
     except Exception as e:
         logger.warning(f"⚠️ Handlers PayPal: {e}")
     
+    # Handlers d'annulation de réservation avec remboursement automatique
+    try:
+        from handlers.booking_cancellation_handlers import (
+            booking_cancellation_handler,
+            confirm_cancellation_handler,
+            add_paypal_handler
+        )
+        from handlers.paypal_email_handler import paypal_email_handler
+        
+        application.add_handler(booking_cancellation_handler)
+        application.add_handler(confirm_cancellation_handler) 
+        application.add_handler(add_paypal_handler)
+        application.add_handler(paypal_email_handler)
+        logger.info("✅ Handlers d'annulation de réservation configurés")
+    except Exception as e:
+        logger.warning(f"⚠️ Handlers d'annulation: {e}")
+    
     # Configuration des commandes du menu hamburger (EXACTEMENT comme bot.py.backup)
     from telegram import BotCommand
     commands = [
