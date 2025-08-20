@@ -589,7 +589,7 @@ async def show_my_bookings(update: Update, context: CallbackContext):
                 now = datetime.now()
                 time_indicator = '🕒' if trip.departure_time > now else '📅'
                 
-                booking_str = f"{status_emoji} **Réservation {i}:**\n"
+                booking_str = f"{status_emoji} *Réservation {i}:*\n"
                 booking_str += f"📍 {departure_city} → {arrival_city}\n"
                 booking_str += f"{time_indicator} {departure_date}\n"
                 booking_str += f"{payment_emoji} Paiement: {payment_status}\n"
