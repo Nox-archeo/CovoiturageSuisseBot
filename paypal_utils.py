@@ -250,6 +250,74 @@ def pay_driver(driver_email: str, trip_amount: float) -> Tuple[bool, Optional[st
             logger.error(f"Erreur lors de la création du paiement PayPal : {e}")
             return False, None, None
 
+    def find_payment(self, payment_id: str) -> Tuple[bool, Optional[Dict]]:
+        """
+        Trouve les détails d'un paiement PayPal par son ID
+        
+        Args:
+            payment_id: ID du paiement PayPal
+            
+        Returns:
+            Tuple[success, payment_details]
+        """
+        try:
+            # Obtenir token d'accès
+            credentials = f"{self.client_id}:{self.client_secret}"
+            encoded_credentials = base64.b64encode(credentials.encode()).decode()
+            
+            token_headers = {
+                "Accept": "application/json",
+                "Accept-Language": "en_US",
+                "Authorization": f"Basic {encoded_credentials}"
+            }
+            
+            token_response = requests.post(
+                f"{self.base_url}/v1/oauth2/token",
+                headers=token_headers,
+                data="grant_type=client_credentials"
+            )
+            
+            if token_response.status_code != 200:
+                logger.error(f"Erreur token PayPal : {token_response.status_code}")
+                return False, None
+            
+            access_token = token_response.json()["access_token"]
+            
+            # Récupérer les détails du paiement/commande
+            payment_headers = {
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {access_token}"
+            }
+            
+            # Essayer d'abord comme commande v2
+            payment_response = requests.get(
+                f"{self.base_url}/v2/checkout/orders/{payment_id}",
+                headers=payment_headers
+            )
+            
+            if payment_response.status_code == 200:
+                payment_data = payment_response.json()
+                logger.info(f"Détails de commande PayPal récupérés : {payment_id}")
+                return True, payment_data
+            else:
+                # Essayer comme capture directe
+                capture_response = requests.get(
+                    f"{self.base_url}/v2/payments/captures/{payment_id}",
+                    headers=payment_headers
+                )
+                
+                if capture_response.status_code == 200:
+                    capture_data = capture_response.json()
+                    logger.info(f"Détails de capture PayPal récupérés : {payment_id}")
+                    return True, capture_data
+                else:
+                    logger.error(f"Paiement PayPal non trouvé : {payment_id}")
+                    return False, None
+                    
+        except Exception as e:
+            logger.error(f"Erreur lors de la recherche du paiement PayPal : {e}")
+            return False, None
+
     def capture_order(self, order_id: str) -> Tuple[bool, Optional[Dict]]:
         """
         Capture une commande PayPal approuvée

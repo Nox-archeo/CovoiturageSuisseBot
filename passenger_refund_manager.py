@@ -76,18 +76,31 @@ async def process_passenger_refund(booking_id: int, bot=None) -> bool:
             # Envoyer une notification au passager
             if bot and passenger.telegram_id:
                 try:
-                    telegram_bot = bot.bot if hasattr(bot, 'bot') else bot
-                    await telegram_bot.send_message(
-                        chat_id=passenger.telegram_id,
-                        text=f"💰 **Remboursement confirmé !**\n\n"
-                             f"Votre remboursement de {refund_amount:.2f} CHF "
-                             f"a été traité avec succès.\n\n"
-                             f"📧 Envoyé sur: {passenger.paypal_email}\n"
-                             f"🆔 Référence: {refund_result.get('refund_id', 'N/A')}\n\n"
-                             f"⏱️ Le montant apparaîtra sur votre compte PayPal "
-                             f"dans les minutes qui suivent.",
-                        parse_mode='Markdown'
-                    )
+                    # Utiliser la méthode correcte selon le type de bot
+                    if hasattr(bot, 'send_message'):
+                        await bot.send_message(
+                            chat_id=passenger.telegram_id,
+                            text=f"💰 **Remboursement confirmé !**\n\n"
+                                 f"Votre remboursement de {refund_amount:.2f} CHF "
+                                 f"a été traité avec succès.\n\n"
+                                 f"📧 Envoyé sur: {passenger.paypal_email}\n"
+                                 f"🆔 Référence: {refund_result.get('refund_id', 'N/A')}\n\n"
+                                 f"⏱️ Le montant apparaîtra sur votre compte PayPal "
+                                 f"dans les minutes qui suivent.",
+                            parse_mode='Markdown'
+                        )
+                    elif hasattr(bot, 'bot') and hasattr(bot.bot, 'send_message'):
+                        await bot.bot.send_message(
+                            chat_id=passenger.telegram_id,
+                            text=f"💰 **Remboursement confirmé !**\n\n"
+                                 f"Votre remboursement de {refund_amount:.2f} CHF "
+                                 f"a été traité avec succès.\n\n"
+                                 f"📧 Envoyé sur: {passenger.paypal_email}\n"
+                                 f"🆔 Référence: {refund_result.get('refund_id', 'N/A')}\n\n"
+                                 f"⏱️ Le montant apparaîtra sur votre compte PayPal "
+                                 f"dans les minutes qui suivent.",
+                            parse_mode='Markdown'
+                        )
                     logger.info(f"✅ Notification remboursement envoyée au passager {passenger.telegram_id}")
                 except Exception as e:
                     logger.error(f"❌ Erreur notification passager: {e}")
@@ -101,18 +114,31 @@ async def process_passenger_refund(booking_id: int, bot=None) -> bool:
             # Envoyer une notification d'échec
             if bot and passenger.telegram_id:
                 try:
-                    telegram_bot = bot.bot if hasattr(bot, 'bot') else bot
-                    await telegram_bot.send_message(
-                        chat_id=passenger.telegram_id,
-                        text=f"⚠️ **Problème de remboursement**\n\n"
-                             f"Le remboursement automatique de {refund_amount:.2f} CHF "
-                             f"a échoué.\n\n"
-                             f"🔧 **Raison:** {error_msg}\n\n"
-                             f"💬 **Action requise:** Contactez le support avec "
-                             f"le numéro de réservation #{booking_id}.\n\n"
-                             f"📧 Votre email PayPal: {passenger.paypal_email}",
-                        parse_mode='Markdown'
-                    )
+                    # Utiliser la méthode correcte selon le type de bot
+                    if hasattr(bot, 'send_message'):
+                        await bot.send_message(
+                            chat_id=passenger.telegram_id,
+                            text=f"⚠️ **Problème de remboursement**\n\n"
+                                 f"Le remboursement automatique de {refund_amount:.2f} CHF "
+                                 f"a échoué.\n\n"
+                                 f"🔧 **Raison:** {error_msg}\n\n"
+                                 f"💬 **Action requise:** Contactez le support avec "
+                                 f"le numéro de réservation #{booking_id}.\n\n"
+                                 f"📧 Votre email PayPal: {passenger.paypal_email}",
+                            parse_mode='Markdown'
+                        )
+                    elif hasattr(bot, 'bot') and hasattr(bot.bot, 'send_message'):
+                        await bot.bot.send_message(
+                            chat_id=passenger.telegram_id,
+                            text=f"⚠️ **Problème de remboursement**\n\n"
+                                 f"Le remboursement automatique de {refund_amount:.2f} CHF "
+                                 f"a échoué.\n\n"
+                                 f"🔧 **Raison:** {error_msg}\n\n"
+                                 f"💬 **Action requise:** Contactez le support avec "
+                                 f"le numéro de réservation #{booking_id}.\n\n"
+                                 f"📧 Votre email PayPal: {passenger.paypal_email}",
+                            parse_mode='Markdown'
+                        )
                 except Exception as e:
                     logger.error(f"❌ Erreur notification échec: {e}")
             
