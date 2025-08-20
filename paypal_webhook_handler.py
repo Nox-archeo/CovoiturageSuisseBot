@@ -5,7 +5,7 @@ Webhook PayPal pour détecter les nouveaux paiements et déclencher les rembours
 
 import logging
 from datetime import datetime
-from database.models import Booking, Trip
+from database.models import Booking, Trip, User
 from database import get_db
 from fixed_auto_refund_manager import trigger_automatic_refunds_fixed
 
@@ -92,36 +92,46 @@ async def handle_payment_completion(payment_id: str, bot=None) -> bool:
         
         # Envoyer notifications
         if bot:
-            # Notification au passager
+            # Notification au passager - CORRECTION: utiliser telegram_id
             try:
                 # Si c'est une Application, utiliser bot.bot, sinon utiliser bot directement
                 telegram_bot = bot.bot if hasattr(bot, 'bot') else bot
                 
-                await telegram_bot.send_message(
-                    chat_id=booking.passenger_id,
-                    text=f"✅ *Réservation confirmée !*\n\n"
-                         f"Votre paiement a été traité avec succès.\n"
-                         f"Détails de votre réservation #{booking.id}",
-                    parse_mode='Markdown'
-                )
-                logger.info(f"✅ Notification envoyée au passager {booking.passenger_id}")
+                # Récupérer l'utilisateur passager pour avoir son telegram_id
+                passenger = db.query(User).filter(User.id == booking.passenger_id).first()
+                if passenger and passenger.telegram_id:
+                    await telegram_bot.send_message(
+                        chat_id=passenger.telegram_id,
+                        text=f"✅ *Réservation confirmée !*\n\n"
+                             f"Votre paiement a été traité avec succès.\n"
+                             f"Détails de votre réservation #{booking.id}",
+                        parse_mode='Markdown'
+                    )
+                    logger.info(f"✅ Notification envoyée au passager telegram_id={passenger.telegram_id}")
+                else:
+                    logger.error(f"❌ Passager non trouvé ou telegram_id manquant: passenger_id={booking.passenger_id}")
             except Exception as e:
                 logger.error(f"❌ Erreur notification passager: {e}")
             
-            # Notification au conducteur (récupérer le trip pour avoir les infos du conducteur)
+            # Notification au conducteur - CORRECTION: utiliser telegram_id
             trip = db.query(Trip).filter(Trip.id == booking.trip_id).first()
             if trip:
                 try:
                     telegram_bot = bot.bot if hasattr(bot, 'bot') else bot
                     
-                    await telegram_bot.send_message(
-                        chat_id=trip.driver_id,
-                        text=f"🎉 *Nouvelle réservation confirmée !*\n\n"
-                             f"Un passager a confirmé sa réservation pour votre trajet.\n"
-                             f"Réservation #{booking.id}",
-                        parse_mode='Markdown'
-                    )
-                    logger.info(f"✅ Notification envoyée au conducteur {trip.driver_id}")
+                    # Récupérer l'utilisateur conducteur pour avoir son telegram_id
+                    driver = db.query(User).filter(User.id == trip.driver_id).first()
+                    if driver and driver.telegram_id:
+                        await telegram_bot.send_message(
+                            chat_id=driver.telegram_id,
+                            text=f"🎉 *Nouvelle réservation confirmée !*\n\n"
+                                 f"Un passager a confirmé sa réservation pour votre trajet.\n"
+                                 f"Réservation #{booking.id}",
+                            parse_mode='Markdown'
+                        )
+                        logger.info(f"✅ Notification envoyée au conducteur telegram_id={driver.telegram_id}")
+                    else:
+                        logger.error(f"❌ Conducteur non trouvé ou telegram_id manquant: driver_id={trip.driver_id}")
                 except Exception as e:
                     logger.error(f"❌ Erreur notification conducteur: {e}")
         
