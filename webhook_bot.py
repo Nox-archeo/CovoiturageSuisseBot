@@ -263,6 +263,15 @@ async def handle_payment_completed(data: dict):
         booking.payment_status = 'completed'
         booking.status = 'confirmed'
         booking.paid_at = datetime.utcnow()
+        
+        # CORRECTION CRITIQUE: Décrémenter les places disponibles du trajet
+        trip = booking.trip
+        if trip and trip.seats_available > 0:
+            trip.seats_available -= 1
+            logger.info(f"🔽 Places décrémentées: {trip.seats_available + 1} → {trip.seats_available} pour trajet {trip.id}")
+        else:
+            logger.warning(f"⚠️ Impossible de décrémenter les places du trajet {trip.id if trip else 'None'}")
+        
         db.commit()
         
         logger.info(f"✅ Paiement complété pour la réservation {booking.id}, trajet {booking.trip_id}")
@@ -361,6 +370,15 @@ async def handle_payment_completed(data: dict):
             )
         
         logger.info(f"Paiement {custom_id} traité avec succès")
+        
+        # NOUVEAU: Ajouter les boutons de communication post-réservation
+        try:
+            logger.info("🔄 Ajout des boutons de communication post-réservation...")
+            from post_booking_communication import add_post_booking_communication
+            await add_post_booking_communication(booking.id, telegram_app.bot)
+            logger.info("✅ Boutons de communication ajoutés avec succès")
+        except Exception as comm_error:
+            logger.error(f"❌ Erreur ajout boutons communication: {comm_error}")
         
     except Exception as e:
         logger.error(f"Erreur traitement paiement complété: {e}")

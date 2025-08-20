@@ -539,6 +539,28 @@ async def setup_all_handlers_complete(application):
     except Exception as e:
         logger.warning(f"⚠️ Handlers d'annulation: {e}")
     
+    # Handlers de communication post-réservation
+    try:
+        from handlers.post_booking_handlers import (
+            handle_contact_driver,
+            handle_contact_passenger,
+            handle_meeting_point,
+            handle_cancel_booking_with_refund,
+            handle_confirm_cancel,
+            handle_trip_details
+        )
+        
+        application.add_handler(CallbackQueryHandler(handle_contact_driver, pattern="^contact_driver:"))
+        application.add_handler(CallbackQueryHandler(handle_contact_passenger, pattern="^contact_passenger:"))
+        application.add_handler(CallbackQueryHandler(handle_meeting_point, pattern="^meeting_point:"))
+        application.add_handler(CallbackQueryHandler(handle_cancel_booking_with_refund, pattern="^cancel_booking:"))
+        application.add_handler(CallbackQueryHandler(handle_confirm_cancel, pattern="^confirm_cancel:"))
+        application.add_handler(CallbackQueryHandler(handle_trip_details, pattern="^trip_details:"))
+        
+        logger.info("✅ Handlers de communication post-réservation configurés")
+    except Exception as e:
+        logger.warning(f"⚠️ Handlers de communication: {e}")
+    
     # Configuration des commandes du menu hamburger (EXACTEMENT comme bot.py.backup)
     from telegram import BotCommand
     commands = [
