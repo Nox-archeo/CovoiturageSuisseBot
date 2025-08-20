@@ -538,9 +538,17 @@ async def show_my_bookings(update: Update, context: CallbackContext):
             return PROFILE_MAIN
         
         # 🔥 CORRECTION: Récupérer TOUTES les réservations avec infos de paiement
+        # DEBUG: Log de la configuration de base de données
+        import os
+        database_url = os.getenv('DATABASE_URL', 'NOT_SET')
+        logger.info(f"🔍 [DEBUG] DATABASE_URL utilisée: {database_url[:50]}...")
+        logger.info(f"🔍 [DEBUG] User ID recherché: {user.id}")
+        
         bookings = db.query(Booking).filter(
             Booking.passenger_id == user.id
         ).join(Trip).order_by(Trip.departure_time.desc()).limit(20).all()
+        
+        logger.info(f"🔍 [DEBUG] Nombre de réservations trouvées: {len(bookings)}")
         
         if not bookings:
             message = "🎫 *Mes réservations :*\n\nAucune réservation trouvée.\n\n💡 Réservez votre première place avec /chercher_trajet"
