@@ -1144,32 +1144,34 @@ async def get_pending_payments():
 
 @app.post("/admin/cleanup-bookings")
 async def cleanup_duplicate_bookings():
-    """Supprimer les réservations dupliquées non payées"""
+    """Supprimer TOUTES les réservations de test de l'utilisateur ID 1"""
     try:
         from database.db_manager import get_db
         from database.models import Booking
         
         db = get_db()
         
-        # Supprimer les réservations non payées sans PayPal ID
-        deleted_bookings = db.query(Booking).filter(
-            Booking.passenger_id == 5932296330,
-            Booking.payment_status != 'completed',
-            Booking.is_paid == False,
-            Booking.paypal_payment_id.is_(None)
+        # Supprimer TOUTES les réservations de l'utilisateur ID 1 (Margaux)
+        all_bookings = db.query(Booking).filter(
+            Booking.passenger_id == 1
         ).all()
         
-        deleted_ids = [b.id for b in deleted_bookings]
+        deleted_ids = [b.id for b in all_bookings]
+        deleted_count = len(all_bookings)
         
-        # Supprimer
-        for booking in deleted_bookings:
+        print(f"🗑️ Suppression de {deleted_count} réservations pour l'utilisateur ID 1")
+        
+        # Supprimer toutes les réservations
+        for booking in all_bookings:
             db.delete(booking)
         
         db.commit()
         
+        print(f"✅ {deleted_count} réservations supprimées avec succès!")
+        
         return {
             "success": True,
-            "message": f"Supprimé {len(deleted_bookings)} réservations non payées",
+            "message": f"Supprimé {deleted_count} réservations de test",
             "deleted_booking_ids": deleted_ids
         }
         
