@@ -51,7 +51,7 @@ async def handle_contact_driver(update: Update, context: CallbackContext):
         
         message = (
             f"👤 **Contact Conducteur**\n\n"
-            f"**Nom:** {driver.first_name or 'Non renseigné'}\n"
+            f"**Nom:** {driver.full_name or driver.username or 'Non renseigné'}\n"
             f"**Contact:**\n{contact_text}\n\n"
             f"📍 **Trajet:** {trip.departure_city} → {trip.arrival_city}\n"
             f"📅 **Date:** {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}"
@@ -101,7 +101,7 @@ async def handle_contact_passenger(update: Update, context: CallbackContext):
         
         message = (
             f"👤 **Contact Passager**\n\n"
-            f"**Nom:** {passenger.first_name or 'Non renseigné'}\n"
+            f"**Nom:** {passenger.full_name or passenger.username or 'Non renseigné'}\n"
             f"**Contact:**\n{contact_text}\n\n"
             f"💰 **Montant payé:** {booking.total_price:.2f} CHF\n"
             f"📅 **Réservation:** #{booking_id}"

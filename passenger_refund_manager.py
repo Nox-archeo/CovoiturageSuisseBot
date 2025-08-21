@@ -69,6 +69,12 @@ async def process_passenger_refund(booking_id: int, bot=None) -> bool:
             booking.status = 'cancelled'
             booking.payment_status = 'refunded'
             
+            # CORRECTION CRITIQUE: Remettre la place disponible
+            trip = booking.trip
+            if trip:
+                trip.seats_available += 1
+                logger.info(f"🔼 Place remise: {trip.seats_available - 1} → {trip.seats_available} pour trajet {trip.id}")
+            
             db.commit()
             
             logger.info(f"✅ Remboursement réussi: {refund_amount:.2f} CHF vers {passenger.paypal_email}")
@@ -104,6 +110,37 @@ async def process_passenger_refund(booking_id: int, bot=None) -> bool:
                     logger.info(f"✅ Notification remboursement envoyée au passager {passenger.telegram_id}")
                 except Exception as e:
                     logger.error(f"❌ Erreur notification passager: {e}")
+            
+            # NOUVEAU: Notifier le conducteur de l'annulation
+            trip = booking.trip
+            if bot and trip and trip.driver and trip.driver.telegram_id:
+                try:
+                    driver_message = (
+                        f"⚠️ **Annulation de réservation**\n\n"
+                        f"**Passager:** {passenger.full_name or passenger.username or 'Nom non disponible'}\n"
+                        f"**Trajet:** {trip.departure_city} → {trip.arrival_city}\n"
+                        f"**Date:** {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
+                        f"**Montant remboursé:** {refund_amount:.2f} CHF\n\n"
+                        f"📍 **Places disponibles:** {trip.seats_available + 1} → {trip.seats_available + 1}\n"
+                        f"💡 La place est à nouveau disponible pour d'autres passagers."
+                    )
+                    
+                    if hasattr(bot, 'send_message'):
+                        await bot.send_message(
+                            chat_id=trip.driver.telegram_id,
+                            text=driver_message,
+                            parse_mode='Markdown'
+                        )
+                    elif hasattr(bot, 'bot') and hasattr(bot.bot, 'send_message'):
+                        await bot.bot.send_message(
+                            chat_id=trip.driver.telegram_id,
+                            text=driver_message,
+                            parse_mode='Markdown'
+                        )
+                    
+                    logger.info(f"✅ Notification annulation envoyée au conducteur {trip.driver.telegram_id}")
+                except Exception as e:
+                    logger.error(f"❌ Erreur notification conducteur: {e}")
             
             return True
         

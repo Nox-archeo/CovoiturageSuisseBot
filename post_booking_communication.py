@@ -46,17 +46,19 @@ async def add_post_booking_communication(booking_id: int, bot):
             
             driver_contact = ""
             if driver:
+                # Afficher le nom complet et les contacts
+                driver_name = driver.full_name or driver.username or f"Conducteur #{driver.id}"
                 contact_info = []
+                
                 if driver.username:
                     contact_info.append(f"@{driver.username}")
                 if driver.phone:
                     contact_info.append(f"📞 {driver.phone}")
                 
                 if contact_info:
-                    driver_contact = f"👤 **Conducteur:** {' | '.join(contact_info)}\n"
+                    driver_contact = f"👤 **Conducteur:** {driver_name}\n📱 **Contact:** {' | '.join(contact_info)}\n"
                 else:
-                    driver_name = driver.first_name or driver.username or 'Nom non disponible'
-                    driver_contact = f"👤 **Conducteur:** {driver_name}\n"
+                    driver_contact = f"👤 **Conducteur:** {driver_name}\n📱 **Contact:** Via boutons ci-dessous\n"
             
             passenger_message = (
                 f"🎉 **Réservation confirmée #{booking_id}**\n\n"
@@ -85,17 +87,19 @@ async def add_post_booking_communication(booking_id: int, bot):
             
             passenger_contact = ""
             if passenger:
+                # Afficher le nom complet et les contacts
+                passenger_name = passenger.full_name or passenger.username or f"Passager #{passenger.id}"
                 contact_info = []
+                
                 if passenger.username:
                     contact_info.append(f"@{passenger.username}")
                 if passenger.phone:
                     contact_info.append(f"📞 {passenger.phone}")
                 
                 if contact_info:
-                    passenger_contact = f"👤 **Passager:** {' | '.join(contact_info)}\n"
+                    passenger_contact = f"👤 **Passager:** {passenger_name}\n📱 **Contact:** {' | '.join(contact_info)}\n"
                 else:
-                    passenger_name = passenger.first_name or passenger.username or 'Nom non disponible'
-                    passenger_contact = f"👤 **Passager:** {passenger_name}\n"
+                    passenger_contact = f"👤 **Passager:** {passenger_name}\n📱 **Contact:** Via boutons ci-dessous\n"
             
             # Compter le total de passagers payants
             total_paid_passengers = db.query(Booking).filter(
