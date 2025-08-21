@@ -46,7 +46,7 @@ async def handle_contact_driver(update: Update, context: CallbackContext):
         # Bouton pour envoyer un message direct
         keyboard = [
             [InlineKeyboardButton("💬 Envoyer un message", callback_data=f"send_message_driver:{trip_id}")],
-            [InlineKeyboardButton("🔙 Retour", callback_data=f"trip_details:{trip_id}")]
+            [InlineKeyboardButton("🔙 Retour réservations", callback_data="profile:my_bookings")]
         ]
         
         message = (
@@ -314,3 +314,55 @@ async def handle_trip_details(update: Update, context: CallbackContext):
     except Exception as e:
         logger.error(f"Erreur trip_details: {e}")
         await query.edit_message_text("❌ Erreur lors de l'affichage des détails")
+
+async def handle_send_message_driver(update: Update, context: CallbackContext):
+    """Gère l'envoi de message au conducteur"""
+    query = update.callback_query
+    await query.answer()
+    
+    try:
+        trip_id = int(query.data.split(':')[1])
+        db = get_db()
+        trip = db.query(Trip).filter(Trip.id == trip_id).first()
+        
+        if not trip or not trip.driver:
+            await query.edit_message_text("❌ Conducteur non trouvé")
+            return
+        
+        driver = trip.driver
+        passenger_user = db.query(User).filter(User.telegram_id == query.from_user.id).first()
+        
+        if not passenger_user:
+            await query.edit_message_text("❌ Utilisateur non trouvé")
+            return
+        
+        # Interface pour envoyer un message
+        keyboard = [
+            [InlineKeyboardButton("🔙 Retour contact", callback_data=f"contact_driver:{trip_id}")]
+        ]
+        
+        message = (
+            f"💬 **Envoyer un message à {driver.full_name or driver.username or 'conducteur'}**\n\n"
+            f"📍 **Trajet:** {trip.departure_city} → {trip.arrival_city}\n"
+            f"📅 **Date:** {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n\n"
+            f"✍️ **Tapez votre message ci-dessous et envoyez-le.**\n"
+            f"Le message sera transmis automatiquement au conducteur."
+        )
+        
+        await query.edit_message_text(
+            text=message,
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode='Markdown'
+        )
+        
+        # Stocker les infos pour le prochain message
+        context.user_data['messaging_driver'] = {
+            'driver_id': driver.telegram_id,
+            'driver_name': driver.full_name or driver.username or 'conducteur',
+            'trip_id': trip_id,
+            'passenger_name': passenger_user.full_name or passenger_user.username or 'passager'
+        }
+        
+    except Exception as e:
+        logger.error(f"Erreur send_message_driver: {e}")
+        await query.edit_message_text("❌ Erreur lors de l'envoi du message")

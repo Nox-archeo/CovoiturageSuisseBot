@@ -135,6 +135,16 @@ async def handle_payment_completion(payment_id: str, bot=None) -> bool:
                 except Exception as e:
                     logger.error(f"❌ Erreur notification conducteur: {e}")
         
+        # NOUVEAU: Ajouter les boutons de communication post-réservation
+        try:
+            logger.info(f"🔄 Ajout des boutons de communication pour réservation {booking.id}...")
+            from post_booking_communication import add_post_booking_communication
+            telegram_bot = bot.bot if hasattr(bot, 'bot') else bot
+            await add_post_booking_communication(booking.id, telegram_bot)
+            logger.info(f"✅ Boutons de communication ajoutés pour réservation {booking.id}")
+        except Exception as comm_error:
+            logger.error(f"❌ Erreur ajout boutons communication: {comm_error}")
+        
         # Déclencher les remboursements automatiques si nécessaire
         await trigger_automatic_refunds_fixed(booking.trip_id, bot)
         
