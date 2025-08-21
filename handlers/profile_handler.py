@@ -504,13 +504,22 @@ async def show_my_trips(update: Update, context: CallbackContext):
                 parse_mode=ParseMode.MARKDOWN
             )
             return PROFILE_MAIN
-        # Construction du message et du clavier
+        # Construction du message et du clavier AVEC boutons individuels sous chaque trajet
         text = "🚗 *Mes trajets à venir :*"
         reply_markup_rows = []
-        for b in active_blocks:
-            text += f"\n\n{b['text']}"
-            if b['buttons']:
-                reply_markup_rows.append(b['buttons'])
+        
+        for block in active_blocks:
+            text += f"\n\n{block['text']}"
+            
+            # Ajouter les boutons de ce trajet DIRECTEMENT après son texte
+            if block['buttons']:
+                # Organiser les boutons en lignes (max 2 boutons par ligne)
+                buttons = block['buttons']
+                for j in range(0, len(buttons), 2):
+                    button_row = buttons[j:j+2]
+                    reply_markup_rows.append(button_row)
+        
+        # Boutons de navigation À LA FIN
         reply_markup_rows.append([InlineKeyboardButton("➕ Créer un trajet", callback_data="menu:create")])
         reply_markup_rows.append([InlineKeyboardButton("⬅️ Retour au profil", callback_data="profile:back_to_profile")])
         await query.edit_message_text(
@@ -671,19 +680,25 @@ async def show_my_bookings(update: Update, context: CallbackContext):
                 
                 reservation_blocks.append({'text': booking_str, 'buttons': row_btns})
             
-            # Construction du message et du clavier
+            # Construction du message et du clavier AVEC boutons individuels
             message = f"🎫 *Mes réservations :*\n\n📊 {len(bookings)} réservation(s) trouvée(s)"
             keyboard = []
             
-            for block in reservation_blocks:
+            for i, block in enumerate(reservation_blocks):
                 message += f"\n\n{block['text']}"
+                
+                # Ajouter les boutons de cette réservation DIRECTEMENT après son texte
                 if block['buttons']:
-                    keyboard.extend(block['buttons'])  # extend au lieu de append pour les lignes de boutons
+                    # Organiser les boutons en lignes (max 2 boutons par ligne)
+                    buttons = block['buttons']
+                    for j in range(0, len(buttons), 2):
+                        button_row = buttons[j:j+2]
+                        keyboard.append(button_row)
             
             if len(bookings) == 20:
                 message += "\n\n📝 *Affichage limité aux 20 dernières réservations*"
             
-            # Boutons de navigation
+            # Boutons de navigation À LA FIN
             keyboard.extend([
                 [InlineKeyboardButton("🔍 Rechercher un trajet", callback_data="menu:search_trip")],
                 [InlineKeyboardButton("⬅️ Retour au profil", callback_data="profile:back_to_profile")]
