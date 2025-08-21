@@ -901,6 +901,11 @@ async def handle_name_input(update: Update, context: CallbackContext):
     """
     Gère l'entrée du nom
     """
+    # NOUVEAU: Ignorer si on est en mode messaging
+    if 'messaging_driver' in context.user_data:
+        logger.info("🎯 Message ignoré par profile_handler (mode messaging_driver actif)")
+        return  # Laisser le combined_message_handler gérer
+    
     user_id = update.effective_user.id
     name = update.message.text.strip()
     
@@ -937,6 +942,11 @@ async def handle_age_input(update: Update, context: CallbackContext):
     """
     Gère l'entrée de l'âge
     """
+    # NOUVEAU: Ignorer si on est en mode messaging
+    if 'messaging_driver' in context.user_data:
+        logger.info("🎯 Message ignoré par profile_handler (mode messaging_driver actif)")
+        return  # Laisser le combined_message_handler gérer
+    
     user_id = update.effective_user.id
     age_text = update.message.text.strip()
     
@@ -976,6 +986,11 @@ async def handle_phone_input(update: Update, context: CallbackContext):
     """
     Gère l'entrée du numéro de téléphone
     """
+    # NOUVEAU: Ignorer si on est en mode messaging
+    if 'messaging_driver' in context.user_data:
+        logger.info("🎯 Message ignoré par profile_handler (mode messaging_driver actif)")
+        return  # Laisser le combined_message_handler gérer
+    
     user_id = update.effective_user.id
     phone = update.message.text.strip()
     
@@ -1019,6 +1034,11 @@ async def handle_description_input(update: Update, context: CallbackContext):
     """
     Gère l'entrée de la description
     """
+    # NOUVEAU: Ignorer si on est en mode messaging
+    if 'messaging_driver' in context.user_data:
+        logger.info("🎯 Message ignoré par profile_handler (mode messaging_driver actif)")
+        return  # Laisser le combined_message_handler gérer
+    
     user_id = update.effective_user.id
     description = update.message.text.strip()
     
@@ -1672,6 +1692,11 @@ Exemple : `votre.email@exemple.com`"""
 
 async def save_paypal_email(update: Update, context: CallbackContext):
     """Sauvegarder le nouvel email PayPal"""
+    # NOUVEAU: Ignorer si on est en mode messaging
+    if 'messaging_driver' in context.user_data:
+        logger.info("🎯 Message ignoré par profile_handler (mode messaging_driver actif)")
+        return  # Laisser le combined_message_handler gérer
+    
     user_id = update.effective_user.id
     new_email = update.message.text.strip()
     

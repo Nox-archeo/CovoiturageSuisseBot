@@ -363,6 +363,13 @@ async def handle_send_message_driver(update: Update, context: CallbackContext):
             'passenger_name': passenger_user.full_name or passenger_user.username or 'passager'
         }
         
+        # NOUVEAU: Forcer la sortie de toute conversation active
+        if 'conversation_state' in context.user_data:
+            del context.user_data['conversation_state']
+        
+        logger.info(f"🎯 Mode messaging_driver activé pour user {query.from_user.id}")
+        logger.info(f"📝 Driver info stocké: {context.user_data['messaging_driver']}")
+        
     except Exception as e:
         logger.error(f"Erreur send_message_driver: {e}")
         await query.edit_message_text("❌ Erreur lors de l'envoi du message")
