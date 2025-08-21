@@ -552,7 +552,11 @@ async def setup_all_handlers_complete(application):
             handle_send_message_driver,
             handle_rdv_station,
             handle_rdv_center,
-            handle_rdv_custom
+            handle_rdv_custom,
+            handle_message_to_driver,
+            handle_reply_to_passenger,
+            handle_reply_to_driver,
+            handle_message_to_passenger
         )
         
         application.add_handler(CallbackQueryHandler(handle_contact_driver, pattern="^contact_driver:"))
@@ -565,6 +569,8 @@ async def setup_all_handlers_complete(application):
         application.add_handler(CallbackQueryHandler(handle_rdv_station, pattern="^rdv_station:"))
         application.add_handler(CallbackQueryHandler(handle_rdv_center, pattern="^rdv_center:"))
         application.add_handler(CallbackQueryHandler(handle_rdv_custom, pattern="^rdv_custom:"))
+        application.add_handler(CallbackQueryHandler(handle_reply_to_passenger, pattern="^reply_to_passenger:"))
+        application.add_handler(CallbackQueryHandler(handle_reply_to_driver, pattern="^reply_to_driver:"))
         
         logger.info("✅ Handlers de communication post-réservation configurés")
     except Exception as e:
@@ -580,6 +586,26 @@ async def setup_all_handlers_complete(application):
         logger.info("✅ Handlers de confirmation de trajet configurés")
     except Exception as e:
         logger.warning(f"⚠️ Handlers de confirmation: {e}")
+    
+    # MessageHandlers pour la messagerie bidirectionnelle
+    try:
+        from telegram.ext import MessageHandler, filters
+        from handlers.post_booking_handlers import handle_message_to_driver, handle_message_to_passenger
+        
+        # Handler pour les messages texte (passager vers conducteur)
+        def combined_message_handler(update, context):
+            """Gère les messages texte selon le mode actuel"""
+            if 'messaging_driver' in context.user_data:
+                return handle_message_to_driver(update, context)
+            elif 'replying_to_passenger' in context.user_data:
+                return handle_message_to_passenger(update, context)
+            # Sinon ignorer le message
+        
+        application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, combined_message_handler))
+        
+        logger.info("✅ MessageHandlers pour messagerie bidirectionnelle configurés")
+    except Exception as e:
+        logger.warning(f"⚠️ MessageHandlers: {e}")
     
     # Configuration des commandes du menu hamburger (EXACTEMENT comme bot.py.backup)
     from telegram import BotCommand

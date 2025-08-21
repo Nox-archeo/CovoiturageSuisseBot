@@ -374,10 +374,36 @@ async def handle_rdv_station(update: Update, context: CallbackContext):
     
     try:
         trip_id = int(query.data.split(':')[1])
+        db = get_db()
+        trip = db.query(Trip).filter(Trip.id == trip_id).first()
+        passenger_user = db.query(User).filter(User.telegram_id == query.from_user.id).first()
+        
+        if trip and trip.driver and passenger_user:
+            # NOUVEAU: Notifier réellement le conducteur
+            try:
+                telegram_bot = context.bot
+                passenger_name = passenger_user.full_name or passenger_user.username or 'Un passager'
+                
+                await telegram_bot.send_message(
+                    chat_id=trip.driver.telegram_id,
+                    text=f"📍 **Point de rendez-vous choisi**\n\n"
+                         f"👤 **Passager:** {passenger_name}\n"
+                         f"🚉 **Point de RDV:** Gare de départ\n\n"
+                         f"📍 **Trajet:** {trip.departure_city} → {trip.arrival_city}\n"
+                         f"📅 **Date:** {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}",
+                    parse_mode='Markdown'
+                )
+                confirmation_text = "📍 **Point de rendez-vous défini**\n\n🚉 **Gare de départ**\n\n✅ Le conducteur a été notifié de votre choix."
+            except Exception as notify_error:
+                logger.error(f"Erreur notification conducteur: {notify_error}")
+                confirmation_text = "📍 **Point de rendez-vous défini**\n\n🚉 **Gare de départ**\n\n⚠️ Choix enregistré mais notification conducteur échouée."
+        else:
+            confirmation_text = "📍 **Point de rendez-vous défini**\n\n🚉 **Gare de départ**\n\n⚠️ Trajet ou conducteur non trouvé."
+        
         keyboard = [[InlineKeyboardButton("🔙 Retour réservations", callback_data="profile:my_bookings")]]
         
         await query.edit_message_text(
-            text="📍 **Point de rendez-vous défini**\n\n🚉 **Gare de départ**\n\nLe conducteur sera informé de votre choix.",
+            text=confirmation_text,
             reply_markup=InlineKeyboardMarkup(keyboard),
             parse_mode='Markdown'
         )
@@ -392,10 +418,36 @@ async def handle_rdv_center(update: Update, context: CallbackContext):
     
     try:
         trip_id = int(query.data.split(':')[1])
+        db = get_db()
+        trip = db.query(Trip).filter(Trip.id == trip_id).first()
+        passenger_user = db.query(User).filter(User.telegram_id == query.from_user.id).first()
+        
+        if trip and trip.driver and passenger_user:
+            # NOUVEAU: Notifier réellement le conducteur
+            try:
+                telegram_bot = context.bot
+                passenger_name = passenger_user.full_name or passenger_user.username or 'Un passager'
+                
+                await telegram_bot.send_message(
+                    chat_id=trip.driver.telegram_id,
+                    text=f"📍 **Point de rendez-vous choisi**\n\n"
+                         f"👤 **Passager:** {passenger_name}\n"
+                         f"🏢 **Point de RDV:** Centre-ville\n\n"
+                         f"📍 **Trajet:** {trip.departure_city} → {trip.arrival_city}\n"
+                         f"📅 **Date:** {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}",
+                    parse_mode='Markdown'
+                )
+                confirmation_text = "📍 **Point de rendez-vous défini**\n\n🏢 **Centre-ville**\n\n✅ Le conducteur a été notifié de votre choix."
+            except Exception as notify_error:
+                logger.error(f"Erreur notification conducteur: {notify_error}")
+                confirmation_text = "📍 **Point de rendez-vous défini**\n\n🏢 **Centre-ville**\n\n⚠️ Choix enregistré mais notification conducteur échouée."
+        else:
+            confirmation_text = "📍 **Point de rendez-vous défini**\n\n🏢 **Centre-ville**\n\n⚠️ Trajet ou conducteur non trouvé."
+        
         keyboard = [[InlineKeyboardButton("🔙 Retour réservations", callback_data="profile:my_bookings")]]
         
         await query.edit_message_text(
-            text="📍 **Point de rendez-vous défini**\n\n🏢 **Centre-ville**\n\nLe conducteur sera informé de votre choix.",
+            text=confirmation_text,
             reply_markup=InlineKeyboardMarkup(keyboard),
             parse_mode='Markdown'
         )
@@ -420,3 +472,197 @@ async def handle_rdv_custom(update: Update, context: CallbackContext):
     except Exception as e:
         logger.error(f"Erreur rdv_custom: {e}")
         await query.edit_message_text("❌ Erreur lors de la définition du RDV")
+
+async def handle_message_to_driver(update: Update, context: CallbackContext):
+    """Gère les messages texte envoyés au conducteur"""
+    try:
+        # Vérifier si l'utilisateur est en mode messaging
+        if 'messaging_driver' not in context.user_data:
+            return  # Pas en mode messaging, ignorer
+        
+        messaging_info = context.user_data['messaging_driver']
+        driver_id = messaging_info['driver_id']
+        driver_name = messaging_info['driver_name'] 
+        trip_id = messaging_info['trip_id']
+        passenger_name = messaging_info['passenger_name']
+        
+        message_text = update.message.text
+        
+        # Envoyer le message au conducteur avec bouton répondre
+        keyboard = [
+            [InlineKeyboardButton("💬 Répondre", callback_data=f"reply_to_passenger:{update.effective_user.id}:{trip_id}")]
+        ]
+        
+        await context.bot.send_message(
+            chat_id=driver_id,
+            text=f"💬 **Message de {passenger_name}**\n\n"
+                 f"📍 **Trajet:** Trip #{trip_id}\n\n"
+                 f"💭 \"{message_text}\"\n\n"
+                 f"👆 Utilisez le bouton ci-dessous pour répondre",
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode='Markdown'
+        )
+        
+        # Confirmation au passager
+        keyboard_passenger = [
+            [InlineKeyboardButton("🔙 Retour réservations", callback_data="profile:my_bookings")]
+        ]
+        
+        await update.message.reply_text(
+            text=f"✅ **Message envoyé à {driver_name}**\n\n"
+                 f"💭 \"{message_text}\"\n\n"
+                 f"Le conducteur peut vous répondre directement.",
+            reply_markup=InlineKeyboardMarkup(keyboard_passenger),
+            parse_mode='Markdown'
+        )
+        
+        # Nettoyer le mode messaging
+        del context.user_data['messaging_driver']
+        
+    except Exception as e:
+        logger.error(f"Erreur handle_message_to_driver: {e}")
+        await update.message.reply_text("❌ Erreur lors de l'envoi du message")
+
+async def handle_reply_to_passenger(update: Update, context: CallbackContext):
+    """Gère les réponses du conducteur au passager"""
+    query = update.callback_query
+    await query.answer()
+    
+    try:
+        parts = query.data.split(':')
+        passenger_telegram_id = int(parts[1])
+        trip_id = int(parts[2])
+        
+        db = get_db()
+        driver_user = db.query(User).filter(User.telegram_id == query.from_user.id).first()
+        passenger_user = db.query(User).filter(User.telegram_id == passenger_telegram_id).first()
+        
+        if not driver_user or not passenger_user:
+            await query.edit_message_text("❌ Utilisateur non trouvé")
+            return
+        
+        # Interface pour taper la réponse
+        keyboard = [
+            [InlineKeyboardButton("🔙 Annuler", callback_data="profile:my_trips")]
+        ]
+        
+        message = (
+            f"💬 **Répondre à {passenger_user.full_name or passenger_user.username or 'passager'}**\n\n"
+            f"📍 **Trajet:** Trip #{trip_id}\n\n"
+            f"✍️ **Tapez votre réponse ci-dessous et envoyez-la.**"
+        )
+        
+        await query.edit_message_text(
+            text=message,
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode='Markdown'
+        )
+        
+        # Stocker les infos pour la réponse
+        context.user_data['replying_to_passenger'] = {
+            'passenger_id': passenger_telegram_id,
+            'passenger_name': passenger_user.full_name or passenger_user.username or 'passager',
+            'trip_id': trip_id,
+            'driver_name': driver_user.full_name or driver_user.username or 'conducteur'
+        }
+        
+    except Exception as e:
+        logger.error(f"Erreur reply_to_passenger: {e}")
+        await query.edit_message_text("❌ Erreur lors de la réponse")
+
+async def handle_message_to_passenger(update: Update, context: CallbackContext):
+    """Gère les messages texte envoyés au passager par le conducteur"""
+    try:
+        # Vérifier si le conducteur est en mode réponse
+        if 'replying_to_passenger' not in context.user_data:
+            return  # Pas en mode réponse, ignorer
+        
+        reply_info = context.user_data['replying_to_passenger']
+        passenger_id = reply_info['passenger_id']
+        passenger_name = reply_info['passenger_name']
+        trip_id = reply_info['trip_id']
+        driver_name = reply_info['driver_name']
+        
+        message_text = update.message.text
+        
+        # Envoyer le message au passager avec bouton répondre
+        keyboard = [
+            [InlineKeyboardButton("💬 Répondre", callback_data=f"reply_to_driver:{update.effective_user.id}:{trip_id}")]
+        ]
+        
+        await context.bot.send_message(
+            chat_id=passenger_id,
+            text=f"💬 **Réponse de {driver_name}**\n\n"
+                 f"📍 **Trajet:** Trip #{trip_id}\n\n"
+                 f"💭 \"{message_text}\"\n\n"
+                 f"👆 Utilisez le bouton ci-dessous pour répondre",
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode='Markdown'
+        )
+        
+        # Confirmation au conducteur
+        keyboard_driver = [
+            [InlineKeyboardButton("🔙 Retour mes trajets", callback_data="profile:my_trips")]
+        ]
+        
+        await update.message.reply_text(
+            text=f"✅ **Réponse envoyée à {passenger_name}**\n\n"
+                 f"💭 \"{message_text}\"\n\n"
+                 f"Le passager peut vous répondre.",
+            reply_markup=InlineKeyboardMarkup(keyboard_driver),
+            parse_mode='Markdown'
+        )
+        
+        # Nettoyer le mode réponse
+        del context.user_data['replying_to_passenger']
+        
+    except Exception as e:
+        logger.error(f"Erreur handle_message_to_passenger: {e}")
+        await update.message.reply_text("❌ Erreur lors de l'envoi de la réponse")
+
+async def handle_reply_to_driver(update: Update, context: CallbackContext):
+    """Gère les réponses du passager au conducteur (répond à une réponse)"""
+    query = update.callback_query
+    await query.answer()
+    
+    try:
+        parts = query.data.split(':')
+        driver_telegram_id = int(parts[1])
+        trip_id = int(parts[2])
+        
+        db = get_db()
+        passenger_user = db.query(User).filter(User.telegram_id == query.from_user.id).first()
+        driver_user = db.query(User).filter(User.telegram_id == driver_telegram_id).first()
+        
+        if not driver_user or not passenger_user:
+            await query.edit_message_text("❌ Utilisateur non trouvé")
+            return
+        
+        # Interface pour taper la réponse
+        keyboard = [
+            [InlineKeyboardButton("🔙 Annuler", callback_data="profile:my_bookings")]
+        ]
+        
+        message = (
+            f"💬 **Répondre à {driver_user.full_name or driver_user.username or 'conducteur'}**\n\n"
+            f"📍 **Trajet:** Trip #{trip_id}\n\n"
+            f"✍️ **Tapez votre réponse ci-dessous et envoyez-la.**"
+        )
+        
+        await query.edit_message_text(
+            text=message,
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode='Markdown'
+        )
+        
+        # Stocker les infos pour la réponse
+        context.user_data['messaging_driver'] = {
+            'driver_id': driver_telegram_id,
+            'driver_name': driver_user.full_name or driver_user.username or 'conducteur',
+            'trip_id': trip_id,
+            'passenger_name': passenger_user.full_name or passenger_user.username or 'passager'
+        }
+        
+    except Exception as e:
+        logger.error(f"Erreur reply_to_driver: {e}")
+        await query.edit_message_text("❌ Erreur lors de la réponse")
