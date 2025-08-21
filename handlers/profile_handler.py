@@ -678,7 +678,7 @@ async def show_my_bookings(update: Update, context: CallbackContext):
             for block in reservation_blocks:
                 message += f"\n\n{block['text']}"
                 if block['buttons']:
-                    keyboard.append(block['buttons'])
+                    keyboard.extend(block['buttons'])  # extend au lieu de append pour les lignes de boutons
             
             if len(bookings) == 20:
                 message += "\n\n📝 *Affichage limité aux 20 dernières réservations*"
