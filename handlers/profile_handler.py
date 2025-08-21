@@ -615,7 +615,7 @@ async def show_my_bookings(update: Update, context: CallbackContext):
                 # Boutons pour cette réservation
                 row_btns = []
                 
-                # Ajouter les boutons de confirmation si éligible
+                # Ajouter les boutons de confirmation existants si éligible
                 confirmation_buttons = await add_confirmation_buttons_to_trip(trip.id, user.id, 'passenger')
                 if confirmation_buttons:
                     row_btns.extend(confirmation_buttons)
@@ -633,29 +633,41 @@ async def show_my_bookings(update: Update, context: CallbackContext):
                         else:
                             driver_name = f"conducteur #{driver.id}"
                     
-                    # Ajouter tous les boutons de communication post-réservation
-                    row_btns.extend([
-                        InlineKeyboardButton(
-                            f"💬 Contacter {driver_name}", 
-                            callback_data=f"contact_driver:{trip.id}"
-                        ),
-                        InlineKeyboardButton(
-                            "📍 Point de rendez-vous", 
-                            callback_data=f"meeting_point:{trip.id}"
-                        ),
-                        InlineKeyboardButton(
-                            "✅ Confirmer présence", 
-                            callback_data=f"confirm_trip_passenger:{trip.id}:{booking.id}"
-                        ),
-                        InlineKeyboardButton(
-                            "ℹ️ Détails du trajet", 
-                            callback_data=f"trip_details:{trip.id}"
-                        ),
-                        InlineKeyboardButton(
-                            "❌ Annuler avec remboursement", 
-                            callback_data=f"cancel_booking:{booking.id}"
-                        )
-                    ])
+                    # Organiser les boutons en lignes séparées pour qu'ils soient lisibles
+                    communication_buttons = [
+                        # Ligne 1: Contact et Point de rendez-vous
+                        [
+                            InlineKeyboardButton(
+                                f"💬 Contacter {driver_name}", 
+                                callback_data=f"contact_driver:{trip.id}"
+                            ),
+                            InlineKeyboardButton(
+                                "📍 Point de RDV", 
+                                callback_data=f"meeting_point:{trip.id}"
+                            )
+                        ],
+                        # Ligne 2: Confirmer présence et Détails
+                        [
+                            InlineKeyboardButton(
+                                "✅ Confirmer présence", 
+                                callback_data=f"confirm_trip_passenger:{trip.id}:{booking.id}"
+                            ),
+                            InlineKeyboardButton(
+                                "ℹ️ Détails du trajet", 
+                                callback_data=f"trip_details:{trip.id}"
+                            )
+                        ],
+                        # Ligne 3: Annuler réservation
+                        [
+                            InlineKeyboardButton(
+                                "❌ Annuler avec remboursement", 
+                                callback_data=f"cancel_booking:{booking.id}"
+                            )
+                        ]
+                    ]
+                    
+                    # Ajouter ces lignes de boutons au système
+                    row_btns.extend(communication_buttons)
                 
                 reservation_blocks.append({'text': booking_str, 'buttons': row_btns})
             
