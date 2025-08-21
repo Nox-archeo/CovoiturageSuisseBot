@@ -50,7 +50,9 @@ async def handle_booking_cancellation(update: Update, context: CallbackContext):
             return
         
         # Vérifier que les champs essentiels ne sont pas None
-        if not booking.total_price or not trip.departure_time:
+        price = booking.total_price or booking.amount or 0
+        if not price or not trip.departure_time:
+            logger.error(f"❌ Données incomplètes - price: {price}, departure_time: {trip.departure_time}")
             await query.edit_message_text("❌ Données de réservation incomplètes.")
             return
         
@@ -66,7 +68,7 @@ async def handle_booking_cancellation(update: Update, context: CallbackContext):
             f"⚠️ *Confirmer l'annulation*\n\n"
             f"📍 **Trajet:** {trip.departure_city} → {trip.arrival_city}\n"
             f"📅 **Date:** {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
-            f"💰 **Montant à rembourser:** {booking.total_price:.2f} CHF\n\n"
+            f"💰 **Montant à rembourser:** {price:.2f} CHF\n\n"
             f"🔄 **Remboursement automatique via PayPal**\n"
             f"Vous serez remboursé dans les minutes qui suivent.\n\n"
             f"⚠️ **Cette action est définitive.**"
@@ -108,6 +110,9 @@ async def confirm_booking_cancellation(update: Update, context: CallbackContext)
             await query.edit_message_text("❌ Réservation non trouvée ou déjà annulée.")
             return
         
+        # Calculer le prix (utiliser amount si total_price n'existe pas)
+        price = booking.total_price or booking.amount or 0
+        
         # Vérifier l'email PayPal de l'utilisateur
         if not user.paypal_email:
             keyboard = [
@@ -119,7 +124,7 @@ async def confirm_booking_cancellation(update: Update, context: CallbackContext)
                 f"📧 **Email PayPal requis**\n\n"
                 f"Pour recevoir le remboursement automatique, "
                 f"vous devez renseigner votre email PayPal.\n\n"
-                f"💰 **Montant à rembourser:** {booking.total_price:.2f} CHF"
+                f"💰 **Montant à rembourser:** {price:.2f} CHF"
             )
             
             await query.edit_message_text(
@@ -138,94 +143,50 @@ async def confirm_booking_cancellation(update: Update, context: CallbackContext)
             refund_success = await process_passenger_refund(booking_id, context.bot)
             
             if refund_success:
-                # Récupérer le trajet pour libérer la place
-                trip = booking.trip
-                
-                # LIBÉRER LA PLACE dans le trajet
-                if trip and trip.current_passengers > 0:
-                    trip.current_passengers -= 1
-                    logger.info(f"✅ Place libérée: {trip.current_passengers}/{trip.max_passengers}")
-                
                 # Marquer la réservation comme annulée
                 booking.status = 'cancelled'
                 booking.payment_status = 'refunded'
-                
-                # SUPPRIMER la réservation pour qu'elle n'apparaisse plus dans le profil
-                db.delete(booking)
                 db.commit()
                 
                 message = (
                     f"✅ **Annulation confirmée !**\n\n"
-                    f"💰 **Remboursement de {booking.total_price:.2f} CHF traité**\n"
+                    f"💰 **Remboursement de {price:.2f} CHF traité**\n"
                     f"📧 Envoyé sur: {user.paypal_email}\n\n"
                     f"⏱️ Le remboursement apparaîtra sur votre compte PayPal "
-                    f"dans les minutes qui suivent.\n\n"
-                    f"✅ **Place libérée** dans le trajet du conducteur"
+                    f"dans les minutes qui suivent."
                 )
                 
-                # Notifier le conducteur avec info sur la place libérée
+                # Notifier le conducteur
                 try:
-                    driver = trip.driver if trip else None
+                    trip = booking.trip
+                    driver = trip.driver
                     if driver and driver.telegram_id:
-                        available_spots = trip.max_passengers - trip.current_passengers
                         await context.bot.send_message(
                             chat_id=driver.telegram_id,
-                            text=f"� **Annulation de réservation**\n\n"
-                                 f"Un passager a annulé sa réservation :\n\n"
-                                 f"📍 **Trajet:** {trip.departure_city} → {trip.arrival_city}\n"
-                                 f"📅 **Date:** {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
-                                 f"💰 **Montant:** {booking.total_price:.2f} CHF\n\n"
-                                 f"✅ **Bonne nouvelle:** Une place s'est libérée !\n"
-                                 f"🆓 **Places disponibles:** {available_spots}/{trip.max_passengers}\n\n"
-                                 f"Le remboursement a été traité automatiquement.",
+                            text=f"📝 **Réservation annulée**\n\n"
+                                 f"Un passager a annulé sa réservation pour votre trajet "
+                                 f"{trip.departure_city} → {trip.arrival_city} "
+                                 f"le {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}.\n\n"
+                                 f"Réservation #{booking_id} - Remboursement automatique effectué.",
                             parse_mode='Markdown'
                         )
-                        logger.info(f"✅ Conducteur notifié (ID: {driver.telegram_id})")
                 except Exception as e:
                     logger.error(f"Erreur notification conducteur: {e}")
                 
             else:
-                # Même si remboursement échoue, libérer la place et supprimer la réservation
-                trip = booking.trip
-                
-                # LIBÉRER LA PLACE
-                if trip and trip.current_passengers > 0:
-                    trip.current_passengers -= 1
-                    logger.info(f"✅ Place libérée malgré échec remboursement: {trip.current_passengers}/{trip.max_passengers}")
-                
-                # SUPPRIMER la réservation
-                db.delete(booking)
-                db.commit()
-                
                 message = (
-                    f"⚠️ **Annulation terminée**\n\n"
-                    f"✅ **Réservation annulée et place libérée**\n"
-                    f"❌ **Remboursement automatique échoué**\n\n"
-                    f"💬 **Contactez le support** pour le remboursement:\n"
+                    f"⚠️ **Annulation en cours**\n\n"
+                    f"Votre réservation a été annulée mais le remboursement "
+                    f"automatique a échoué.\n\n"
+                    f"💬 **Contactez le support** avec cette information:\n"
                     f"📝 Réservation #{booking_id}\n"
-                    f"📧 PayPal: {user.paypal_email}\n"
-                    f"💰 Montant: {booking.total_price:.2f} CHF\n\n"
+                    f"📧 PayPal: {user.paypal_email}\n\n"
                     f"Le remboursement sera traité manuellement."
                 )
                 
-                # Notifier le conducteur même en cas d'échec remboursement
-                try:
-                    driver = trip.driver if trip else None
-                    if driver and driver.telegram_id:
-                        available_spots = trip.max_passengers - trip.current_passengers
-                        await context.bot.send_message(
-                            chat_id=driver.telegram_id,
-                            text=f"🚨 **Annulation de réservation**\n\n"
-                                 f"Un passager a annulé sa réservation :\n\n"
-                                 f"📍 **Trajet:** {trip.departure_city} → {trip.arrival_city}\n"
-                                 f"📅 **Date:** {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n\n"
-                                 f"✅ **Place libérée !**\n"
-                                 f"🆓 **Places disponibles:** {available_spots}/{trip.max_passengers}\n\n"
-                                 f"⚠️ Remboursement à traiter manuellement.",
-                            parse_mode='Markdown'
-                        )
-                except Exception as e:
-                    logger.error(f"Erreur notification conducteur: {e}")
+                # Marquer quand même comme annulé
+                booking.status = 'cancelled'
+                db.commit()
             
         except ImportError:
             # Fallback si le module n'existe pas
@@ -238,7 +199,7 @@ async def confirm_booking_cancellation(update: Update, context: CallbackContext)
                 f"Contactez le support avec:\n"
                 f"📝 Réservation #{booking_id}\n"
                 f"📧 PayPal: {user.paypal_email}\n"
-                f"💰 Montant: {booking.total_price:.2f} CHF"
+                f"💰 Montant: {price:.2f} CHF"
             )
         
         await query.edit_message_text(message, parse_mode='Markdown')
