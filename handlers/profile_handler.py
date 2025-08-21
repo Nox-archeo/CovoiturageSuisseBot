@@ -620,6 +620,26 @@ async def show_my_bookings(update: Update, context: CallbackContext):
                 if confirmation_buttons:
                     row_btns.extend(confirmation_buttons)
                 
+                # NOUVEAU: Ajouter bouton de communication avec le conducteur pour réservations payées
+                if booking.is_paid and booking.status != 'cancelled':
+                    # Récupérer le nom du conducteur pour l'affichage
+                    driver = trip.driver
+                    driver_name = "conducteur"
+                    if driver:
+                        if driver.full_name:
+                            driver_name = driver.full_name
+                        elif driver.username:
+                            driver_name = f"@{driver.username}"
+                        else:
+                            driver_name = f"conducteur #{driver.id}"
+                    
+                    row_btns.append(
+                        InlineKeyboardButton(
+                            f"💬 Contacter {driver_name}", 
+                            callback_data=f"contact_driver:{trip.id}"
+                        )
+                    )
+                
                 # Ajouter le bouton d'annulation pour les réservations payées non confirmées
                 if booking.is_paid and booking.status != 'cancelled':
                     row_btns.append(
