@@ -556,7 +556,11 @@ async def setup_all_handlers_complete(application):
             handle_message_to_driver,
             handle_reply_to_passenger,
             handle_reply_to_driver,
-            handle_message_to_passenger
+            handle_message_to_passenger,
+            handle_confirm_rdv_station,
+            handle_confirm_rdv_center,
+            handle_suggest_rdv,
+            handle_contact_passenger_rdv
         )
         
         application.add_handler(CallbackQueryHandler(handle_contact_driver, pattern="^contact_driver:"))
@@ -571,6 +575,10 @@ async def setup_all_handlers_complete(application):
         application.add_handler(CallbackQueryHandler(handle_rdv_custom, pattern="^rdv_custom:"))
         application.add_handler(CallbackQueryHandler(handle_reply_to_passenger, pattern="^reply_to_passenger:"))
         application.add_handler(CallbackQueryHandler(handle_reply_to_driver, pattern="^reply_to_driver:"))
+        application.add_handler(CallbackQueryHandler(handle_confirm_rdv_station, pattern="^confirm_rdv_station:"))
+        application.add_handler(CallbackQueryHandler(handle_confirm_rdv_center, pattern="^confirm_rdv_center:"))
+        application.add_handler(CallbackQueryHandler(handle_suggest_rdv, pattern="^suggest_rdv:"))
+        application.add_handler(CallbackQueryHandler(handle_contact_passenger_rdv, pattern="^contact_passenger_rdv:"))
         
         logger.info("✅ Handlers de communication post-réservation configurés")
     except Exception as e:
@@ -590,7 +598,7 @@ async def setup_all_handlers_complete(application):
     # MessageHandlers pour la messagerie bidirectionnelle
     try:
         from telegram.ext import MessageHandler, filters
-        from handlers.post_booking_handlers import handle_message_to_driver, handle_message_to_passenger
+        from handlers.post_booking_handlers import handle_message_to_driver, handle_message_to_passenger, handle_rdv_suggestion_message
         
         # Handler pour les messages texte (passager vers conducteur)
         def combined_message_handler(update, context):
@@ -599,11 +607,13 @@ async def setup_all_handlers_complete(application):
                 return handle_message_to_driver(update, context)
             elif 'replying_to_passenger' in context.user_data:
                 return handle_message_to_passenger(update, context)
+            elif 'suggesting_rdv' in context.user_data:
+                return handle_rdv_suggestion_message(update, context)
             # Sinon ignorer le message
         
         application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, combined_message_handler))
         
-        logger.info("✅ MessageHandlers pour messagerie bidirectionnelle configurés")
+        logger.info("✅ MessageHandlers pour messagerie bidirectionnelle et RDV configurés")
     except Exception as e:
         logger.warning(f"⚠️ MessageHandlers: {e}")
     

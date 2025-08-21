@@ -390,7 +390,13 @@ async def handle_rdv_station(update: Update, context: CallbackContext):
                          f"👤 **Passager:** {passenger_name}\n"
                          f"🚉 **Point de RDV:** Gare de départ\n\n"
                          f"📍 **Trajet:** {trip.departure_city} → {trip.arrival_city}\n"
-                         f"📅 **Date:** {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}",
+                         f"📅 **Date:** {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n\n"
+                         f"⚠️ **Veuillez confirmer ce lieu de rendez-vous ou proposer une alternative.**",
+                    reply_markup=InlineKeyboardMarkup([
+                        [InlineKeyboardButton("✅ Confirmer gare", callback_data=f"confirm_rdv_station:{trip_id}:{query.from_user.id}")],
+                        [InlineKeyboardButton("📝 Proposer autre lieu", callback_data=f"suggest_rdv:{trip_id}:{query.from_user.id}")],
+                        [InlineKeyboardButton("💬 Contacter passager", callback_data=f"contact_passenger_rdv:{trip_id}:{query.from_user.id}")]
+                    ]),
                     parse_mode='Markdown'
                 )
                 confirmation_text = "📍 **Point de rendez-vous défini**\n\n🚉 **Gare de départ**\n\n✅ Le conducteur a été notifié de votre choix."
@@ -434,7 +440,13 @@ async def handle_rdv_center(update: Update, context: CallbackContext):
                          f"👤 **Passager:** {passenger_name}\n"
                          f"🏢 **Point de RDV:** Centre-ville\n\n"
                          f"📍 **Trajet:** {trip.departure_city} → {trip.arrival_city}\n"
-                         f"📅 **Date:** {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}",
+                         f"📅 **Date:** {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n\n"
+                         f"⚠️ **Veuillez confirmer ce lieu de rendez-vous ou proposer une alternative.**",
+                    reply_markup=InlineKeyboardMarkup([
+                        [InlineKeyboardButton("✅ Confirmer centre-ville", callback_data=f"confirm_rdv_center:{trip_id}:{query.from_user.id}")],
+                        [InlineKeyboardButton("📝 Proposer autre lieu", callback_data=f"suggest_rdv:{trip_id}:{query.from_user.id}")],
+                        [InlineKeyboardButton("💬 Contacter passager", callback_data=f"contact_passenger_rdv:{trip_id}:{query.from_user.id}")]
+                    ]),
                     parse_mode='Markdown'
                 )
                 confirmation_text = "📍 **Point de rendez-vous défini**\n\n🏢 **Centre-ville**\n\n✅ Le conducteur a été notifié de votre choix."
@@ -666,3 +678,224 @@ async def handle_reply_to_driver(update: Update, context: CallbackContext):
     except Exception as e:
         logger.error(f"Erreur reply_to_driver: {e}")
         await query.edit_message_text("❌ Erreur lors de la réponse")
+
+async def handle_confirm_rdv_station(update: Update, context: CallbackContext):
+    """Le conducteur confirme le RDV gare"""
+    query = update.callback_query
+    await query.answer("✅ RDV gare confirmé")
+    
+    try:
+        parts = query.data.split(':')
+        trip_id = int(parts[1])
+        passenger_telegram_id = int(parts[2])
+        
+        db = get_db()
+        trip = db.query(Trip).filter(Trip.id == trip_id).first()
+        driver_user = db.query(User).filter(User.telegram_id == query.from_user.id).first()
+        
+        if trip and driver_user:
+            # Notifier le passager de la confirmation
+            try:
+                await context.bot.send_message(
+                    chat_id=passenger_telegram_id,
+                    text=f"✅ **RDV confirmé par le conducteur !**\n\n"
+                         f"🚉 **Lieu:** Gare de départ\n"
+                         f"👤 **Conducteur:** {driver_user.full_name or driver_user.username or 'Conducteur'}\n\n"
+                         f"📍 **Trajet:** {trip.departure_city} → {trip.arrival_city}\n"
+                         f"📅 **Date:** {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n\n"
+                         f"🎉 Rendez-vous fixé ! À bientôt.",
+                    parse_mode='Markdown'
+                )
+            except Exception as e:
+                logger.error(f"Erreur notification passager: {e}")
+        
+        # Confirmation au conducteur
+        await query.edit_message_text(
+            text=f"✅ **RDV gare confirmé !**\n\n"
+                 f"Le passager a été informé.\n"
+                 f"📍 **Trajet:** {trip.departure_city} → {trip.arrival_city}\n"
+                 f"📅 **Date:** {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}",
+            parse_mode='Markdown'
+        )
+        
+    except Exception as e:
+        logger.error(f"Erreur confirm_rdv_station: {e}")
+        await query.edit_message_text("❌ Erreur lors de la confirmation")
+
+async def handle_confirm_rdv_center(update: Update, context: CallbackContext):
+    """Le conducteur confirme le RDV centre-ville"""
+    query = update.callback_query
+    await query.answer("✅ RDV centre-ville confirmé")
+    
+    try:
+        parts = query.data.split(':')
+        trip_id = int(parts[1])
+        passenger_telegram_id = int(parts[2])
+        
+        db = get_db()
+        trip = db.query(Trip).filter(Trip.id == trip_id).first()
+        driver_user = db.query(User).filter(User.telegram_id == query.from_user.id).first()
+        
+        if trip and driver_user:
+            # Notifier le passager de la confirmation
+            try:
+                await context.bot.send_message(
+                    chat_id=passenger_telegram_id,
+                    text=f"✅ **RDV confirmé par le conducteur !**\n\n"
+                         f"🏢 **Lieu:** Centre-ville\n"
+                         f"👤 **Conducteur:** {driver_user.full_name or driver_user.username or 'Conducteur'}\n\n"
+                         f"📍 **Trajet:** {trip.departure_city} → {trip.arrival_city}\n"
+                         f"📅 **Date:** {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n\n"
+                         f"🎉 Rendez-vous fixé ! À bientôt.",
+                    parse_mode='Markdown'
+                )
+            except Exception as e:
+                logger.error(f"Erreur notification passager: {e}")
+        
+        # Confirmation au conducteur
+        await query.edit_message_text(
+            text=f"✅ **RDV centre-ville confirmé !**\n\n"
+                 f"Le passager a été informé.\n"
+                 f"📍 **Trajet:** {trip.departure_city} → {trip.arrival_city}\n"
+                 f"📅 **Date:** {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}",
+            parse_mode='Markdown'
+        )
+        
+    except Exception as e:
+        logger.error(f"Erreur confirm_rdv_center: {e}")
+        await query.edit_message_text("❌ Erreur lors de la confirmation")
+
+async def handle_suggest_rdv(update: Update, context: CallbackContext):
+    """Le conducteur propose un autre lieu de RDV"""
+    query = update.callback_query
+    await query.answer("📝 Proposer un autre lieu")
+    
+    try:
+        parts = query.data.split(':')
+        trip_id = int(parts[1])
+        passenger_telegram_id = int(parts[2])
+        
+        db = get_db()
+        trip = db.query(Trip).filter(Trip.id == trip_id).first()
+        driver_user = db.query(User).filter(User.telegram_id == query.from_user.id).first()
+        
+        if not trip or not driver_user:
+            await query.edit_message_text("❌ Données non trouvées")
+            return
+        
+        # Interface pour proposer un autre lieu
+        keyboard = [
+            [InlineKeyboardButton("🔙 Retour", callback_data=f"contact_passenger_rdv:{trip_id}:{passenger_telegram_id}")]
+        ]
+        
+        await query.edit_message_text(
+            text=f"📝 **Proposer un autre lieu de RDV**\n\n"
+                 f"📍 **Trajet:** {trip.departure_city} → {trip.arrival_city}\n\n"
+                 f"✍️ **Tapez ci-dessous le lieu que vous proposez.**\n"
+                 f"Il sera transmis automatiquement au passager.",
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode='Markdown'
+        )
+        
+        # Stocker les infos pour le prochain message
+        context.user_data['suggesting_rdv'] = {
+            'trip_id': trip_id,
+            'passenger_id': passenger_telegram_id,
+            'driver_name': driver_user.full_name or driver_user.username or 'conducteur'
+        }
+        
+    except Exception as e:
+        logger.error(f"Erreur suggest_rdv: {e}")
+        await query.edit_message_text("❌ Erreur lors de la proposition")
+
+async def handle_contact_passenger_rdv(update: Update, context: CallbackContext):
+    """Contact du passager pour les RDV"""
+    query = update.callback_query
+    await query.answer("💬 Contact passager")
+    
+    try:
+        parts = query.data.split(':')
+        trip_id = int(parts[1])
+        passenger_telegram_id = int(parts[2])
+        
+        db = get_db()
+        trip = db.query(Trip).filter(Trip.id == trip_id).first()
+        passenger_user = db.query(User).filter(User.telegram_id == passenger_telegram_id).first()
+        
+        if not trip or not passenger_user:
+            await query.edit_message_text("❌ Données non trouvées")
+            return
+        
+        contact_info = []
+        if passenger_user.username:
+            contact_info.append(f"Telegram: @{passenger_user.username}")
+        if passenger_user.phone:
+            contact_info.append(f"Téléphone: {passenger_user.phone}")
+        
+        contact_text = "\n".join(contact_info) if contact_info else "Aucune information de contact disponible"
+        
+        keyboard = [
+            [InlineKeyboardButton("💬 Envoyer un message", callback_data=f"message_passenger_rdv:{trip_id}:{passenger_telegram_id}")],
+            [InlineKeyboardButton("🔙 Retour RDV", callback_data=f"back_to_rdv:{trip_id}:{passenger_telegram_id}")]
+        ]
+        
+        await query.edit_message_text(
+            text=f"👤 **Contact Passager**\n\n"
+                 f"**Nom:** {passenger_user.full_name or passenger_user.username or 'Non renseigné'}\n"
+                 f"**Contact:**\n{contact_text}\n\n"
+                 f"📍 **Trajet:** {trip.departure_city} → {trip.arrival_city}\n"
+                 f"📅 **Date:** {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}",
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode='Markdown'
+        )
+        
+    except Exception as e:
+        logger.error(f"Erreur contact_passenger_rdv: {e}")
+        await query.edit_message_text("❌ Erreur lors du contact")
+
+async def handle_rdv_suggestion_message(update: Update, context: CallbackContext):
+    """Gère les suggestions de lieu de RDV par le conducteur"""
+    try:
+        # Vérifier si le conducteur est en mode suggestion RDV
+        if 'suggesting_rdv' not in context.user_data:
+            return  # Pas en mode suggestion, ignorer
+        
+        rdv_info = context.user_data['suggesting_rdv']
+        trip_id = rdv_info['trip_id']
+        passenger_id = rdv_info['passenger_id']
+        driver_name = rdv_info['driver_name']
+        
+        suggested_location = update.message.text
+        
+        # Envoyer la suggestion au passager avec boutons de réponse
+        keyboard = [
+            [InlineKeyboardButton("✅ Accepter", callback_data=f"accept_rdv_suggestion:{trip_id}:{update.effective_user.id}")],
+            [InlineKeyboardButton("❌ Refuser", callback_data=f"refuse_rdv_suggestion:{trip_id}:{update.effective_user.id}")],
+            [InlineKeyboardButton("💬 Discuter", callback_data=f"discuss_rdv:{trip_id}:{update.effective_user.id}")]
+        ]
+        
+        await context.bot.send_message(
+            chat_id=passenger_id,
+            text=f"📝 **Proposition de RDV du conducteur**\n\n"
+                 f"👤 **Conducteur:** {driver_name}\n"
+                 f"📍 **Lieu proposé:** {suggested_location}\n\n"
+                 f"🚗 **Trajet:** Trip #{trip_id}\n\n"
+                 f"Que souhaitez-vous faire ?",
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode='Markdown'
+        )
+        
+        # Confirmation au conducteur
+        await update.message.reply_text(
+            text=f"✅ **Proposition envoyée !**\n\n"
+                 f"📍 **Lieu proposé:** {suggested_location}\n\n"
+                 f"Le passager va recevoir votre proposition et pourra accepter, refuser ou discuter.",
+            parse_mode='Markdown'
+        )
+        
+        # Nettoyer le mode suggestion
+        del context.user_data['suggesting_rdv']
+        
+    except Exception as e:
+        logger.error(f"Erreur rdv_suggestion_message: {e}")
+        await update.message.reply_text("❌ Erreur lors de l'envoi de la proposition")
