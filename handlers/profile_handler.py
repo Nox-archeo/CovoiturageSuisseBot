@@ -646,10 +646,10 @@ async def show_my_bookings(update: Update, context: CallbackContext):
                                 callback_data=f"meeting_point:{trip.id}"
                             )
                         ],
-                        # Ligne 2: Confirmer présence et Détails
+                        # Ligne 2: Confirmer trajet et Détails
                         [
                             InlineKeyboardButton(
-                                "✅ Confirmer présence", 
+                                "✅ Trajet OK", 
                                 callback_data=f"confirm_trip_passenger:{trip.id}:{booking.id}"
                             ),
                             InlineKeyboardButton(
