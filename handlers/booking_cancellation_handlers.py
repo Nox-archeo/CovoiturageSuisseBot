@@ -188,6 +188,25 @@ async def confirm_booking_cancellation(update: Update, context: CallbackContext)
                 booking.status = 'cancelled'
                 db.commit()
             
+            # 🔥 CORRECTION: Notifier TOUJOURS le conducteur, même si remboursement échoué
+            try:
+                trip = booking.trip
+                driver = trip.driver if trip else None
+                if driver and driver.telegram_id:
+                    refund_status = "automatique effectué" if refund_success else "en cours (traitement manuel)"
+                    await context.bot.send_message(
+                        chat_id=driver.telegram_id,
+                        text=f"📝 **Réservation annulée**\n\n"
+                             f"Un passager a annulé sa réservation pour votre trajet "
+                             f"{trip.departure_city} → {trip.arrival_city} "
+                             f"le {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}.\n\n"
+                             f"Réservation #{booking_id} - Remboursement {refund_status}.",
+                        parse_mode='Markdown'
+                    )
+                    logger.info(f"✅ Notification conducteur envoyée pour annulation #{booking_id}")
+            except Exception as e:
+                logger.error(f"❌ Erreur notification conducteur: {e}")
+            
         except ImportError:
             # Fallback si le module n'existe pas
             booking.status = 'cancelled'
