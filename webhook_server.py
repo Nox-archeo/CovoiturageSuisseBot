@@ -252,9 +252,10 @@ async def create_bot_app_webhook():
     except Exception as e:
         logger.warning(f"Attention - Configuration PayPal : {e}")
     
-    # Créer l'application EXACTEMENT comme dans bot.py.backup
-    persistence = PicklePersistence(filepath="bot_data.pickle")
-    application = Application.builder().token(BOT_TOKEN).persistence(persistence).build()
+    # 🔥 DÉSACTIVER PERSISTENCE PICKLE - Utiliser UNIQUEMENT PostgreSQL
+    # persistence = PicklePersistence(filepath="bot_data.pickle")
+    # application = Application.builder().token(BOT_TOKEN).persistence(persistence).build()
+    application = Application.builder().token(BOT_TOKEN).build()  # Sans persistence pickle
     
     # Importer et configurer tous les handlers EXACTEMENT comme dans bot.py.backup
     await setup_all_handlers_complete(application)
