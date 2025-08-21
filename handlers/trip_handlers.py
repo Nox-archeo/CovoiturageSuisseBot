@@ -298,7 +298,7 @@ async def handle_show_trips_by_time(update: Update, context: CallbackContext):
         trips = db.query(Trip).filter(
             Trip.driver_id == user.id,
             Trip.is_published == True,
-            Trip.departure_time > datetime.now(),
+            Trip.status != 'completed',  # Garde les trajets jusqu'à confirmation complète
             Trip.is_cancelled == False
         ).order_by(Trip.departure_time).all()
         title = "🚗 *Mes trajets à venir*"
@@ -430,7 +430,7 @@ async def list_my_trips(update: Update, context: CallbackContext):
             trips_query = db.query(Trip).filter(
                 Trip.driver_id == user.id,
                 Trip.is_published == True,
-                Trip.departure_time > datetime.now(),
+                Trip.status != 'completed',  # Garde jusqu'à confirmation
                 Trip.is_cancelled == False
             ).order_by(Trip.departure_time).all()
             
@@ -823,7 +823,7 @@ async def list_passenger_trips(update: Update, context: CallbackContext):
         trip_requests = db.query(Trip).filter(
             Trip.creator_id == user.id,
             Trip.trip_role == "passenger",
-            Trip.departure_time > datetime.now(),
+            Trip.status != 'completed',  # Garde jusqu'à confirmation
             Trip.is_cancelled == False
         ).order_by(Trip.departure_time).all()
         
@@ -832,7 +832,7 @@ async def list_passenger_trips(update: Update, context: CallbackContext):
             Booking.passenger_id == user.id,
             Booking.status.in_(["pending", "confirmed"])
         ).join(Trip).filter(
-            Trip.departure_time > datetime.now()
+            Trip.status != 'completed'  # Garde jusqu'à confirmation
         ).order_by(Trip.departure_time).all()
         
         # Construire le message
