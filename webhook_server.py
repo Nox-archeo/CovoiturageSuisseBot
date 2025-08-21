@@ -399,8 +399,39 @@ async def setup_all_handlers_complete(application):
         
     except Exception as e:
         logger.warning(f"⚠️ ConversationHandlers principaux non disponibles: {e}")
+
+    # NOUVEAU: Ajouter d'abord le combined_message_handler pour la messagerie (PRIORITÉ)
+    try:
+        async def combined_message_handler(update: Update, context: CallbackContext):
+            """
+            Handler unifié pour tous les messages texte selon le mode utilisateur
+            """
+            user_id = update.effective_user.id
+            message_text = update.message.text
+            logger.info(f"🎯 combined_message_handler appelé pour {user_id}: '{message_text}'")
+            
+            if 'messaging_driver' in context.user_data:
+                logger.info(f"🎯 Mode messaging_driver détecté pour {user_id}")
+                return await handle_message_to_driver(update, context)
+            elif 'replying_to_passenger' in context.user_data:
+                logger.info(f"🎯 Mode replying_to_passenger détecté pour {user_id}")
+                return await handle_message_to_passenger(update, context)
+            elif 'suggesting_rdv' in context.user_data:
+                logger.info(f"🎯 Mode suggesting_rdv détecté pour {user_id}")
+                return await handle_rdv_suggestion_message(update, context)
+            else:
+                logger.info(f"ℹ️ Message ignoré (aucun mode actif) pour {user_id}")
+                # Retourner None pour permettre aux autres handlers de traiter
+                return None
+            # Sinon ignorer le message
+        
+        application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, combined_message_handler))
+        logger.info("✅ combined_message_handler enregistré EN PREMIER (priorité)")
+        
+    except Exception as e:
+        logger.warning(f"⚠️ combined_message_handler: {e}")
     
-    # Ajouter les autres ConversationHandlers nécessaires
+    # Ajouter les autres ConversationHandlers APRÈS (profil, véhicule)
     application.add_handler(profile_conv_handler)
     application.add_handler(vehicle_conv_handler)
     
@@ -621,9 +652,8 @@ async def setup_all_handlers_complete(application):
                 logger.info(f"ℹ️ Message ignoré (aucun mode actif) pour {user_id}")
             # Sinon ignorer le message
         
-        application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, combined_message_handler))
+        logger.info("✅ Handlers post-booking (contact, message, RDV) configurés")
         
-        logger.info("✅ MessageHandlers pour messagerie bidirectionnelle et RDV configurés")
     except Exception as e:
         logger.warning(f"⚠️ MessageHandlers: {e}")
     
