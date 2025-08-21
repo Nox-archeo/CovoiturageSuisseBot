@@ -136,7 +136,7 @@ async def handle_meeting_point(update: Update, context: CallbackContext):
             [InlineKeyboardButton("📍 Gare de départ", callback_data=f"rdv_station:{trip_id}")],
             [InlineKeyboardButton("🏢 Centre-ville", callback_data=f"rdv_center:{trip_id}")],
             [InlineKeyboardButton("✏️ Autre lieu (message)", callback_data=f"rdv_custom:{trip_id}")],
-            [InlineKeyboardButton("🔙 Retour", callback_data=f"trip_details:{trip_id}")]
+            [InlineKeyboardButton("🔙 Retour réservations", callback_data="profile:my_bookings")]
         ]
         
         message = (
@@ -283,12 +283,12 @@ async def handle_trip_details(update: Update, context: CallbackContext):
         ).all()
         
         total_passengers = len(bookings)
-        total_revenue = sum(b.total_price for b in bookings)
+        total_revenue = sum(b.amount for b in bookings)  # Utiliser 'amount' au lieu de 'total_price'
         
         passengers_list = []
         for booking in bookings:
-            passenger_name = booking.passenger.first_name or booking.passenger.username or 'Passager'
-            passengers_list.append(f"• {passenger_name} ({booking.total_price:.2f} CHF)")
+            passenger_name = booking.passenger.full_name or booking.passenger.username or 'Passager'
+            passengers_list.append(f"• {passenger_name} ({booking.amount:.2f} CHF)")
         
         passengers_text = "\n".join(passengers_list) if passengers_list else "Aucun passager"
         
@@ -296,13 +296,13 @@ async def handle_trip_details(update: Update, context: CallbackContext):
             f"🚗 **Détails du Trajet #{trip_id}**\n\n"
             f"📍 **Itinéraire:** {trip.departure_city} → {trip.arrival_city}\n"
             f"📅 **Date:** {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
-            f"👤 **Conducteur:** {trip.driver.first_name or 'Non renseigné'}\n\n"
+            f"👤 **Conducteur:** {trip.driver.full_name or 'Non renseigné'}\n\n"
             f"👥 **Passagers ({total_passengers}):**\n{passengers_text}\n\n"
             f"💰 **Total collecté:** {total_revenue:.2f} CHF"
         )
         
         keyboard = [
-            [InlineKeyboardButton("🔙 Retour au menu principal", callback_data="main_menu")]
+            [InlineKeyboardButton("🔙 Retour réservations", callback_data="profile:my_bookings")]
         ]
         
         await query.edit_message_text(
@@ -366,3 +366,57 @@ async def handle_send_message_driver(update: Update, context: CallbackContext):
     except Exception as e:
         logger.error(f"Erreur send_message_driver: {e}")
         await query.edit_message_text("❌ Erreur lors de l'envoi du message")
+
+async def handle_rdv_station(update: Update, context: CallbackContext):
+    """Gère le choix gare comme point de RDV"""
+    query = update.callback_query
+    await query.answer("📍 Point de RDV: Gare sélectionnée")
+    
+    try:
+        trip_id = int(query.data.split(':')[1])
+        keyboard = [[InlineKeyboardButton("🔙 Retour réservations", callback_data="profile:my_bookings")]]
+        
+        await query.edit_message_text(
+            text="📍 **Point de rendez-vous défini**\n\n🚉 **Gare de départ**\n\nLe conducteur sera informé de votre choix.",
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode='Markdown'
+        )
+    except Exception as e:
+        logger.error(f"Erreur rdv_station: {e}")
+        await query.edit_message_text("❌ Erreur lors de la définition du RDV")
+
+async def handle_rdv_center(update: Update, context: CallbackContext):
+    """Gère le choix centre-ville comme point de RDV"""
+    query = update.callback_query
+    await query.answer("📍 Point de RDV: Centre-ville sélectionné")
+    
+    try:
+        trip_id = int(query.data.split(':')[1])
+        keyboard = [[InlineKeyboardButton("🔙 Retour réservations", callback_data="profile:my_bookings")]]
+        
+        await query.edit_message_text(
+            text="📍 **Point de rendez-vous défini**\n\n🏢 **Centre-ville**\n\nLe conducteur sera informé de votre choix.",
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode='Markdown'
+        )
+    except Exception as e:
+        logger.error(f"Erreur rdv_center: {e}")
+        await query.edit_message_text("❌ Erreur lors de la définition du RDV")
+
+async def handle_rdv_custom(update: Update, context: CallbackContext):
+    """Gère le choix lieu personnalisé comme point de RDV"""
+    query = update.callback_query
+    await query.answer("✏️ Tapez votre lieu de RDV")
+    
+    try:
+        trip_id = int(query.data.split(':')[1])
+        keyboard = [[InlineKeyboardButton("🔙 Retour réservations", callback_data="profile:my_bookings")]]
+        
+        await query.edit_message_text(
+            text="✏️ **Lieu personnalisé**\n\nTapez ci-dessous l'adresse ou le lieu de rendez-vous souhaité.",
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode='Markdown'
+        )
+    except Exception as e:
+        logger.error(f"Erreur rdv_custom: {e}")
+        await query.edit_message_text("❌ Erreur lors de la définition du RDV")

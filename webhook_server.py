@@ -549,7 +549,10 @@ async def setup_all_handlers_complete(application):
             handle_cancel_booking_with_refund,
             handle_confirm_cancel,
             handle_trip_details,
-            handle_send_message_driver
+            handle_send_message_driver,
+            handle_rdv_station,
+            handle_rdv_center,
+            handle_rdv_custom
         )
         
         application.add_handler(CallbackQueryHandler(handle_contact_driver, pattern="^contact_driver:"))
@@ -559,6 +562,9 @@ async def setup_all_handlers_complete(application):
         application.add_handler(CallbackQueryHandler(handle_confirm_cancel, pattern="^confirm_cancel:"))
         application.add_handler(CallbackQueryHandler(handle_trip_details, pattern="^trip_details:"))
         application.add_handler(CallbackQueryHandler(handle_send_message_driver, pattern="^send_message_driver:"))
+        application.add_handler(CallbackQueryHandler(handle_rdv_station, pattern="^rdv_station:"))
+        application.add_handler(CallbackQueryHandler(handle_rdv_center, pattern="^rdv_center:"))
+        application.add_handler(CallbackQueryHandler(handle_rdv_custom, pattern="^rdv_custom:"))
         
         logger.info("✅ Handlers de communication post-réservation configurés")
     except Exception as e:
