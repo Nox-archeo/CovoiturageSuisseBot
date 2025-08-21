@@ -85,6 +85,15 @@ async def confirm_booking_with_payment(update: Update, context: CallbackContext)
     trip_id = int(query.data.split('_')[-1])
     user_id = update.effective_user.id
     
+    # 🧹 NETTOYAGE AUTOMATIQUE: Supprimer les réservations expirées à chaque nouvelle réservation
+    try:
+        from auto_cleanup_unpaid import cleanup_unpaid_bookings
+        deleted_count = cleanup_unpaid_bookings()
+        if deleted_count > 0:
+            logger.info(f"🧹 {deleted_count} réservations expirées nettoyées automatiquement")
+    except Exception as cleanup_error:
+        logger.warning(f"⚠️ Erreur nettoyage automatique: {cleanup_error}")
+    
     try:
         db = get_db()
         

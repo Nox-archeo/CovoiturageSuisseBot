@@ -290,6 +290,19 @@ async def handle_payment_completed(data: dict):
         except Exception as refund_error:
             logger.error(f"❌ Erreur lors du traitement des remboursements automatiques: {refund_error}")
         
+        # NOUVEAU: Nettoyage automatique des réservations non payées expirées
+        try:
+            logger.info("🧹 Nettoyage automatique des réservations expirées...")
+            from auto_cleanup_unpaid import cleanup_unpaid_bookings
+            deleted_count = cleanup_unpaid_bookings()
+            if deleted_count > 0:
+                logger.info(f"✅ {deleted_count} réservations expirées nettoyées")
+            else:
+                logger.info("ℹ️ Aucune réservation expirée à nettoyer")
+                
+        except Exception as cleanup_error:
+            logger.error(f"❌ Erreur lors du nettoyage automatique: {cleanup_error}")
+        
         # Notifier le passager
         logger.info(f"📱 Notification passager pour réservation {booking.id}")
         passenger = booking.passenger

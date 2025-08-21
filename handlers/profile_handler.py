@@ -1385,9 +1385,12 @@ async def handle_trip_sub_callbacks_from_profile(update: Update, context: Callba
                     if len(passenger_trips) == 10:
                         message += "📝 *Affichage limité aux 10 dernières demandes*"
             else:
-                # Récupérer les réservations (bookings) de l'utilisateur
+                # Récupérer les réservations (bookings) de l'utilisateur - SEULEMENT PAYÉES
                 bookings = db.query(Booking).filter(
-                    Booking.passenger_id == user.id
+                    and_(
+                        Booking.passenger_id == user.id,
+                        Booking.is_paid == True  # 🔥 CORRECTION: Seulement les payées
+                    )
                 ).join(Trip).order_by(Trip.departure_time.desc()).limit(10).all()
                 
                 if not bookings:
