@@ -40,6 +40,7 @@ async def add_post_booking_communication(booking_id: int, bot):
             passenger_keyboard = [
                 [InlineKeyboardButton("💬 Contacter le conducteur", callback_data=f"contact_driver:{trip.id}")],
                 [InlineKeyboardButton("📍 Point de rendez-vous", callback_data=f"meeting_point:{trip.id}")],
+                [InlineKeyboardButton("✅ Confirmer présence", callback_data=f"confirm_trip_passenger:{trip.id}:{booking_id}")],
                 [InlineKeyboardButton("❌ Annuler avec remboursement", callback_data=f"cancel_booking:{booking_id}")],
                 [InlineKeyboardButton("ℹ️ Détails du trajet", callback_data=f"trip_details:{trip.id}")]
             ]
@@ -64,7 +65,7 @@ async def add_post_booking_communication(booking_id: int, bot):
                 f"🎉 **Réservation confirmée #{booking_id}**\n\n"
                 f"📍 **Trajet:** {trip.departure_city} → {trip.arrival_city}\n"
                 f"📅 **Date:** {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
-                f"💰 **Montant payé:** {booking.total_price:.2f} CHF\n\n"
+                f"💰 **Montant payé:** {booking.amount:.2f} CHF\n\n"
                 f"{driver_contact}\n"
                 f"🔽 **Actions disponibles:**"
             )
@@ -81,6 +82,7 @@ async def add_post_booking_communication(booking_id: int, bot):
             driver_keyboard = [
                 [InlineKeyboardButton("💬 Contacter le passager", callback_data=f"contact_passenger:{booking_id}")],
                 [InlineKeyboardButton("📍 Définir point de RDV", callback_data=f"set_meeting_point:{trip.id}")],
+                [InlineKeyboardButton("✅ Confirmer trajet effectué", callback_data=f"confirm_trip_driver:{trip.id}")],
                 [InlineKeyboardButton("👥 Voir tous les passagers", callback_data=f"view_passengers:{trip.id}")],
                 [InlineKeyboardButton("ℹ️ Détails du trajet", callback_data=f"trip_details:{trip.id}")]
             ]
@@ -112,7 +114,7 @@ async def add_post_booking_communication(booking_id: int, bot):
                 f"📍 **Trajet:** {trip.departure_city} → {trip.arrival_city}\n"
                 f"📅 **Date:** {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
                 f"👥 **Total passagers:** {total_paid_passengers}\n"
-                f"💰 **Prix payé:** {booking.total_price:.2f} CHF\n\n"
+                f"💰 **Prix payé:** {booking.amount:.2f} CHF\n\n"
                 f"{passenger_contact}\n"
                 f"🔽 **Actions disponibles:**"
             )
@@ -138,7 +140,7 @@ if __name__ == "__main__":
     
     async def test():
         mock_bot = AsyncMock()
-        await add_post_booking_communication(28, mock_bot)
+        await add_post_booking_communication(29, mock_bot)
         print("Test terminé")
     
     asyncio.run(test())
