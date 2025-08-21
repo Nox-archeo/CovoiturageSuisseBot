@@ -401,35 +401,41 @@ async def setup_all_handlers_complete(application):
         logger.warning(f"⚠️ ConversationHandlers principaux non disponibles: {e}")
 
     # NOUVEAU: Ajouter d'abord le combined_message_handler pour la messagerie (PRIORITÉ)
-    try:
-        async def combined_message_handler(update: Update, context: CallbackContext):
-            """
-            Handler unifié pour tous les messages texte selon le mode utilisateur
-            """
-            user_id = update.effective_user.id
-            message_text = update.message.text
-            logger.info(f"🎯 combined_message_handler appelé pour {user_id}: '{message_text}'")
-            
-            if 'messaging_driver' in context.user_data:
-                logger.info(f"🎯 Mode messaging_driver détecté pour {user_id}")
-                return await handle_message_to_driver(update, context)
-            elif 'replying_to_passenger' in context.user_data:
-                logger.info(f"🎯 Mode replying_to_passenger détecté pour {user_id}")
-                return await handle_message_to_passenger(update, context)
-            elif 'suggesting_rdv' in context.user_data:
-                logger.info(f"🎯 Mode suggesting_rdv détecté pour {user_id}")
-                return await handle_rdv_suggestion_message(update, context)
-            else:
-                logger.info(f"ℹ️ Message ignoré (aucun mode actif) pour {user_id}")
-                # Retourner None pour permettre aux autres handlers de traiter
-                return None
-            # Sinon ignorer le message
+    async def combined_message_handler(update: Update, context: CallbackContext):
+        """
+        Handler unifié pour tous les messages texte selon le mode utilisateur
+        PRIORITÉ: Traité AVANT tous les ConversationHandlers
+        """
+        user_id = update.effective_user.id
+        message_text = update.message.text
+        logger.info(f"🎯 combined_message_handler appelé pour {user_id}: '{message_text}'")
         
-        application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, combined_message_handler))
-        logger.info("✅ combined_message_handler enregistré EN PREMIER (priorité)")
-        
-    except Exception as e:
-        logger.warning(f"⚠️ combined_message_handler: {e}")
+        if 'messaging_driver' in context.user_data:
+            logger.info(f"🎯 Mode messaging_driver détecté pour {user_id}")
+            return await handle_message_to_driver(update, context)
+        elif 'replying_to_passenger' in context.user_data:
+            logger.info(f"🎯 Mode replying_to_passenger détecté pour {user_id}")
+            return await handle_message_to_passenger(update, context)
+        elif 'suggesting_rdv' in context.user_data:
+            logger.info(f"🎯 Mode suggesting_rdv détecté pour {user_id}")
+            return await handle_rdv_suggestion_message(update, context)
+        else:
+            logger.info(f"ℹ️ Message ignoré par combined_message_handler (aucun mode actif) pour {user_id}")
+            # Retourner None pour permettre aux autres handlers de traiter
+            return None
+    
+    # Enregistrer le combined_message_handler EN PREMIER (PRIORITÉ ABSOLUE)
+    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, combined_message_handler))
+    logger.info("✅ combined_message_handler enregistré EN PREMIER (priorité absolue)")
+    
+    # TEST: Ajouter un handler de test pour TOUS les messages pour diagnostic
+    async def debug_all_messages(update: Update, context: CallbackContext):
+        user_id = update.effective_user.id
+        message_text = update.message.text if update.message else "N/A"
+        logger.error(f"🔍 DEBUG: Message reçu par debug_all_messages - User: {user_id}, Text: '{message_text}'")
+    
+    application.add_handler(MessageHandler(filters.ALL, debug_all_messages))
+    logger.error("🔍 DEBUG: Handler de diagnostic ajouté pour TOUS les messages")
     
     # Ajouter les autres ConversationHandlers APRÈS (profil, véhicule)
     application.add_handler(profile_conv_handler)
