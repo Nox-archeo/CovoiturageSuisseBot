@@ -620,7 +620,7 @@ async def show_my_bookings(update: Update, context: CallbackContext):
                 if confirmation_buttons:
                     row_btns.extend(confirmation_buttons)
                 
-                # NOUVEAU: Ajouter bouton de communication avec le conducteur pour réservations payées
+                # NOUVEAU: Ajouter tous les boutons de communication pour réservations payées
                 if booking.is_paid and booking.status != 'cancelled':
                     # Récupérer le nom du conducteur pour l'affichage
                     driver = trip.driver
@@ -633,21 +633,29 @@ async def show_my_bookings(update: Update, context: CallbackContext):
                         else:
                             driver_name = f"conducteur #{driver.id}"
                     
-                    row_btns.append(
+                    # Ajouter tous les boutons de communication post-réservation
+                    row_btns.extend([
                         InlineKeyboardButton(
                             f"💬 Contacter {driver_name}", 
                             callback_data=f"contact_driver:{trip.id}"
-                        )
-                    )
-                
-                # Ajouter le bouton d'annulation pour les réservations payées non confirmées
-                if booking.is_paid and booking.status != 'cancelled':
-                    row_btns.append(
+                        ),
                         InlineKeyboardButton(
-                            "❌ Annuler réservation", 
+                            "📍 Point de rendez-vous", 
+                            callback_data=f"meeting_point:{trip.id}"
+                        ),
+                        InlineKeyboardButton(
+                            "✅ Confirmer présence", 
+                            callback_data=f"confirm_trip_passenger:{trip.id}:{booking.id}"
+                        ),
+                        InlineKeyboardButton(
+                            "ℹ️ Détails du trajet", 
+                            callback_data=f"trip_details:{trip.id}"
+                        ),
+                        InlineKeyboardButton(
+                            "❌ Annuler avec remboursement", 
                             callback_data=f"cancel_booking:{booking.id}"
                         )
-                    )
+                    ])
                 
                 reservation_blocks.append({'text': booking_str, 'buttons': row_btns})
             
