@@ -355,20 +355,25 @@ async def handle_show_trips_by_time(update: Update, context: CallbackContext):
                 # Trajets à venir : Modifier (si pas de réservations), Supprimer, Signaler
                 if booking_count == 0:
                     buttons.append(InlineKeyboardButton("✏️ Modifier", callback_data=f"trip:edit:{trip.id}"))
-                buttons.append(InlineKeyboardButton("🗑 Supprimer", callback_data=f"trip:delete:{trip.id}"))
+                
+                # NOUVEAU: Bouton pour contacter les passagers (si il y en a)
+                if booking_count > 0:
+                    buttons.append(InlineKeyboardButton("� Contacter passagers", callback_data=f"contact_passengers:{trip.id}"))
+                
+                buttons.append(InlineKeyboardButton("�🗑 Supprimer", callback_data=f"trip:delete:{trip.id}"))
                 buttons.append(InlineKeyboardButton("🚩 Signaler", callback_data=f"trip:report:{trip.id}"))
             else:
-                # Trajets passés : Supprimer, Signaler (pas de modification)
+                # Trajets passés : Contacter (si il y a eu des passagers), Supprimer, Signaler
+                if booking_count > 0:
+                    buttons.append(InlineKeyboardButton("💬 Voir passagers", callback_data=f"contact_passengers:{trip.id}"))
                 buttons.append(InlineKeyboardButton("🗑 Supprimer", callback_data=f"trip:delete:{trip.id}"))
                 buttons.append(InlineKeyboardButton("🚩 Signaler", callback_data=f"trip:report:{trip.id}"))
             
-            # Organiser les boutons en lignes
+            # Organiser les boutons en lignes (maximum 2 par ligne)
             keyboard = []
-            if len(buttons) <= 2:
-                keyboard.append(buttons)
-            else:
-                keyboard.append(buttons[:2])
-                keyboard.append(buttons[2:])
+            for i in range(0, len(buttons), 2):
+                row = buttons[i:i+2]
+                keyboard.append(row)
             
             # Envoyer le trajet avec ses boutons
             await context.bot.send_message(
@@ -538,13 +543,34 @@ async def list_my_trips(update: Update, context: CallbackContext):
                 )
                 
                 # Boutons d'action pour trajets individuels
-                keyboard_row = []
                 if booking_count == 0:
-                    keyboard_row.append(InlineKeyboardButton("✏️ Modifier", callback_data=f"trip:edit:{trip_data['id']}"))
-                keyboard_row.append(InlineKeyboardButton("🗑 Supprimer", callback_data=f"trip:delete:{trip_data['id']}"))
-                keyboard_row.append(InlineKeyboardButton("🚩 Signaler", callback_data=f"trip:report:{trip_data['id']}"))
-                
-                active_blocks.append({"text": trip_str, "keyboard_row": keyboard_row})
+                    # Trajet sans réservation - boutons d'édition
+                    keyboard_row = [
+                        InlineKeyboardButton("✏️ Modifier", callback_data=f"trip:edit:{trip_data['id']}"),
+                        InlineKeyboardButton("🗑 Supprimer", callback_data=f"trip:delete:{trip_data['id']}"),
+                        InlineKeyboardButton("🚩 Signaler", callback_data=f"trip:report:{trip_data['id']}")
+                    ]
+                    active_blocks.append({"text": trip_str, "keyboard_row": keyboard_row})
+                else:
+                    # Trajet avec réservations - boutons de gestion passagers
+                    keyboard_row_1 = [
+                        InlineKeyboardButton("💬 Contacter passagers", callback_data=f"driver:contact_passengers:{trip_data['id']}"),
+                        InlineKeyboardButton("📍 Définir point RDV", callback_data=f"driver:set_meeting:{trip_data['id']}")
+                    ]
+                    keyboard_row_2 = [
+                        InlineKeyboardButton("✅ Confirmer trajet effectué", callback_data=f"driver:confirm_trip:{trip_data['id']}"),
+                        InlineKeyboardButton("� Voir passagers", callback_data=f"driver:view_passengers:{trip_data['id']}")
+                    ]
+                    keyboard_row_3 = [
+                        InlineKeyboardButton("ℹ️ Détails du trajet", callback_data=f"driver:trip_details:{trip_data['id']}"),
+                        InlineKeyboardButton("🚩 Signaler", callback_data=f"trip:report:{trip_data['id']}")
+                    ]
+                    active_blocks.append({
+                        "text": trip_str, 
+                        "keyboard_row": keyboard_row_1,
+                        "keyboard_row_2": keyboard_row_2,
+                        "keyboard_row_3": keyboard_row_3
+                    })
                 
             except Exception as e:
                 logger.error(f"[MES TRAJETS] Erreur sur le trajet {trip_data.get('id', '?')}: {e}")
@@ -597,9 +623,12 @@ async def list_my_trips(update: Update, context: CallbackContext):
                     trip_keyboard = []
                     if 'keyboard_row' in block and block['keyboard_row']:
                         trip_keyboard.append(block['keyboard_row'])
-                    # Ajouter la deuxième ligne de boutons s'il y en a une (pour les groupes réguliers)
+                    # Ajouter la deuxième ligne de boutons s'il y en a une
                     if 'keyboard_row_2' in block and block['keyboard_row_2']:
                         trip_keyboard.append(block['keyboard_row_2'])
+                    # Ajouter la troisième ligne de boutons s'il y en a une
+                    if 'keyboard_row_3' in block and block['keyboard_row_3']:
+                        trip_keyboard.append(block['keyboard_row_3'])
                     
                     # Envoyer le message du trajet avec ses boutons
                     await context.bot.send_message(
@@ -2331,6 +2360,15 @@ def register(application):
     application.add_handler(CallbackQueryHandler(confirm_delete_regular_group, pattern=r"^confirm_delete_group:"))
     application.add_handler(CallbackQueryHandler(handle_trip_detail, pattern=r"^trip_detail:\d+$"))
     
+    # Nouveaux handlers pour les boutons conducteur
+    application.add_handler(CallbackQueryHandler(handle_driver_contact_passengers, pattern=r"^driver:contact_passengers:\d+$"))
+    application.add_handler(CallbackQueryHandler(handle_driver_set_meeting_point, pattern=r"^driver:set_meeting:\d+$"))
+    application.add_handler(CallbackQueryHandler(handle_driver_confirm_trip_completed, pattern=r"^driver:confirm_trip:\d+$"))
+    application.add_handler(CallbackQueryHandler(handle_driver_view_passengers, pattern=r"^driver:view_passengers:\d+$"))
+    application.add_handler(CallbackQueryHandler(handle_driver_trip_details, pattern=r"^driver:trip_details:\d+$"))
+    application.add_handler(CallbackQueryHandler(handle_confirm_trip_completed, pattern=r"^driver:confirm_completed:\d+$"))
+    application.add_handler(CallbackQueryHandler(handle_driver_message_passenger, pattern=r"^driver:message_passenger:\d+$"))
+    
     logger.info("Handlers trip_handlers enregistrés avec succès")
 
 async def handle_regular_group_view(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -2956,3 +2994,385 @@ async def confirm_delete_passenger_trip(update: Update, context: CallbackContext
         )
     
     return ConversationHandler.END
+
+# ================================
+# HANDLERS POUR BOUTONS CONDUCTEUR
+# ================================
+
+async def handle_driver_contact_passengers(update: Update, context: CallbackContext):
+    """Handler pour contacter les passagers d'un trajet"""
+    query = update.callback_query
+    await query.answer()
+    
+    trip_id = int(query.data.split(":")[-1])
+    user_id = update.effective_user.id
+    
+    try:
+        db = get_db()
+        trip = db.query(Trip).filter(Trip.id == trip_id, Trip.driver_id == user_id).first()
+        
+        if not trip:
+            await query.edit_message_text("❌ Trajet non trouvé.")
+            return
+        
+        # Récupérer les passagers confirmés
+        from database.models import Booking
+        bookings = db.query(Booking).filter(
+            Booking.trip_id == trip_id,
+            Booking.status == 'confirmed'
+        ).all()
+        
+        if not bookings:
+            await query.edit_message_text(
+                "📭 *Aucun passager confirmé*\n\n"
+                "Ce trajet n'a pas encore de passagers confirmés.",
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("🔙 Retour", callback_data="trips:show_driver")]
+                ]),
+                parse_mode="Markdown"
+            )
+            return
+        
+        # Afficher la liste des passagers avec bouton message individuel
+        message_text = f"💬 *Contacter les passagers*\n\n"
+        message_text += f"📍 **{trip.departure_city}** → **{trip.arrival_city}**\n"
+        message_text += f"📅 {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n\n"
+        message_text += f"👥 **{len(bookings)} passager(s) confirmé(s):**\n\n"
+        
+        keyboard = []
+        for booking in bookings:
+            passenger = db.query(User).filter(User.telegram_id == booking.passenger_id).first()
+            if passenger:
+                passenger_name = passenger.first_name or "Passager"
+                message_text += f"• {passenger_name}\n"
+                keyboard.append([
+                    InlineKeyboardButton(
+                        f"💬 Envoyer un message à {passenger_name}", 
+                        callback_data=f"driver:message_passenger:{booking.id}"
+                    )
+                ])
+        
+        keyboard.append([InlineKeyboardButton("🔙 Retour", callback_data="trips:show_driver")])
+        
+        await query.edit_message_text(
+            message_text,
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode="Markdown"
+        )
+        
+    except Exception as e:
+        logger.error(f"Erreur handle_driver_contact_passengers: {e}")
+        await query.edit_message_text("❌ Erreur lors de l'affichage des passagers.")
+
+async def handle_driver_set_meeting_point(update: Update, context: CallbackContext):
+    """Handler pour définir un point de rendez-vous"""
+    query = update.callback_query
+    await query.answer()
+    
+    trip_id = int(query.data.split(":")[-1])
+    
+    await query.edit_message_text(
+        "📍 *Définir le point de rendez-vous*\n\n"
+        "Envoyez-moi l'adresse ou la description du point de rendez-vous pour ce trajet.\n\n"
+        "💡 *Exemple:* \"Gare de Lausanne, quai 3\" ou \"Place de la Palud, fontaine\"",
+        reply_markup=InlineKeyboardMarkup([
+            [InlineKeyboardButton("❌ Annuler", callback_data="trips:show_driver")]
+        ]),
+        parse_mode="Markdown"
+    )
+    
+    # Stocker l'ID du trajet pour la prochaine étape
+    context.user_data['setting_meeting_point_for_trip'] = trip_id
+
+async def handle_driver_confirm_trip_completed(update: Update, context: CallbackContext):
+    """Handler pour confirmer que le trajet a été effectué"""
+    query = update.callback_query
+    await query.answer()
+    
+    trip_id = int(query.data.split(":")[-1])
+    user_id = update.effective_user.id
+    
+    try:
+        db = get_db()
+        trip = db.query(Trip).filter(Trip.id == trip_id, Trip.driver_id == user_id).first()
+        
+        if not trip:
+            await query.edit_message_text("❌ Trajet non trouvé.")
+            return
+        
+        # Vérifier s'il y a des passagers confirmés
+        from database.models import Booking
+        confirmed_bookings = db.query(Booking).filter(
+            Booking.trip_id == trip_id,
+            Booking.status == 'confirmed'
+        ).count()
+        
+        if confirmed_bookings == 0:
+            await query.edit_message_text(
+                "⚠️ *Aucun passager confirmé*\n\n"
+                "Vous ne pouvez confirmer un trajet que s'il y a des passagers confirmés.",
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("🔙 Retour", callback_data="trips:show_driver")]
+                ]),
+                parse_mode="Markdown"
+            )
+            return
+        
+        # Demander confirmation
+        message_text = (
+            f"✅ *Confirmer trajet effectué*\n\n"
+            f"📍 **{trip.departure_city}** → **{trip.arrival_city}**\n"
+            f"📅 {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
+            f"👥 {confirmed_bookings} passager(s) confirmé(s)\n\n"
+            f"⚠️ **Êtes-vous sûr que ce trajet a été effectué ?**\n"
+            f"Cette action déclenchera les paiements aux conducteurs et ne peut pas être annulée."
+        )
+        
+        keyboard = [
+            [
+                InlineKeyboardButton("✅ Oui, confirmer", callback_data=f"driver:confirm_completed:{trip_id}"),
+                InlineKeyboardButton("❌ Non, annuler", callback_data="trips:show_driver")
+            ]
+        ]
+        
+        await query.edit_message_text(
+            message_text,
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode="Markdown"
+        )
+        
+    except Exception as e:
+        logger.error(f"Erreur handle_driver_confirm_trip_completed: {e}")
+        await query.edit_message_text("❌ Erreur lors de la confirmation du trajet.")
+
+async def handle_driver_view_passengers(update: Update, context: CallbackContext):
+    """Handler pour voir tous les passagers du trajet"""
+    query = update.callback_query
+    await query.answer()
+    
+    trip_id = int(query.data.split(":")[-1])
+    user_id = update.effective_user.id
+    
+    try:
+        db = get_db()
+        trip = db.query(Trip).filter(Trip.id == trip_id, Trip.driver_id == user_id).first()
+        
+        if not trip:
+            await query.edit_message_text("❌ Trajet non trouvé.")
+            return
+        
+        # Récupérer toutes les réservations
+        from database.models import Booking
+        bookings = db.query(Booking).filter(Booking.trip_id == trip_id).all()
+        
+        if not bookings:
+            await query.edit_message_text(
+                "👥 *Aucune réservation*\n\n"
+                "Ce trajet n'a pas encore de réservations.",
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("🔙 Retour", callback_data="trips:show_driver")]
+                ]),
+                parse_mode="Markdown"
+            )
+            return
+        
+        # Construire le message avec tous les passagers
+        message_text = f"👥 *Passagers du trajet*\n\n"
+        message_text += f"📍 **{trip.departure_city}** → **{trip.arrival_city}**\n"
+        message_text += f"📅 {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
+        message_text += f"💰 {format_swiss_price(trip.price_per_seat)}/place\n\n"
+        
+        confirmed_count = 0
+        pending_count = 0
+        
+        for booking in bookings:
+            passenger = db.query(User).filter(User.telegram_id == booking.passenger_id).first()
+            passenger_name = passenger.first_name if passenger else "Passager"
+            
+            status_emoji = "✅" if booking.status == 'confirmed' else "⏳"
+            status_text = "Confirmé" if booking.status == 'confirmed' else "En attente"
+            
+            message_text += f"{status_emoji} **{passenger_name}** - {status_text}\n"
+            
+            if booking.status == 'confirmed':
+                confirmed_count += 1
+            else:
+                pending_count += 1
+        
+        message_text += f"\n📊 **Résumé:**\n"
+        message_text += f"✅ {confirmed_count} confirmé(s)\n"
+        message_text += f"⏳ {pending_count} en attente\n"
+        message_text += f"💺 {trip.seats_available - len(bookings)} place(s) libre(s)"
+        
+        keyboard = [
+            [InlineKeyboardButton("🔙 Retour", callback_data="trips:show_driver")]
+        ]
+        
+        await query.edit_message_text(
+            message_text,
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode="Markdown"
+        )
+        
+    except Exception as e:
+        logger.error(f"Erreur handle_driver_view_passengers: {e}")
+        await query.edit_message_text("❌ Erreur lors de l'affichage des passagers.")
+
+async def handle_driver_trip_details(update: Update, context: CallbackContext):
+    """Handler pour afficher les détails complets du trajet"""
+    query = update.callback_query
+    await query.answer()
+    
+    trip_id = int(query.data.split(":")[-1])
+    user_id = update.effective_user.id
+    
+    try:
+        db = get_db()
+        trip = db.query(Trip).filter(Trip.id == trip_id, Trip.driver_id == user_id).first()
+        
+        if not trip:
+            await query.edit_message_text("❌ Trajet non trouvé.")
+            return
+        
+        # Récupérer les statistiques
+        from database.models import Booking
+        total_bookings = db.query(Booking).filter(Booking.trip_id == trip_id).count()
+        confirmed_bookings = db.query(Booking).filter(
+            Booking.trip_id == trip_id,
+            Booking.status == 'confirmed'
+        ).count()
+        
+        # Construire le message détaillé
+        message_text = f"ℹ️ *Détails du trajet*\n\n"
+        message_text += f"🆔 **ID:** {trip.id}\n"
+        message_text += f"📍 **Départ:** {trip.departure_city}\n"
+        message_text += f"📍 **Arrivée:** {trip.arrival_city}\n"
+        message_text += f"📅 **Date:** {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
+        message_text += f"💰 **Prix:** {format_swiss_price(trip.price_per_seat)}/place\n"
+        message_text += f"💺 **Places:** {trip.seats_available}\n\n"
+        
+        if hasattr(trip, 'description') and trip.description:
+            message_text += f"📝 **Description:** {trip.description}\n\n"
+        
+        message_text += f"📊 **Réservations:**\n"
+        message_text += f"✅ {confirmed_bookings} confirmée(s)\n"
+        message_text += f"📋 {total_bookings} total\n"
+        message_text += f"💺 {trip.seats_available - total_bookings} libre(s)\n\n"
+        
+        # Revenus estimés
+        estimated_revenue = confirmed_bookings * trip.price_per_seat * 0.88  # 88% pour le conducteur
+        message_text += f"💰 **Revenus estimés:** {format_swiss_price(estimated_revenue)}\n"
+        message_text += f"📅 **Créé le:** {trip.created_at.strftime('%d/%m/%Y')}"
+        
+        keyboard = [
+            [InlineKeyboardButton("🔙 Retour", callback_data="trips:show_driver")]
+        ]
+        
+        await query.edit_message_text(
+            message_text,
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode="Markdown"
+        )
+        
+    except Exception as e:
+        logger.error(f"Erreur handle_driver_trip_details: {e}")
+        await query.edit_message_text("❌ Erreur lors de l'affichage des détails.")
+
+async def handle_confirm_trip_completed(update: Update, context: CallbackContext):
+    """Confirme définitivement que le trajet a été effectué"""
+    query = update.callback_query
+    await query.answer()
+    
+    trip_id = int(query.data.split(":")[-1])
+    user_id = update.effective_user.id
+    
+    try:
+        db = get_db()
+        trip = db.query(Trip).filter(Trip.id == trip_id, Trip.driver_id == user_id).first()
+        
+        if not trip:
+            await query.edit_message_text("❌ Trajet non trouvé.")
+            return
+        
+        # Marquer le trajet comme terminé
+        trip.status = 'completed'
+        trip.completed_at = datetime.now()
+        db.commit()
+        
+        # Récupérer les réservations confirmées pour déclencher les paiements
+        from database.models import Booking
+        confirmed_bookings = db.query(Booking).filter(
+            Booking.trip_id == trip_id,
+            Booking.status == 'confirmed'
+        ).all()
+        
+        # TODO: Déclencher les paiements aux conducteurs ici
+        # for booking in confirmed_bookings:
+        #     trigger_driver_payment(booking)
+        
+        await query.edit_message_text(
+            f"✅ *Trajet confirmé comme effectué !*\n\n"
+            f"📍 {trip.departure_city} → {trip.arrival_city}\n"
+            f"📅 {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n\n"
+            f"🎉 Merci d'avoir utilisé notre service !\n"
+            f"💰 Les paiements vont être traités automatiquement.\n\n"
+            f"⭐ N'hésitez pas à évaluer vos passagers !",
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("🔙 Retour à mes trajets", callback_data="trips:show_driver")]
+            ]),
+            parse_mode="Markdown"
+        )
+        
+    except Exception as e:
+        logger.error(f"Erreur handle_confirm_trip_completed: {e}")
+        await query.edit_message_text("❌ Erreur lors de la confirmation du trajet.")
+
+async def handle_driver_message_passenger(update: Update, context: CallbackContext):
+    """Handler pour envoyer un message à un passager spécifique"""
+    query = update.callback_query
+    await query.answer()
+    
+    booking_id = int(query.data.split(":")[-1])
+    
+    try:
+        db = get_db()
+        from database.models import Booking
+        booking = db.query(Booking).filter(Booking.id == booking_id).first()
+        
+        if not booking:
+            await query.edit_message_text("❌ Réservation non trouvée.")
+            return
+        
+        # Récupérer les infos du passager et du trajet
+        passenger = db.query(User).filter(User.telegram_id == booking.passenger_id).first()
+        trip = db.query(Trip).filter(Trip.id == booking.trip_id).first()
+        
+        if not passenger or not trip:
+            await query.edit_message_text("❌ Informations introuvables.")
+            return
+        
+        passenger_name = passenger.first_name or "Passager"
+        
+        await query.edit_message_text(
+            f"💬 *Envoyer un message à {passenger_name}*\n\n"
+            f"📍 {trip.departure_city} → {trip.arrival_city}\n"
+            f"📅 {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n\n"
+            f"✍️ **Tapez votre message ci-dessous:**\n"
+            f"Il sera envoyé directement à {passenger_name}.",
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("❌ Annuler", callback_data=f"driver:contact_passengers:{trip.id}")]
+            ]),
+            parse_mode="Markdown"
+        )
+        
+        # Stocker les infos pour le prochain message
+        context.user_data['messaging_passenger'] = {
+            'booking_id': booking_id,
+            'passenger_id': booking.passenger_id,
+            'passenger_name': passenger_name,
+            'trip_id': trip.id
+        }
+        
+    except Exception as e:
+        logger.error(f"Erreur handle_driver_message_passenger: {e}")
+        await query.edit_message_text("❌ Erreur lors de l'envoi du message.")
