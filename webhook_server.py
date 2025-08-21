@@ -252,10 +252,10 @@ async def create_bot_app_webhook():
     except Exception as e:
         logger.warning(f"Attention - Configuration PayPal : {e}")
     
-    # 🔥 DÉSACTIVER PERSISTENCE PICKLE - Utiliser UNIQUEMENT PostgreSQL
-    # persistence = PicklePersistence(filepath="bot_data.pickle")
-    # application = Application.builder().token(BOT_TOKEN).persistence(persistence).build()
-    application = Application.builder().token(BOT_TOKEN).build()  # Sans persistence pickle
+    # � PERSISTANCE LIMITÉE: Seulement pour les conversations, PAS pour les réservations
+    # Les réservations sont gérées uniquement en PostgreSQL
+    persistence = PicklePersistence(filepath="bot_data.pickle")
+    application = Application.builder().token(BOT_TOKEN).persistence(persistence).build()
     
     # Importer et configurer tous les handlers EXACTEMENT comme dans bot.py.backup
     await setup_all_handlers_complete(application)
@@ -1210,6 +1210,13 @@ async def test_real_notification():
         return {"success": False, "error": str(e)}
 
 if __name__ == "__main__":
+    # 🧹 NETTOYAGE PICKLE AU DÉMARRAGE pour éviter les conflits
+    try:
+        from clean_pickle_startup import clean_pickle_on_startup
+        clean_pickle_on_startup()
+    except Exception as cleanup_error:
+        logger.warning(f"⚠️ Nettoyage pickle: {cleanup_error}")
+    
     port = int(os.getenv('PORT', 8000))
     logger.info(f"🚀 Démarrage serveur webhook sur port {port}")
     
