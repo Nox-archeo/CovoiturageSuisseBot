@@ -547,11 +547,12 @@ async def show_my_bookings(update: Update, context: CallbackContext):
             )
             return PROFILE_MAIN
         
-        # 🔥 CORRECTION: Récupérer SEULEMENT les réservations PAYÉES
+        # 🔥 CORRECTION: Récupérer SEULEMENT les réservations PAYÉES ET NON ANNULÉES
         bookings = db.query(Booking).filter(
             and_(
                 Booking.passenger_id == user.id,
-                Booking.is_paid == True  # Seulement les réservations payées
+                Booking.is_paid == True,  # Seulement les réservations payées
+                Booking.status != 'cancelled'  # Exclure les réservations annulées
             )
         ).join(Trip).order_by(Trip.departure_time.desc()).limit(20).all()
         
@@ -1389,7 +1390,8 @@ async def handle_trip_sub_callbacks_from_profile(update: Update, context: Callba
                 bookings = db.query(Booking).filter(
                     and_(
                         Booking.passenger_id == user.id,
-                        Booking.is_paid == True  # 🔥 CORRECTION: Seulement les payées
+                        Booking.is_paid == True,  # 🔥 CORRECTION: Seulement les payées
+                        Booking.status != 'cancelled'  # Exclure les annulées
                     )
                 ).join(Trip).order_by(Trip.departure_time.desc()).limit(10).all()
                 

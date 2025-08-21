@@ -49,7 +49,11 @@ async def process_passenger_refund(booking_id: int, bot=None) -> bool:
             return False
         
         # Calculer le montant du remboursement (montant total payé)
-        refund_amount = booking.total_price
+        refund_amount = booking.total_price or booking.amount or 0
+        
+        if refund_amount <= 0:
+            logger.error(f"❌ Montant de remboursement invalide: {refund_amount}")
+            return False
         
         logger.info(f"🔄 Traitement remboursement: {refund_amount:.2f} CHF pour réservation #{booking_id}")
         
