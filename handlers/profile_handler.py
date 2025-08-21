@@ -689,11 +689,14 @@ async def show_my_bookings(update: Update, context: CallbackContext):
                 
                 # Ajouter les boutons de cette réservation DIRECTEMENT après son texte
                 if block['buttons']:
-                    # Organiser les boutons en lignes (max 2 boutons par ligne)
-                    buttons = block['buttons']
-                    for j in range(0, len(buttons), 2):
-                        button_row = buttons[j:j+2]
-                        keyboard.append(button_row)
+                    # block['buttons'] contient déjà des lignes de boutons (listes d'InlineKeyboardButton)
+                    for button_row in block['buttons']:
+                        if isinstance(button_row, list):
+                            # C'est déjà une ligne de boutons
+                            keyboard.append(button_row)
+                        else:
+                            # C'est un bouton individuel, on le met dans une ligne
+                            keyboard.append([button_row])
             
             if len(bookings) == 20:
                 message += "\n\n📝 *Affichage limité aux 20 dernières réservations*"
