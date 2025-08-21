@@ -400,31 +400,7 @@ async def setup_all_handlers_complete(application):
     except Exception as e:
         logger.warning(f"⚠️ ConversationHandlers principaux non disponibles: {e}")
     
-    # PRIORITÉ: combined_message_handler AVANT tous les ConversationHandlers
-    async def combined_message_handler(update: Update, context: CallbackContext):
-        """Handler unifié pour tous les messages texte selon le mode utilisateur - PRIORITÉ ABSOLUE"""
-        user_id = update.effective_user.id
-        message_text = update.message.text
-        logger.info(f"🎯 combined_message_handler appelé pour {user_id}: '{message_text}'")
-        
-        if 'messaging_driver' in context.user_data:
-            logger.info(f"🎯 Mode messaging_driver détecté pour {user_id}")
-            return await handle_message_to_driver(update, context)
-        elif 'replying_to_passenger' in context.user_data:
-            logger.info(f"🎯 Mode replying_to_passenger détecté pour {user_id}")
-            return await handle_message_to_passenger(update, context)  
-        elif 'suggesting_rdv' in context.user_data:
-            logger.info(f"🎯 Mode suggesting_rdv détecté pour {user_id}")
-            return await handle_rdv_suggestion_message(update, context)
-        else:
-            logger.info(f"ℹ️ Message ignoré par combined_message_handler pour {user_id}")
-            return None  # Laisser autres handlers traiter
-    
-    # Enregistrer le combined_message_handler EN PREMIER (PRIORITÉ ABSOLUE)
-    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, combined_message_handler))
-    logger.info("✅ combined_message_handler enregistré EN PREMIER (priorité absolue)")
-    
-    # Ajouter les autres ConversationHandlers APRÈS
+    # Ajouter les autres ConversationHandlers nécessaires
     application.add_handler(profile_conv_handler)
     application.add_handler(vehicle_conv_handler)
     
@@ -580,11 +556,7 @@ async def setup_all_handlers_complete(application):
             handle_message_to_driver,
             handle_reply_to_passenger,
             handle_reply_to_driver,
-            handle_message_to_passenger,
-            handle_confirm_rdv_station,
-            handle_confirm_rdv_center,
-            handle_suggest_rdv,
-            handle_contact_passenger_rdv
+            handle_message_to_passenger
         )
         
         application.add_handler(CallbackQueryHandler(handle_contact_driver, pattern="^contact_driver:"))
@@ -599,10 +571,6 @@ async def setup_all_handlers_complete(application):
         application.add_handler(CallbackQueryHandler(handle_rdv_custom, pattern="^rdv_custom:"))
         application.add_handler(CallbackQueryHandler(handle_reply_to_passenger, pattern="^reply_to_passenger:"))
         application.add_handler(CallbackQueryHandler(handle_reply_to_driver, pattern="^reply_to_driver:"))
-        application.add_handler(CallbackQueryHandler(handle_confirm_rdv_station, pattern="^confirm_rdv_station:"))
-        application.add_handler(CallbackQueryHandler(handle_confirm_rdv_center, pattern="^confirm_rdv_center:"))
-        application.add_handler(CallbackQueryHandler(handle_suggest_rdv, pattern="^suggest_rdv:"))
-        application.add_handler(CallbackQueryHandler(handle_contact_passenger_rdv, pattern="^contact_passenger_rdv:"))
         
         logger.info("✅ Handlers de communication post-réservation configurés")
     except Exception as e:
@@ -622,32 +590,20 @@ async def setup_all_handlers_complete(application):
     # MessageHandlers pour la messagerie bidirectionnelle
     try:
         from telegram.ext import MessageHandler, filters
-        from handlers.post_booking_handlers import handle_message_to_driver, handle_message_to_passenger, handle_rdv_suggestion_message
+        from handlers.post_booking_handlers import handle_message_to_driver, handle_message_to_passenger
         
         # Handler pour les messages texte (passager vers conducteur)
-        async def combined_message_handler(update, context):
+        def combined_message_handler(update, context):
             """Gère les messages texte selon le mode actuel"""
-            # Log pour diagnostiquer
-            user_id = update.effective_user.id
-            message_text = update.message.text if update.message else "N/A"
-            logger.info(f"📝 Message reçu de {user_id}: '{message_text[:50]}...'")
-            
             if 'messaging_driver' in context.user_data:
-                logger.info(f"🎯 Mode messaging_driver détecté pour {user_id}")
-                return await handle_message_to_driver(update, context)
+                return handle_message_to_driver(update, context)
             elif 'replying_to_passenger' in context.user_data:
-                logger.info(f"🎯 Mode replying_to_passenger détecté pour {user_id}")
-                return await handle_message_to_passenger(update, context)
-            elif 'suggesting_rdv' in context.user_data:
-                logger.info(f"🎯 Mode suggesting_rdv détecté pour {user_id}")
-                return await handle_rdv_suggestion_message(update, context)
-            else:
-                logger.info(f"ℹ️ Message ignoré (aucun mode actif) pour {user_id}")
+                return handle_message_to_passenger(update, context)
             # Sinon ignorer le message
         
         application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, combined_message_handler))
         
-        logger.info("✅ MessageHandlers pour messagerie bidirectionnelle et RDV configurés")
+        logger.info("✅ MessageHandlers pour messagerie bidirectionnelle configurés")
     except Exception as e:
         logger.warning(f"⚠️ MessageHandlers: {e}")
     
