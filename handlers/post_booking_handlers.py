@@ -488,9 +488,14 @@ async def handle_rdv_custom(update: Update, context: CallbackContext):
 async def handle_message_to_driver(update: Update, context: CallbackContext):
     """Gère les messages texte envoyés au conducteur"""
     try:
+        logger.info(f"🔥 handle_message_to_driver appelé par {update.effective_user.id}")
+        
         # Vérifier si l'utilisateur est en mode messaging
         if 'messaging_driver' not in context.user_data:
+            logger.info(f"⚠️ User {update.effective_user.id} pas en mode messaging_driver")
             return  # Pas en mode messaging, ignorer
+        
+        logger.info(f"✅ User {update.effective_user.id} en mode messaging_driver")
         
         messaging_info = context.user_data['messaging_driver']
         driver_id = messaging_info['driver_id']
@@ -499,6 +504,7 @@ async def handle_message_to_driver(update: Update, context: CallbackContext):
         passenger_name = messaging_info['passenger_name']
         
         message_text = update.message.text
+        logger.info(f"📝 Message à envoyer: '{message_text}' vers conducteur {driver_id}")
         
         # Envoyer le message au conducteur avec bouton répondre
         keyboard = [
@@ -515,21 +521,26 @@ async def handle_message_to_driver(update: Update, context: CallbackContext):
             parse_mode='Markdown'
         )
         
+        logger.info(f"✅ Message envoyé au conducteur {driver_id}")
+        
         # Confirmation au passager
         keyboard_passenger = [
             [InlineKeyboardButton("🔙 Retour réservations", callback_data="profile:my_bookings")]
         ]
         
         await update.message.reply_text(
-            text=f"✅ **Message envoyé à {driver_name}**\n\n"
+            text=f"✅ **Votre message a bien été envoyé à {driver_name}**\n\n"
                  f"💭 \"{message_text}\"\n\n"
                  f"Le conducteur peut vous répondre directement.",
             reply_markup=InlineKeyboardMarkup(keyboard_passenger),
             parse_mode='Markdown'
         )
         
+        logger.info(f"✅ Confirmation envoyée au passager {update.effective_user.id}")
+        
         # Nettoyer le mode messaging
         del context.user_data['messaging_driver']
+        logger.info(f"🧹 Mode messaging_driver nettoyé pour {update.effective_user.id}")
         
     except Exception as e:
         logger.error(f"Erreur handle_message_to_driver: {e}")

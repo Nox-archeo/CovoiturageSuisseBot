@@ -601,14 +601,24 @@ async def setup_all_handlers_complete(application):
         from handlers.post_booking_handlers import handle_message_to_driver, handle_message_to_passenger, handle_rdv_suggestion_message
         
         # Handler pour les messages texte (passager vers conducteur)
-        def combined_message_handler(update, context):
+        async def combined_message_handler(update, context):
             """Gère les messages texte selon le mode actuel"""
+            # Log pour diagnostiquer
+            user_id = update.effective_user.id
+            message_text = update.message.text if update.message else "N/A"
+            logger.info(f"📝 Message reçu de {user_id}: '{message_text[:50]}...'")
+            
             if 'messaging_driver' in context.user_data:
-                return handle_message_to_driver(update, context)
+                logger.info(f"🎯 Mode messaging_driver détecté pour {user_id}")
+                return await handle_message_to_driver(update, context)
             elif 'replying_to_passenger' in context.user_data:
-                return handle_message_to_passenger(update, context)
+                logger.info(f"🎯 Mode replying_to_passenger détecté pour {user_id}")
+                return await handle_message_to_passenger(update, context)
             elif 'suggesting_rdv' in context.user_data:
-                return handle_rdv_suggestion_message(update, context)
+                logger.info(f"🎯 Mode suggesting_rdv détecté pour {user_id}")
+                return await handle_rdv_suggestion_message(update, context)
+            else:
+                logger.info(f"ℹ️ Message ignoré (aucun mode actif) pour {user_id}")
             # Sinon ignorer le message
         
         application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, combined_message_handler))
