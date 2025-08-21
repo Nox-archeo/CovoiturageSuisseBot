@@ -344,24 +344,34 @@ async def confirm_passenger_completion(query, trip: Trip, booking: Booking, db):
 async def release_payment_to_driver(query, trip: Trip, db):
     """Libère le paiement au conducteur après double confirmation"""
     try:
+        logger.info(f"🚀 DÉBUT release_payment_to_driver pour trip {trip.id}")
+        
         # Marquer le trajet comme complètement confirmé
         trip.status = 'completed_confirmed'
         trip.payment_released = True
+        logger.info(f"✅ Trip {trip.id} marqué comme completed_confirmed et payment_released=True")
         db.commit()
         
         # Calculer le montant à libérer
+        logger.info(f"🔍 Recherche des réservations payées pour trip {trip.id}")
         paid_bookings = db.query(Booking).filter(
             Booking.trip_id == trip.id,
             Booking.is_paid == True
         ).all()
         
+        logger.info(f"📋 {len(paid_bookings)} réservations payées trouvées")
+        
         total_amount = sum(booking.amount for booking in paid_bookings if booking.amount)
         driver_amount = total_amount * 0.88  # 88% pour le conducteur
         
+        logger.info(f"💰 Calcul montants: total={total_amount} CHF, conducteur={driver_amount} CHF")
+        
         # Marquer les réservations comme terminées
+        logger.info(f"🔄 Marquage des {len(paid_bookings)} réservations comme completed_confirmed")
         for booking in paid_bookings:
             booking.status = 'completed_confirmed'
         db.commit()
+        logger.info(f"✅ Réservations mises à jour")
         
         # Message de confirmation
         message = (
@@ -374,19 +384,23 @@ async def release_payment_to_driver(query, trip: Trip, db):
             f"Merci d'utiliser CovoiturageSuisse !"
         )
         
+        logger.info(f"📱 Envoi du message de confirmation à l'utilisateur")
         await query.edit_message_text(message, parse_mode='Markdown')
         
         # Notifier le conducteur
+        logger.info(f"🔔 Notification du conducteur (trip.driver_id={trip.driver_id})")
         try:
             await query.bot.send_message(
                 chat_id=trip.driver_id,
                 text=message,
                 parse_mode='Markdown'
             )
-        except:
-            pass  # Éviter erreur si c'est déjà le conducteur
+            logger.info(f"✅ Conducteur notifié avec succès")
+        except Exception as e:
+            logger.error(f"❌ Erreur notification conducteur: {e}")
         
         # Notifier tous les passagers
+        logger.info(f"🔔 Notification des {len(paid_bookings)} passagers")
         for booking in paid_bookings:
             try:
                 passenger = db.query(User).filter(User.id == booking.passenger_id).first()
@@ -400,44 +414,63 @@ async def release_payment_to_driver(query, trip: Trip, db):
                              f"Merci d'avoir utilisé CovoiturageSuisse !",
                         parse_mode='Markdown'
                     )
+                    logger.info(f"✅ Passager {booking.passenger_id} notifié")
             except Exception as e:
-                logger.error(f"Erreur notification passager {booking.passenger_id}: {e}")
+                logger.error(f"❌ Erreur notification passager {booking.passenger_id}: {e}")
         
         logger.info(f"🎉 Paiement de {driver_amount:.2f} CHF libéré pour trajet {trip.id}")
         
         # 🚀 NOUVEAU: Déclencher le vrai paiement au conducteur
+        logger.info(f"🚀 APPEL process_driver_payout pour {driver_amount:.2f} CHF")
         await process_driver_payout(trip, driver_amount, db)
+        logger.info(f"✅ process_driver_payout terminé")
         
     except Exception as e:
-        logger.error(f"Erreur release_payment_to_driver: {e}")
+        logger.error(f"❌ ERREUR CRITIQUE dans release_payment_to_driver: {e}")
+        import traceback
+        logger.error(f"📚 Stack trace: {traceback.format_exc()}")
 
 async def process_driver_payout(trip: Trip, driver_amount: float, db):
     """
     Traite le paiement automatique au conducteur via PayPal
     """
     try:
+        logger.info(f"🚀 DÉBUT process_driver_payout: trip {trip.id}, montant {driver_amount:.2f} CHF")
+        
         # Récupérer les infos du conducteur
+        logger.info(f"🔍 Recherche du conducteur ID {trip.driver_id}")
         driver = db.query(User).filter(User.id == trip.driver_id).first()
         
         if not driver:
-            logger.error(f"Conducteur non trouvé pour trip {trip.id}")
+            logger.error(f"❌ Conducteur non trouvé pour trip {trip.id}")
+            trip.status = 'payment_failed'
+            db.commit()
             return
             
+        logger.info(f"✅ Conducteur trouvé: ID={driver.id}, telegram_id={driver.telegram_id}")
+        
         if not driver.paypal_email:
-            logger.error(f"Conducteur {driver.id} n'a pas d'email PayPal configuré")
+            logger.error(f"❌ Conducteur {driver.id} n'a pas d'email PayPal configuré")
             # Marquer qu'il faut un paiement manuel
             trip.status = 'payment_pending_manual'
             db.commit()
             return
         
+        logger.info(f"✅ Email PayPal conducteur: {driver.paypal_email}")
+        
         # Initialiser PayPal
+        logger.info(f"🔌 Initialisation PayPal...")
         paypal = PayPalManager()
+        logger.info(f"✅ PayPal initialisé")
         
         # Description du trajet pour PayPal
         trip_description = f"{trip.departure_city} → {trip.arrival_city} ({trip.departure_time.strftime('%d/%m/%Y')})"
         
         # 💰 EFFECTUER LE PAIEMENT RÉEL
-        logger.info(f"🏦 Tentative de paiement PayPal : {driver_amount:.2f} CHF vers {driver.paypal_email}")
+        logger.info(f"🏦 TENTATIVE PAIEMENT PAYPAL:")
+        logger.info(f"   → Montant: {driver_amount:.2f} CHF")
+        logger.info(f"   → Destinataire: {driver.paypal_email}")
+        logger.info(f"   → Description: {trip_description}")
         
         success, payout_details = paypal.payout_to_driver(
             driver_email=driver.paypal_email,
@@ -445,8 +478,13 @@ async def process_driver_payout(trip: Trip, driver_amount: float, db):
             trip_description=trip_description
         )
         
+        logger.info(f"📊 Résultat paiement PayPal: success={success}")
+        if payout_details:
+            logger.info(f"📋 Détails payout: {payout_details}")
+        
         if success and payout_details:
             # ✅ PAIEMENT RÉUSSI
+            logger.info(f"🎉 PAIEMENT PAYPAL RÉUSSI!")
             batch_id = payout_details.get('batch_id')
             trip.payout_batch_id = batch_id
             trip.status = 'completed_paid'
@@ -458,7 +496,7 @@ async def process_driver_payout(trip: Trip, driver_amount: float, db):
             
             db.commit()
             
-            logger.info(f"✅ Paiement PayPal réussi ! Batch ID: {batch_id}")
+            logger.info(f"✅ Base de données mise à jour avec batch_id: {batch_id}")
             
             # Notifier le conducteur du paiement réussi
             try:
@@ -474,12 +512,13 @@ async def process_driver_payout(trip: Trip, driver_amount: float, db):
                          f"Merci d'utiliser CovoiturageSuisse !",
                     parse_mode='Markdown'
                 )
+                logger.info(f"✅ Notification paiement réussi envoyée au conducteur")
             except Exception as e:
-                logger.error(f"Erreur notification conducteur paiement: {e}")
+                logger.error(f"❌ Erreur notification conducteur paiement: {e}")
                 
         else:
             # ❌ ÉCHEC DU PAIEMENT
-            logger.error(f"❌ Échec paiement PayPal pour trajet {trip.id}")
+            logger.error(f"❌ ÉCHEC PAIEMENT PAYPAL pour trajet {trip.id}")
             trip.status = 'payment_failed'
             db.commit()
             
@@ -497,11 +536,14 @@ async def process_driver_payout(trip: Trip, driver_amount: float, db):
                          f"Notre équipe va traiter le paiement manuellement dans les 24h.",
                     parse_mode='Markdown'
                 )
+                logger.info(f"✅ Notification échec paiement envoyée au conducteur")
             except Exception as e:
-                logger.error(f"Erreur notification échec paiement: {e}")
+                logger.error(f"❌ Erreur notification échec paiement: {e}")
                 
     except Exception as e:
-        logger.error(f"Erreur process_driver_payout: {e}")
+        logger.error(f"❌ ERREUR CRITIQUE dans process_driver_payout: {e}")
+        import traceback
+        logger.error(f"📚 Stack trace payout: {traceback.format_exc()}")
         # Marquer pour traitement manuel
         trip.status = 'payment_error'
         db.commit()
