@@ -162,17 +162,35 @@ async def handle_cancel_booking_with_refund(update: Update, context: CallbackCon
     await query.answer()
     
     try:
+        logger.info(f"🔥 ANNULATION: callback_data = {query.data}")
         booking_id = int(query.data.split(':')[1])
+        logger.info(f"🔥 ANNULATION: booking_id = {booking_id}")
+        
         db = get_db()
         booking = db.query(Booking).filter(Booking.id == booking_id).first()
+        logger.info(f"🔥 ANNULATION: booking trouvé = {booking is not None}")
         
         if not booking:
             await query.edit_message_text("❌ Réservation non trouvée")
             return
         
+        logger.info(f"🔥 ANNULATION: booking.status = {booking.status}")
+        logger.info(f"🔥 ANNULATION: booking.trip = {booking.trip is not None}")
+        
         if booking.status == 'cancelled':
             await query.edit_message_text("❌ Cette réservation est déjà annulée")
             return
+        
+        # Vérifier les données du booking
+        if not booking.trip:
+            await query.edit_message_text("❌ Données de réservation incomplètes (trajet manquant)")
+            return
+            
+        if not hasattr(booking, 'total_price') or booking.total_price is None:
+            # Utiliser amount si total_price n'existe pas
+            price = getattr(booking, 'amount', 0) or 0
+        else:
+            price = booking.total_price
         
         # Confirmation d'annulation
         keyboard = [
@@ -185,11 +203,13 @@ async def handle_cancel_booking_with_refund(update: Update, context: CallbackCon
             f"**Réservation:** #{booking_id}\n"
             f"**Trajet:** {booking.trip.departure_city} → {booking.trip.arrival_city}\n"
             f"**Date:** {booking.trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
-            f"**Montant:** {booking.total_price:.2f} CHF\n\n"
+            f"**Montant:** {price:.2f} CHF\n\n"
             f"💰 **Remboursement automatique:** Vous serez remboursé intégralement "
             f"sur votre compte PayPal.\n\n"
             f"❓ Êtes-vous sûr de vouloir annuler ?"
         )
+        
+        logger.info(f"🔥 ANNULATION: Message créé, envoi...")
         
         await query.edit_message_text(
             text=message,
@@ -198,8 +218,11 @@ async def handle_cancel_booking_with_refund(update: Update, context: CallbackCon
         )
         
     except Exception as e:
-        logger.error(f"Erreur cancel_booking: {e}")
-        await query.edit_message_text("❌ Erreur lors de l'annulation")
+        logger.error(f"❌ Erreur complète cancel_booking: {e}")
+        logger.error(f"❌ Type erreur: {type(e).__name__}")
+        import traceback
+        logger.error(f"❌ Stack trace: {traceback.format_exc()}")
+        await query.edit_message_text("❌ Données de réservation incomplètes")
 
 async def handle_confirm_cancel(update: Update, context: CallbackContext):
     """Confirme l'annulation et déclenche le remboursement"""
