@@ -6,7 +6,7 @@ Fournit un tableau de bord interactif avec toutes les informations pertinentes.
 """
 import logging
 import re
-from sqlalchemy import func
+from sqlalchemy import func, and_
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.constants import ParseMode
 from telegram.ext import (
@@ -302,11 +302,12 @@ async def get_user_stats(user_id):
     ).scalar()
     stats['trips_count'] = future_trips or 0
     
-    # Compter les réservations actives (en tant que passager)
+    # Compter SEULEMENT les réservations payées et actives (en tant que passager)
     try:
         active_bookings = db.query(func.count(Booking.id)).filter(
             Booking.passenger_id == user.id,
             Booking.status.in_(['confirmed', 'pending']),
+            Booking.is_paid == True,  # Seulement les réservations payées
             Trip.departure_time > datetime.now()
         ).join(Trip).scalar()
         stats['bookings_count'] = active_bookings or 0
@@ -463,7 +464,11 @@ async def show_my_trips(update: Update, context: CallbackContext):
                 arrival_city = getattr(trip, 'arrival_city', "Arrivée")
                 price_per_seat = getattr(trip, 'price_per_seat', 0.00)
                 try:
-                    booking_count = db.query(Booking).filter(Booking.trip_id == trip.id, Booking.status.in_(["pending", "confirmed"])) .count()
+                    booking_count = db.query(Booking).filter(
+                        Booking.trip_id == trip.id, 
+                        Booking.status.in_(["pending", "confirmed"]),
+                        Booking.is_paid == True  # Seulement les réservations payées
+                    ).count()
                 except Exception as e:
                     logger.error(f"Erreur lors du comptage des réservations pour le trajet {getattr(trip, 'id', '?')}: {e}")
                     booking_count = 0
@@ -542,9 +547,12 @@ async def show_my_bookings(update: Update, context: CallbackContext):
             )
             return PROFILE_MAIN
         
-        # 🔥 CORRECTION: Récupérer TOUTES les réservations avec infos de paiement
+        # 🔥 CORRECTION: Récupérer SEULEMENT les réservations PAYÉES
         bookings = db.query(Booking).filter(
-            Booking.passenger_id == user.id
+            and_(
+                Booking.passenger_id == user.id,
+                Booking.is_paid == True  # Seulement les réservations payées
+            )
         ).join(Trip).order_by(Trip.departure_time.desc()).limit(20).all()
         
         if not bookings:

@@ -288,10 +288,11 @@ async def check_booking_status(update: Update, context: CallbackContext):
             await update.message.reply_text("❌ Utilisateur non trouvé. Utilisez /start d'abord.")
             return
         
-        # Récupérer les réservations actives
+        # Récupérer SEULEMENT les réservations PAYÉES et actives
         bookings = db.query(Booking).filter(
             Booking.passenger_id == user.id,
-            Booking.status.in_(['pending', 'confirmed'])
+            Booking.status.in_(['pending', 'confirmed']),
+            Booking.is_paid == True  # Seulement les réservations payées
         ).order_by(Booking.booking_date.desc()).limit(5).all()
         
         if not bookings:
