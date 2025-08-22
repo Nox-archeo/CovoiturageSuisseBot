@@ -611,6 +611,8 @@ async def setup_all_handlers_complete(application):
         
         application.add_handler(CallbackQueryHandler(handle_trip_confirmation_callback, pattern="^confirm_trip_driver:"))
         application.add_handler(CallbackQueryHandler(handle_trip_confirmation_callback, pattern="^confirm_trip_passenger:"))
+        application.add_handler(CallbackQueryHandler(handle_trip_confirmation_callback, pattern="^force_confirm_driver:"))
+        application.add_handler(CallbackQueryHandler(handle_trip_confirmation_callback, pattern="^force_confirm_passenger:"))
         
         logger.info("✅ Handlers de confirmation de trajet configurés")
     except Exception as e:

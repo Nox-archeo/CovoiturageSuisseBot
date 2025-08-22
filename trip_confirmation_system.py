@@ -211,6 +211,19 @@ async def handle_trip_confirmation_callback(update: Update, context: CallbackCon
             booking_id = int(parts[2]) if len(parts) > 2 else None
             await handle_passenger_confirmation(query, trip, booking_id, db, now)
             
+        elif action == "force_confirm_driver":
+            # Confirmation forcée côté conducteur - aller directement à la confirmation
+            await confirm_driver_completion(query, trip, db)
+            
+        elif action == "force_confirm_passenger":
+            # Confirmation forcée côté passager - aller directement à la confirmation
+            booking_id = int(parts[2]) if len(parts) > 2 else None
+            booking = db.query(Booking).filter(Booking.id == booking_id).first()
+            if booking:
+                await confirm_passenger_completion(query, trip, booking, db)
+            else:
+                await query.edit_message_text("❌ Réservation non trouvée.")
+            
     except Exception as e:
         logger.error(f"Erreur handle_trip_confirmation_callback: {e}")
         await query.edit_message_text("❌ Erreur lors de la confirmation.")
@@ -235,7 +248,7 @@ async def handle_driver_confirmation(query, trip: Trip, db, now: datetime):
                     f"Le trajet a lieu dans {days_until} jour(s).\n"
                     f"📅 Date prévue : {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n\n"
                     f"❓ **Voulez-vous vraiment confirmer que le trajet a eu lieu ?**\n"
-                    f"Cette action libérera le paiement aux passagers.",
+                    f"Cette action libérera 88% du paiement sur votre compte PayPal.",
                     reply_markup=InlineKeyboardMarkup(keyboard),
                     parse_mode='Markdown'
                 )
