@@ -76,6 +76,7 @@ async def handle_payment_completion(payment_id: str, bot=None) -> bool:
         # 🎯 SOLUTION CRITIQUE: PayPal change l'ID entre création et webhook - Chercher par reference_id
         if not booking and paypal_payment_details:
             logger.info(f"🔍 DIAGNOSTIC: Recherche par reference_id car booking non trouvé")
+            logger.info(f"🔍 DIAGNOSTIC: Structure complète PayPal webhook: {paypal_payment_details}")
             try:
                 if 'purchase_units' in paypal_payment_details:
                     logger.info(f"🔍 DIAGNOSTIC: purchase_units trouvé, nombre d'unités: {len(paypal_payment_details['purchase_units'])}")
@@ -96,6 +97,7 @@ async def handle_payment_completion(payment_id: str, bot=None) -> bool:
                             logger.info(f"🔍 DIAGNOSTIC: Pas de reference_id dans cette unité: {unit.keys()}")
                 else:
                     logger.warning(f"🔍 DIAGNOSTIC: Pas de purchase_units dans paypal_payment_details")
+                    logger.info(f"🔍 DIAGNOSTIC: Clés disponibles: {list(paypal_payment_details.keys())}")
             except Exception as e:
                 logger.error(f"❌ Erreur recherche reference_id: {e}")
                 import traceback
