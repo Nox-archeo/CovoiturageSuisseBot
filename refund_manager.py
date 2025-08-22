@@ -257,10 +257,10 @@ class RefundManager:
                 # Libérer les places dans le trajet
                 trip = db.query(Trip).get(booking.trip_id)
                 if trip:
-                    if hasattr(trip, 'available_seats') and trip.available_seats is not None:
-                        trip.available_seats += booking.seats
-                    elif hasattr(trip, 'seats_available') and trip.seats_available is not None:
-                        trip.seats_available += booking.seats
+                    # Les places totales ne changent JAMAIS lors de remboursement
+                    # Seules les réservations payées sont comptées dynamiquement
+                    # (Correction du bug: les places ne doivent pas être modifiées)
+                    logger.info(f"Remboursement traité - places totales inchangées pour trajet {trip.id}")
                 
                 db.commit()
                 

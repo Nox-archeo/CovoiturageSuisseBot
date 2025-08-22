@@ -73,11 +73,12 @@ async def process_passenger_refund(booking_id: int, bot=None) -> bool:
             booking.status = 'cancelled'
             booking.payment_status = 'refunded'
             
-            # CORRECTION CRITIQUE: Remettre la place disponible
+            # Les places totales ne changent JAMAIS lors de remboursement
+            # Seules les réservations payées sont comptées dynamiquement
+            # (Correction du bug: les places ne doivent pas être modifiées)
             trip = booking.trip
             if trip:
-                trip.seats_available += 1
-                logger.info(f"🔼 Place remise: {trip.seats_available - 1} → {trip.seats_available} pour trajet {trip.id}")
+                logger.info(f"✅ Remboursement traité - places totales inchangées: {trip.seats_available} pour trajet {trip.id}")
             
             db.commit()
             
