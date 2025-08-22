@@ -259,7 +259,7 @@ async def handle_passenger_confirmation(query, trip: Trip, booking_id: int, db, 
         if trip.departure_time > now:
             days_until = (trip.departure_time - now).days
             
-            if days_until > 0:
+            if True:  # Toujours demander double confirmation pour sécurité paiement
                 # Demander confirmation pour trajet futur
                 keyboard = [
                     [InlineKeyboardButton("✅ Oui, confirmer quand même", callback_data=f"force_confirm_passenger:{trip.id}:{booking_id}")],
