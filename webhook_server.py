@@ -740,8 +740,9 @@ async def payment_success(booking_id: int, token: str = None, PayerID: str = Non
             
             logger.info(f"✅ Paiement capturé avec succès: {capture_data.get('id')}")
             
-            # 🚀 NOUVELLES NOTIFICATIONS POST-PAIEMENT
-            await send_post_payment_notifications(booking, db)
+            # 🚀 UTILISER LE SYSTÈME EXISTANT DE COMMUNICATION POST-RÉSERVATION
+            from post_booking_communication import send_post_booking_messages
+            await send_post_booking_messages(booking.id)
             
             # Page de succès simple
             html_content = f"""
@@ -785,80 +786,6 @@ async def payment_success(booking_id: int, token: str = None, PayerID: str = Non
     except Exception as e:
         logger.error(f"❌ Erreur payment success: {e}")
         return {"error": "Erreur interne"}
-
-async def send_post_payment_notifications(booking, db):
-    """
-    Envoie les notifications après un paiement réussi
-    """
-    try:
-        from telegram import Bot, InlineKeyboardButton, InlineKeyboardMarkup
-        from database.models import Trip, User
-        
-        # Récupérer les données
-        trip = db.query(Trip).filter(Trip.id == booking.trip_id).first()
-        passenger = db.query(User).filter(User.id == booking.passenger_id).first()
-        driver = db.query(User).filter(User.id == trip.driver_id).first()
-        
-        if not trip or not passenger or not driver:
-            logger.error("❌ Données manquantes pour notifications post-paiement")
-            return
-        
-        bot = Bot(token=os.getenv('TELEGRAM_BOT_TOKEN'))
-        
-        # 📱 NOTIFICATION AU PASSAGER
-        passenger_buttons = [
-            [InlineKeyboardButton("💬 Contacter conducteur", callback_data=f"message_driver:{trip.id}:{driver.id}")],
-            [InlineKeyboardButton("📍 Infos trajet", callback_data=f"trip_details:{trip.id}")],
-            [InlineKeyboardButton("✅ Confirmer trajet effectué", callback_data=f"confirm_trip_passenger:{trip.id}:{booking.id}")]
-        ]
-        
-        passenger_message = (
-            f"🎉 **Réservation confirmée !**\n\n"
-            f"📍 **{trip.departure_city} → {trip.arrival_city}**\n"
-            f"📅 {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
-            f"👤 Conducteur: {driver.full_name or driver.username or 'Conducteur'}\n"
-            f"💰 Montant: {booking.amount:.2f} CHF\n\n"
-            f"🚗 Utilisez les boutons ci-dessous pour contacter le conducteur et gérer votre trajet."
-        )
-        
-        await bot.send_message(
-            chat_id=passenger.telegram_id,
-            text=passenger_message,
-            reply_markup=InlineKeyboardMarkup(passenger_buttons),
-            parse_mode='Markdown'
-        )
-        
-        # 📱 NOTIFICATION AU CONDUCTEUR  
-        driver_buttons = [
-            [InlineKeyboardButton("💬 Contacter passager", callback_data=f"message_passenger:{trip.id}:{passenger.id}")],
-            [InlineKeyboardButton("📋 Voir passagers", callback_data=f"driver:view_passengers:{trip.id}")],
-            [InlineKeyboardButton("📍 Définir point de RDV", callback_data=f"driver:set_meeting_point:{trip.id}")],
-            [InlineKeyboardButton("✅ Confirmer trajet effectué", callback_data=f"confirm_trip_driver:{trip.id}")]
-        ]
-        
-        driver_message = (
-            f"💰 **Nouvelle réservation payée !**\n\n"
-            f"📍 **{trip.departure_city} → {trip.arrival_city}**\n"
-            f"📅 {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
-            f"👤 Passager: {passenger.full_name or passenger.username or 'Passager'}\n"
-            f"💺 Places réservées: {booking.seats}\n"
-            f"💰 Montant: {booking.amount:.2f} CHF\n\n"
-            f"🚗 Gérez votre trajet avec les boutons ci-dessous."
-        )
-        
-        await bot.send_message(
-            chat_id=driver.telegram_id,
-            text=driver_message,
-            reply_markup=InlineKeyboardMarkup(driver_buttons),
-            parse_mode='Markdown'
-        )
-        
-        logger.info(f"✅ Notifications post-paiement envoyées pour booking {booking.id}")
-        
-    except Exception as e:
-        logger.error(f"❌ Erreur notifications post-paiement: {e}")
-        import traceback
-        traceback.print_exc()
 
 @app.get("/payment/cancel/{booking_id}")
 async def payment_cancel(booking_id: int):
