@@ -524,16 +524,8 @@ async def process_driver_payout(trip: Trip, driver_amount: float, db, context: C
                 amount=driver_amount,
                 trip_description=trip_description
             )
-        elif hasattr(paypal, 'send_payout'):
-            logger.info(f"🔄 Utilisation de send_payout en fallback")
-            success, payout_details = paypal.send_payout(
-                recipient_email=driver.paypal_email,
-                amount=driver_amount,
-                currency="CHF",
-                description=f"Paiement conducteur - {trip_description}"
-            )
         else:
-            logger.error(f"❌ Aucune méthode de payout disponible dans PayPalManager")
+            logger.error(f"❌ Méthode payout_to_driver NOT FOUND dans PayPalManager")
             logger.error(f"📚 Méthodes disponibles: {dir(paypal)}")
             success = False
             payout_details = None
