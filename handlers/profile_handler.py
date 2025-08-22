@@ -585,6 +585,16 @@ async def show_my_bookings(update: Update, context: CallbackContext):
             return PROFILE_MAIN
         
         # 🔥 CORRECTION: Récupérer SEULEMENT les réservations PAYÉES ET NON ANNULÉES
+        # 🔍 DEBUG: Logs pour diagnostiquer le problème "Aucune réservation trouvée"
+        logger.info(f"🔍 DIAGNOSTIC Mes réservations - user.id={user.id}, telegram_id={user_id}")
+        
+        # Première vérification: toutes les réservations de cet utilisateur
+        all_bookings = db.query(Booking).filter(Booking.passenger_id == user.id).all()
+        logger.info(f"📋 Total réservations utilisateur {user.id}: {len(all_bookings)}")
+        
+        for booking in all_bookings:
+            logger.info(f"  - Booking {booking.id}: is_paid={getattr(booking, 'is_paid', 'MISSING')}, status={getattr(booking, 'status', 'MISSING')}, amount={getattr(booking, 'amount', 'MISSING')}")
+        
         bookings = db.query(Booking).filter(
             and_(
                 Booking.passenger_id == user.id,
@@ -592,6 +602,8 @@ async def show_my_bookings(update: Update, context: CallbackContext):
                 Booking.status != 'cancelled'  # Exclure les réservations annulées
             )
         ).join(Trip).order_by(Trip.departure_time.desc()).limit(20).all()
+        
+        logger.info(f"🎯 Réservations filtrées (payées + non annulées): {len(bookings)}")
         
         if not bookings:
             message = "🎫 *Mes réservations :*\n\nAucune réservation trouvée.\n\n💡 Utilisez le bouton ci-dessous pour rechercher un trajet"

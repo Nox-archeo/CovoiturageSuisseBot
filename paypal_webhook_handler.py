@@ -121,6 +121,13 @@ async def handle_payment_completion(payment_id: str, bot=None) -> bool:
         db.commit()
         logger.info(f"✅ Réservation {booking.id} marquée comme payée et confirmée")
         
+        # 🔍 DIAGNOSTIC: Vérifier la sauvegarde
+        booking_check = db.query(Booking).filter(Booking.id == booking.id).first()
+        if booking_check:
+            logger.info(f"📋 VÉRIFICATION booking {booking.id}: is_paid={booking_check.is_paid}, status={booking_check.status}, passenger_id={booking_check.passenger_id}")
+        else:
+            logger.error(f"❌ ERREUR: Booking {booking.id} non trouvé après sauvegarde!")
+        
         # Envoyer notifications
         if bot:
             # Notification au passager - CORRECTION: utiliser telegram_id
