@@ -558,8 +558,8 @@ async def list_my_trips(update: Update, context: CallbackContext):
                         InlineKeyboardButton("📍 Définir point RDV", callback_data=f"driver:set_meeting:{trip_data['id']}")
                     ]
                     keyboard_row_2 = [
-                        InlineKeyboardButton("✅ Confirmer trajet effectué", callback_data=f"driver:confirm_trip:{trip_data['id']}"),
-                        InlineKeyboardButton("� Voir passagers", callback_data=f"driver:view_passengers:{trip_data['id']}")
+                        InlineKeyboardButton("✅ Confirmer trajet effectué", callback_data=f"confirm_trip_driver:{trip_data['id']}"),
+                        InlineKeyboardButton("👥 Voir passagers", callback_data=f"driver:view_passengers:{trip_data['id']}")
                     ]
                     keyboard_row_3 = [
                         InlineKeyboardButton("ℹ️ Détails du trajet", callback_data=f"driver:trip_details:{trip_data['id']}"),
