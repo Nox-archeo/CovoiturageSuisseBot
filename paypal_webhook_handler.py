@@ -41,13 +41,39 @@ async def handle_payment_completion(payment_id: str, bot=None) -> bool:
                     'Content-Type': 'application/json',
                     'Authorization': f'Bearer {access_token}'
                 }
+                
+                # D'abord récupérer les détails du capture
                 response = requests.get(
                     f"https://api.paypal.com/v2/payments/captures/{payment_id}",
                     headers=headers
                 )
                 if response.status_code == 200:
-                    paypal_payment_details = response.json()
-                    logger.info(f"✅ Détails PayPal récupérés pour: {payment_id}")
+                    capture_details = response.json()
+                    logger.info(f"✅ Détails capture PayPal récupérés pour: {payment_id}")
+                    logger.info(f"🔍 DEBUG: Contenu capture_details: {capture_details}")
+                    
+                    # Extraire l'order_id du capture pour récupérer le custom_id
+                    supplementary_data = capture_details.get('supplementary_data', {})
+                    related_ids = supplementary_data.get('related_ids', {})
+                    order_id = related_ids.get('order_id')
+                    
+                    if order_id:
+                        logger.info(f"🔍 Order ID trouvé dans capture: {order_id}")
+                        # Récupérer les détails de l'ordre pour obtenir custom_id
+                        order_response = requests.get(
+                            f"https://api.paypal.com/v2/checkout/orders/{order_id}",
+                            headers=headers
+                        )
+                        if order_response.status_code == 200:
+                            order_details = order_response.json()
+                            logger.info(f"✅ Détails ordre PayPal récupérés pour: {order_id}")
+                            paypal_payment_details = order_details
+                        else:
+                            logger.warning(f"⚠️ Impossible de récupérer les détails de l'ordre: {order_response.status_code}")
+                            paypal_payment_details = capture_details
+                    else:
+                        logger.warning("⚠️ Order ID non trouvé dans les détails du capture")
+                        paypal_payment_details = capture_details
                 else:
                     logger.warning(f"⚠️ Impossible de récupérer les détails PayPal: {response.status_code}")
         except Exception as e:
@@ -56,9 +82,12 @@ async def handle_payment_completion(payment_id: str, bot=None) -> bool:
         # Rechercher la réservation par custom_id si disponible
         booking = None
         custom_id = None
+        order_id = None
         
         if paypal_payment_details:
             custom_id = paypal_payment_details.get('custom_id')
+            order_id = paypal_payment_details.get('id')  # L'ID de l'ordre si on a récupéré les détails de l'ordre
+            
             if custom_id:
                 try:
                     booking = db.query(Booking).filter(Booking.id == int(custom_id)).first()
@@ -66,14 +95,21 @@ async def handle_payment_completion(payment_id: str, bot=None) -> bool:
                 except (ValueError, TypeError):
                     logger.warning(f"⚠️ custom_id invalide: {custom_id}")
         
-        # Fallback 1: rechercher par payment_id exact
+        # Fallback 1: rechercher par order_id si on l'a extrait
+        if not booking and order_id:
+            booking = db.query(Booking).filter(
+                Booking.paypal_payment_id == order_id
+            ).first()
+            logger.info(f"🔍 Recherche par order_id={order_id}: {'Trouvé' if booking else 'Non trouvé'}")
+        
+        # Fallback 2: rechercher par payment_id exact (capture_id)
         if not booking:
             booking = db.query(Booking).filter(
                 Booking.paypal_payment_id == payment_id
             ).first()
             logger.info(f"🔍 Recherche par payment_id={payment_id}: {'Trouvé' if booking else 'Non trouvé'}")
         
-        # Fallback 2: rechercher par payment_id partiel (parfois PayPal envoie capture_id au lieu d'order_id)
+        # Fallback 3: rechercher par payment_id partiel (parfois PayPal envoie capture_id au lieu d'order_id)
         if not booking:
             # Chercher toutes les réservations non payées récentes et voir si le payment_id correspond partiellement
             recent_bookings = db.query(Booking).filter(
@@ -84,13 +120,14 @@ async def handle_payment_completion(payment_id: str, bot=None) -> bool:
             for recent_booking in recent_bookings:
                 if recent_booking.paypal_payment_id and (
                     payment_id in recent_booking.paypal_payment_id or 
-                    recent_booking.paypal_payment_id in payment_id
+                    recent_booking.paypal_payment_id in payment_id or
+                    (order_id and order_id in recent_booking.paypal_payment_id)
                 ):
                     booking = recent_booking
                     logger.info(f"🔍 Recherche par payment_id partiel: Trouvé booking {booking.id}")
                     break
         
-        # Fallback 3: si custom_id fourni, chercher une réservation non payée avec cet ID
+        # Fallback 4: si custom_id fourni, chercher une réservation non payée avec cet ID
         if not booking and custom_id:
             try:
                 potential_booking = db.query(Booking).filter(

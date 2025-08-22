@@ -712,6 +712,8 @@ async def payment_success(booking_id: int, token: str = None, PayerID: str = Non
     """Route de retour après succès de paiement PayPal"""
     logger.info(f"🎉 PAYMENT SUCCESS: booking_id={booking_id}, token={token}, PayerID={PayerID}")
     
+    global telegram_app
+    
     try:
         from paypal_utils import PayPalManager
         from database import get_db
@@ -741,8 +743,8 @@ async def payment_success(booking_id: int, token: str = None, PayerID: str = Non
             logger.info(f"✅ Paiement capturé avec succès: {capture_data.get('id')}")
             
             # 🚀 UTILISER LE SYSTÈME EXISTANT DE COMMUNICATION POST-RÉSERVATION
-            from post_booking_communication import send_post_booking_messages
-            await send_post_booking_messages(booking.id)
+            from post_booking_communication import add_post_booking_communication
+            await add_post_booking_communication(booking.id, telegram_app.bot)
             
             # Page de succès simple
             html_content = f"""
