@@ -1507,14 +1507,14 @@ async def handle_trip_sub_callbacks_from_profile(update: Update, context: Callba
                             'cancelled': '❌'
                         }.get(trip.status, '❓')
                         
-                        message += f"{status_emoji} **Demande {i}:**\n"
+                        message += f"{status_emoji} *Demande {i}:*\n"
                         message += f"📍 {trip.departure_city} → {trip.arrival_city}\n"
                         message += f"📅 {departure_date}\n"
                         message += f"👥 {seats_text} recherchée{'s' if trip.seats_available > 1 else ''}\n"
                         
                         if hasattr(trip, 'additional_info') and trip.additional_info:
                             info_preview = trip.additional_info[:50] + "..." if len(trip.additional_info) > 50 else trip.additional_info
-                            message += f"� {info_preview}\n"
+                            message += f"ℹ️ {info_preview}\n"
                         
                         message += "\n"
                     
@@ -1564,7 +1564,7 @@ async def handle_trip_sub_callbacks_from_profile(update: Update, context: Callba
                         now = datetime.now()
                         time_indicator = '🕒' if trip.departure_time > now else '📅'
                         
-                        message += f"{status_emoji} **Réservation {i}:**\n"
+                        message += f"{status_emoji} *Réservation {i}:*\n"
                         message += f"📍 {trip.departure_city} → {trip.arrival_city}\n"
                         message += f"{time_indicator} {departure_date}\n"
                         message += f"{payment_emoji} Paiement: {payment_status}\n"
