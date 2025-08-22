@@ -1,7 +1,7 @@
 """
 Utilitaires pour l'intégration PayPal
 Gestion des paiements et transferts pour la plateforme de covoiturage
-FORCE CACHE REFRESH - 2025-08-22 10:30 - payout_to_driver DOIT EXISTER
+FORCE CACHE REFRESH RENDER - 2025-08-22 11:00 - payout_to_driver OBLIGATOIRE
 """
 
 import os
