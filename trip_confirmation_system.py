@@ -210,6 +210,19 @@ async def handle_trip_confirmation_callback(update: Update, context: CallbackCon
         elif action == "confirm_trip_passenger":
             booking_id = int(parts[2]) if len(parts) > 2 else None
             await handle_passenger_confirmation(query, trip, booking_id, db, now)
+        
+        elif action == "force_confirm_driver":
+            # Confirmation forcée du conducteur après double vérification
+            await confirm_driver_completion(query, trip, db)
+            
+        elif action == "force_confirm_passenger":
+            # Confirmation forcée du passager après double vérification
+            booking_id = int(parts[2]) if len(parts) > 2 else None
+            booking = db.query(Booking).filter(Booking.id == booking_id).first()
+            if booking:
+                await confirm_passenger_completion(query, trip, booking, db)
+            else:
+                await query.edit_message_text("❌ Réservation non trouvée.")
             
     except Exception as e:
         logger.error(f"Erreur handle_trip_confirmation_callback: {e}")
@@ -218,31 +231,42 @@ async def handle_trip_confirmation_callback(update: Update, context: CallbackCon
 async def handle_driver_confirmation(query, trip: Trip, db, now: datetime):
     """Gère la confirmation du conducteur"""
     try:
-        # Vérifier si confirmation prématurée
+        # TOUJOURS demander une double confirmation (même pour trajets passés)
+        trip_status = "passé" if trip.departure_time <= now else "à venir"
+        days_text = ""
+        
         if trip.departure_time > now:
             days_until = (trip.departure_time - now).days
-            hours_until = (trip.departure_time - now).total_seconds() / 3600
-            
             if days_until > 0:
-                # Demander confirmation pour trajet futur
-                keyboard = [
-                    [InlineKeyboardButton("✅ Oui, confirmer quand même", callback_data=f"force_confirm_driver:{trip.id}")],
-                    [InlineKeyboardButton("❌ Annuler", callback_data="noop")]
-                ]
-                
-                await query.edit_message_text(
-                    f"⚠️ **Attention !**\n\n"
-                    f"Le trajet a lieu dans {days_until} jour(s).\n"
-                    f"📅 Date prévue : {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n\n"
-                    f"❓ **Voulez-vous vraiment confirmer que le trajet a eu lieu ?**\n"
-                    f"Cette action libérera le paiement aux passagers.",
-                    reply_markup=InlineKeyboardMarkup(keyboard),
-                    parse_mode='Markdown'
-                )
-                return
+                days_text = f"Le trajet a lieu dans {days_until} jour(s).\n"
+            else:
+                hours_until = (trip.departure_time - now).total_seconds() / 3600
+                days_text = f"Le trajet a lieu dans {hours_until:.1f} heure(s).\n"
+        else:
+            # Trajet passé
+            days_ago = (now - trip.departure_time).days
+            if days_ago == 0:
+                days_text = "Le trajet était prévu aujourd'hui.\n"
+            else:
+                days_text = f"Le trajet était prévu il y a {days_ago} jour(s).\n"
         
-        # Confirmation normale
-        await confirm_driver_completion(query, trip, db)
+        # Demander confirmation avec détails complets
+        keyboard = [
+            [InlineKeyboardButton("✅ Oui, confirmer le trajet", callback_data=f"force_confirm_driver:{trip.id}")],
+            [InlineKeyboardButton("❌ Non, annuler", callback_data="noop")]
+        ]
+        
+        await query.edit_message_text(
+            f"⚠️ **CONFIRMATION IMPORTANTE**\n\n"
+            f"📍 **Trajet :** {trip.departure_city} → {trip.arrival_city}\n"
+            f"📅 **Date :** {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
+            f"🕐 **Statut :** {days_text}\n"
+            f"💰 **Impact :** Cette confirmation peut déclencher votre paiement\n\n"
+            f"❓ **Confirmez-vous que ce trajet s'est bien déroulé ?**\n"
+            f"⚠️ Cette action est définitive !",
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode='Markdown'
+        )
         
     except Exception as e:
         logger.error(f"Erreur handle_driver_confirmation: {e}")
@@ -255,30 +279,42 @@ async def handle_passenger_confirmation(query, trip: Trip, booking_id: int, db, 
             await query.edit_message_text("❌ Réservation non trouvée.")
             return
         
-        # Vérifier si confirmation prématurée
+        # TOUJOURS demander une double confirmation (même pour trajets passés)
+        trip_status = "passé" if trip.departure_time <= now else "à venir"
+        days_text = ""
+        
         if trip.departure_time > now:
             days_until = (trip.departure_time - now).days
-            
             if days_until > 0:
-                # Demander confirmation pour trajet futur
-                keyboard = [
-                    [InlineKeyboardButton("✅ Oui, confirmer quand même", callback_data=f"force_confirm_passenger:{trip.id}:{booking_id}")],
-                    [InlineKeyboardButton("❌ Annuler", callback_data="noop")]
-                ]
-                
-                await query.edit_message_text(
-                    f"⚠️ **Attention !**\n\n"
-                    f"Le trajet a lieu dans {days_until} jour(s).\n"
-                    f"📅 Date prévue : {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n\n"
-                    f"❓ **Voulez-vous vraiment confirmer que le trajet a eu lieu ?**\n"
-                    f"Cette confirmation est nécessaire pour le paiement du conducteur.",
-                    reply_markup=InlineKeyboardMarkup(keyboard),
-                    parse_mode='Markdown'
-                )
-                return
+                days_text = f"Le trajet a lieu dans {days_until} jour(s).\n"
+            else:
+                hours_until = (trip.departure_time - now).total_seconds() / 3600
+                days_text = f"Le trajet a lieu dans {hours_until:.1f} heure(s).\n"
+        else:
+            # Trajet passé
+            days_ago = (now - trip.departure_time).days
+            if days_ago == 0:
+                days_text = "Le trajet était prévu aujourd'hui.\n"
+            else:
+                days_text = f"Le trajet était prévu il y a {days_ago} jour(s).\n"
         
-        # Confirmation normale
-        await confirm_passenger_completion(query, trip, booking, db)
+        # Demander confirmation avec détails complets
+        keyboard = [
+            [InlineKeyboardButton("✅ Oui, confirmer le trajet", callback_data=f"force_confirm_passenger:{trip.id}:{booking_id}")],
+            [InlineKeyboardButton("❌ Non, annuler", callback_data="noop")]
+        ]
+        
+        await query.edit_message_text(
+            f"⚠️ **CONFIRMATION IMPORTANTE**\n\n"
+            f"📍 **Trajet :** {trip.departure_city} → {trip.arrival_city}\n"
+            f"📅 **Date :** {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
+            f"🕐 **Statut :** {days_text}\n"
+            f"💰 **Impact :** Cette confirmation déclenchera le paiement du conducteur\n\n"
+            f"❓ **Confirmez-vous que ce trajet s'est bien déroulé ?**\n"
+            f"⚠️ Cette action est définitive !",
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode='Markdown'
+        )
         
     except Exception as e:
         logger.error(f"Erreur handle_passenger_confirmation: {e}")
