@@ -368,8 +368,9 @@ async def release_payment_to_driver(query, trip: Trip, db):
             Booking.is_paid == True
         ).all()
         
-        total_amount = sum(booking.amount for booking in paid_bookings if booking.amount)
-        driver_amount = total_amount * 0.88  # 88% pour le conducteur
+        # CORRECTION: Utiliser le prix fixe du trajet, pas la somme des paiements
+        driver_amount = trip.price * 0.88  # 88% du prix fixe du trajet
+        commission_amount = trip.price * 0.12  # 12% de commission
         
         # Marquer les réservations comme terminées
         for booking in paid_bookings:
@@ -464,10 +465,7 @@ async def process_driver_payout(trip: Trip, driver_amount: float, db):
             trip.payout_batch_id = batch_id
             trip.status = 'completed_paid'
             trip.driver_amount = driver_amount
-            trip.commission_amount = sum(booking.amount for booking in db.query(Booking).filter(
-                Booking.trip_id == trip.id,
-                Booking.is_paid == True
-            ).all()) * 0.12
+            trip.commission_amount = trip.price * 0.12  # Commission fixe sur prix trajet
             
             db.commit()
             
@@ -495,10 +493,7 @@ async def process_driver_payout(trip: Trip, driver_amount: float, db):
             logger.error(f"❌ Échec paiement PayPal pour trajet {trip.id}")
             trip.status = 'payment_pending_manual'
             trip.driver_amount = driver_amount
-            trip.commission_amount = sum(booking.amount for booking in db.query(Booking).filter(
-                Booking.trip_id == trip.id,
-                Booking.is_paid == True
-            ).all()) * 0.12
+            trip.commission_amount = trip.price * 0.12  # Commission fixe sur prix trajet
             db.commit()
             
             # Enregistrer pour traitement manuel
