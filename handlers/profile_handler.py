@@ -599,6 +599,14 @@ async def show_my_bookings(update: Update, context: CallbackContext):
                 [InlineKeyboardButton("🔍 Rechercher un trajet", callback_data="menu:search_trip")],
                 [InlineKeyboardButton("⬅️ Retour au profil", callback_data="profile:back_to_profile")]
             ]
+            
+            await query.edit_message_text(
+                message,
+                reply_markup=InlineKeyboardMarkup(keyboard),
+                parse_mode="Markdown"
+            )
+            db.close()
+            return PROFILE_MAIN
         else:
             # Organiser en blocs avec boutons individuels comme show_my_trips
             reservation_blocks = []
@@ -722,7 +730,7 @@ async def show_my_bookings(update: Update, context: CallbackContext):
             for block in reservation_blocks:
                 try:
                     # Message de la réservation avec numérotation
-                    reservation_message = f"**✅ Réservation {reservation_number}:**\n{block['text']}"
+                    reservation_message = f"*✅ Réservation {reservation_number}:*\n{block['text']}"
                     
                     # Construire le clavier pour cette réservation spécifique
                     reservation_keyboard = []
@@ -758,7 +766,7 @@ async def show_my_bookings(update: Update, context: CallbackContext):
             
             await context.bot.send_message(
                 chat_id=update.effective_chat.id,
-                text="🔧 **Actions :**",
+                text="🔧 *Actions :*",
                 reply_markup=InlineKeyboardMarkup(navigation_keyboard),
                 parse_mode="Markdown"
             )
@@ -769,6 +777,8 @@ async def show_my_bookings(update: Update, context: CallbackContext):
                     text="📝 *Affichage limité aux 20 dernières réservations*",
                     parse_mode="Markdown"
                 )
+        
+        db.close()  # Fermer la connexion DB
         return PROFILE_MAIN
         
     except Exception as e:
