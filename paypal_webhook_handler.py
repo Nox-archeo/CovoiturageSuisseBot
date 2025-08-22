@@ -73,6 +73,23 @@ async def handle_payment_completion(payment_id: str, bot=None) -> bool:
             ).first()
             logger.info(f"🔍 Recherche par payment_id={payment_id}: {'Trouvé' if booking else 'Non trouvé'}")
         
+        # 🎯 SOLUTION CRITIQUE: PayPal change l'ID entre création et webhook - Chercher par reference_id
+        if not booking and paypal_payment_details:
+            try:
+                if 'purchase_units' in paypal_payment_details:
+                    for unit in paypal_payment_details['purchase_units']:
+                        if 'reference_id' in unit:
+                            ref_id = unit['reference_id']
+                            try:
+                                booking = db.query(Booking).filter(Booking.id == int(ref_id)).first()
+                                if booking:
+                                    logger.info(f"🎯 SOLUTION: Réservation trouvée par reference_id={ref_id}")
+                                    break
+                            except (ValueError, TypeError):
+                                logger.warning(f"⚠️ reference_id invalide: {ref_id}")
+            except Exception as e:
+                logger.warning(f"⚠️ Erreur recherche reference_id: {e}")
+        
         if not booking:
             logger.error(f"❌ RESTAURÉ - Aucune réservation trouvée pour payment_id={payment_id}, custom_id={custom_id}")
             return False
