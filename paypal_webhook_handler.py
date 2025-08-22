@@ -77,7 +77,7 @@ async def handle_payment_completion(payment_id: str, bot=None) -> bool:
         if not booking and paypal_payment_details:
             # Essayer de trouver par d'autres champs PayPal
             try:
-                # Chercher dans les détails du paiement d'autres identifiants
+                # 🎯 SOLUTION: Chercher par reference_id dans purchase_units (c'est là que PayPal stocke notre custom_id!)
                 if 'purchase_units' in paypal_payment_details:
                     for unit in paypal_payment_details['purchase_units']:
                         if 'reference_id' in unit:
@@ -85,12 +85,14 @@ async def handle_payment_completion(payment_id: str, bot=None) -> bool:
                             try:
                                 booking = db.query(Booking).filter(Booking.id == int(ref_id)).first()
                                 if booking:
-                                    logger.info(f"🔍 Réservation trouvée par reference_id={ref_id}")
+                                    logger.info(f"🎯 SOLUTION TROUVÉE: Réservation trouvée par reference_id={ref_id}")
                                     break
                             except (ValueError, TypeError):
-                                pass
-                        
-                        # Chercher par invoice_id si présent
+                                logger.warning(f"⚠️ reference_id invalide: {ref_id}")
+                
+                # Fallback: chercher par invoice_id si présent
+                if not booking and 'purchase_units' in paypal_payment_details:
+                    for unit in paypal_payment_details['purchase_units']:
                         if 'invoice_id' in unit:
                             invoice_id = unit['invoice_id']
                             try:
