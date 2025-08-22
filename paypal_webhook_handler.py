@@ -8,7 +8,6 @@ from datetime import datetime
 from database.models import Booking, Trip, User
 from database import get_db
 from fixed_auto_refund_manager import trigger_automatic_refunds_fixed
-from sqlalchemy import and_
 
 logger = logging.getLogger(__name__)
 
@@ -67,26 +66,42 @@ async def handle_payment_completion(payment_id: str, bot=None) -> bool:
                 except (ValueError, TypeError):
                     logger.warning(f"⚠️ custom_id invalide: {custom_id}")
         
-        # Fallback: rechercher par payment_id
+        # Fallback 1: rechercher par payment_id exact
         if not booking:
             booking = db.query(Booking).filter(
                 Booking.paypal_payment_id == payment_id
             ).first()
             logger.info(f"🔍 Recherche par payment_id={payment_id}: {'Trouvé' if booking else 'Non trouvé'}")
         
-        # 🎯 SOLUTION RADICALE: Chercher la réservation la plus récente NON confirmée
+        # Fallback 2: rechercher par payment_id partiel (parfois PayPal envoie capture_id au lieu d'order_id)
         if not booking:
-            from datetime import datetime, timedelta
-            # Chercher dans les 10 dernières minutes
-            recent_time = datetime.now() - timedelta(minutes=10)
-            booking = db.query(Booking).filter(
-                and_(
-                    Booking.is_paid == False,
-                    Booking.status != "cancelled",
-                    Booking.created_at >= recent_time
-                )
-            ).order_by(Booking.created_at.desc()).first()
-            logger.info(f"🎯 SOLUTION RADICALE: Chercher récente non payée = {'Trouvé' if booking else 'Non trouvé'}")
+            # Chercher toutes les réservations non payées récentes et voir si le payment_id correspond partiellement
+            recent_bookings = db.query(Booking).filter(
+                Booking.is_paid == False,
+                Booking.paypal_payment_id.isnot(None)
+            ).order_by(Booking.booking_date.desc()).limit(10).all()
+            
+            for recent_booking in recent_bookings:
+                if recent_booking.paypal_payment_id and (
+                    payment_id in recent_booking.paypal_payment_id or 
+                    recent_booking.paypal_payment_id in payment_id
+                ):
+                    booking = recent_booking
+                    logger.info(f"🔍 Recherche par payment_id partiel: Trouvé booking {booking.id}")
+                    break
+        
+        # Fallback 3: si custom_id fourni, chercher une réservation non payée avec cet ID
+        if not booking and custom_id:
+            try:
+                potential_booking = db.query(Booking).filter(
+                    Booking.id == int(custom_id),
+                    Booking.is_paid == False
+                ).first()
+                if potential_booking:
+                    booking = potential_booking
+                    logger.info(f"🔍 Recherche fallback par custom_id={custom_id}: Trouvé booking non payé {booking.id}")
+            except (ValueError, TypeError):
+                pass
         
         if not booking:
             logger.error(f"❌ Aucune réservation trouvée pour payment_id={payment_id}, custom_id={custom_id}")
@@ -105,60 +120,59 @@ async def handle_payment_completion(payment_id: str, bot=None) -> bool:
         db.commit()
         logger.info(f"✅ Réservation {booking.id} marquée comme payée et confirmée")
         
-        # Envoyer notifications
-        if bot:
-            # Notification au passager - CORRECTION: utiliser telegram_id
-            try:
-                # Si c'est une Application, utiliser bot.bot, sinon utiliser bot directement
-                telegram_bot = bot.bot if hasattr(bot, 'bot') else bot
-                
-                # Récupérer l'utilisateur passager pour avoir son telegram_id
-                passenger = db.query(User).filter(User.id == booking.passenger_id).first()
-                if passenger and passenger.telegram_id:
-                    await telegram_bot.send_message(
-                        chat_id=passenger.telegram_id,
-                        text=f"✅ *Réservation confirmée !*\n\n"
-                             f"Votre paiement a été traité avec succès.\n"
-                             f"Détails de votre réservation #{booking.id}",
-                        parse_mode='Markdown'
-                    )
-                    logger.info(f"✅ Notification envoyée au passager telegram_id={passenger.telegram_id}")
-                else:
-                    logger.error(f"❌ Passager non trouvé ou telegram_id manquant: passenger_id={booking.passenger_id}")
-            except Exception as e:
-                logger.error(f"❌ Erreur notification passager: {e}")
+        # NOUVEAU: Utiliser le système complet de communication post-réservation
+        try:
+            logger.info(f"🔄 Envoi des notifications complètes pour réservation {booking.id}...")
+            from post_booking_communication import send_post_booking_messages
+            await send_post_booking_messages(booking.id)
+            logger.info(f"✅ Notifications complètes envoyées pour réservation {booking.id}")
+        except Exception as comm_error:
+            logger.error(f"❌ Erreur envoi notifications complètes: {comm_error}")
             
-            # Notification au conducteur - CORRECTION: utiliser telegram_id
-            trip = db.query(Trip).filter(Trip.id == booking.trip_id).first()
-            if trip:
+            # Fallback: notifications basiques si le système complet échoue
+            if bot:
+                # Notification au passager - CORRECTION: utiliser telegram_id
                 try:
+                    # Si c'est une Application, utiliser bot.bot, sinon utiliser bot directement
                     telegram_bot = bot.bot if hasattr(bot, 'bot') else bot
                     
-                    # Récupérer l'utilisateur conducteur pour avoir son telegram_id
-                    driver = db.query(User).filter(User.id == trip.driver_id).first()
-                    if driver and driver.telegram_id:
+                    # Récupérer l'utilisateur passager pour avoir son telegram_id
+                    passenger = db.query(User).filter(User.id == booking.passenger_id).first()
+                    if passenger and passenger.telegram_id:
                         await telegram_bot.send_message(
-                            chat_id=driver.telegram_id,
-                            text=f"🎉 *Nouvelle réservation confirmée !*\n\n"
-                                 f"Un passager a confirmé sa réservation pour votre trajet.\n"
-                                 f"Réservation #{booking.id}",
+                            chat_id=passenger.telegram_id,
+                            text=f"✅ *Réservation confirmée !*\n\n"
+                                 f"Votre paiement a été traité avec succès.\n"
+                                 f"Détails de votre réservation #{booking.id}",
                             parse_mode='Markdown'
                         )
-                        logger.info(f"✅ Notification envoyée au conducteur telegram_id={driver.telegram_id}")
+                        logger.info(f"✅ Notification fallback envoyée au passager telegram_id={passenger.telegram_id}")
                     else:
-                        logger.error(f"❌ Conducteur non trouvé ou telegram_id manquant: driver_id={trip.driver_id}")
+                        logger.error(f"❌ Passager non trouvé ou telegram_id manquant: passenger_id={booking.passenger_id}")
                 except Exception as e:
-                    logger.error(f"❌ Erreur notification conducteur: {e}")
-        
-        # NOUVEAU: Ajouter les boutons de communication post-réservation
-        try:
-            logger.info(f"🔄 Ajout des boutons de communication pour réservation {booking.id}...")
-            from post_booking_communication import add_post_booking_communication
-            telegram_bot = bot.bot if hasattr(bot, 'bot') else bot
-            await add_post_booking_communication(booking.id, telegram_bot)
-            logger.info(f"✅ Boutons de communication ajoutés pour réservation {booking.id}")
-        except Exception as comm_error:
-            logger.error(f"❌ Erreur ajout boutons communication: {comm_error}")
+                    logger.error(f"❌ Erreur notification fallback passager: {e}")
+                
+                # Notification au conducteur - CORRECTION: utiliser telegram_id
+                trip = db.query(Trip).filter(Trip.id == booking.trip_id).first()
+                if trip:
+                    try:
+                        telegram_bot = bot.bot if hasattr(bot, 'bot') else bot
+                        
+                        # Récupérer l'utilisateur conducteur pour avoir son telegram_id
+                        driver = db.query(User).filter(User.id == trip.driver_id).first()
+                        if driver and driver.telegram_id:
+                            await telegram_bot.send_message(
+                                chat_id=driver.telegram_id,
+                                text=f"🎉 *Nouvelle réservation confirmée !*\n\n"
+                                     f"Un passager a confirmé sa réservation pour votre trajet.\n"
+                                     f"Réservation #{booking.id}",
+                                parse_mode='Markdown'
+                            )
+                            logger.info(f"✅ Notification fallback envoyée au conducteur telegram_id={driver.telegram_id}")
+                        else:
+                            logger.error(f"❌ Conducteur non trouvé ou telegram_id manquant: driver_id={trip.driver_id}")
+                    except Exception as e:
+                        logger.error(f"❌ Erreur notification fallback conducteur: {e}")
         
         # Déclencher les remboursements automatiques si nécessaire
         await trigger_automatic_refunds_fixed(booking.trip_id, bot)
