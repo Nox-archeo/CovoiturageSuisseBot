@@ -1,8 +1,6 @@
 """
 Utilitaires pour l'intégration PayPal
 Gestion des paiements et transferts pour la plateforme de covoiturage
-FORCE CACHE REFRESH RENDER - 2025-08-22 12:15 - payout_to_driver AVAILABLE IMMEDIATELY
-IMMEDIATE DEPLOY REQUIRED - CRITICAL CONDUCTOR PAYMENT METHOD
 """
 
 import os
@@ -28,10 +26,6 @@ class PayPalManager:
         self.client_id = os.getenv('PAYPAL_CLIENT_ID')
         self.client_secret = os.getenv('PAYPAL_CLIENT_SECRET')
         self.mode = os.getenv('PAYPAL_MODE', 'sandbox')  # 'sandbox' ou 'live'
-        
-        # 🔥 LOG DE DIAGNOSTIC POUR RENDER
-        logger.info(f"🚀 PayPalManager initialisé - Cache refresh 22/08/2025 10:30")
-        logger.info(f"📋 Méthodes disponibles: {[method for method in dir(self) if not method.startswith('_')]}")
         
         if not self.client_id or not self.client_secret:
             raise ValueError("Les identifiants PayPal ne sont pas configurés dans le fichier .env")
@@ -74,8 +68,8 @@ class PayPalManager:
                 return None
                 
         except Exception as e:
-            logger.error(f"Erreur lors de la récupération de paiement : {e}")
-            return False, None
+            logger.error(f"Erreur lors de la récupération du token : {e}")
+            return None
     
     def create_payment(self, amount: float, currency: str = "CHF", 
                       description: str = "Paiement covoiturage",

@@ -377,55 +377,15 @@ async def release_payment_to_driver(query, trip: Trip, db):
             booking.status = 'completed_confirmed'
         db.commit()
         
-        # Message de confirmation
-        message = (
-            f"🎉 **PAIEMENT LIBÉRÉ !**\n\n"
-            f"📍 {trip.departure_city} → {trip.arrival_city}\n"
-            f"📅 {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n"
-            f"💰 **Montant : {driver_amount:.2f} CHF**\n\n"
-            f"✅ Toutes les confirmations reçues !\n"
-            f"🏦 Votre paiement sera traité dans les prochaines 24h.\n\n"
-            f"Merci d'utiliser CovoiturageSuisse !"
-        )
+        logger.info(f"🎉 Déclenchement paiement de {driver_amount:.2f} CHF pour trajet {trip.id}")
         
-        await query.edit_message_text(message, parse_mode='Markdown')
-        
-        # Notifier le conducteur
-        try:
-            await query.bot.send_message(
-                chat_id=trip.driver_id,
-                text=message,
-                parse_mode='Markdown'
-            )
-        except:
-            pass  # Éviter erreur si c'est déjà le conducteur
-        
-        # Notifier tous les passagers
-        for booking in paid_bookings:
-            try:
-                passenger = db.query(User).filter(User.id == booking.passenger_id).first()
-                if passenger and passenger.telegram_id:
-                    await query.bot.send_message(
-                        chat_id=passenger.telegram_id,
-                        text=f"🎉 **Trajet confirmé !**\n\n"
-                             f"📍 {trip.departure_city} → {trip.arrival_city}\n"
-                             f"📅 {trip.departure_time.strftime('%d/%m/%Y')}\n\n"
-                             f"✅ Le conducteur a été payé suite à vos confirmations mutuelles.\n"
-                             f"Merci d'avoir utilisé CovoiturageSuisse !",
-                        parse_mode='Markdown'
-                    )
-            except Exception as e:
-                logger.error(f"Erreur notification passager {booking.passenger_id}: {e}")
-        
-        logger.info(f"🎉 Paiement de {driver_amount:.2f} CHF libéré pour trajet {trip.id}")
-        
-        # 🚀 NOUVEAU: Déclencher le vrai paiement au conducteur
-        await process_driver_payout(trip, driver_amount, db)
+        # 🚀 TRAITER LE PAIEMENT AVANT LES NOTIFICATIONS
+        await process_driver_payout(trip, driver_amount, db, query, paid_bookings)
         
     except Exception as e:
         logger.error(f"Erreur release_payment_to_driver: {e}")
 
-async def process_driver_payout(trip: Trip, driver_amount: float, db):
+async def process_driver_payout(trip: Trip, driver_amount: float, db, query, paid_bookings):
     """
     Traite le paiement automatique au conducteur via PayPal
     """
@@ -471,22 +431,45 @@ async def process_driver_payout(trip: Trip, driver_amount: float, db):
             
             logger.info(f"✅ Paiement PayPal réussi ! Batch ID: {batch_id}")
             
-            # Notifier le conducteur du paiement réussi
+            # NOTIFICATIONS DE SUCCÈS PAYPAL
+            success_message = (
+                f"💰 **PAIEMENT ENVOYÉ !**\n\n"
+                f"📧 PayPal: {driver.paypal_email}\n"
+                f"💵 Montant: {driver_amount:.2f} CHF\n"
+                f"🚗 Trajet: {trip_description}\n\n"
+                f"✅ Le paiement arrivera dans votre compte PayPal dans les prochaines minutes.\n\n"
+                f"Merci d'utiliser CovoiturageSuisse !"
+            )
+            
+            # Mettre à jour le message du bouton
+            await query.edit_message_text(success_message, parse_mode='Markdown')
+            
+            # Notifier le conducteur
             try:
-                from telegram import Bot
-                bot = Bot(token=os.getenv('TELEGRAM_BOT_TOKEN'))
-                await bot.send_message(
+                await query.bot.send_message(
                     chat_id=driver.telegram_id,
-                    text=f"💰 **PAIEMENT ENVOYÉ !**\n\n"
-                         f"📧 PayPal: {driver.paypal_email}\n"
-                         f"💵 Montant: {driver_amount:.2f} CHF\n"
-                         f"🚗 Trajet: {trip_description}\n\n"
-                         f"✅ Le paiement arrivera dans votre compte PayPal dans les prochaines minutes.\n\n"
-                         f"Merci d'utiliser CovoiturageSuisse !",
+                    text=success_message,
                     parse_mode='Markdown'
                 )
             except Exception as e:
                 logger.error(f"Erreur notification conducteur paiement: {e}")
+            
+            # Notifier tous les passagers
+            for booking in paid_bookings:
+                try:
+                    passenger = db.query(User).filter(User.id == booking.passenger_id).first()
+                    if passenger and passenger.telegram_id:
+                        await query.bot.send_message(
+                            chat_id=passenger.telegram_id,
+                            text=f"🎉 **Trajet confirmé !**\n\n"
+                                 f"� {trip.departure_city} → {trip.arrival_city}\n"
+                                 f"📅 {trip.departure_time.strftime('%d/%m/%Y')}\n\n"
+                                 f"✅ Le conducteur a reçu son paiement PayPal.\n"
+                                 f"Merci d'avoir utilisé CovoiturageSuisse !",
+                            parse_mode='Markdown'
+                        )
+                except Exception as e:
+                    logger.error(f"Erreur notification passager {booking.passenger_id}: {e}")
                 
         else:
             # ❌ ÉCHEC DU PAIEMENT - Basculer en mode manuel
@@ -495,6 +478,19 @@ async def process_driver_payout(trip: Trip, driver_amount: float, db):
             trip.driver_amount = driver_amount
             trip.commission_amount = trip.price * 0.12  # Commission fixe sur prix trajet
             db.commit()
+            
+            # NOTIFICATIONS D'ÉCHEC PAYPAL
+            manual_message = (
+                f"✅ **Trajet confirmé - Paiement en cours**\n\n"
+                f"💰 Montant: {driver_amount:.2f} CHF\n"
+                f"🚗 Trajet: {trip_description}\n\n"
+                f"🏦 Votre paiement sera traité manuellement dans les 24h.\n"
+                f"📧 Destination: {driver.paypal_email}\n\n"
+                f"Merci d'utiliser CovoiturageSuisse !"
+            )
+            
+            # Mettre à jour le message du bouton
+            await query.edit_message_text(manual_message, parse_mode='Markdown')
             
             # Enregistrer pour traitement manuel
             try:
@@ -505,22 +501,35 @@ async def process_driver_payout(trip: Trip, driver_amount: float, db):
             except:
                 pass
             
-            # Notifier que le paiement sera manuel
+            # Notifier le conducteur du paiement manuel
             try:
-                from telegram import Bot
-                bot = Bot(token=os.getenv('TELEGRAM_BOT_TOKEN'))
-                await bot.send_message(
+                await query.bot.send_message(
                     chat_id=driver.telegram_id,
-                    text=f"✅ **Trajet confirmé - Paiement en cours**\n\n"
-                         f"💰 Montant: {driver_amount:.2f} CHF\n"
-                         f"🚗 Trajet: {trip_description}\n\n"
-                         f"🏦 Votre paiement sera traité manuellement dans les 24h.\n"
-                         f"📧 Destination: {driver.paypal_email}\n\n"
-                         f"Merci d'utiliser CovoiturageSuisse !",
+                    text=manual_message,
                     parse_mode='Markdown'
                 )
             except Exception as e:
-                logger.error(f"Erreur notification paiement manuel: {e}")
+                logger.error(f"Erreur notification conducteur paiement: {e}")
+            
+            # Notifier tous les passagers
+            for booking in paid_bookings:
+                try:
+                    passenger = db.query(User).filter(User.id == booking.passenger_id).first()
+                    if passenger and passenger.telegram_id:
+                        await query.bot.send_message(
+                            chat_id=passenger.telegram_id,
+                            text=f"🎉 **Trajet confirmé !**\n\n"
+                                 f"� {trip.departure_city} → {trip.arrival_city}\n"
+                                 f"� {trip.departure_time.strftime('%d/%m/%Y')}\n\n"
+                                 f"✅ Le paiement du conducteur est en cours de traitement.\n"
+                                 f"Merci d'avoir utilisé CovoiturageSuisse !",
+                            parse_mode='Markdown'
+                        )
+                except Exception as e:
+                    logger.error(f"Erreur notification passager {booking.passenger_id}: {e}")
+        
+    except Exception as e:
+        logger.error(f"Erreur process_driver_payout: {e}")
                 
     except Exception as e:
         logger.error(f"Erreur process_driver_payout: {e}")
