@@ -74,7 +74,7 @@ async def handle_payment_completion(payment_id: str, bot=None) -> bool:
             logger.info(f"🔍 Recherche par payment_id={payment_id}: {'Trouvé' if booking else 'Non trouvé'}")
         
         if not booking:
-            logger.error(f"❌ Aucune réservation trouvée pour payment_id={payment_id}, custom_id={custom_id}")
+            logger.error(f"❌ RESTAURÉ - Aucune réservation trouvée pour payment_id={payment_id}, custom_id={custom_id}")
             return False
         
         logger.info(f"✅ Réservation trouvée: ID={booking.id}, Trip={booking.trip_id}")
