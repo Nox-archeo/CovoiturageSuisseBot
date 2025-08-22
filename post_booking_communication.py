@@ -24,21 +24,16 @@ async def add_post_booking_communication(booking_id: int, bot):
         bot: Instance du bot Telegram
     """
     try:
-        logger.info(f"🚀 DÉBUT add_post_booking_communication pour booking {booking_id}")
         db = get_db()
         booking = db.query(Booking).filter(Booking.id == booking_id).first()
         
         if not booking:
-            logger.error(f"❌ Réservation {booking_id} non trouvée")
+            logger.error(f"Réservation {booking_id} non trouvée")
             return
-        
-        logger.info(f"✅ Booking trouvé: {booking_id}, passenger_id={booking.passenger_id}, trip_id={booking.trip_id}")
         
         trip = booking.trip
         passenger = booking.passenger
         driver = trip.driver
-        
-        logger.info(f"📋 Relations - trip: {trip.id if trip else 'None'}, passenger: {passenger.id if passenger else 'None'}, driver: {driver.id if driver else 'None'}")
         
         # Boutons pour le passager
         if passenger and passenger.telegram_id:
@@ -81,7 +76,6 @@ async def add_post_booking_communication(booking_id: int, bot):
                 reply_markup=InlineKeyboardMarkup(passenger_keyboard),
                 parse_mode='Markdown'
             )
-            logger.info(f"✅ Message envoyé au passager {passenger.telegram_id}")
         
         # Boutons pour le conducteur
         if driver and driver.telegram_id:
@@ -131,15 +125,13 @@ async def add_post_booking_communication(booking_id: int, bot):
                 reply_markup=InlineKeyboardMarkup(driver_keyboard),
                 parse_mode='Markdown'
             )
-            logger.info(f"✅ Message envoyé au conducteur {driver.telegram_id}")
         
-        logger.info(f"🎉 SUCCÈS add_post_booking_communication pour booking {booking_id}")
+        logger.info(f"✅ Boutons de communication ajoutés pour la réservation {booking_id}")
         
     except Exception as e:
-        logger.error(f"❌ Erreur dans add_post_booking_communication: {e}")
+        logger.error(f"❌ Erreur ajout boutons communication: {e}")
         import traceback
-        logger.error(f"📚 Stack trace: {traceback.format_exc()}")
-        raise e
+        traceback.print_exc()
 
 if __name__ == "__main__":
     # Test de la fonction

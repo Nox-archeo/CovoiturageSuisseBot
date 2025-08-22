@@ -585,16 +585,6 @@ async def show_my_bookings(update: Update, context: CallbackContext):
             return PROFILE_MAIN
         
         # 🔥 CORRECTION: Récupérer SEULEMENT les réservations PAYÉES ET NON ANNULÉES
-        # 🔍 DEBUG: Logs pour diagnostiquer le problème "Aucune réservation trouvée"
-        logger.info(f"🔍 DIAGNOSTIC Mes réservations - user.id={user.id}, telegram_id={user_id}")
-        
-        # Première vérification: toutes les réservations de cet utilisateur
-        all_bookings = db.query(Booking).filter(Booking.passenger_id == user.id).all()
-        logger.info(f"📋 Total réservations utilisateur {user.id}: {len(all_bookings)}")
-        
-        for booking in all_bookings:
-            logger.info(f"  - Booking {booking.id}: is_paid={getattr(booking, 'is_paid', 'MISSING')}, status={getattr(booking, 'status', 'MISSING')}, amount={getattr(booking, 'amount', 'MISSING')}")
-        
         bookings = db.query(Booking).filter(
             and_(
                 Booking.passenger_id == user.id,
@@ -603,22 +593,12 @@ async def show_my_bookings(update: Update, context: CallbackContext):
             )
         ).join(Trip).order_by(Trip.departure_time.desc()).limit(20).all()
         
-        logger.info(f"🎯 Réservations filtrées (payées + non annulées): {len(bookings)}")
-        
         if not bookings:
             message = "🎫 *Mes réservations :*\n\nAucune réservation trouvée.\n\n💡 Utilisez le bouton ci-dessous pour rechercher un trajet"
             keyboard = [
                 [InlineKeyboardButton("🔍 Rechercher un trajet", callback_data="menu:search_trip")],
                 [InlineKeyboardButton("⬅️ Retour au profil", callback_data="profile:back_to_profile")]
             ]
-            
-            await query.edit_message_text(
-                message,
-                reply_markup=InlineKeyboardMarkup(keyboard),
-                parse_mode="Markdown"
-            )
-            db.close()
-            return PROFILE_MAIN
         else:
             # Organiser en blocs avec boutons individuels comme show_my_trips
             reservation_blocks = []
@@ -742,7 +722,7 @@ async def show_my_bookings(update: Update, context: CallbackContext):
             for block in reservation_blocks:
                 try:
                     # Message de la réservation avec numérotation
-                    reservation_message = f"*✅ Réservation {reservation_number}:*\n{block['text']}"
+                    reservation_message = f"**✅ Réservation {reservation_number}:**\n{block['text']}"
                     
                     # Construire le clavier pour cette réservation spécifique
                     reservation_keyboard = []
@@ -778,7 +758,7 @@ async def show_my_bookings(update: Update, context: CallbackContext):
             
             await context.bot.send_message(
                 chat_id=update.effective_chat.id,
-                text="🔧 *Actions :*",
+                text="🔧 **Actions :**",
                 reply_markup=InlineKeyboardMarkup(navigation_keyboard),
                 parse_mode="Markdown"
             )
@@ -789,8 +769,6 @@ async def show_my_bookings(update: Update, context: CallbackContext):
                     text="📝 *Affichage limité aux 20 dernières réservations*",
                     parse_mode="Markdown"
                 )
-        
-        db.close()  # Fermer la connexion DB
         return PROFILE_MAIN
         
     except Exception as e:
@@ -1529,14 +1507,14 @@ async def handle_trip_sub_callbacks_from_profile(update: Update, context: Callba
                             'cancelled': '❌'
                         }.get(trip.status, '❓')
                         
-                        message += f"{status_emoji} *Demande {i}:*\n"
+                        message += f"{status_emoji} **Demande {i}:**\n"
                         message += f"📍 {trip.departure_city} → {trip.arrival_city}\n"
                         message += f"📅 {departure_date}\n"
                         message += f"👥 {seats_text} recherchée{'s' if trip.seats_available > 1 else ''}\n"
                         
                         if hasattr(trip, 'additional_info') and trip.additional_info:
                             info_preview = trip.additional_info[:50] + "..." if len(trip.additional_info) > 50 else trip.additional_info
-                            message += f"ℹ️ {info_preview}\n"
+                            message += f"� {info_preview}\n"
                         
                         message += "\n"
                     
@@ -1586,7 +1564,7 @@ async def handle_trip_sub_callbacks_from_profile(update: Update, context: Callba
                         now = datetime.now()
                         time_indicator = '🕒' if trip.departure_time > now else '📅'
                         
-                        message += f"{status_emoji} *Réservation {i}:*\n"
+                        message += f"{status_emoji} **Réservation {i}:**\n"
                         message += f"📍 {trip.departure_city} → {trip.arrival_city}\n"
                         message += f"{time_indicator} {departure_date}\n"
                         message += f"{payment_emoji} Paiement: {payment_status}\n"
