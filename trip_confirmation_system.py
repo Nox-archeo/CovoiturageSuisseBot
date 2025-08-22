@@ -223,7 +223,7 @@ async def handle_driver_confirmation(query, trip: Trip, db, now: datetime):
             days_until = (trip.departure_time - now).days
             hours_until = (trip.departure_time - now).total_seconds() / 3600
             
-            if days_until > 0:
+            if True:  # Toujours demander double confirmation pour sécurité paiement
                 # Demander confirmation pour trajet futur
                 keyboard = [
                     [InlineKeyboardButton("✅ Oui, confirmer quand même", callback_data=f"force_confirm_driver:{trip.id}")],
