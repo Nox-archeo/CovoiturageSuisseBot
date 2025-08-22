@@ -125,8 +125,8 @@ async def handle_payment_completion(payment_id: str, bot=None) -> bool:
         if bot:
             # Notification au passager - CORRECTION: utiliser telegram_id
             try:
-                # Si c'est une Application, utiliser bot.bot, sinon utiliser bot directement
-                telegram_bot = bot.bot if hasattr(bot, 'bot') else bot
+                # Le bot est déjà l'instance correcte du Bot
+                telegram_bot = bot
                 
                 # Récupérer l'utilisateur passager pour avoir son telegram_id
                 passenger = db.query(User).filter(User.id == booking.passenger_id).first()
@@ -148,7 +148,7 @@ async def handle_payment_completion(payment_id: str, bot=None) -> bool:
             trip = db.query(Trip).filter(Trip.id == booking.trip_id).first()
             if trip:
                 try:
-                    telegram_bot = bot.bot if hasattr(bot, 'bot') else bot
+                    telegram_bot = bot
                     
                     # Récupérer l'utilisateur conducteur pour avoir son telegram_id
                     driver = db.query(User).filter(User.id == trip.driver_id).first()
@@ -170,7 +170,7 @@ async def handle_payment_completion(payment_id: str, bot=None) -> bool:
         try:
             logger.info(f"🔄 Ajout des boutons de communication pour réservation {booking.id}...")
             from post_booking_communication import add_post_booking_communication
-            telegram_bot = bot.bot if hasattr(bot, 'bot') else bot
+            telegram_bot = bot
             await add_post_booking_communication(booking.id, telegram_bot)
             logger.info(f"✅ Boutons de communication ajoutés pour réservation {booking.id}")
         except Exception as comm_error:
