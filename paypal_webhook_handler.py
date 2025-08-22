@@ -73,38 +73,8 @@ async def handle_payment_completion(payment_id: str, bot=None) -> bool:
             ).first()
             logger.info(f"🔍 Recherche par payment_id={payment_id}: {'Trouvé' if booking else 'Non trouvé'}")
         
-        # 🎯 SOLUTION CRITIQUE: PayPal change l'ID entre création et webhook - Chercher par reference_id
-        if not booking and paypal_payment_details:
-            logger.info(f"🔍 DIAGNOSTIC: Recherche par reference_id car booking non trouvé")
-            logger.info(f"🔍 DIAGNOSTIC: Structure complète PayPal webhook: {paypal_payment_details}")
-            try:
-                if 'purchase_units' in paypal_payment_details:
-                    logger.info(f"🔍 DIAGNOSTIC: purchase_units trouvé, nombre d'unités: {len(paypal_payment_details['purchase_units'])}")
-                    for unit in paypal_payment_details['purchase_units']:
-                        if 'reference_id' in unit:
-                            ref_id = unit['reference_id']
-                            logger.info(f"🔍 DIAGNOSTIC: reference_id trouvé: {ref_id}")
-                            try:
-                                booking = db.query(Booking).filter(Booking.id == int(ref_id)).first()
-                                if booking:
-                                    logger.info(f"🎯 SOLUTION: Réservation trouvée par reference_id={ref_id}")
-                                    break
-                                else:
-                                    logger.warning(f"⚠️ Aucune réservation pour reference_id={ref_id}")
-                            except (ValueError, TypeError):
-                                logger.warning(f"⚠️ reference_id invalide: {ref_id}")
-                        else:
-                            logger.info(f"🔍 DIAGNOSTIC: Pas de reference_id dans cette unité: {unit.keys()}")
-                else:
-                    logger.warning(f"🔍 DIAGNOSTIC: Pas de purchase_units dans paypal_payment_details")
-                    logger.info(f"🔍 DIAGNOSTIC: Clés disponibles: {list(paypal_payment_details.keys())}")
-            except Exception as e:
-                logger.error(f"❌ Erreur recherche reference_id: {e}")
-                import traceback
-                logger.error(f"Stacktrace: {traceback.format_exc()}")
-        
         if not booking:
-            logger.error(f"❌ RESTAURÉ - Aucune réservation trouvée pour payment_id={payment_id}, custom_id={custom_id}")
+            logger.error(f"❌ Aucune réservation trouvée pour payment_id={payment_id}, custom_id={custom_id}")
             return False
         
         logger.info(f"✅ Réservation trouvée: ID={booking.id}, Trip={booking.trip_id}")
