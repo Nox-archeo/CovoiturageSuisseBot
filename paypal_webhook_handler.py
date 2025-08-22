@@ -8,6 +8,7 @@ from datetime import datetime
 from database.models import Booking, Trip, User
 from database import get_db
 from fixed_auto_refund_manager import trigger_automatic_refunds_fixed
+from sqlalchemy import and_
 
 logger = logging.getLogger(__name__)
 
@@ -72,6 +73,20 @@ async def handle_payment_completion(payment_id: str, bot=None) -> bool:
                 Booking.paypal_payment_id == payment_id
             ).first()
             logger.info(f"🔍 Recherche par payment_id={payment_id}: {'Trouvé' if booking else 'Non trouvé'}")
+        
+        # 🎯 SOLUTION RADICALE: Chercher la réservation la plus récente NON confirmée
+        if not booking:
+            from datetime import datetime, timedelta
+            # Chercher dans les 10 dernières minutes
+            recent_time = datetime.now() - timedelta(minutes=10)
+            booking = db.query(Booking).filter(
+                and_(
+                    Booking.is_paid == False,
+                    Booking.status != "cancelled",
+                    Booking.created_at >= recent_time
+                )
+            ).order_by(Booking.created_at.desc()).first()
+            logger.info(f"🎯 SOLUTION RADICALE: Chercher récente non payée = {'Trouvé' if booking else 'Non trouvé'}")
         
         if not booking:
             logger.error(f"❌ Aucune réservation trouvée pour payment_id={payment_id}, custom_id={custom_id}")
