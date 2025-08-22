@@ -73,42 +73,9 @@ async def handle_payment_completion(payment_id: str, bot=None) -> bool:
             ).first()
             logger.info(f"🔍 Recherche par payment_id={payment_id}: {'Trouvé' if booking else 'Non trouvé'}")
         
-        # 🔥 NOUVEAU: Recherche élargie par motifs PayPal similaires
-        if not booking and paypal_payment_details:
-            # Essayer de trouver par d'autres champs PayPal
-            try:
-                # 🎯 SOLUTION: Chercher par reference_id dans purchase_units (c'est là que PayPal stocke notre custom_id!)
-                if 'purchase_units' in paypal_payment_details:
-                    for unit in paypal_payment_details['purchase_units']:
-                        if 'reference_id' in unit:
-                            ref_id = unit['reference_id']
-                            try:
-                                booking = db.query(Booking).filter(Booking.id == int(ref_id)).first()
-                                if booking:
-                                    logger.info(f"🎯 SOLUTION TROUVÉE: Réservation trouvée par reference_id={ref_id}")
-                                    break
-                            except (ValueError, TypeError):
-                                logger.warning(f"⚠️ reference_id invalide: {ref_id}")
-                
-                # Fallback: chercher par invoice_id si présent
-                if not booking and 'purchase_units' in paypal_payment_details:
-                    for unit in paypal_payment_details['purchase_units']:
-                        if 'invoice_id' in unit:
-                            invoice_id = unit['invoice_id']
-                            try:
-                                booking = db.query(Booking).filter(Booking.id == int(invoice_id)).first()
-                                if booking:
-                                    logger.info(f"🔍 Réservation trouvée par invoice_id={invoice_id}")
-                                    break
-                            except (ValueError, TypeError):
-                                pass
-            except Exception as e:
-                logger.warning(f"⚠️ Erreur recherche élargie: {e}")
-        
         if not booking:
             logger.error(f"❌ Aucune réservation trouvée pour payment_id={payment_id}, custom_id={custom_id}")
-            # 🔥 NOUVEAU: Ne pas échouer complètement, juste loguer et continuer
-            return True  # Retourner True pour éviter les erreurs en cascade
+            return False
         
         logger.info(f"✅ Réservation trouvée: ID={booking.id}, Trip={booking.trip_id}")
         
@@ -123,19 +90,12 @@ async def handle_payment_completion(payment_id: str, bot=None) -> bool:
         db.commit()
         logger.info(f"✅ Réservation {booking.id} marquée comme payée et confirmée")
         
-        # 🔍 DIAGNOSTIC: Vérifier la sauvegarde
-        booking_check = db.query(Booking).filter(Booking.id == booking.id).first()
-        if booking_check:
-            logger.info(f"📋 VÉRIFICATION booking {booking.id}: is_paid={booking_check.is_paid}, status={booking_check.status}, passenger_id={booking_check.passenger_id}")
-        else:
-            logger.error(f"❌ ERREUR: Booking {booking.id} non trouvé après sauvegarde!")
-        
         # Envoyer notifications
         if bot:
             # Notification au passager - CORRECTION: utiliser telegram_id
             try:
-                # Le bot est déjà l'instance correcte du Bot
-                telegram_bot = bot
+                # Si c'est une Application, utiliser bot.bot, sinon utiliser bot directement
+                telegram_bot = bot.bot if hasattr(bot, 'bot') else bot
                 
                 # Récupérer l'utilisateur passager pour avoir son telegram_id
                 passenger = db.query(User).filter(User.id == booking.passenger_id).first()
@@ -157,7 +117,7 @@ async def handle_payment_completion(payment_id: str, bot=None) -> bool:
             trip = db.query(Trip).filter(Trip.id == booking.trip_id).first()
             if trip:
                 try:
-                    telegram_bot = bot
+                    telegram_bot = bot.bot if hasattr(bot, 'bot') else bot
                     
                     # Récupérer l'utilisateur conducteur pour avoir son telegram_id
                     driver = db.query(User).filter(User.id == trip.driver_id).first()
@@ -179,7 +139,7 @@ async def handle_payment_completion(payment_id: str, bot=None) -> bool:
         try:
             logger.info(f"🔄 Ajout des boutons de communication pour réservation {booking.id}...")
             from post_booking_communication import add_post_booking_communication
-            telegram_bot = bot
+            telegram_bot = bot.bot if hasattr(bot, 'bot') else bot
             await add_post_booking_communication(booking.id, telegram_bot)
             logger.info(f"✅ Boutons de communication ajoutés pour réservation {booking.id}")
         except Exception as comm_error:
