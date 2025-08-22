@@ -336,10 +336,11 @@ async def handle_show_trips_by_time(update: Update, context: CallbackContext):
                 
             departure_date = trip.departure_time.strftime("%d/%m/%Y à %H:%M")
             
-            # Compter les réservations actives
+            # Compter seulement les réservations payées et confirmées
             booking_count = db.query(Booking).filter(
                 Booking.trip_id == trip.id, 
-                Booking.status.in_(["pending", "confirmed"])
+                Booking.status == "confirmed",
+                Booking.is_paid == True
             ).count()
             
             trip_text = (
@@ -437,10 +438,11 @@ async def list_my_trips(update: Update, context: CallbackContext):
             # Extraire toutes les données nécessaires avant de fermer la session
             trips_data = []
             for trip in trips_query:
-                # Compter les réservations actives
+                # Compter seulement les réservations payées et confirmées
                 booking_count = db.query(Booking).filter(
                     Booking.trip_id == trip.id, 
-                    Booking.status.in_(["pending", "confirmed"])
+                    Booking.status == "confirmed",
+                    Booking.is_paid == True
                 ).count()
                 
                 trip_data = {
@@ -689,7 +691,8 @@ async def handle_trip_view(update: Update, context: CallbackContext):
         departure_date = trip.departure_time.strftime("%d/%m/%Y à %H:%M")
         booking_count = db.query(Booking).filter(
             Booking.trip_id == trip.id, 
-            Booking.status.in_(["pending", "confirmed", "completed"])
+            Booking.status.in_(["confirmed", "completed"]),
+            Booking.is_paid == True
         ).count()
         
         message = (
