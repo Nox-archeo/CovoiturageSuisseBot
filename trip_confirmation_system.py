@@ -5,6 +5,7 @@ Système de confirmation de trajet DOUBLE (conducteur + passager) pour libérer 
 
 import sys
 import os
+import importlib
 sys.path.append('/Users/margaux/CovoiturageSuisse')
 
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
@@ -12,6 +13,10 @@ from telegram.ext import CallbackContext
 from database.db_manager import get_db
 from database.models import Booking, Trip, User
 from datetime import datetime, timedelta
+
+# Import avec rechargement forcé pour s'assurer d'avoir la dernière version
+import paypal_utils
+importlib.reload(paypal_utils)
 from paypal_utils import PayPalManager
 import logging
 
@@ -213,14 +218,14 @@ async def handle_trip_confirmation_callback(update: Update, context: CallbackCon
         
         elif action == "force_confirm_driver":
             # Confirmation forcée du conducteur après double vérification
-            await confirm_driver_completion(query, trip, db)
+            await confirm_driver_completion(query, trip, db, context)
             
         elif action == "force_confirm_passenger":
             # Confirmation forcée du passager après double vérification
             booking_id = int(parts[2]) if len(parts) > 2 else None
             booking = db.query(Booking).filter(Booking.id == booking_id).first()
             if booking:
-                await confirm_passenger_completion(query, trip, booking, db)
+                await confirm_passenger_completion(query, trip, booking, db, context)
             else:
                 await query.edit_message_text("❌ Réservation non trouvée.")
             
@@ -319,7 +324,7 @@ async def handle_passenger_confirmation(query, trip: Trip, booking_id: int, db, 
     except Exception as e:
         logger.error(f"Erreur handle_passenger_confirmation: {e}")
 
-async def confirm_driver_completion(query, trip: Trip, db):
+async def confirm_driver_completion(query, trip: Trip, db, context: CallbackContext):
     """Confirme la completion côté conducteur"""
     try:
         # Marquer la confirmation conducteur
@@ -331,7 +336,7 @@ async def confirm_driver_completion(query, trip: Trip, db):
         
         if confirmation_state['all_confirmed']:
             # Toutes les confirmations reçues - libérer le paiement
-            await release_payment_to_driver(query, trip, db)
+            await release_payment_to_driver(query, trip, db, context)
         else:
             # En attente des confirmations passagers
             await query.edit_message_text(
@@ -348,7 +353,7 @@ async def confirm_driver_completion(query, trip: Trip, db):
     except Exception as e:
         logger.error(f"Erreur confirm_driver_completion: {e}")
 
-async def confirm_passenger_completion(query, trip: Trip, booking: Booking, db):
+async def confirm_passenger_completion(query, trip: Trip, booking: Booking, db, context: CallbackContext):
     """Confirme la completion côté passager"""
     try:
         # Marquer la confirmation passager
@@ -360,7 +365,7 @@ async def confirm_passenger_completion(query, trip: Trip, booking: Booking, db):
         
         if confirmation_state['all_confirmed']:
             # Toutes les confirmations reçues - libérer le paiement
-            await release_payment_to_driver(query, trip, db)
+            await release_payment_to_driver(query, trip, db, context)
         else:
             # En attente d'autres confirmations
             await query.edit_message_text(
@@ -377,7 +382,7 @@ async def confirm_passenger_completion(query, trip: Trip, booking: Booking, db):
     except Exception as e:
         logger.error(f"Erreur confirm_passenger_completion: {e}")
 
-async def release_payment_to_driver(query, trip: Trip, db):
+async def release_payment_to_driver(query, trip: Trip, db, context: CallbackContext):
     """Libère le paiement au conducteur après double confirmation"""
     try:
         logger.info(f"🚀 DÉBUT release_payment_to_driver pour trip {trip.id}")
@@ -426,7 +431,7 @@ async def release_payment_to_driver(query, trip: Trip, db):
         # Notifier le conducteur
         logger.info(f"🔔 Notification du conducteur (trip.driver_id={trip.driver_id})")
         try:
-            await query.bot.send_message(
+            await context.bot.send_message(
                 chat_id=trip.driver_id,
                 text=message,
                 parse_mode='Markdown'
@@ -441,7 +446,7 @@ async def release_payment_to_driver(query, trip: Trip, db):
             try:
                 passenger = db.query(User).filter(User.id == booking.passenger_id).first()
                 if passenger and passenger.telegram_id:
-                    await query.bot.send_message(
+                    await context.bot.send_message(
                         chat_id=passenger.telegram_id,
                         text=f"🎉 **Trajet confirmé !**\n\n"
                              f"📍 {trip.departure_city} → {trip.arrival_city}\n"
@@ -458,7 +463,7 @@ async def release_payment_to_driver(query, trip: Trip, db):
         
         # 🚀 NOUVEAU: Déclencher le vrai paiement au conducteur
         logger.info(f"🚀 APPEL process_driver_payout pour {driver_amount:.2f} CHF")
-        await process_driver_payout(trip, driver_amount, db)
+        await process_driver_payout(trip, driver_amount, db, context)
         logger.info(f"✅ process_driver_payout terminé")
         
     except Exception as e:
@@ -466,7 +471,7 @@ async def release_payment_to_driver(query, trip: Trip, db):
         import traceback
         logger.error(f"📚 Stack trace: {traceback.format_exc()}")
 
-async def process_driver_payout(trip: Trip, driver_amount: float, db):
+async def process_driver_payout(trip: Trip, driver_amount: float, db, context: CallbackContext):
     """
     Traite le paiement automatique au conducteur via PayPal
     """
@@ -499,6 +504,9 @@ async def process_driver_payout(trip: Trip, driver_amount: float, db):
         paypal = PayPalManager()
         logger.info(f"✅ PayPal initialisé")
         
+        # 🔍 DIAGNOSTIC: Vérifier les méthodes disponibles
+        logger.info(f"🔍 Méthodes disponibles dans PayPalManager: {[method for method in dir(paypal) if not method.startswith('_')]}")
+        
         # Description du trajet pour PayPal
         trip_description = f"{trip.departure_city} → {trip.arrival_city} ({trip.departure_time.strftime('%d/%m/%Y')})"
         
@@ -508,11 +516,19 @@ async def process_driver_payout(trip: Trip, driver_amount: float, db):
         logger.info(f"   → Destinataire: {driver.paypal_email}")
         logger.info(f"   → Description: {trip_description}")
         
-        success, payout_details = paypal.payout_to_driver(
-            driver_email=driver.paypal_email,
-            amount=driver_amount,
-            trip_description=trip_description
-        )
+        # Vérifier si la méthode existe avant de l'appeler
+        if hasattr(paypal, 'payout_to_driver'):
+            logger.info(f"✅ Méthode payout_to_driver trouvée")
+            success, payout_details = paypal.payout_to_driver(
+                driver_email=driver.paypal_email,
+                amount=driver_amount,
+                trip_description=trip_description
+            )
+        else:
+            logger.error(f"❌ Méthode payout_to_driver NOT FOUND dans PayPalManager")
+            logger.error(f"📚 Méthodes disponibles: {dir(paypal)}")
+            success = False
+            payout_details = None
         
         logger.info(f"📊 Résultat paiement PayPal: success={success}")
         if payout_details:
@@ -536,9 +552,7 @@ async def process_driver_payout(trip: Trip, driver_amount: float, db):
             
             # Notifier le conducteur du paiement réussi
             try:
-                from telegram import Bot
-                bot = Bot(token=os.getenv('TELEGRAM_BOT_TOKEN'))
-                await bot.send_message(
+                await context.bot.send_message(
                     chat_id=driver.telegram_id,
                     text=f"💰 **PAIEMENT ENVOYÉ !**\n\n"
                          f"📧 PayPal: {driver.paypal_email}\n"
@@ -560,9 +574,7 @@ async def process_driver_payout(trip: Trip, driver_amount: float, db):
             
             # Notifier l'échec
             try:
-                from telegram import Bot
-                bot = Bot(token=os.getenv('TELEGRAM_BOT_TOKEN'))
-                await bot.send_message(
+                await context.bot.send_message(
                     chat_id=driver.telegram_id,
                     text=f"⚠️ **Problème avec votre paiement**\n\n"
                          f"💰 Montant: {driver_amount:.2f} CHF\n"
