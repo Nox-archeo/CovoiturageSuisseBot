@@ -368,9 +368,10 @@ async def release_payment_to_driver(query, trip: Trip, db):
             Booking.is_paid == True
         ).all()
         
-        # CORRECTION: Utiliser le prix fixe du trajet, pas la somme des paiements
-        driver_amount = trip.price * 0.88  # 88% du prix fixe du trajet
-        commission_amount = trip.price * 0.12  # 12% de commission
+        # CORRECTION: Calculer le prix total à partir des réservations payées
+        total_paid_amount = sum(booking.amount_paid for booking in paid_bookings)
+        driver_amount = total_paid_amount * 0.88  # 88% du montant payé
+        commission_amount = total_paid_amount * 0.12  # 12% de commission
         
         # Marquer les réservations comme terminées
         for booking in paid_bookings:
@@ -390,6 +391,9 @@ async def process_driver_payout(trip: Trip, driver_amount: float, db, query, pai
     Traite le paiement automatique au conducteur via PayPal
     """
     try:
+        # Calculer le montant total payé pour la commission
+        total_paid_amount = sum(booking.amount_paid for booking in paid_bookings)
+        
         # Récupérer les infos du conducteur
         driver = db.query(User).filter(User.id == trip.driver_id).first()
         
@@ -425,7 +429,7 @@ async def process_driver_payout(trip: Trip, driver_amount: float, db, query, pai
             trip.payout_batch_id = batch_id
             trip.status = 'completed_paid'
             trip.driver_amount = driver_amount
-            trip.commission_amount = trip.price * 0.12  # Commission fixe sur prix trajet
+            trip.commission_amount = total_paid_amount * 0.12  # Commission basée sur montant payé
             
             db.commit()
             
@@ -476,7 +480,7 @@ async def process_driver_payout(trip: Trip, driver_amount: float, db, query, pai
             logger.error(f"❌ Échec paiement PayPal pour trajet {trip.id}")
             trip.status = 'payment_pending_manual'
             trip.driver_amount = driver_amount
-            trip.commission_amount = trip.price * 0.12  # Commission fixe sur prix trajet
+            trip.commission_amount = total_paid_amount * 0.12  # Commission basée sur montant payé
             db.commit()
             
             # NOTIFICATIONS D'ÉCHEC PAYPAL
