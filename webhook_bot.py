@@ -264,11 +264,13 @@ async def handle_payment_completed(data: dict):
         booking.status = 'confirmed'
         booking.paid_at = datetime.utcnow()
         
-        # Les places totales ne changent JAMAIS - seules les réservations payées sont comptées
-        # (Correction du bug: les places ne doivent pas être modifiées)
+        # CORRECTION CRITIQUE: Décrémenter les places disponibles du trajet
         trip = booking.trip
-        if trip:
-            logger.info(f"✅ Paiement confirmé pour trajet {trip.id} - places totales inchangées: {trip.seats_available}")
+        if trip and trip.seats_available > 0:
+            trip.seats_available -= 1
+            logger.info(f"🔽 Places décrémentées: {trip.seats_available + 1} → {trip.seats_available} pour trajet {trip.id}")
+        else:
+            logger.warning(f"⚠️ Impossible de décrémenter les places du trajet {trip.id if trip else 'None'}")
         
         db.commit()
         

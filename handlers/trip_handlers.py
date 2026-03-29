@@ -336,11 +336,10 @@ async def handle_show_trips_by_time(update: Update, context: CallbackContext):
                 
             departure_date = trip.departure_time.strftime("%d/%m/%Y à %H:%M")
             
-            # Compter seulement les réservations payées et confirmées
+            # Compter les réservations actives
             booking_count = db.query(Booking).filter(
                 Booking.trip_id == trip.id, 
-                Booking.status == "confirmed",
-                Booking.is_paid == True
+                Booking.status.in_(["pending", "confirmed"])
             ).count()
             
             trip_text = (
@@ -438,11 +437,10 @@ async def list_my_trips(update: Update, context: CallbackContext):
             # Extraire toutes les données nécessaires avant de fermer la session
             trips_data = []
             for trip in trips_query:
-                # Compter seulement les réservations payées et confirmées
+                # Compter les réservations actives
                 booking_count = db.query(Booking).filter(
                     Booking.trip_id == trip.id, 
-                    Booking.status == "confirmed",
-                    Booking.is_paid == True
+                    Booking.status.in_(["pending", "confirmed"])
                 ).count()
                 
                 trip_data = {
@@ -560,8 +558,8 @@ async def list_my_trips(update: Update, context: CallbackContext):
                         InlineKeyboardButton("📍 Définir point RDV", callback_data=f"driver:set_meeting:{trip_data['id']}")
                     ]
                     keyboard_row_2 = [
-                        InlineKeyboardButton("✅ Confirmer trajet effectué", callback_data=f"confirm_trip_driver:{trip_data['id']}"),
-                        InlineKeyboardButton("👥 Voir passagers", callback_data=f"driver:view_passengers:{trip_data['id']}")
+                        InlineKeyboardButton("✅ Confirmer trajet effectué", callback_data=f"driver:confirm_trip:{trip_data['id']}"),
+                        InlineKeyboardButton("� Voir passagers", callback_data=f"driver:view_passengers:{trip_data['id']}")
                     ]
                     keyboard_row_3 = [
                         InlineKeyboardButton("ℹ️ Détails du trajet", callback_data=f"driver:trip_details:{trip_data['id']}"),
@@ -691,8 +689,7 @@ async def handle_trip_view(update: Update, context: CallbackContext):
         departure_date = trip.departure_time.strftime("%d/%m/%Y à %H:%M")
         booking_count = db.query(Booking).filter(
             Booking.trip_id == trip.id, 
-            Booking.status.in_(["confirmed", "completed"]),
-            Booking.is_paid == True
+            Booking.status.in_(["pending", "confirmed", "completed"])
         ).count()
         
         message = (

@@ -1377,9 +1377,16 @@ async def book_without_payment(update: Update, context: CallbackContext):
             
             db.add(new_booking)
             
-            # Les places totales ne changent JAMAIS
-            # Seules les réservations payées sont comptées dynamiquement
-            # (modification supprimée pour corriger le bug des places qui s'ajoutent)
+            # Mettre à jour le nombre de places disponibles avec gestion d'erreurs
+            try:
+                if hasattr(trip, 'available_seats') and trip.available_seats is not None:
+                    trip.available_seats -= seats
+                elif hasattr(trip, 'seats_available') and trip.seats_available is not None:
+                    trip.seats_available -= seats
+                else:
+                    logger.warning(f"Impossible de mettre à jour le nombre de places pour le trajet {trip.id}")
+            except Exception as e:
+                logger.error(f"Erreur lors de la mise à jour des places disponibles: {str(e)}")
             
             db.commit()
         except Exception as e:
@@ -1532,10 +1539,14 @@ async def handle_cancel_payment(update: Update, context: CallbackContext):
             # Supprimer la réservation annulée
             trip = db.query(Trip).get(booking.trip_id)
             if trip:
-                # Les places totales ne changent JAMAIS lors d'annulation
-                # Seules les réservations payées sont comptées dynamiquement
-                # (modification supprimée pour corriger le bug des places qui s'ajoutent)
-                pass
+                # Restaurer les places disponibles
+                try:
+                    if hasattr(trip, 'available_seats') and trip.available_seats is not None:
+                        trip.available_seats += booking.seats
+                    elif hasattr(trip, 'seats_available') and trip.seats_available is not None:
+                        trip.seats_available += booking.seats
+                except Exception as e:
+                    logger.error(f"Erreur lors de la restauration des places: {str(e)}")
             
             db.delete(booking)
             db.commit()

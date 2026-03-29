@@ -504,56 +504,19 @@ async def show_my_trips(update: Update, context: CallbackContext):
                 parse_mode=ParseMode.MARKDOWN
             )
             return PROFILE_MAIN
-        # NOUVEAU: Envoyer chaque trajet comme message séparé avec ses boutons
-        # D'abord le titre principal
-        title_message = f"🚗 *Mes trajets à venir :*\n\n📊 {len(active_blocks)} trajet(s) trouvé(s)"
-        
+        # Construction du message et du clavier
+        text = "🚗 *Mes trajets à venir :*"
+        reply_markup_rows = []
+        for b in active_blocks:
+            text += f"\n\n{b['text']}"
+            if b['buttons']:
+                reply_markup_rows.append(b['buttons'])
+        reply_markup_rows.append([InlineKeyboardButton("➕ Créer un trajet", callback_data="menu:create")])
+        reply_markup_rows.append([InlineKeyboardButton("⬅️ Retour au profil", callback_data="profile:back_to_profile")])
         await query.edit_message_text(
-            text=title_message,
+            text=text,
+            reply_markup=InlineKeyboardMarkup(reply_markup_rows),
             parse_mode=ParseMode.MARKDOWN
-        )
-        
-        # Ensuite, envoyer chaque trajet individuellement avec ses boutons
-        trip_number = 1
-        for block in active_blocks:
-            try:
-                # Message du trajet avec numérotation
-                trip_message = f"**🚗 Trajet {trip_number}:**\n{block['text']}"
-                
-                # Construire le clavier pour ce trajet spécifique
-                trip_keyboard = []
-                if block['buttons']:
-                    # Organiser les boutons en lignes (max 2 boutons par ligne)
-                    buttons = block['buttons']
-                    for j in range(0, len(buttons), 2):
-                        button_row = buttons[j:j+2]
-                        trip_keyboard.append(button_row)
-                
-                # Envoyer le message du trajet avec ses boutons
-                await context.bot.send_message(
-                    chat_id=update.effective_chat.id,
-                    text=trip_message,
-                    reply_markup=InlineKeyboardMarkup(trip_keyboard),
-                    parse_mode="Markdown"
-                )
-                
-                trip_number += 1
-                
-            except Exception as e:
-                logger.error(f"Erreur lors de l'envoi du trajet {trip_number}: {e}")
-                continue
-        
-        # Envoyer les boutons de navigation à la fin
-        navigation_keyboard = [
-            [InlineKeyboardButton("➕ Créer un trajet", callback_data="menu:create")],
-            [InlineKeyboardButton("⬅️ Retour au profil", callback_data="profile:back_to_profile")]
-        ]
-        
-        await context.bot.send_message(
-            chat_id=update.effective_chat.id,
-            text="🔧 **Actions :**",
-            reply_markup=InlineKeyboardMarkup(navigation_keyboard),
-            parse_mode="Markdown"
         )
         return PROFILE_MAIN
     except Exception as e:
@@ -708,67 +671,29 @@ async def show_my_bookings(update: Update, context: CallbackContext):
                 
                 reservation_blocks.append({'text': booking_str, 'buttons': row_btns})
             
-            # NOUVEAU: Envoyer chaque réservation comme message séparé avec ses boutons
-            # D'abord le titre principal
-            title_message = f"🎫 *Mes réservations :*\n\n📊 {len(bookings)} réservation(s) trouvée(s)"
+            # Construction du message et du clavier
+            message = f"🎫 *Mes réservations :*\n\n📊 {len(bookings)} réservation(s) trouvée(s)"
+            keyboard = []
             
-            await query.edit_message_text(
-                text=title_message,
-                parse_mode=ParseMode.MARKDOWN
-            )
-            
-            # Ensuite, envoyer chaque réservation individuellement avec ses boutons
-            reservation_number = 1
             for block in reservation_blocks:
-                try:
-                    # Message de la réservation avec numérotation
-                    reservation_message = f"**✅ Réservation {reservation_number}:**\n{block['text']}"
-                    
-                    # Construire le clavier pour cette réservation spécifique
-                    reservation_keyboard = []
-                    if block['buttons']:
-                        # block['buttons'] contient des lignes de boutons ou des boutons individuels
-                        for button_item in block['buttons']:
-                            if isinstance(button_item, list):
-                                # C'est déjà une ligne de boutons
-                                reservation_keyboard.append(button_item)
-                            else:
-                                # C'est un bouton individuel, on le met dans une ligne
-                                reservation_keyboard.append([button_item])
-                    
-                    # Envoyer le message de la réservation avec ses boutons
-                    await context.bot.send_message(
-                        chat_id=update.effective_chat.id,
-                        text=reservation_message,
-                        reply_markup=InlineKeyboardMarkup(reservation_keyboard),
-                        parse_mode="Markdown"
-                    )
-                    
-                    reservation_number += 1
-                    
-                except Exception as e:
-                    logger.error(f"Erreur lors de l'envoi de la réservation {reservation_number}: {e}")
-                    continue
-            
-            # Envoyer les boutons de navigation à la fin
-            navigation_keyboard = [
-                [InlineKeyboardButton("🔍 Rechercher un trajet", callback_data="menu:search_trip")],
-                [InlineKeyboardButton("⬅️ Retour au profil", callback_data="profile:back_to_profile")]
-            ]
-            
-            await context.bot.send_message(
-                chat_id=update.effective_chat.id,
-                text="🔧 **Actions :**",
-                reply_markup=InlineKeyboardMarkup(navigation_keyboard),
-                parse_mode="Markdown"
-            )
+                message += f"\n\n{block['text']}"
+                if block['buttons']:
+                    keyboard.extend(block['buttons'])  # extend au lieu de append pour les lignes de boutons
             
             if len(bookings) == 20:
-                await context.bot.send_message(
-                    chat_id=update.effective_chat.id,
-                    text="📝 *Affichage limité aux 20 dernières réservations*",
-                    parse_mode="Markdown"
-                )
+                message += "\n\n📝 *Affichage limité aux 20 dernières réservations*"
+            
+            # Boutons de navigation
+            keyboard.extend([
+                [InlineKeyboardButton("🔍 Rechercher un trajet", callback_data="menu:search_trip")],
+                [InlineKeyboardButton("⬅️ Retour au profil", callback_data="profile:back_to_profile")]
+            ])
+        
+        await query.edit_message_text(
+            text=message,
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode=ParseMode.MARKDOWN
+        )
         return PROFILE_MAIN
         
     except Exception as e:

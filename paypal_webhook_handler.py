@@ -160,8 +160,8 @@ async def handle_payment_completion(payment_id: str, bot=None) -> bool:
         # NOUVEAU: Utiliser le système complet de communication post-réservation
         try:
             logger.info(f"🔄 Envoi des notifications complètes pour réservation {booking.id}...")
-            from post_booking_communication import send_post_booking_messages
-            await send_post_booking_messages(booking.id)
+            from post_booking_communication import add_post_booking_communication
+            await add_post_booking_communication(booking.id, bot)
             logger.info(f"✅ Notifications complètes envoyées pour réservation {booking.id}")
         except Exception as comm_error:
             logger.error(f"❌ Erreur envoi notifications complètes: {comm_error}")

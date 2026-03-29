@@ -498,7 +498,10 @@ async def process_driver_payout(trip: Trip, driver_amount: float, db, query, pai
             
             # Notifier le conducteur
             try:
-                await query.bot.send_message(
+                from telegram import Bot
+                import os
+                bot = Bot(token=os.getenv('TELEGRAM_BOT_TOKEN'))
+                await bot.send_message(
                     chat_id=driver.telegram_id,
                     text=success_message,
                     parse_mode='Markdown'
@@ -511,10 +514,13 @@ async def process_driver_payout(trip: Trip, driver_amount: float, db, query, pai
                 try:
                     passenger = db.query(User).filter(User.id == booking.passenger_id).first()
                     if passenger and passenger.telegram_id:
-                        await query.bot.send_message(
+                        from telegram import Bot
+                        import os
+                        bot = Bot(token=os.getenv('TELEGRAM_BOT_TOKEN'))
+                        await bot.send_message(
                             chat_id=passenger.telegram_id,
                             text=f"🎉 **Trajet confirmé !**\n\n"
-                                 f"� {trip.departure_city} → {trip.arrival_city}\n"
+                                 f"📍 {trip.departure_city} → {trip.arrival_city}\n"
                                  f"📅 {trip.departure_time.strftime('%d/%m/%Y')}\n\n"
                                  f"✅ Le conducteur a reçu son paiement PayPal.\n"
                                  f"Merci d'avoir utilisé CovoiturageSuisse !",
@@ -555,7 +561,10 @@ async def process_driver_payout(trip: Trip, driver_amount: float, db, query, pai
             
             # Notifier le conducteur du paiement manuel
             try:
-                await query.bot.send_message(
+                from telegram import Bot
+                import os
+                bot = Bot(token=os.getenv('TELEGRAM_BOT_TOKEN'))
+                await bot.send_message(
                     chat_id=driver.telegram_id,
                     text=manual_message,
                     parse_mode='Markdown'
@@ -568,11 +577,14 @@ async def process_driver_payout(trip: Trip, driver_amount: float, db, query, pai
                 try:
                     passenger = db.query(User).filter(User.id == booking.passenger_id).first()
                     if passenger and passenger.telegram_id:
-                        await query.bot.send_message(
+                        from telegram import Bot
+                        import os
+                        bot = Bot(token=os.getenv('TELEGRAM_BOT_TOKEN'))
+                        await bot.send_message(
                             chat_id=passenger.telegram_id,
                             text=f"🎉 **Trajet confirmé !**\n\n"
-                                 f"� {trip.departure_city} → {trip.arrival_city}\n"
-                                 f"� {trip.departure_time.strftime('%d/%m/%Y')}\n\n"
+                                 f"📍 {trip.departure_city} → {trip.arrival_city}\n"
+                                 f"📅 {trip.departure_time.strftime('%d/%m/%Y')}\n\n"
                                  f"✅ Le paiement du conducteur est en cours de traitement.\n"
                                  f"Merci d'avoir utilisé CovoiturageSuisse !",
                             parse_mode='Markdown'
