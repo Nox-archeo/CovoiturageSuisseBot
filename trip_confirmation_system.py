@@ -352,7 +352,10 @@ async def notify_passengers_driver_confirmed(query, trip: Trip, db):
                     ]]
                     
                     try:
-                        await query.bot.send_message(
+                        from telegram import Bot
+                        import os
+                        bot = Bot(token=os.getenv('TELEGRAM_BOT_TOKEN'))
+                        await bot.send_message(
                             chat_id=passenger.telegram_id,
                             text=f"🎉 **Le conducteur a confirmé le trajet !**\n\n"
                                  f"📍 {trip.departure_city} → {trip.arrival_city}\n"
