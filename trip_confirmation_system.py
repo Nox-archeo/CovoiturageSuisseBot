@@ -319,11 +319,56 @@ async def confirm_driver_completion(query, trip: Trip, db):
                 f"Le paiement sera libéré une fois que tous les passagers auront confirmé.",
                 parse_mode='Markdown'
             )
+            
+            # 🚨 NOUVEAU: Notifier tous les passagers que le conducteur a confirmé
+            await notify_passengers_driver_confirmed(query, trip, db)
         
         logger.info(f"✅ Conducteur a confirmé le trajet {trip.id}")
         
     except Exception as e:
         logger.error(f"Erreur confirm_driver_completion: {e}")
+
+async def notify_passengers_driver_confirmed(query, trip: Trip, db):
+    """Envoie une notification aux passagers quand le conducteur confirme le trajet"""
+    try:
+        # Récupérer tous les passagers payés de ce trajet
+        paid_bookings = db.query(Booking).filter(
+            Booking.trip_id == trip.id,
+            Booking.is_paid == True
+        ).all()
+        
+        for booking in paid_bookings:
+            # Vérifier si ce passager n'a pas déjà confirmé
+            if not getattr(booking, 'passenger_confirmed_completion', False):
+                passenger = db.query(User).filter(User.id == booking.passenger_id).first()
+                if passenger and passenger.telegram_id:
+                    
+                    # Créer le bouton de confirmation pour ce passager
+                    keyboard = [[
+                        InlineKeyboardButton(
+                            "✅ Confirmer le trajet", 
+                            callback_data=f"confirm_trip_passenger:{trip.id}:{booking.id}"
+                        )
+                    ]]
+                    
+                    try:
+                        await query.bot.send_message(
+                            chat_id=passenger.telegram_id,
+                            text=f"🎉 **Le conducteur a confirmé le trajet !**\n\n"
+                                 f"📍 {trip.departure_city} → {trip.arrival_city}\n"
+                                 f"📅 {trip.departure_time.strftime('%d/%m/%Y à %H:%M')}\n\n"
+                                 f"✅ **À votre tour de confirmer que le trajet a eu lieu.**\n"
+                                 f"Une fois que tous les passagers auront confirmé, le paiement du conducteur sera libéré.\n\n"
+                                 f"💰 Montant de votre réservation : {booking.amount:.2f} CHF",
+                            reply_markup=InlineKeyboardMarkup(keyboard),
+                            parse_mode='Markdown'
+                        )
+                        logger.info(f"📧 Notification envoyée au passager {passenger.telegram_id} pour trajet {trip.id}")
+                    except Exception as e:
+                        logger.error(f"Erreur envoi notification passager {passenger.telegram_id}: {e}")
+    
+    except Exception as e:
+        logger.error(f"Erreur notify_passengers_driver_confirmed: {e}")
 
 async def confirm_passenger_completion(query, trip: Trip, booking: Booking, db):
     """Confirme la completion côté passager"""
@@ -369,7 +414,7 @@ async def release_payment_to_driver(query, trip: Trip, db):
         ).all()
         
         # CORRECTION: Calculer le prix total à partir des réservations payées
-        total_paid_amount = sum(booking.amount_paid for booking in paid_bookings)
+        total_paid_amount = sum(booking.amount for booking in paid_bookings)
         driver_amount = total_paid_amount * 0.88  # 88% du montant payé
         commission_amount = total_paid_amount * 0.12  # 12% de commission
         
@@ -392,7 +437,7 @@ async def process_driver_payout(trip: Trip, driver_amount: float, db, query, pai
     """
     try:
         # Calculer le montant total payé pour la commission
-        total_paid_amount = sum(booking.amount_paid for booking in paid_bookings)
+        total_paid_amount = sum(booking.amount for booking in paid_bookings)
         
         # Récupérer les infos du conducteur
         driver = db.query(User).filter(User.id == trip.driver_id).first()
