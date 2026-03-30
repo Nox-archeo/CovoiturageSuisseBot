@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker
 from database.models import User, Booking, Trip
 
 # Forcer l'utilisation de PostgreSQL (même URL que le bot sur Render)
-POSTGRES_URL = "postgresql://covoiturage_qw9c_user:UT15TWaumLIVkmHOOakrhSpFhmKH5vaX@dpg-d26ah2muk2gs73bqjnn0-a.oregon-postgres.render.com/covoiturage_qw9c"
+POSTGRES_URL = os.getenv('DATABASE_URL')  # Utiliser variable d'environnement
 
 def connect_to_production_db():
     """Se connecter à la vraie base PostgreSQL"""

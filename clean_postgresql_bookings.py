@@ -8,7 +8,7 @@ import psycopg2
 from urllib.parse import urlparse
 
 # URL de la base PostgreSQL depuis les variables d'environnement
-DATABASE_URL = os.getenv('DATABASE_URL', 'postgresql://covoiturage_user:LonePumpkin321@dpg-crt6bt5umphs73ah6700-a.oregon-postgres.render.com/covoiturage')
+DATABASE_URL = os.getenv('DATABASE_URL')  # Utiliser variable d'environnement
 
 def clean_postgresql_bookings():
     try:

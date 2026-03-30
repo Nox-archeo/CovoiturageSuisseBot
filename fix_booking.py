@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker
 from database.models import User, Booking, Trip
 
 # URL PostgreSQL correcte
-POSTGRES_URL = "postgresql://covoiturage_qw9c_user:UT15TWaumLIVkmHOOakrhSpFhmKH5vaX@dpg-d26ah2muk2gs73bqjnn0-a.oregon-postgres.render.com/covoiturage_qw9c"
+POSTGRES_URL = os.getenv('DATABASE_URL')  # Utiliser variable d'environnement
 
 def fix_booking_total_price():
     """Corriger le total_price de la réservation #23"""
